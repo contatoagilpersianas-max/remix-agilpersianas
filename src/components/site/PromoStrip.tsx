@@ -1,30 +1,25 @@
-import { Truck, CreditCard, ShieldCheck, Ruler } from "lucide-react";
-
 const ITEMS = [
-  { icon: Truck, t: "Frete grátis", s: "Acima de R$ 1.500" },
-  { icon: CreditCard, t: "12× sem juros", s: "Ou 5% off no PIX" },
-  { icon: Ruler, t: "Sob medida", s: "Largura e altura ao cm" },
-  { icon: ShieldCheck, t: "Garantia 5 anos", s: "Suporte especializado" },
+  "FRETE GRÁTIS para todo o Brasil",
+  "12× SEM JUROS no cartão",
+  "GARANTIA de 5 anos",
+  "ENTREGA expressa em SP",
+  "INSTALAÇÃO profissional",
 ];
 
 export function PromoStrip() {
+  // Marquee infinito como na referência
+  const loop = [...ITEMS, ...ITEMS, ...ITEMS];
   return (
-    <section className="border-y border-border bg-card">
-      <div className="container-premium grid grid-cols-2 divide-y divide-x divide-border md:grid-cols-4 md:divide-y-0">
-        {ITEMS.map(({ icon: Icon, t, s }) => (
-          <div key={t} className="flex items-center gap-3 px-4 py-4 md:px-6 md:py-5">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <Icon className="h-5 w-5" />
-            </span>
-            <div className="min-w-0">
-              <div className="font-display text-sm font-semibold leading-tight md:text-base">
-                {t}
-              </div>
-              <div className="truncate text-[11px] text-muted-foreground md:text-xs">
-                {s}
-              </div>
-            </div>
-          </div>
+    <section className="border-y border-border bg-foreground text-background overflow-hidden">
+      <div className="flex whitespace-nowrap py-3 animate-marquee will-change-transform">
+        {loop.map((t, i) => (
+          <span
+            key={i}
+            className="mx-8 inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.22em]"
+          >
+            {t}
+            <span className="text-primary">•</span>
+          </span>
         ))}
       </div>
     </section>
