@@ -77,26 +77,6 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Trust strip */}
-      <div className="border-y border-border bg-card">
-        <div className="container-premium grid grid-cols-2 divide-x divide-border md:grid-cols-4">
-          {[
-            { t: "Frete grátis", s: "Acima de R$ 1.500" },
-            { t: "12× sem juros", s: "No cartão de crédito" },
-            { t: "5% no PIX", s: "Desconto à vista" },
-            { t: "Sob medida", s: "Largura e altura ao cm" },
-          ].map((b) => (
-            <div key={b.t} className="px-4 py-5 text-center md:px-6 md:py-6">
-              <div className="font-display text-sm font-semibold md:text-base">
-                {b.t}
-              </div>
-              <div className="mt-0.5 text-xs text-muted-foreground md:text-sm">
-                {b.s}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }
