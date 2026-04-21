@@ -1,5 +1,4 @@
-import { Phone, MessageCircle, MapPin, Truck, Lock } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Phone, MessageCircle, MapPin, Package } from "lucide-react";
 
 export function TopBar() {
   return (
@@ -28,16 +27,10 @@ export function TopBar() {
           </span>
         </div>
         <div className="flex flex-1 items-center justify-center gap-2 md:flex-none md:justify-end">
-          <Truck className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
+          <Package className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
           <span className="font-medium">
-            Frete grátis acima de R$ 1.500 — Instalação inclusa em SP
+            Sob medida ao cm — Envio para todo o Brasil em até 15 dias úteis
           </span>
-          <Link
-            to="/auth"
-            className="ml-3 hidden md:inline-flex items-center gap-1 opacity-50 hover:opacity-100 transition"
-          >
-            <Lock className="h-3 w-3" /> Admin
-          </Link>
         </div>
       </div>
     </div>

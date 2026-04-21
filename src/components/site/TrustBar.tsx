@@ -1,11 +1,11 @@
 // TrustBar — selos de confiança logo após o Hero
-import { ShieldCheck, Award, Users, Truck } from "lucide-react";
+import { ShieldCheck, Award, Users, Package } from "lucide-react";
 
 const ITEMS = [
   { icon: Users, value: "+20.000", label: "Clientes atendidos" },
   { icon: Award, value: "4.9 ★", label: "2.300+ avaliações" },
   { icon: ShieldCheck, value: "5 anos", label: "Garantia total" },
-  { icon: Truck, value: "Brasil", label: "Frete grátis acima R$ 1.500" },
+  { icon: Package, value: "Brasil", label: "Envio para todo o país" },
 ];
 
 export function TrustBar() {

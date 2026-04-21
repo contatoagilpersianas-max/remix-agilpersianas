@@ -1,10 +1,10 @@
-import { Ruler, Scissors, Truck, Wrench } from "lucide-react";
+import { Ruler, Scissors, Package, PlayCircle } from "lucide-react";
 
 const STEPS = [
   { icon: Ruler, t: "1. Meça sua janela", s: "Largura e altura em cm — temos guia ilustrado." },
   { icon: Scissors, t: "2. Escolha o tecido", s: "Blackout, tela solar, double vision e mais." },
-  { icon: Truck, t: "3. Receba em casa", s: "Produzimos sob medida e enviamos para todo o Brasil." },
-  { icon: Wrench, t: "4. Instale fácil", s: "Vídeo passo a passo. Em SP, instalação inclusa." },
+  { icon: Package, t: "3. Produzimos sob medida", s: "Fabricação exclusiva para a sua janela." },
+  { icon: PlayCircle, t: "4. Instalação fácil", s: "Vídeo passo a passo e suporte no WhatsApp." },
 ];
 
 export function MeasureCTA() {

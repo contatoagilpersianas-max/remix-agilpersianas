@@ -19,17 +19,17 @@ import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ágil Persianas — Persianas e Cortinas sob Medida | Frete Grátis" },
+      { title: "Ágil Persianas — Persianas e Cortinas sob Medida" },
       {
         name: "description",
         content:
-          "Persianas, cortinas e toldos sob medida com tecidos premium. Frete grátis para todo o Brasil, 12× sem juros, instalação inclusa em SP e garantia de 5 anos.",
+          "Persianas, cortinas e toldos sob medida com tecidos premium. Envio para todo o Brasil, 12× sem juros e garantia de 5 anos.",
       },
       { property: "og:title", content: "Ágil Persianas — Luz, Forma e Função" },
       {
         property: "og:description",
         content:
-          "Coleção 2026: persianas e cortinas sob medida. Receba orçamento via WhatsApp em 5 minutos.",
+          "Coleção 2026: persianas e cortinas sob medida com tecidos premium e garantia de 5 anos.",
       },
     ],
   }),

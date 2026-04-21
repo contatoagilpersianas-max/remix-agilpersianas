@@ -45,7 +45,7 @@ export function FeaturedProducts() {
             Os mais vendidos da semana
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground md:text-base">
-            Persianas com tecidos exclusivos e até <strong className="text-primary">70% OFF</strong> — frete grátis para todo o Brasil.
+            Persianas com tecidos exclusivos e até <strong className="text-primary">70% OFF</strong> — sob medida ao cm com envio para todo o Brasil.
           </p>
         </div>
 

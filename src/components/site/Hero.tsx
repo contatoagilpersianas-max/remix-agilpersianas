@@ -1,6 +1,6 @@
 // Hero comercial — foto imersiva + texto sobreposto + CTAs + captura WhatsApp
 import heroImg from "@/assets/hero-living-room.jpg";
-import { ArrowRight, Shield, Truck, Star } from "lucide-react";
+import { ArrowRight, Shield, Ruler, Star } from "lucide-react";
 
 export function Hero() {
   return (
@@ -57,15 +57,15 @@ export function Hero() {
             className="mt-5 max-w-xl text-base md:text-lg leading-relaxed"
             style={{ color: "rgba(245,237,224,0.85)" }}
           >
-            Persianas, cortinas e toldos sob medida com tecidos premium,
-            instalação profissional e até <strong>36× sem juros</strong>.
+            Persianas, cortinas e toldos sob medida com tecidos premium e
+            até <strong>12× sem juros</strong>.
           </p>
 
           {/* Selos rápidos */}
           <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[12px] font-medium" style={{ color: "rgba(245,237,224,0.75)" }}>
             <span className="inline-flex items-center gap-1.5">
-              <Truck className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
-              Frete grátis Brasil
+              <Ruler className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
+              Sob medida ao cm
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
@@ -97,47 +97,6 @@ export function Hero() {
               Calcular minha medida
             </a>
           </div>
-
-          {/* Quick capture WhatsApp — gatilho de conversão */}
-          <form
-            id="medida"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const data = new FormData(e.currentTarget);
-              const medida = data.get("medida")?.toString().trim() || "";
-              const msg = encodeURIComponent(
-                `Olá! Quero orçamento para minha medida: ${medida}`,
-              );
-              window.open(`https://wa.me/5511999999999?text=${msg}`, "_blank");
-            }}
-            className="mt-6 flex flex-col sm:flex-row items-stretch gap-2 max-w-xl rounded-full p-1.5"
-            style={{
-              backgroundColor: "rgba(20,12,4,0.65)",
-              border: "1px solid rgba(245,237,224,0.18)",
-              backdropFilter: "blur(6px)",
-            }}
-          >
-            <input
-              name="medida"
-              required
-              placeholder="Largura × Altura (ex.: 120 × 160 cm)"
-              className="flex-1 bg-transparent px-4 py-2 text-sm outline-none placeholder:text-[rgba(245,237,224,0.5)]"
-              style={{ color: "#f5ede0" }}
-            />
-            <button
-              type="submit"
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-[11px] font-bold uppercase tracking-[0.14em] transition hover:opacity-90"
-              style={{ backgroundColor: "#25D366", color: "#fff" }}
-            >
-              Orçamento em 5 min <ArrowRight className="h-3.5 w-3.5" />
-            </button>
-          </form>
-          <p
-            className="mt-2 text-[11px]"
-            style={{ color: "rgba(245,237,224,0.55)" }}
-          >
-            ⚡ Resposta via WhatsApp em até 5 minutos — sem compromisso.
-          </p>
 
           {/* Métricas */}
           <div
