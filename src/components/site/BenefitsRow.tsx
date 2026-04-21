@@ -1,10 +1,10 @@
-import { Truck, CreditCard, Ruler, ShieldCheck } from "lucide-react";
+import { Ruler, CreditCard, Package, ShieldCheck } from "lucide-react";
 
 const ITEMS = [
   {
-    icon: Truck,
-    title: "Frete grátis acima de R$ 1.500",
-    desc: "Entrega para todo o Brasil — instalação inclusa em SP.",
+    icon: Ruler,
+    title: "Sob medida ao cm",
+    desc: "Cada produto é fabricado exatamente para sua janela.",
   },
   {
     icon: CreditCard,
@@ -12,13 +12,13 @@ const ITEMS = [
     desc: "Parcele em todos os cartões ou ganhe desconto à vista.",
   },
   {
-    icon: Ruler,
-    title: "Sob medida — largura e altura ao cm",
-    desc: "Cada produto é fabricado exatamente para sua janela.",
+    icon: Package,
+    title: "Envio para todo o Brasil",
+    desc: "Embalagem reforçada e rastreio até a sua porta.",
   },
   {
     icon: ShieldCheck,
-    title: "Garantia 5 anos — suporte especializado",
+    title: "Garantia 5 anos",
     desc: "Pós-venda dedicado e troca facilitada de peças.",
   },
 ];

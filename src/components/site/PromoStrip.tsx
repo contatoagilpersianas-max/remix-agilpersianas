@@ -1,10 +1,12 @@
 const ITEMS = [
-  "Instalação profissional",
-  "Garantia de 5 anos",
-  "Frete grátis para todo o Brasil",
-  "12× sem juros no cartão",
-  "Entrega expressa em SP",
   "Sob medida ao cm",
+  "Garantia de 5 anos",
+  "Envio para todo o Brasil",
+  "12× sem juros no cartão",
+  "5% de desconto no PIX",
+  "Showroom em São Paulo",
+  "Atendimento via WhatsApp",
+  "Tecidos premium importados",
 ];
 
 export function PromoStrip() {
