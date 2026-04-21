@@ -27,7 +27,8 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
-const NAV = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const NAV: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/pedidos", label: "Pedidos", icon: ShoppingCart },
   { to: "/admin/orcamentos", label: "Orçamentos", icon: FileText },
@@ -108,7 +109,7 @@ function AdminLayout() {
             return (
               <Link
                 key={it.to}
-                to={it.to}
+                to={it.to as "/admin"}
                 className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition ${
                   active
                     ? "bg-primary text-primary-foreground shadow-md"
