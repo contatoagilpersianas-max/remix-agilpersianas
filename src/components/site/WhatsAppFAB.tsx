@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export function WhatsAppFAB() {
   return (
@@ -6,11 +6,11 @@ export function WhatsAppFAB() {
       href="https://wa.me/5511999999999"
       target="_blank"
       rel="noreferrer"
-      aria-label="Falar no WhatsApp"
-      className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-lg transition hover:scale-105"
+      aria-label="Falar com Especialista"
+      className="fixed bottom-6 right-6 z-40 group inline-flex h-12 items-center gap-3 rounded-full bg-foreground px-5 text-[11px] font-bold uppercase tracking-[0.22em] text-background shadow-lg transition hover:bg-primary"
     >
-      <MessageCircle className="h-6 w-6" />
-      <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-whatsapp/40" />
+      Falar com Especialista
+      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
     </a>
   );
 }

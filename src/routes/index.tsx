@@ -2,10 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Hero } from "@/components/site/Hero";
 import { PromoStrip } from "@/components/site/PromoStrip";
-import { Categories } from "@/components/site/Categories";
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
-import { MeasureCTA } from "@/components/site/MeasureCTA";
-import { Testimonials } from "@/components/site/Testimonials";
+import { CategoryBanners } from "@/components/site/CategoryBanners";
+import { DiscountsGrid } from "@/components/site/DiscountsGrid";
 import { Newsletter } from "@/components/site/Newsletter";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
@@ -13,17 +12,17 @@ import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ágil Persianas — Persianas e cortinas sob medida com entrega para todo Brasil" },
+      { title: "Ágil Persianas — Luz, Forma e Função. Coleção 2026 sob medida" },
       {
         name: "description",
         content:
-          "Persianas rolô, romana, horizontais, verticais e toldos sob medida. Tecidos premium, 12× sem juros, frete grátis acima de R$ 1.500.",
+          "Persianas e cortinas sob medida com tecidos premium, frete grátis para todo o Brasil, 12× sem juros e garantia de 5 anos.",
       },
-      { property: "og:title", content: "Ágil Persianas — Conforto sob medida" },
+      { property: "og:title", content: "Ágil Persianas — Luz, Forma e Função" },
       {
         property: "og:description",
         content:
-          "Coleção 2026 de persianas e cortinas premium. Calcule pelo tamanho exato da sua janela.",
+          "Coleção 2026: Soluções arquitetônicas sob medida para transformar sua visão em realidade.",
       },
     ],
   }),
@@ -37,10 +36,9 @@ function Index() {
       <main>
         <Hero />
         <PromoStrip />
-        <Categories />
         <FeaturedProducts />
-        <MeasureCTA />
-        <Testimonials />
+        <CategoryBanners />
+        <DiscountsGrid />
         <Newsletter />
       </main>
       <Footer />

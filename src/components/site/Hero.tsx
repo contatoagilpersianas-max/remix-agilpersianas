@@ -1,82 +1,52 @@
-import { ArrowRight, Sparkles } from "lucide-react";
+// Hero — estilo editorial, tipografia serif centralizada
 import heroImg from "@/assets/hero-living-room.jpg";
 
 export function Hero() {
   return (
     <section className="relative overflow-hidden">
-      <div className="relative h-[640px] w-full md:h-[720px]">
+      <div className="relative h-[78vh] min-h-[560px] w-full md:h-[88vh]">
         <img
           src={heroImg}
-          alt="Sala de estar premium com persianas rolô"
+          alt="Sala de estar contemporânea com persianas rolô translúcidas"
           className="absolute inset-0 h-full w-full object-cover"
-          width={1920}
-          height={1080}
+          width={2400}
+          height={1600}
         />
-        <div
-          className="absolute inset-0"
-          style={{ background: "var(--gradient-hero-overlay)" }}
-        />
+        {/* Vinheta sutil para garantir contraste do título central */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0.18)_55%,rgba(0,0,0,0.45)_100%)]" />
 
-        <div className="container-premium relative flex h-full items-center">
-          <div className="max-w-2xl text-graphite-foreground animate-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5 text-primary-glow" />
-              Coleção 2026 — sob medida
-            </span>
+        <div className="container-premium relative flex h-full flex-col items-center justify-center text-center text-white">
+          <h1 className="font-display text-5xl font-medium leading-[1.02] tracking-tight drop-shadow-lg md:text-7xl lg:text-8xl">
+            Luz, Forma e Função.
+          </h1>
 
-            <h1 className="mt-6 font-display text-5xl leading-[1.05] font-semibold md:text-7xl">
-              A luz certa.
-              <br />
-              <span className="bg-gradient-to-r from-primary-glow to-primary bg-clip-text text-transparent">
-                Para cada ambiente.
-              </span>
-            </h1>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
+            Coleção 2026: Soluções arquitetônicas sob medida para transformar
+            sua visão em realidade.
+          </p>
 
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85 md:text-xl">
-              Persianas, cortinas e toldos sob medida com tecidos premium,
-              instalação profissional e até 36× sem juros.
-            </p>
-
-            <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-              <a
-                href="#categorias"
-                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-7 text-base font-semibold text-primary-foreground shadow-glow transition hover:brightness-110"
-              >
-                Ver coleção completa
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </a>
-              <a
-                href="#calculadora"
-                className="inline-flex h-14 items-center justify-center rounded-full border border-white/25 bg-white/5 px-7 text-base font-medium text-white backdrop-blur-md transition hover:bg-white/10"
-              >
-                Calcular minha medida
-              </a>
-            </div>
-
-            <dl className="mt-10 flex flex-wrap gap-x-10 gap-y-4 text-white/80">
-              <div>
-                <dt className="text-xs uppercase tracking-wider opacity-70">+ de</dt>
-                <dd className="font-display text-2xl font-semibold text-white">
-                  20 mil clientes
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs uppercase tracking-wider opacity-70">Avaliação</dt>
-                <dd className="font-display text-2xl font-semibold text-white">
-                  4.9 ★
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs uppercase tracking-wider opacity-70">Garantia</dt>
-                <dd className="font-display text-2xl font-semibold text-white">
-                  5 anos
-                </dd>
-              </div>
-            </dl>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <a
+              href="#consultoria"
+              className="inline-flex h-12 items-center justify-center rounded-none bg-white px-8 text-[12px] font-bold uppercase tracking-[0.22em] text-foreground transition hover:bg-primary hover:text-primary-foreground"
+            >
+              Agendar Consultoria
+            </a>
+            <a
+              href="#catalogo"
+              className="inline-flex h-12 items-center justify-center rounded-none border border-white/80 bg-transparent px-8 text-[12px] font-bold uppercase tracking-[0.22em] text-white transition hover:bg-white hover:text-foreground"
+            >
+              Ver Catálogo
+            </a>
           </div>
         </div>
-      </div>
 
+        {/* Indicador de slides (estático) */}
+        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
+          <span className="h-1.5 w-6 rounded-full bg-white" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
+        </div>
+      </div>
     </section>
   );
 }
