@@ -4,7 +4,7 @@ const ITEMS = [
   "Envio para todo o Brasil",
   "Parcele em até 12×",
   "5% de desconto no PIX",
-  "Showroom em São Paulo",
+  "Catálogo com mais de 200 modelos",
   "Atendimento via WhatsApp",
   "Tecidos premium importados",
 ];
