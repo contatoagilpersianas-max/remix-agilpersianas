@@ -1,4 +1,5 @@
 import { Heart, ShoppingBag, Star } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import rolo from "@/assets/cat-rolo.jpg";
 import romana from "@/assets/cat-romana.jpg";
 import horizontal from "@/assets/cat-horizontal.jpg";
@@ -14,6 +15,7 @@ const PRODUCTS = [
     reviews: 1284,
     img: rolo,
     badge: "Mais vendida",
+    slug: "persiana-rolo-blackout-premium",
   },
   {
     name: "Persiana Romana Linho Cru",
