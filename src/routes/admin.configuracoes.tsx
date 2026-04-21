@@ -32,7 +32,7 @@ function Settings() {
 
   async function save(key: string, value: object) {
     setSaving(key);
-    const { error } = await supabase.from("site_settings").upsert({ key, value });
+    const { error } = await supabase.from("site_settings").upsert([{ key, value: value as never }]);
     setSaving(null);
     if (error) return toast.error(error.message);
     toast.success("Salvo");

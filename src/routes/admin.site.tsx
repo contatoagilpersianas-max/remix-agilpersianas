@@ -38,7 +38,7 @@ function SiteContent() {
 
   async function saveHero() {
     setSaving(true);
-    const { error } = await supabase.from("site_settings").upsert({ key: "hero", value: hero });
+    const { error } = await supabase.from("site_settings").upsert([{ key: "hero", value: hero as never }]);
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Hero atualizado");
