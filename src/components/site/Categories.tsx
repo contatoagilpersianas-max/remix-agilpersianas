@@ -1,3 +1,5 @@
+// Categories — "Encontre seu modelo ideal" no estilo premium da referência
+// Cards limpos com fundo branco, imagem grande, label preto embaixo
 import { ArrowUpRight } from "lucide-react";
 import rolo from "@/assets/cat-rolo.jpg";
 import romana from "@/assets/cat-romana.jpg";
@@ -7,70 +9,109 @@ import painel from "@/assets/cat-painel.jpg";
 import toldo from "@/assets/cat-toldo.jpg";
 
 const CATS = [
-  { name: "Rolô", desc: "A mais vendida", img: rolo, span: "md:col-span-2 md:row-span-2" },
-  { name: "Romana", desc: "Sofisticação clássica", img: romana, span: "md:col-span-1" },
-  { name: "Horizontais", desc: "Madeira e alumínio", img: horizontal, span: "md:col-span-1" },
-  { name: "Verticais", desc: "Para grandes vãos", img: vertical, span: "md:col-span-1" },
-  { name: "Painel", desc: "Linhas minimalistas", img: painel, span: "md:col-span-1" },
-  { name: "Toldos", desc: "Áreas externas", img: toldo, span: "md:col-span-2" },
+  { name: "Rolô", desc: "A mais vendida", img: rolo },
+  { name: "Romana", desc: "Sofisticação clássica", img: romana },
+  { name: "Horizontais", desc: "Madeira e alumínio", img: horizontal },
+  { name: "Verticais", desc: "Para grandes vãos", img: vertical },
+  { name: "Painel", desc: "Linhas minimalistas", img: painel },
+  { name: "Toldos", desc: "Áreas externas", img: toldo },
 ];
 
 export function Categories() {
   return (
-    <section id="categorias" className="py-20 md:py-28">
+    <section id="categorias" className="bg-background py-20 md:py-28">
       <div className="container-premium">
-        <div className="mb-12 flex items-end justify-between gap-6">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-              Categorias
-            </span>
-            <h2 className="mt-3 font-display text-4xl font-semibold md:text-5xl">
-              Encontre seu modelo ideal
-            </h2>
-            <p className="mt-3 max-w-xl text-muted-foreground md:text-lg">
-              Cada ambiente pede um tipo de luz. Explore nossa curadoria de
-              persianas e toldos sob medida.
-            </p>
-          </div>
-          <a
-            href="/"
-            className="hidden items-center gap-1 text-sm font-semibold text-primary hover:underline md:inline-flex"
+        {/* Header da seção — estilo editorial premium */}
+        <div className="mb-14 flex flex-col items-center text-center">
+          <span
+            className="text-[11px] font-bold uppercase tracking-[0.28em]"
+            style={{ color: "#E2763A" }}
           >
-            Ver todas
-            <ArrowUpRight className="h-4 w-4" />
-          </a>
+            ✦ Categorias
+          </span>
+          <h2
+            className="font-display mt-4 leading-[1.05] tracking-tight"
+            style={{
+              fontWeight: 400,
+              fontSize: "clamp(34px, 4.2vw, 52px)",
+              color: "#1a1208",
+            }}
+          >
+            Encontre seu modelo <em className="italic" style={{ color: "#E2763A" }}>ideal</em>
+          </h2>
+          <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-muted-foreground md:text-base">
+            Cada ambiente pede um tipo de luz. Explore nossa curadoria de
+            persianas, cortinas e toldos sob medida.
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:auto-rows-[220px]">
-          {CATS.map((c, i) => (
+        {/* Grid de categorias — cards limpos premium */}
+        <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-6 lg:gap-6">
+          {CATS.map((c) => (
             <a
               key={c.name}
-              href="/"
-              className={`group relative overflow-hidden rounded-2xl bg-secondary shadow-card transition hover:shadow-lg ${c.span ?? ""}`}
-              style={{ animationDelay: `${i * 60}ms` }}
+              href="#catalogo"
+              className="group flex flex-col text-center"
             >
-              <img
-                src={c.img}
-                alt={c.name}
-                loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-premium group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/75">
+              <div
+                className="relative aspect-square overflow-hidden rounded-2xl bg-white transition-all duration-500"
+                style={{
+                  border: "1px solid rgba(226,118,58,0.12)",
+                  boxShadow:
+                    "0 1px 2px rgba(20,12,4,0.04), 0 8px 28px -12px rgba(20,12,4,0.12)",
+                }}
+              >
+                <img
+                  src={c.img}
+                  alt={c.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                />
+                {/* Overlay sutil no hover */}
+                <div
+                  className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, transparent 60%, rgba(20,12,4,0.45) 100%)",
+                  }}
+                />
+                {/* Botão circular no hover */}
+                <span
+                  className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full opacity-0 shadow-lg transition-all duration-500 group-hover:opacity-100"
+                  style={{ backgroundColor: "#E2763A", color: "#fff" }}
+                >
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
+              </div>
+              {/* Texto abaixo do card */}
+              <div className="mt-4">
+                <h3
+                  className="font-display text-base font-semibold tracking-tight transition-colors group-hover:text-primary md:text-lg"
+                  style={{ color: "#1a1208" }}
+                >
+                  {c.name}
+                </h3>
+                <p
+                  className="mt-0.5 text-[11px] uppercase tracking-[0.16em]"
+                  style={{ color: "rgba(26,18,8,0.55)" }}
+                >
                   {c.desc}
-                </div>
-                <div className="mt-1 flex items-end justify-between">
-                  <h3 className="font-display text-2xl font-semibold md:text-3xl">
-                    {c.name}
-                  </h3>
-                  <span className="flex h-9 w-9 shrink-0 translate-y-1 items-center justify-center rounded-full bg-white/95 text-foreground opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100">
-                    <ArrowUpRight className="h-4 w-4" />
-                  </span>
-                </div>
+                </p>
               </div>
             </a>
           ))}
+        </div>
+
+        {/* CTA final */}
+        <div className="mt-12 text-center">
+          <a
+            href="#catalogo"
+            className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.18em] transition hover:gap-3"
+            style={{ color: "#E2763A" }}
+          >
+            Ver catálogo completo
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
         </div>
       </div>
     </section>

@@ -1,18 +1,53 @@
-// Hero comercial — foto imersiva + texto sobreposto + CTAs + captura WhatsApp
-import heroImg from "@/assets/hero-living-room.jpg";
+// Hero comercial — carrossel de imagens imersivas + textos rotativos
+import { useEffect, useState } from "react";
+import heroLiving from "@/assets/hero-living-room.jpg";
+import heroBedroom from "@/assets/hero-bedroom.jpg";
 import { ArrowRight, Shield, Ruler, Star } from "lucide-react";
 
+const SLIDES = [
+  {
+    img: heroLiving,
+    badge: "✦ Coleção 2026 — Sob medida",
+    titleTop: "A luz certa.",
+    titleBottom: "Para cada ambiente.",
+    subtitle:
+      "Persianas, cortinas e toldos sob medida com tecidos premium e parcelamento em até 12×.",
+  },
+  {
+    img: heroBedroom,
+    badge: "✦ Linha Premium — Tecidos exclusivos",
+    titleTop: "Privacidade.",
+    titleBottom: "Conforto. Design.",
+    subtitle:
+      "Persianas blackout sob medida ao centímetro. Acabamento premium com instalação simples.",
+  },
+];
+
 export function Hero() {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActive((i) => (i + 1) % SLIDES.length);
+    }, 6000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section className="relative overflow-hidden">
-      {/* Foto de fundo */}
+      {/* Slides — fade entre imagens */}
       <div className="absolute inset-0">
-        <img
-          src={heroImg}
-          alt="Sala premium com persianas Ágil"
-          className="h-full w-full object-cover"
-        />
-        {/* Overlay para contraste do texto */}
+        {SLIDES.map((s, i) => (
+          <img
+            key={i}
+            src={s.img}
+            alt={s.titleTop}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
+              i === active ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+        {/* Overlay para contraste */}
         <div
           className="absolute inset-0"
           style={{
@@ -25,44 +60,56 @@ export function Hero() {
       {/* Conteúdo */}
       <div className="relative container-premium py-16 md:py-24 lg:py-28">
         <div className="max-w-2xl">
-          {/* Badge */}
+          {SLIDES.map((s, i) => (
+            <div
+              key={i}
+              className={`transition-opacity duration-700 ${
+                i === active ? "opacity-100" : "pointer-events-none absolute inset-0 opacity-0"
+              }`}
+              aria-hidden={i !== active}
+            >
+              {/* Badge */}
+              <div
+                className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em]"
+                style={{
+                  borderColor: "rgba(226,118,58,0.55)",
+                  color: "#E2763A",
+                  backgroundColor: "rgba(20,12,4,0.5)",
+                }}
+              >
+                {s.badge}
+              </div>
+
+              {/* Headline */}
+              <h1
+                className="font-display mt-6 leading-[1.02] tracking-tight"
+                style={{
+                  fontWeight: 400,
+                  fontSize: "clamp(40px, 6vw, 68px)",
+                  color: "#f5ede0",
+                  textShadow: "0 2px 30px rgba(0,0,0,0.4)",
+                }}
+              >
+                {s.titleTop}
+                <br />
+                <span style={{ color: "#E2763A" }}>{s.titleBottom}</span>
+              </h1>
+
+              {/* Subtítulo */}
+              <p
+                className="mt-5 max-w-xl text-base md:text-lg leading-relaxed"
+                style={{ color: "rgba(245,237,224,0.85)" }}
+              >
+                {s.subtitle}
+              </p>
+            </div>
+          ))}
+
+          {/* Selos rápidos (fixos) */}
           <div
-            className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em]"
-            style={{
-              borderColor: "rgba(226,118,58,0.55)",
-              color: "#E2763A",
-              backgroundColor: "rgba(20,12,4,0.5)",
-            }}
+            className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[12px] font-medium"
+            style={{ color: "rgba(245,237,224,0.75)" }}
           >
-            <span>✦</span> Coleção 2026 — Sob medida
-          </div>
-
-          {/* Headline */}
-          <h1
-            className="font-display mt-6 leading-[1.02] tracking-tight"
-            style={{
-              fontWeight: 400,
-              fontSize: "clamp(40px, 6vw, 68px)",
-              color: "#f5ede0",
-              textShadow: "0 2px 30px rgba(0,0,0,0.4)",
-            }}
-          >
-            A luz certa.
-            <br />
-            <span style={{ color: "#E2763A" }}>Para cada ambiente.</span>
-          </h1>
-
-          {/* Subtítulo */}
-          <p
-            className="mt-5 max-w-xl text-base md:text-lg leading-relaxed"
-            style={{ color: "rgba(245,237,224,0.85)" }}
-          >
-            Persianas, cortinas e toldos sob medida com tecidos premium e
-            parcelamento em até <strong>12×</strong>.
-          </p>
-
-          {/* Selos rápidos */}
-          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[12px] font-medium" style={{ color: "rgba(245,237,224,0.75)" }}>
             <span className="inline-flex items-center gap-1.5">
               <Ruler className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
               Sob medida ao cm
@@ -72,7 +119,10 @@ export function Hero() {
               Garantia 5 anos
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Star className="h-3.5 w-3.5 fill-current" style={{ color: "#E2763A" }} />
+              <Star
+                className="h-3.5 w-3.5 fill-current"
+                style={{ color: "#E2763A" }}
+              />
               4.9 (2.300+ avaliações)
             </span>
           </div>
@@ -123,6 +173,23 @@ export function Hero() {
                   {m.l}
                 </div>
               </div>
+            ))}
+          </div>
+
+          {/* Indicadores do carrossel */}
+          <div className="mt-8 flex items-center gap-2">
+            {SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                aria-label={`Slide ${i + 1}`}
+                className="h-1.5 rounded-full transition-all"
+                style={{
+                  width: i === active ? 32 : 12,
+                  backgroundColor:
+                    i === active ? "#E2763A" : "rgba(245,237,224,0.35)",
+                }}
+              />
             ))}
           </div>
         </div>
