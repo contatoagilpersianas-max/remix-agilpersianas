@@ -144,7 +144,7 @@ function ProductCard({ product }: { product: Product }) {
             ou {fmt(pixPrice)} no PIX (-5%)
           </span>
           <span className="mt-0.5 text-[11px] text-muted-foreground">
-            12× de {fmt(installment)} sem juros
+            em até 12× de {fmt(installment)}
           </span>
         </div>
       </div>

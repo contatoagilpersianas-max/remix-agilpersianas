@@ -29,7 +29,7 @@ export function TopBar() {
         <div className="flex flex-1 items-center justify-center gap-2 md:flex-none md:justify-end">
           <Package className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
           <span className="font-medium">
-            Sob medida ao cm — Envio para todo o Brasil em até 15 dias úteis
+            Sob medida — Envio para todo o Brasil
           </span>
         </div>
       </div>

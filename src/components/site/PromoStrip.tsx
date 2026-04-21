@@ -2,7 +2,7 @@ const ITEMS = [
   "Sob medida ao cm",
   "Garantia de 5 anos",
   "Envio para todo o Brasil",
-  "12× sem juros no cartão",
+  "Parcele em até 12×",
   "5% de desconto no PIX",
   "Showroom em São Paulo",
   "Atendimento via WhatsApp",
