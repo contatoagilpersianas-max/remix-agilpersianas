@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 
 export function TopBar() {
   return (
-    <div className="bg-graphite text-graphite-foreground text-xs">
+    <div className="bg-foreground text-background text-xs">
       <div className="container-premium flex h-9 items-center justify-between gap-4">
         <div className="hidden items-center gap-5 md:flex">
           <a
@@ -28,13 +28,13 @@ export function TopBar() {
           </span>
         </div>
         <div className="flex flex-1 items-center justify-center gap-2 md:flex-none md:justify-end">
-          <Truck className="h-3.5 w-3.5 text-primary" />
+          <Truck className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
           <span className="font-medium">
-            Frete grátis acima de R$ 1.500 — instalação inclusa em SP
+            Frete grátis acima de R$ 1.500 — Instalação inclusa em SP
           </span>
           <Link
             to="/auth"
-            className="ml-3 hidden md:inline-flex items-center gap-1 opacity-60 hover:opacity-100 transition"
+            className="ml-3 hidden md:inline-flex items-center gap-1 opacity-50 hover:opacity-100 transition"
           >
             <Lock className="h-3 w-3" /> Admin
           </Link>
