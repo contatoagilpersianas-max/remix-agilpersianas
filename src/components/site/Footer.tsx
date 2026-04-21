@@ -138,7 +138,7 @@ export function Footer() {
           </div>
           <div className="mt-3 flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 text-xs">
             <CreditCard className="h-5 w-5 shrink-0 text-primary-glow" />
-            <span className="opacity-85">Em até 12× sem juros no cartão.</span>
+            <span className="opacity-85">Parcele em até 12× no cartão.</span>
           </div>
         </div>
       </div>
