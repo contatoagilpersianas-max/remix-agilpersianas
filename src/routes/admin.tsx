@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect, Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { useEffect } from "react";
 import {
@@ -7,6 +7,7 @@ import {
   FileText,
   Users,
   Package,
+  Tag,
   Globe,
   Megaphone,
   Factory,
@@ -28,18 +29,19 @@ export const Route = createFileRoute("/admin")({
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin/pedidos", label: "Pedidos", icon: ShoppingCart, soon: true },
-  { to: "/admin/orcamentos", label: "Orçamentos", icon: FileText, soon: true },
-  { to: "/admin/leads", label: "Leads CRM", icon: Users, soon: true },
+  { to: "/admin/pedidos", label: "Pedidos", icon: ShoppingCart },
+  { to: "/admin/orcamentos", label: "Orçamentos", icon: FileText },
+  { to: "/admin/leads", label: "Leads CRM", icon: Users },
   { to: "/admin/catalogo", label: "Catálogo", icon: Package },
-  { to: "/admin/site", label: "Site / Conteúdo", icon: Globe, soon: true },
-  { to: "/admin/marketing", label: "Marketing", icon: Megaphone, soon: true },
-  { to: "/admin/producao", label: "Produção", icon: Factory, soon: true },
-  { to: "/admin/financeiro", label: "Financeiro", icon: Wallet, soon: true },
-  { to: "/admin/relatorios", label: "Relatórios", icon: BarChart3, soon: true },
-  { to: "/admin/usuarios", label: "Usuários", icon: UserCog, soon: true },
-  { to: "/admin/configuracoes", label: "Configurações", icon: Settings, soon: true },
-];
+  { to: "/admin/categorias", label: "Categorias", icon: Tag },
+  { to: "/admin/site", label: "Site / Conteúdo", icon: Globe },
+  { to: "/admin/marketing", label: "Marketing", icon: Megaphone },
+  { to: "/admin/producao", label: "Produção", icon: Factory },
+  { to: "/admin/financeiro", label: "Financeiro", icon: Wallet },
+  { to: "/admin/relatorios", label: "Relatórios", icon: BarChart3 },
+  { to: "/admin/usuarios", label: "Usuários", icon: UserCog },
+  { to: "/admin/configuracoes", label: "Configurações", icon: Settings },
+] as const;
 
 function AdminLayout() {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -89,7 +91,6 @@ function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-[oklch(0.98_0.003_240)] flex">
-      {/* Sidebar */}
       <aside className="w-64 shrink-0 bg-graphite text-graphite-foreground flex flex-col sticky top-0 h-screen">
         <div className="px-5 h-16 flex items-center gap-2 border-b border-white/10">
           <div className="h-9 w-9 rounded-lg bg-gradient-primary flex items-center justify-center font-display font-bold text-lg">
@@ -108,22 +109,15 @@ function AdminLayout() {
               <Link
                 key={it.to}
                 to={it.to}
-                disabled={it.soon}
                 className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition ${
                   active
                     ? "bg-primary text-primary-foreground shadow-md"
                     : "text-graphite-foreground/75 hover:bg-white/5 hover:text-graphite-foreground"
-                } ${it.soon ? "opacity-50 cursor-not-allowed" : ""}`}
-                onClick={(e) => {
-                  if (it.soon) e.preventDefault();
-                }}
+                }`}
               >
                 <it.icon className="h-4 w-4 shrink-0" />
                 <span className="flex-1">{it.label}</span>
-                {it.soon && (
-                  <span className="text-[9px] uppercase tracking-wider bg-white/10 px-1.5 py-0.5 rounded">em breve</span>
-                )}
-                {active && !it.soon && <ChevronRight className="h-3.5 w-3.5" />}
+                {active && <ChevronRight className="h-3.5 w-3.5" />}
               </Link>
             );
           })}
@@ -145,7 +139,6 @@ function AdminLayout() {
         </div>
       </aside>
 
-      {/* Main */}
       <div className="flex-1 min-w-0">
         <header className="h-16 border-b bg-card sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-card/80">
           <div className="h-full px-6 flex items-center gap-4">
