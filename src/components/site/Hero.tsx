@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+// Hero — estilo editorial, tipografia serif centralizada
 import heroImg from "@/assets/hero-living-room.jpg";
 
 export function Hero() {
@@ -32,13 +32,12 @@ export function Hero() {
             >
               Agendar Consultoria
             </a>
-            <Link
-              to="/"
-              hash="catalogo"
+            <a
+              href="#catalogo"
               className="inline-flex h-12 items-center justify-center rounded-none border border-white/80 bg-transparent px-8 text-[12px] font-bold uppercase tracking-[0.22em] text-white transition hover:bg-white hover:text-foreground"
             >
               Ver Catálogo
-            </Link>
+            </a>
           </div>
         </div>
 
