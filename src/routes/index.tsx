@@ -1,12 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { TopBar } from "@/components/site/TopBar";
 import { Header } from "@/components/site/Header";
+import { CategoryNav } from "@/components/site/CategoryNav";
 import { Hero } from "@/components/site/Hero";
 import { PromoStrip } from "@/components/site/PromoStrip";
+import { TrustBar } from "@/components/site/TrustBar";
 import { BenefitsRow } from "@/components/site/BenefitsRow";
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 import { CategoryBanners } from "@/components/site/CategoryBanners";
+import { Categories } from "@/components/site/Categories";
 import { DiscountsGrid } from "@/components/site/DiscountsGrid";
+import { MeasureCTA } from "@/components/site/MeasureCTA";
+import { Testimonials } from "@/components/site/Testimonials";
 import { Newsletter } from "@/components/site/Newsletter";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
@@ -14,17 +19,17 @@ import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ágil Persianas — Luz, Forma e Função. Coleção 2026 sob medida" },
+      { title: "Ágil Persianas — Persianas e Cortinas sob Medida | Frete Grátis" },
       {
         name: "description",
         content:
-          "Persianas e cortinas sob medida com tecidos premium, frete grátis para todo o Brasil, 12× sem juros e garantia de 5 anos.",
+          "Persianas, cortinas e toldos sob medida com tecidos premium. Frete grátis para todo o Brasil, 12× sem juros, instalação inclusa em SP e garantia de 5 anos.",
       },
       { property: "og:title", content: "Ágil Persianas — Luz, Forma e Função" },
       {
         property: "og:description",
         content:
-          "Coleção 2026: Soluções arquitetônicas sob medida para transformar sua visão em realidade.",
+          "Coleção 2026: persianas e cortinas sob medida. Receba orçamento via WhatsApp em 5 minutos.",
       },
     ],
   }),
@@ -36,13 +41,28 @@ function Index() {
     <div className="min-h-screen bg-background">
       <TopBar />
       <Header />
+      <CategoryNav />
       <main>
         <Hero />
+        {/* Marquee laranja com benefícios — mantido conforme preferência */}
         <PromoStrip />
-        <BenefitsRow />
+        {/* Selos de confiança imediatamente após o hero */}
+        <TrustBar />
+        {/* Categorias visuais — navegação rápida */}
+        <Categories />
+        {/* Mais vendidos com gatilhos de conversão */}
         <FeaturedProducts />
+        {/* Banners promo dupla */}
         <CategoryBanners />
+        {/* Benefícios cards */}
+        <BenefitsRow />
+        {/* CTA forte para captura de lead via WhatsApp */}
+        <MeasureCTA />
+        {/* Descontos */}
         <DiscountsGrid />
+        {/* Prova social */}
+        <Testimonials />
+        {/* Newsletter cupom */}
         <Newsletter />
       </main>
       <Footer />
