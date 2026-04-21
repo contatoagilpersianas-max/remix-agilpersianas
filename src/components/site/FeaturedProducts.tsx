@@ -70,8 +70,11 @@ export function FeaturedProducts() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {PRODUCTS.map((p) => {
             const off = Math.round(((p.old - p.price) / p.old) * 100);
+            const slug = (p as { slug?: string }).slug ?? "persiana-rolo-blackout-premium";
             return (
-              <article
+              <Link
+                to="/produto/$slug"
+                params={{ slug }}
                 key={p.name}
                 className="group relative flex flex-col overflow-hidden rounded-2xl bg-card shadow-card transition hover:shadow-lg"
               >
@@ -105,33 +108,27 @@ export function FeaturedProducts() {
 
                   <div className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
                     <Star className="h-3.5 w-3.5 fill-primary text-primary" />
-                    <span className="font-semibold text-foreground">
-                      {p.rating}
-                    </span>
+                    <span className="font-semibold text-foreground">{p.rating}</span>
                     <span>({p.reviews})</span>
                   </div>
 
                   <div className="mt-auto pt-4">
-                    <div className="text-xs text-muted-foreground line-through">
-                      {fmt(p.old)}
-                    </div>
+                    <div className="text-xs text-muted-foreground line-through">{fmt(p.old)}</div>
                     <div className="flex items-baseline gap-1">
-                      <span className="font-display text-2xl font-bold text-foreground">
-                        {fmt(p.price)}
-                      </span>
+                      <span className="font-display text-2xl font-bold text-foreground">{fmt(p.price)}</span>
                       <span className="text-xs text-muted-foreground">/m²</span>
                     </div>
                     <div className="mt-1 text-xs text-success">
                       ou 12× de {fmt(p.price / 12)} sem juros
                     </div>
 
-                    <button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground py-3 text-sm font-semibold text-background transition hover:bg-primary">
+                    <span className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground py-3 text-sm font-semibold text-background transition group-hover:bg-primary">
                       <ShoppingBag className="h-4 w-4" />
                       Comprar agora
-                    </button>
+                    </span>
                   </div>
                 </div>
-              </article>
+              </Link>
             );
           })}
         </div>
