@@ -1,138 +1,115 @@
-import { Heart, ShoppingBag, Star } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import rolo from "@/assets/cat-rolo.jpg";
-import romana from "@/assets/cat-romana.jpg";
-import horizontal from "@/assets/cat-horizontal.jpg";
-import vertical from "@/assets/cat-vertical.jpg";
+import { Star } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const PRODUCTS = [
-  {
-    name: "Persiana Rolô Blackout Premium",
-    cat: "Rolô",
-    price: 393,
-    old: 549,
-    rating: 4.9,
-    reviews: 1284,
-    img: rolo,
-    badge: "Mais vendida",
-    slug: "persiana-rolo-blackout-premium",
-  },
-  {
-    name: "Persiana Romana Linho Cru",
-    cat: "Romana",
-    price: 689,
-    old: 899,
-    rating: 4.8,
-    reviews: 412,
-    img: romana,
-    badge: "Premium",
-  },
-  {
-    name: "Persiana Horizontal Madeira 50mm",
-    cat: "Horizontal",
-    price: 459,
-    old: 599,
-    rating: 4.7,
-    reviews: 738,
-    img: horizontal,
-  },
-  {
-    name: "Persiana Vertical Tecido Light",
-    cat: "Vertical",
-    price: 379,
-    old: 489,
-    rating: 4.8,
-    reviews: 524,
-    img: vertical,
-    badge: "Frete grátis",
-  },
-];
+type Product = {
+  id: string;
+  name: string;
+  slug: string;
+  badge: string | null;
+  price_per_sqm: number;
+  rating: number;
+  reviews_count: number;
+  cover_image: string | null;
+};
 
 const fmt = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 export function FeaturedProducts() {
+  const { data: products = [], isLoading } = useQuery({
+    queryKey: ["featured-products"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("id, name, slug, badge, price_per_sqm, rating, reviews_count, cover_image")
+        .eq("active", true)
+        .eq("featured", true)
+        .order("bestseller", { ascending: false })
+        .limit(8);
+      if (error) throw error;
+      return (data ?? []) as Product[];
+    },
+  });
+
   return (
-    <section className="bg-sand py-20 md:py-28">
+    <section id="catalogo" className="bg-background py-20 md:py-24">
       <div className="container-premium">
         <div className="mb-12 text-center">
-          <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-            Mais procuradas
-          </span>
-          <h2 className="mt-3 font-display text-4xl font-semibold md:text-5xl">
-            Best-sellers da temporada
+          <h2 className="font-display text-4xl font-medium md:text-5xl">
+            Destaques no Mês do Consumidor
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground md:text-lg">
-            Os modelos preferidos de quem quer praticidade, conforto e estilo.
+            Persianas com tecidos exclusivos. Até 70% de desconto!
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {PRODUCTS.map((p) => {
-            const off = Math.round(((p.old - p.price) / p.old) * 100);
-            const slug = (p as { slug?: string }).slug ?? "persiana-rolo-blackout-premium";
-            return (
-              <Link
-                to="/produto/$slug"
-                params={{ slug }}
-                key={p.name}
-                className="group relative flex flex-col overflow-hidden rounded-2xl bg-card shadow-card transition hover:shadow-lg"
-              >
-                <div className="relative aspect-[4/5] overflow-hidden bg-secondary">
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 ease-premium group-hover:scale-105"
-                  />
-                  {p.badge && (
-                    <span className="absolute left-3 top-3 rounded-full bg-graphite px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-graphite-foreground">
-                      {p.badge}
-                    </span>
-                  )}
-                  <span className="absolute right-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold text-primary-foreground shadow-glow">
-                    -{off}%
-                  </span>
-                  <button className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-foreground opacity-0 shadow-md transition group-hover:opacity-100 hover:bg-white">
-                    <Heart className="h-4 w-4" />
-                  </button>
-                </div>
-
-                <div className="flex flex-1 flex-col p-5">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    {p.cat}
-                  </div>
-                  <h3 className="mt-1 line-clamp-2 font-display text-lg font-semibold">
-                    {p.name}
-                  </h3>
-
-                  <div className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Star className="h-3.5 w-3.5 fill-primary text-primary" />
-                    <span className="font-semibold text-foreground">{p.rating}</span>
-                    <span>({p.reviews})</span>
-                  </div>
-
-                  <div className="mt-auto pt-4">
-                    <div className="text-xs text-muted-foreground line-through">{fmt(p.old)}</div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="font-display text-2xl font-bold text-foreground">{fmt(p.price)}</span>
-                      <span className="text-xs text-muted-foreground">/m²</span>
-                    </div>
-                    <div className="mt-1 text-xs text-success">
-                      ou 12× de {fmt(p.price / 12)} sem juros
-                    </div>
-
-                    <span className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground py-3 text-sm font-semibold text-background transition group-hover:bg-primary">
-                      <ShoppingBag className="h-4 w-4" />
-                      Comprar agora
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        {isLoading ? (
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={i}
+                className="aspect-[3/4] animate-pulse rounded-md bg-secondary"
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
+            {products.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
+  );
+}
+
+function ProductCard({ product }: { product: Product }) {
+  const { name, slug, badge, price_per_sqm, rating, reviews_count, cover_image } = product;
+  const installment = price_per_sqm / 12;
+
+  return (
+    <Link
+      to="/produto/$slug"
+      params={{ slug }}
+      className="group flex flex-col"
+    >
+      <div className="relative aspect-[3/4] overflow-hidden bg-secondary">
+        {cover_image && (
+          <img
+            src={cover_image}
+            alt={name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 ease-premium group-hover:scale-[1.04]"
+          />
+        )}
+        {badge && (
+          <span className="absolute left-3 top-3 inline-flex items-center justify-center bg-foreground px-2 py-1 text-[11px] font-bold text-background">
+            {badge}
+          </span>
+        )}
+      </div>
+
+      <div className="mt-4 flex flex-col text-center">
+        <h3 className="line-clamp-2 text-[13px] font-medium tracking-wide text-foreground transition group-hover:text-primary">
+          {name}
+        </h3>
+
+        <div className="mt-1.5 flex items-center justify-center gap-1 text-[11px] text-muted-foreground">
+          <Star className="h-3 w-3 fill-primary text-primary" />
+          <span className="font-medium text-foreground/80">{rating.toFixed(1)}</span>
+          <span>({reviews_count})</span>
+        </div>
+
+        <div className="mt-2.5 font-display text-lg font-semibold text-foreground">
+          {fmt(price_per_sqm)}
+        </div>
+        <div className="text-[11px] text-muted-foreground">
+          12× de {fmt(installment)}
+        </div>
+      </div>
+    </Link>
   );
 }
