@@ -47,6 +47,158 @@ export type Database = {
         }
         Relationships: []
       }
+      leads: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          email: string | null
+          id: string
+          message: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          product_interest: string | null
+          source: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          product_interest?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          product_interest?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          created_at: string
+          customer_address: string | null
+          customer_email: string | null
+          customer_name: string
+          customer_phone: string | null
+          discount: number
+          id: string
+          items: Json
+          notes: string | null
+          order_number: string
+          payment_method: string | null
+          payment_status: string
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_address?: string | null
+          customer_email?: string | null
+          customer_name: string
+          customer_phone?: string | null
+          discount?: number
+          id?: string
+          items?: Json
+          notes?: string | null
+          order_number?: string
+          payment_method?: string | null
+          payment_status?: string
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_address?: string | null
+          customer_email?: string | null
+          customer_name?: string
+          customer_phone?: string | null
+          discount?: number
+          id?: string
+          items?: Json
+          notes?: string | null
+          order_number?: string
+          payment_method?: string | null
+          payment_status?: string
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      production_jobs: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          due_date: string | null
+          height_cm: number | null
+          id: string
+          notes: string | null
+          order_id: string | null
+          product_name: string
+          stage: string
+          updated_at: string
+          width_cm: number | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          due_date?: string | null
+          height_cm?: number | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          product_name: string
+          stage?: string
+          updated_at?: string
+          width_cm?: number | null
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          due_date?: string | null
+          height_cm?: number | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          product_name?: string
+          stage?: string
+          updated_at?: string
+          width_cm?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "production_jobs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           active: boolean
@@ -175,6 +327,24 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
         }
         Relationships: []
       }
