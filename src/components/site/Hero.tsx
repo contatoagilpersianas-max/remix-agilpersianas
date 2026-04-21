@@ -58,7 +58,7 @@ export function Hero() {
             style={{ color: "rgba(245,237,224,0.85)" }}
           >
             Persianas, cortinas e toldos sob medida com tecidos premium e
-            até <strong>12× sem juros</strong>.
+            parcelamento em até <strong>12×</strong>.
           </p>
 
           {/* Selos rápidos */}
@@ -107,7 +107,7 @@ export function Hero() {
               { v: "+20 mil", l: "Clientes" },
               { v: "4.9 ★", l: "Avaliação" },
               { v: "5 anos", l: "Garantia" },
-              { v: "36×", l: "Sem juros" },
+              { v: "12×", l: "Parcelado" },
             ].map((m) => (
               <div key={m.l}>
                 <div

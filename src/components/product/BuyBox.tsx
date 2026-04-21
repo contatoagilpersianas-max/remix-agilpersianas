@@ -106,7 +106,7 @@ export function BuyBox({ product }: { product: Product }) {
         </div>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <span className="text-muted-foreground">
-            ou <strong className="text-foreground">12× de {BRL(installment)}</strong> sem juros
+            ou em até <strong className="text-foreground">12× de {BRL(installment)}</strong>
           </span>
           <span className="inline-flex items-center gap-1.5 text-success font-medium">
             <span className="h-2 w-2 rounded-full bg-success" />

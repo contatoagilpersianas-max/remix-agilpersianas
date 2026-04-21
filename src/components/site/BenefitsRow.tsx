@@ -8,8 +8,8 @@ const ITEMS = [
   },
   {
     icon: CreditCard,
-    title: "12× sem juros ou 5% off no PIX",
-    desc: "Parcele em todos os cartões ou ganhe desconto à vista.",
+    title: "Parcele em até 12× ou 5% off no PIX",
+    desc: "Aceitamos todos os cartões ou desconto especial à vista.",
   },
   {
     icon: Package,
