@@ -2,14 +2,16 @@ import { Link } from "@tanstack/react-router";
 import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { TopBar } from "./TopBar";
+import { CategoryNav } from "./CategoryNav";
 
 const NAV = [
-  { label: "Persianas Rolô", href: "/" },
+  { label: "Rolô", href: "/" },
   { label: "Romana", href: "/" },
   { label: "Double Vision", href: "/" },
   { label: "Painel", href: "/" },
-  { label: "Horizontais", href: "/" },
-  { label: "Verticais", href: "/" },
+  { label: "Horizontal", href: "/" },
+  { label: "Vertical", href: "/" },
+  { label: "Tela Mosquiteira", href: "/" },
   { label: "Toldos", href: "/" },
   { label: "Ambientes", href: "/" },
 ];
@@ -68,31 +70,8 @@ export function Header() {
         </div>
       </div>
 
-      {/* Categories nav */}
-      <nav className="hidden border-t border-border/60 lg:block">
-        <div className="container-premium">
-          <ul className="flex h-12 items-center gap-1 overflow-x-auto no-scrollbar">
-            {NAV.map((item) => (
-              <li key={item.label}>
-                <Link
-                  to={item.href}
-                  className="relative inline-flex h-10 items-center rounded-md px-3 text-sm font-medium text-foreground/70 transition hover:text-primary"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-            <li className="ml-auto">
-              <Link
-                to="/"
-                className="inline-flex h-9 items-center gap-1 rounded-full border border-primary/20 bg-primary/10 px-3 text-xs font-semibold uppercase tracking-wider text-primary"
-              >
-                ⚡ Ofertas da semana
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      {/* Categories nav with dropdowns (Fácil/SelectBlinds style) */}
+      <CategoryNav />
 
       {/* Mobile menu */}
       {open && (
