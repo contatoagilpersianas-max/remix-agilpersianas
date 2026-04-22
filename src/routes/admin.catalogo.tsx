@@ -357,6 +357,7 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
           <TabsList className="flex flex-wrap h-auto gap-1 bg-muted/40">
             <TabsTrigger value="produto">Produto</TabsTrigger>
             <TabsTrigger value="fotos">Fotos</TabsTrigger>
+            <TabsTrigger value="conteudo">Características & FAQ</TabsTrigger>
             <TabsTrigger value="precos">Preços & Estoque</TabsTrigger>
             <TabsTrigger value="medidas">Medidas (m²)</TabsTrigger>
             <TabsTrigger value="entrega">Entrega</TabsTrigger>
