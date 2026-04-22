@@ -18,6 +18,7 @@ import { Route as PersianaJuizDeForaRouteImport } from './routes/persiana-juiz-d
 import { Route as PersianaDoubleVisionRouteImport } from './routes/persiana-double-vision'
 import { Route as PersianaBeloHorizonteRouteImport } from './routes/persiana-belo-horizonte'
 import { Route as CortinaRomanaRouteImport } from './routes/cortina-romana'
+import { Route as CatalogoRouteImport } from './routes/catalogo'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -82,6 +83,11 @@ const PersianaBeloHorizonteRoute = PersianaBeloHorizonteRouteImport.update({
 const CortinaRomanaRoute = CortinaRomanaRouteImport.update({
   id: '/cortina-romana',
   path: '/cortina-romana',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogoRoute = CatalogoRouteImport.update({
+  id: '/catalogo',
+  path: '/catalogo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -189,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/catalogo': typeof CatalogoRoute
   '/cortina-romana': typeof CortinaRomanaRoute
   '/persiana-belo-horizonte': typeof PersianaBeloHorizonteRoute
   '/persiana-double-vision': typeof PersianaDoubleVisionRoute
@@ -219,6 +226,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/catalogo': typeof CatalogoRoute
   '/cortina-romana': typeof CortinaRomanaRoute
   '/persiana-belo-horizonte': typeof PersianaBeloHorizonteRoute
   '/persiana-double-vision': typeof PersianaDoubleVisionRoute
@@ -251,6 +259,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/catalogo': typeof CatalogoRoute
   '/cortina-romana': typeof CortinaRomanaRoute
   '/persiana-belo-horizonte': typeof PersianaBeloHorizonteRoute
   '/persiana-double-vision': typeof PersianaDoubleVisionRoute
@@ -284,6 +293,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/catalogo'
     | '/cortina-romana'
     | '/persiana-belo-horizonte'
     | '/persiana-double-vision'
@@ -314,6 +324,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/catalogo'
     | '/cortina-romana'
     | '/persiana-belo-horizonte'
     | '/persiana-double-vision'
@@ -345,6 +356,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/catalogo'
     | '/cortina-romana'
     | '/persiana-belo-horizonte'
     | '/persiana-double-vision'
@@ -377,6 +389,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
+  CatalogoRoute: typeof CatalogoRoute
   CortinaRomanaRoute: typeof CortinaRomanaRoute
   PersianaBeloHorizonteRoute: typeof PersianaBeloHorizonteRoute
   PersianaDoubleVisionRoute: typeof PersianaDoubleVisionRoute
@@ -455,6 +468,13 @@ declare module '@tanstack/react-router' {
       path: '/cortina-romana'
       fullPath: '/cortina-romana'
       preLoaderRoute: typeof CortinaRomanaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogo': {
+      id: '/catalogo'
+      path: '/catalogo'
+      fullPath: '/catalogo'
+      preLoaderRoute: typeof CatalogoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -638,6 +658,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
+  CatalogoRoute: CatalogoRoute,
   CortinaRomanaRoute: CortinaRomanaRoute,
   PersianaBeloHorizonteRoute: PersianaBeloHorizonteRoute,
   PersianaDoubleVisionRoute: PersianaDoubleVisionRoute,
