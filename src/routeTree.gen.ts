@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as PersianaSolarScreenRouteImport } from './routes/persiana-solar-screen'
 import { Route as PersianaRoloBlackoutRouteImport } from './routes/persiana-rolo-blackout'
 import { Route as PersianaRioDeJaneiroRouteImport } from './routes/persiana-rio-de-janeiro'
@@ -36,6 +38,16 @@ import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configura
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminCatalogoRouteImport } from './routes/admin.catalogo'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PersianaSolarScreenRoute = PersianaSolarScreenRouteImport.update({
   id: '/persiana-solar-screen',
   path: '/persiana-solar-screen',
@@ -178,6 +190,8 @@ export interface FileRoutesByFullPath {
   '/persiana-rio-de-janeiro': typeof PersianaRioDeJaneiroRoute
   '/persiana-rolo-blackout': typeof PersianaRoloBlackoutRoute
   '/persiana-solar-screen': typeof PersianaSolarScreenRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -205,6 +219,8 @@ export interface FileRoutesByTo {
   '/persiana-rio-de-janeiro': typeof PersianaRioDeJaneiroRoute
   '/persiana-rolo-blackout': typeof PersianaRoloBlackoutRoute
   '/persiana-solar-screen': typeof PersianaSolarScreenRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -234,6 +250,8 @@ export interface FileRoutesById {
   '/persiana-rio-de-janeiro': typeof PersianaRioDeJaneiroRoute
   '/persiana-rolo-blackout': typeof PersianaRoloBlackoutRoute
   '/persiana-solar-screen': typeof PersianaSolarScreenRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -264,6 +282,8 @@ export interface FileRouteTypes {
     | '/persiana-rio-de-janeiro'
     | '/persiana-rolo-blackout'
     | '/persiana-solar-screen'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/admin/catalogo'
     | '/admin/categorias'
     | '/admin/configuracoes'
@@ -291,6 +311,8 @@ export interface FileRouteTypes {
     | '/persiana-rio-de-janeiro'
     | '/persiana-rolo-blackout'
     | '/persiana-solar-screen'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/admin/catalogo'
     | '/admin/categorias'
     | '/admin/configuracoes'
@@ -319,6 +341,8 @@ export interface FileRouteTypes {
     | '/persiana-rio-de-janeiro'
     | '/persiana-rolo-blackout'
     | '/persiana-solar-screen'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/admin/catalogo'
     | '/admin/categorias'
     | '/admin/configuracoes'
@@ -348,6 +372,8 @@ export interface RootRouteChildren {
   PersianaRioDeJaneiroRoute: typeof PersianaRioDeJaneiroRoute
   PersianaRoloBlackoutRoute: typeof PersianaRoloBlackoutRoute
   PersianaSolarScreenRoute: typeof PersianaSolarScreenRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BlogSlugRoute: typeof BlogSlugRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -355,6 +381,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/persiana-solar-screen': {
       id: '/persiana-solar-screen'
       path: '/persiana-solar-screen'
@@ -585,6 +625,8 @@ const rootRouteChildren: RootRouteChildren = {
   PersianaRioDeJaneiroRoute: PersianaRioDeJaneiroRoute,
   PersianaRoloBlackoutRoute: PersianaRoloBlackoutRoute,
   PersianaSolarScreenRoute: PersianaSolarScreenRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   BlogSlugRoute: BlogSlugRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
