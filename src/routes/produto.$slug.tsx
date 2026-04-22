@@ -137,9 +137,15 @@ function ProductPage() {
       <ProductSpecs product={product} />
       <BenefitsGrid features={product.features} />
       <LifestyleSection />
+      <section className="py-14 bg-secondary/40">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <PriceCalculator />
+        </div>
+      </section>
       <HowToMeasure />
       <ProductFAQ items={product.faq} />
       <RelatedProducts categoryId={product.category_id} excludeId={product.id} />
+      <QuoteSection />
 
       <Footer />
       <WhatsAppFAB />
