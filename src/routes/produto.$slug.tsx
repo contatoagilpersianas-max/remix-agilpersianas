@@ -13,8 +13,6 @@ import { HowToMeasure } from "@/components/product/HowToMeasure";
 import { ProductFAQ } from "@/components/product/ProductFAQ";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { ProductSpecs } from "@/components/product/ProductSpecs";
-import { StickyBuyBar } from "@/components/product/StickyBuyBar";
-import { PriceCalculator } from "@/components/site/PriceCalculator";
 import { QuoteSection } from "@/components/site/QuoteSection";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -137,11 +135,6 @@ function ProductPage() {
       <ProductSpecs product={product} />
       <BenefitsGrid features={product.features} />
       <LifestyleSection />
-      <section className="py-14 bg-secondary/40">
-        <div className="container mx-auto px-4 max-w-2xl">
-          <PriceCalculator />
-        </div>
-      </section>
       <HowToMeasure />
       <ProductFAQ items={product.faq} />
       <RelatedProducts categoryId={product.category_id} excludeId={product.id} />
@@ -149,7 +142,6 @@ function ProductPage() {
 
       <Footer />
       <WhatsAppFAB />
-      <StickyBuyBar name={product.name} pricePerSqm={product.price_per_sqm} />
     </div>
   );
 }
