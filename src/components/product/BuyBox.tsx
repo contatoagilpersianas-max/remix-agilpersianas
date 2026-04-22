@@ -1,14 +1,31 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Star, ShieldCheck, Truck, Ruler, MessageCircle, ChevronRight, Info } from "lucide-react";
 import type { Product } from "@/routes/produto.$slug";
 import { toast } from "sonner";
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+// Gera lista de opções em cm, com label "0.30 m (300 mm)"
+function buildMeasureOptions(minCm: number, maxCm: number) {
+  const opts: { cm: number; label: string }[] = [];
+  for (let cm = minCm; cm <= maxCm; cm++) {
+    const meters = (cm / 100).toFixed(2);
+    const mm = cm * 10;
+    opts.push({ cm, label: `${meters} m (${mm} mm)` });
+  }
+  return opts;
+}
 
 type Motor = "manual" | "rf" | "wifi";
 type Mount = "inside" | "outside";
