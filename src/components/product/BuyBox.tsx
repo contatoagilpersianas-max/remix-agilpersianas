@@ -32,13 +32,23 @@ type Mount = "inside" | "outside";
 type Side = "left" | "right";
 
 export function BuyBox({ product }: { product: Product }) {
-  const [width, setWidth] = useState(180);
-  const [height, setHeight] = useState(160);
+  // Inicia com a medida mínima do produto
+  const [width, setWidth] = useState(product.min_width_cm);
+  const [height, setHeight] = useState(product.min_height_cm);
   const [mount, setMount] = useState<Mount>("inside");
   const [side, setSide] = useState<Side>("right");
   const [motor, setMotor] = useState<Motor>("manual");
   const [bando, setBando] = useState(false);
   const [color, setColor] = useState(product.colors?.[0]?.name ?? "");
+
+  const widthOptions = useMemo(
+    () => buildMeasureOptions(product.min_width_cm, product.max_width_cm),
+    [product.min_width_cm, product.max_width_cm],
+  );
+  const heightOptions = useMemo(
+    () => buildMeasureOptions(product.min_height_cm, product.max_height_cm),
+    [product.min_height_cm, product.max_height_cm],
+  );
 
   const validation = useMemo(() => {
     const errors: string[] = [];
