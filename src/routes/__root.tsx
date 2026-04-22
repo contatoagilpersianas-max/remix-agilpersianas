@@ -27,6 +27,25 @@ function NotFoundComponent() {
   );
 }
 
+const ORG_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Ágil Persianas",
+  url: "https://agil2.lovable.app",
+  logo: "https://agil2.lovable.app/og/agil-logo.png",
+  sameAs: [
+    "https://www.instagram.com/agilpersianas",
+    "https://www.facebook.com/agilpersianas",
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+55-11-4002-8922",
+    contactType: "customer service",
+    areaServed: "BR",
+    availableLanguage: ["Portuguese"],
+  },
+};
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -44,6 +63,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(ORG_JSONLD) }],
   }),
   shellComponent: RootShell,
   component: RootComponent,

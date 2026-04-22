@@ -9,11 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as PersianaSolarScreenRouteImport } from './routes/persiana-solar-screen'
+import { Route as PersianaRoloBlackoutRouteImport } from './routes/persiana-rolo-blackout'
+import { Route as PersianaRioDeJaneiroRouteImport } from './routes/persiana-rio-de-janeiro'
+import { Route as PersianaJuizDeForaRouteImport } from './routes/persiana-juiz-de-fora'
+import { Route as PersianaDoubleVisionRouteImport } from './routes/persiana-double-vision'
+import { Route as PersianaBeloHorizonteRouteImport } from './routes/persiana-belo-horizonte'
+import { Route as CortinaRomanaRouteImport } from './routes/cortina-romana'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminSiteRouteImport } from './routes/admin.site'
 import { Route as AdminRelatoriosRouteImport } from './routes/admin.relatorios'
@@ -27,6 +38,51 @@ import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configura
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminCatalogoRouteImport } from './routes/admin.catalogo'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersianaSolarScreenRoute = PersianaSolarScreenRouteImport.update({
+  id: '/persiana-solar-screen',
+  path: '/persiana-solar-screen',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersianaRoloBlackoutRoute = PersianaRoloBlackoutRouteImport.update({
+  id: '/persiana-rolo-blackout',
+  path: '/persiana-rolo-blackout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersianaRioDeJaneiroRoute = PersianaRioDeJaneiroRouteImport.update({
+  id: '/persiana-rio-de-janeiro',
+  path: '/persiana-rio-de-janeiro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersianaJuizDeForaRoute = PersianaJuizDeForaRouteImport.update({
+  id: '/persiana-juiz-de-fora',
+  path: '/persiana-juiz-de-fora',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersianaDoubleVisionRoute = PersianaDoubleVisionRouteImport.update({
+  id: '/persiana-double-vision',
+  path: '/persiana-double-vision',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersianaBeloHorizonteRoute = PersianaBeloHorizonteRouteImport.update({
+  id: '/persiana-belo-horizonte',
+  path: '/persiana-belo-horizonte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CortinaRomanaRoute = CortinaRomanaRouteImport.update({
+  id: '/cortina-romana',
+  path: '/cortina-romana',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -42,6 +98,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -50,6 +111,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
   id: '/produto/$slug',
   path: '/produto/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
@@ -117,6 +183,15 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/cortina-romana': typeof CortinaRomanaRoute
+  '/persiana-belo-horizonte': typeof PersianaBeloHorizonteRoute
+  '/persiana-double-vision': typeof PersianaDoubleVisionRoute
+  '/persiana-juiz-de-fora': typeof PersianaJuizDeForaRoute
+  '/persiana-rio-de-janeiro': typeof PersianaRioDeJaneiroRoute
+  '/persiana-rolo-blackout': typeof PersianaRoloBlackoutRoute
+  '/persiana-solar-screen': typeof PersianaSolarScreenRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -129,12 +204,23 @@ export interface FileRoutesByFullPath {
   '/admin/relatorios': typeof AdminRelatoriosRoute
   '/admin/site': typeof AdminSiteRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/cortina-romana': typeof CortinaRomanaRoute
+  '/persiana-belo-horizonte': typeof PersianaBeloHorizonteRoute
+  '/persiana-double-vision': typeof PersianaDoubleVisionRoute
+  '/persiana-juiz-de-fora': typeof PersianaJuizDeForaRoute
+  '/persiana-rio-de-janeiro': typeof PersianaRioDeJaneiroRoute
+  '/persiana-rolo-blackout': typeof PersianaRoloBlackoutRoute
+  '/persiana-solar-screen': typeof PersianaSolarScreenRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -147,14 +233,25 @@ export interface FileRoutesByTo {
   '/admin/relatorios': typeof AdminRelatoriosRoute
   '/admin/site': typeof AdminSiteRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/cortina-romana': typeof CortinaRomanaRoute
+  '/persiana-belo-horizonte': typeof PersianaBeloHorizonteRoute
+  '/persiana-double-vision': typeof PersianaDoubleVisionRoute
+  '/persiana-juiz-de-fora': typeof PersianaJuizDeForaRoute
+  '/persiana-rio-de-janeiro': typeof PersianaRioDeJaneiroRoute
+  '/persiana-rolo-blackout': typeof PersianaRoloBlackoutRoute
+  '/persiana-solar-screen': typeof PersianaSolarScreenRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -167,8 +264,10 @@ export interface FileRoutesById {
   '/admin/relatorios': typeof AdminRelatoriosRoute
   '/admin/site': typeof AdminSiteRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -176,6 +275,15 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/cortina-romana'
+    | '/persiana-belo-horizonte'
+    | '/persiana-double-vision'
+    | '/persiana-juiz-de-fora'
+    | '/persiana-rio-de-janeiro'
+    | '/persiana-rolo-blackout'
+    | '/persiana-solar-screen'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/admin/catalogo'
     | '/admin/categorias'
     | '/admin/configuracoes'
@@ -188,12 +296,23 @@ export interface FileRouteTypes {
     | '/admin/relatorios'
     | '/admin/site'
     | '/admin/usuarios'
+    | '/blog/$slug'
     | '/produto/$slug'
     | '/admin/'
+    | '/blog/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/cortina-romana'
+    | '/persiana-belo-horizonte'
+    | '/persiana-double-vision'
+    | '/persiana-juiz-de-fora'
+    | '/persiana-rio-de-janeiro'
+    | '/persiana-rolo-blackout'
+    | '/persiana-solar-screen'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/admin/catalogo'
     | '/admin/categorias'
     | '/admin/configuracoes'
@@ -206,13 +325,24 @@ export interface FileRouteTypes {
     | '/admin/relatorios'
     | '/admin/site'
     | '/admin/usuarios'
+    | '/blog/$slug'
     | '/produto/$slug'
     | '/admin'
+    | '/blog'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/auth'
+    | '/cortina-romana'
+    | '/persiana-belo-horizonte'
+    | '/persiana-double-vision'
+    | '/persiana-juiz-de-fora'
+    | '/persiana-rio-de-janeiro'
+    | '/persiana-rolo-blackout'
+    | '/persiana-solar-screen'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/admin/catalogo'
     | '/admin/categorias'
     | '/admin/configuracoes'
@@ -225,19 +355,95 @@ export interface FileRouteTypes {
     | '/admin/relatorios'
     | '/admin/site'
     | '/admin/usuarios'
+    | '/blog/$slug'
     | '/produto/$slug'
     | '/admin/'
+    | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
+  CortinaRomanaRoute: typeof CortinaRomanaRoute
+  PersianaBeloHorizonteRoute: typeof PersianaBeloHorizonteRoute
+  PersianaDoubleVisionRoute: typeof PersianaDoubleVisionRoute
+  PersianaJuizDeForaRoute: typeof PersianaJuizDeForaRoute
+  PersianaRioDeJaneiroRoute: typeof PersianaRioDeJaneiroRoute
+  PersianaRoloBlackoutRoute: typeof PersianaRoloBlackoutRoute
+  PersianaSolarScreenRoute: typeof PersianaSolarScreenRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/persiana-solar-screen': {
+      id: '/persiana-solar-screen'
+      path: '/persiana-solar-screen'
+      fullPath: '/persiana-solar-screen'
+      preLoaderRoute: typeof PersianaSolarScreenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/persiana-rolo-blackout': {
+      id: '/persiana-rolo-blackout'
+      path: '/persiana-rolo-blackout'
+      fullPath: '/persiana-rolo-blackout'
+      preLoaderRoute: typeof PersianaRoloBlackoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/persiana-rio-de-janeiro': {
+      id: '/persiana-rio-de-janeiro'
+      path: '/persiana-rio-de-janeiro'
+      fullPath: '/persiana-rio-de-janeiro'
+      preLoaderRoute: typeof PersianaRioDeJaneiroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/persiana-juiz-de-fora': {
+      id: '/persiana-juiz-de-fora'
+      path: '/persiana-juiz-de-fora'
+      fullPath: '/persiana-juiz-de-fora'
+      preLoaderRoute: typeof PersianaJuizDeForaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/persiana-double-vision': {
+      id: '/persiana-double-vision'
+      path: '/persiana-double-vision'
+      fullPath: '/persiana-double-vision'
+      preLoaderRoute: typeof PersianaDoubleVisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/persiana-belo-horizonte': {
+      id: '/persiana-belo-horizonte'
+      path: '/persiana-belo-horizonte'
+      fullPath: '/persiana-belo-horizonte'
+      preLoaderRoute: typeof PersianaBeloHorizonteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cortina-romana': {
+      id: '/cortina-romana'
+      path: '/cortina-romana'
+      fullPath: '/cortina-romana'
+      preLoaderRoute: typeof CortinaRomanaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -259,6 +465,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -271,6 +484,13 @@ declare module '@tanstack/react-router' {
       path: '/produto/$slug'
       fullPath: '/produto/$slug'
       preLoaderRoute: typeof ProdutoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/usuarios': {
@@ -398,7 +618,18 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
+  CortinaRomanaRoute: CortinaRomanaRoute,
+  PersianaBeloHorizonteRoute: PersianaBeloHorizonteRoute,
+  PersianaDoubleVisionRoute: PersianaDoubleVisionRoute,
+  PersianaJuizDeForaRoute: PersianaJuizDeForaRoute,
+  PersianaRioDeJaneiroRoute: PersianaRioDeJaneiroRoute,
+  PersianaRoloBlackoutRoute: PersianaRoloBlackoutRoute,
+  PersianaSolarScreenRoute: PersianaSolarScreenRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  BlogSlugRoute: BlogSlugRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
