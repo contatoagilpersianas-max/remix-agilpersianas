@@ -52,10 +52,11 @@ export function BuyBox({ product }: { product: Product }) {
 
   const validation = useMemo(() => {
     const errors: string[] = [];
-    if (width < product.min_width_cm) errors.push(`Largura mínima ${product.min_width_cm} cm`);
-    if (width > product.max_width_cm) errors.push(`Largura máxima ${product.max_width_cm} cm`);
-    if (height < product.min_height_cm) errors.push(`Altura mínima ${product.min_height_cm} cm`);
-    if (height > product.max_height_cm) errors.push(`Altura máxima ${product.max_height_cm} cm`);
+    const fmt = (cm: number) => `${(cm / 100).toFixed(2)} m`;
+    if (width < product.min_width_cm) errors.push(`Largura mínima ${fmt(product.min_width_cm)}`);
+    if (width > product.max_width_cm) errors.push(`Largura máxima ${fmt(product.max_width_cm)}`);
+    if (height < product.min_height_cm) errors.push(`Altura mínima ${fmt(product.min_height_cm)}`);
+    if (height > product.max_height_cm) errors.push(`Altura máxima ${fmt(product.max_height_cm)}`);
     return errors;
   }, [width, height, product]);
 
