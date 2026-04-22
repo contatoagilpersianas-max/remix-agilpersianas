@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   CreditCard,
 } from "lucide-react";
+import logoAgil from "@/assets/agil-logo.png";
 
 const COLS = [
   {
@@ -31,18 +32,8 @@ export function Footer() {
       {/* Top: brand + columns */}
       <div className="container-premium grid gap-12 py-16 md:grid-cols-12 md:py-20">
         <div className="md:col-span-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-primary text-primary-foreground">
-              <span className="font-display text-xl font-bold">Á</span>
-            </div>
-            <div className="leading-tight">
-              <div className="font-display text-xl font-bold">
-                Ágil <span className="text-primary-glow">Persianas</span>
-              </div>
-              <div className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/60">
-                Conforto sob medida
-              </div>
-            </div>
+          <div className="rounded-xl bg-white/95 px-4 py-3 inline-block">
+            <img src={logoAgil} alt="Ágil Persianas" className="h-10 w-auto" />
           </div>
 
           <p className="mt-5 max-w-sm text-sm text-white/70">
