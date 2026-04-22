@@ -154,26 +154,46 @@ export function BuyBox({ product }: { product: Product }) {
               <Info className="h-3.5 w-3.5" /> Como medir
             </a>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <Label className="text-xs uppercase tracking-wide text-muted-foreground">Largura (cm)</Label>
-              <Input
-                type="number"
-                value={width}
-                onChange={(e) => setWidth(Number(e.target.value) || 0)}
-                className="h-12 text-lg font-medium"
-              />
-              <p className="text-[10px] text-muted-foreground mt-1">{product.min_width_cm} – {product.max_width_cm} cm</p>
+              <Label className="text-xs uppercase tracking-wide text-muted-foreground">
+                Largura da Persiana
+              </Label>
+              <Select
+                value={String(width)}
+                onValueChange={(v) => setWidth(Number(v))}
+              >
+                <SelectTrigger className="h-12 text-base font-medium mt-1">
+                  <SelectValue placeholder="Selecione a opção" />
+                </SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {widthOptions.map((o) => (
+                    <SelectItem key={o.cm} value={String(o.cm)}>
+                      {o.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
-              <Label className="text-xs uppercase tracking-wide text-muted-foreground">Altura (cm)</Label>
-              <Input
-                type="number"
-                value={height}
-                onChange={(e) => setHeight(Number(e.target.value) || 0)}
-                className="h-12 text-lg font-medium"
-              />
-              <p className="text-[10px] text-muted-foreground mt-1">{product.min_height_cm} – {product.max_height_cm} cm</p>
+              <Label className="text-xs uppercase tracking-wide text-muted-foreground">
+                Altura da Persiana
+              </Label>
+              <Select
+                value={String(height)}
+                onValueChange={(v) => setHeight(Number(v))}
+              >
+                <SelectTrigger className="h-12 text-base font-medium mt-1">
+                  <SelectValue placeholder="Selecione a opção" />
+                </SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {heightOptions.map((o) => (
+                    <SelectItem key={o.cm} value={String(o.cm)}>
+                      {o.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           {validation.map((err) => (
