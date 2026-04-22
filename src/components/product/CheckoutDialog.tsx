@@ -170,14 +170,14 @@ export function CheckoutDialog({
         if (!v) setTimeout(reset, 200);
       }}
     >
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         {step === "form" && (
           <>
             <DialogHeader>
               <DialogTitle className="font-display text-2xl">Finalizar compra</DialogTitle>
               <DialogDescription>
-                Total <strong className="text-foreground">{BRL(total)}</strong> ·{" "}
-                {item.productName}
+                {item.productName} ·{" "}
+                <strong className="text-foreground">{BRL(finalTotal)}</strong>
               </DialogDescription>
             </DialogHeader>
 
@@ -253,8 +253,44 @@ export function CheckoutDialog({
                 </div>
               </div>
 
-              <Button type="submit" size="lg" className="w-full h-12">
-                Gerar cobrança · {BRL(total)}
+              {/* Frete */}
+              <div className="rounded-xl border p-3 bg-sand/30 space-y-2">
+                <div className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Entrega
+                </div>
+                <ShippingCalculator
+                  productId={item.productId}
+                  invoiceValue={baseSubtotal}
+                  selectedCode={shipping?.serviceCode ?? null}
+                  onSelect={(s) => setShipping(s)}
+                  compact
+                />
+                {/* CEP visível para gravar no pedido (sincronizado pelo cálculo) */}
+                <input
+                  type="hidden"
+                  value={cep}
+                  onChange={(e) => setCep(e.target.value)}
+                />
+              </div>
+
+              {/* Resumo */}
+              <div className="rounded-xl bg-muted/40 p-3 text-sm space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span>{BRL(baseSubtotal)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Frete</span>
+                  <span>{shipping ? BRL(shippingCost) : "—"}</span>
+                </div>
+                <div className="flex justify-between font-display text-base pt-1 border-t">
+                  <span>Total</span>
+                  <span>{BRL(finalTotal)}</span>
+                </div>
+              </div>
+
+              <Button type="submit" size="lg" className="w-full h-12" disabled={!shipping}>
+                Gerar cobrança · {BRL(finalTotal)}
               </Button>
               <p className="text-[11px] text-center text-muted-foreground">
                 Pagamento processado com segurança via Asaas. Seus dados não são
