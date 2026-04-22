@@ -40,6 +40,12 @@ export function Hero() {
             key={i}
             src={s.img}
             alt={s.titleTop}
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+            // @ts-expect-error fetchpriority is valid HTML
+            fetchpriority={i === 0 ? "high" : "low"}
+            width={1920}
+            height={1080}
             className={`absolute inset-0 h-full w-full object-cover transition-all duration-[1400ms] ease-out ${
               i === active ? "opacity-100 scale-100" : "opacity-0 scale-105"
             }`}

@@ -69,7 +69,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify(ORG_JSONLD) }],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(ORG_JSONLD) },
+      { children: PIXEL_SNIPPET },
+      { src: `https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`, async: true },
+      { children: GA4_INIT },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -97,6 +102,7 @@ function RootComponent() {
       <AuthProvider>
         <Outlet />
         <Toaster richColors position="top-right" />
+        <SocialProofToasts />
       </AuthProvider>
     </QueryClientProvider>
   );
