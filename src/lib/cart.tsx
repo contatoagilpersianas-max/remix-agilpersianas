@@ -110,9 +110,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 }
 
 export function useCart(): CartContextType {
-  const ctx = useContext(CartContext);
-  if (!ctx) throw new Error("useCart precisa estar dentro de <CartProvider>");
-  return ctx;
+  return useContext(CartContext);
 }
 
 export const formatBRL = (n: number) =>
