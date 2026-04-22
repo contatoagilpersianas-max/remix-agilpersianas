@@ -102,6 +102,8 @@ export const quoteShipping = createServerFn({ method: "POST" })
 
       const services = (json.ShippingSevicesArray ?? [])
         .filter((s) => !s.Error && Number(s.ShippingPrice) > 0)
+        // Apenas Jadlog — Correios (PAC/SEDEX) desativados a pedido
+        .filter((s) => /jadlog/i.test(s.Carrier))
         .map<ShippingQuote>((s) => ({
           carrier: s.Carrier,
           serviceCode: s.ServiceCode,

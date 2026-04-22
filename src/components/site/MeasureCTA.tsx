@@ -4,7 +4,7 @@ const STEPS = [
   { icon: Ruler, t: "1. Meça sua janela", s: "Largura e altura em cm — temos guia ilustrado." },
   { icon: Scissors, t: "2. Escolha o tecido", s: "Blackout, tela solar, double vision e mais." },
   { icon: Package, t: "3. Produzimos sob medida", s: "Fabricação exclusiva para a sua janela." },
-  { icon: PlayCircle, t: "4. Instalação fácil", s: "Vídeo passo a passo e suporte no WhatsApp." },
+  { icon: PlayCircle, t: "4. Instalação fácil", s: "Guia ilustrado e suporte por WhatsApp em cada etapa." },
 ];
 
 export function MeasureCTA() {

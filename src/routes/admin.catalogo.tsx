@@ -265,6 +265,10 @@ function Catalog() {
                     onChange={(e) => setEditing({ ...editing, cover_image: e.target.value })}
                     placeholder="https://..."
                   />
+                  <p className="text-[11px] text-muted-foreground mt-1">
+                    Tamanho recomendado: <strong>1200 × 1200 px</strong> (quadrada, JPG ou WebP, até 500 KB).
+                    Use fundo neutro e a persiana centralizada.
+                  </p>
                 </div>
               </div>
 
