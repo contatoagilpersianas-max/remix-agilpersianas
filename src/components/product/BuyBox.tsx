@@ -40,6 +40,7 @@ export function BuyBox({ product }: { product: Product }) {
   const [side, setSide] = useState<Side>("right");
   const [motor, setMotor] = useState<Motor>("manual");
   const [bando, setBando] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   // Garante cores padrão caso o produto não tenha cores cadastradas
   const productColors = useMemo(() => {
     if (Array.isArray(product.colors) && product.colors.length > 0) {
