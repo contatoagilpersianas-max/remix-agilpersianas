@@ -14,6 +14,8 @@ import { ProductFAQ } from "@/components/product/ProductFAQ";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { ProductSpecs } from "@/components/product/ProductSpecs";
 import { StickyBuyBar } from "@/components/product/StickyBuyBar";
+import { PriceCalculator } from "@/components/site/PriceCalculator";
+import { QuoteSection } from "@/components/site/QuoteSection";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/produto/$slug")({
