@@ -236,12 +236,16 @@ export type Database = {
           motor_rf_price: number
           motor_wifi_price: number
           name: string
+          package_height_cm: number
+          package_length_cm: number
+          package_width_cm: number
           price_per_sqm: number
           rating: number
           reviews_count: number
           short_description: string | null
           slug: string
           updated_at: string
+          weight_kg: number
         }
         Insert: {
           active?: boolean
@@ -267,12 +271,16 @@ export type Database = {
           motor_rf_price?: number
           motor_wifi_price?: number
           name: string
+          package_height_cm?: number
+          package_length_cm?: number
+          package_width_cm?: number
           price_per_sqm?: number
           rating?: number
           reviews_count?: number
           short_description?: string | null
           slug: string
           updated_at?: string
+          weight_kg?: number
         }
         Update: {
           active?: boolean
@@ -298,12 +306,16 @@ export type Database = {
           motor_rf_price?: number
           motor_wifi_price?: number
           name?: string
+          package_height_cm?: number
+          package_length_cm?: number
+          package_width_cm?: number
           price_per_sqm?: number
           rating?: number
           reviews_count?: number
           short_description?: string | null
           slug?: string
           updated_at?: string
+          weight_kg?: number
         }
         Relationships: [
           {
