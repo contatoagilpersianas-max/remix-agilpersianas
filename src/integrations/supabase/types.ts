@@ -21,6 +21,7 @@ export type Database = {
           icon: string | null
           id: string
           name: string
+          parent_id: string | null
           position: number
           slug: string
           updated_at: string
@@ -31,6 +32,7 @@ export type Database = {
           icon?: string | null
           id?: string
           name: string
+          parent_id?: string | null
           position?: number
           slug: string
           updated_at?: string
@@ -41,11 +43,20 @@ export type Database = {
           icon?: string | null
           id?: string
           name?: string
+          parent_id?: string | null
           position?: number
           slug?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       leads: {
         Row: {
@@ -161,6 +172,80 @@ export type Database = {
         }
         Relationships: []
       }
+      product_categories: {
+        Row: {
+          category_id: string
+          created_at: string
+          product_id: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          product_id: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_categories_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_categories_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_images: {
+        Row: {
+          caption: string | null
+          color: string | null
+          created_at: string
+          id: string
+          position: number
+          product_id: string
+          size_kb: number | null
+          url: string
+        }
+        Insert: {
+          caption?: string | null
+          color?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          product_id: string
+          size_kb?: number | null
+          url: string
+        }
+        Update: {
+          caption?: string | null
+          color?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          product_id?: string
+          size_kb?: number | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       production_jobs: {
         Row: {
           assigned_to: string | null
@@ -227,6 +312,8 @@ export type Database = {
           features: Json
           gallery: Json
           id: string
+          installation: string | null
+          manual_pdf_url: string | null
           max_height_cm: number
           max_width_cm: number
           min_area: number
@@ -239,12 +326,23 @@ export type Database = {
           package_height_cm: number
           package_length_cm: number
           package_width_cm: number
+          price: number
           price_per_sqm: number
+          processing_days: number
+          product_type: string
           rating: number
           reviews_count: number
+          sale_price: number | null
+          seo_description: string | null
+          seo_title: string | null
           short_description: string | null
+          sku: string | null
           slug: string
+          stock: number
+          stock_min: number
+          tags: string[]
           updated_at: string
+          video_url: string | null
           weight_kg: number
         }
         Insert: {
@@ -262,6 +360,8 @@ export type Database = {
           features?: Json
           gallery?: Json
           id?: string
+          installation?: string | null
+          manual_pdf_url?: string | null
           max_height_cm?: number
           max_width_cm?: number
           min_area?: number
@@ -274,12 +374,23 @@ export type Database = {
           package_height_cm?: number
           package_length_cm?: number
           package_width_cm?: number
+          price?: number
           price_per_sqm?: number
+          processing_days?: number
+          product_type?: string
           rating?: number
           reviews_count?: number
+          sale_price?: number | null
+          seo_description?: string | null
+          seo_title?: string | null
           short_description?: string | null
+          sku?: string | null
           slug: string
+          stock?: number
+          stock_min?: number
+          tags?: string[]
           updated_at?: string
+          video_url?: string | null
           weight_kg?: number
         }
         Update: {
@@ -297,6 +408,8 @@ export type Database = {
           features?: Json
           gallery?: Json
           id?: string
+          installation?: string | null
+          manual_pdf_url?: string | null
           max_height_cm?: number
           max_width_cm?: number
           min_area?: number
@@ -309,12 +422,23 @@ export type Database = {
           package_height_cm?: number
           package_length_cm?: number
           package_width_cm?: number
+          price?: number
           price_per_sqm?: number
+          processing_days?: number
+          product_type?: string
           rating?: number
           reviews_count?: number
+          sale_price?: number | null
+          seo_description?: string | null
+          seo_title?: string | null
           short_description?: string | null
+          sku?: string | null
           slug?: string
+          stock?: number
+          stock_min?: number
+          tags?: string[]
           updated_at?: string
+          video_url?: string | null
           weight_kg?: number
         }
         Relationships: [
