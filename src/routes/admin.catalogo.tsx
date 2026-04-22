@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,53 +9,113 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Plus, Edit, Trash2, Search, Package, ExternalLink, Loader2 } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Plus, Edit, Trash2, Search, Package, ExternalLink, Loader2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { ImageUpload } from "@/components/admin/ImageUpload";
+import { FileUpload } from "@/components/admin/FileUpload";
+import { GalleryEditor, type GalleryItem } from "@/components/admin/GalleryEditor";
 
-export const Route = createFileRoute("/admin/catalogo")({
-  component: Catalog,
-});
+export const Route = createFileRoute("/admin/catalogo")({ component: Catalog });
 
-type Category = { id: string; name: string; slug: string };
+type Category = { id: string; name: string; slug: string; parent_id: string | null };
+type Color = { name: string; hex: string };
+
 type Product = {
   id: string;
   name: string;
   slug: string;
+  sku: string | null;
   short_description: string | null;
+  description: string | null;
+  installation: string | null;
   category_id: string | null;
   cover_image: string | null;
+  gallery: GalleryItem[];
+  product_type: string;
+  price: number;
+  sale_price: number | null;
   price_per_sqm: number;
+  stock: number;
+  stock_min: number;
+  processing_days: number;
+  min_area: number;
   min_width_cm: number;
   max_width_cm: number;
   min_height_cm: number;
   max_height_cm: number;
-  min_area: number;
   motor_manual_price: number;
   motor_rf_price: number;
   motor_wifi_price: number;
   bando_price: number;
-  active: boolean;
-  featured: boolean;
-  colors: { name: string; hex: string }[];
   weight_kg: number;
   package_length_cm: number;
   package_width_cm: number;
   package_height_cm: number;
+  tags: string[];
+  video_url: string | null;
+  manual_pdf_url: string | null;
+  seo_title: string | null;
+  seo_description: string | null;
+  colors: Color[];
+  active: boolean;
+  featured: boolean;
 };
 
 const slugify = (s: string) =>
-  s
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+  s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+const NEW_PRODUCT: Partial<Product> = {
+  name: "",
+  slug: "",
+  sku: "",
+  short_description: "",
+  description: "",
+  installation: "",
+  category_id: null,
+  cover_image: "",
+  gallery: [],
+  product_type: "simples",
+  price: 0,
+  sale_price: null,
+  price_per_sqm: 0,
+  stock: 0,
+  stock_min: 0,
+  processing_days: 0,
+  min_area: 1,
+  min_width_cm: 40,
+  max_width_cm: 300,
+  min_height_cm: 40,
+  max_height_cm: 300,
+  motor_manual_price: 0,
+  motor_rf_price: 0,
+  motor_wifi_price: 0,
+  bando_price: 0,
+  weight_kg: 2,
+  package_length_cm: 60,
+  package_width_cm: 15,
+  package_height_cm: 15,
+  tags: [],
+  video_url: "",
+  manual_pdf_url: "",
+  seo_title: "",
+  seo_description: "",
+  active: true,
+  featured: false,
+  colors: [
+    { name: "Branco", hex: "#FFFFFF" },
+    { name: "Bege", hex: "#D7C4A3" },
+    { name: "Cinza", hex: "#7E8794" },
+  ],
+};
 
 function Catalog() {
   const [products, setProducts] = useState<Product[]>([]);
   const [cats, setCats] = useState<Category[]>([]);
   const [search, setSearch] = useState("");
+  const [filterCat, setFilterCat] = useState<string>("");
   const [editing, setEditing] = useState<Partial<Product> | null>(null);
+  const [editingExtraCats, setEditingExtraCats] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -63,9 +123,9 @@ function Catalog() {
     setLoading(true);
     const [{ data: p }, { data: c }] = await Promise.all([
       supabase.from("products").select("*").order("created_at", { ascending: false }),
-      supabase.from("categories").select("id,name,slug").order("position"),
+      supabase.from("categories").select("id,name,slug,parent_id").order("position"),
     ]);
-    setProducts(((p ?? []) as unknown) as Product[]);
+    setProducts((p ?? []) as unknown as Product[]);
     setCats((c as Category[]) ?? []);
     setLoading(false);
   }
@@ -74,53 +134,58 @@ function Catalog() {
     load();
   }, []);
 
-  const filtered = products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
+  const filtered = products.filter((p) => {
+    const okSearch = p.name.toLowerCase().includes(search.toLowerCase()) || (p.sku ?? "").toLowerCase().includes(search.toLowerCase());
+    const okCat = !filterCat || p.category_id === filterCat;
+    return okSearch && okCat;
+  });
+
+  const catLabel = (id: string | null) => {
+    if (!id) return "Sem categoria";
+    const c = cats.find((x) => x.id === id);
+    if (!c) return "—";
+    if (c.parent_id) {
+      const parent = cats.find((x) => x.id === c.parent_id);
+      return `${parent?.name ?? ""} › ${c.name}`;
+    }
+    return c.name;
+  };
+
+  async function startEdit(p: Product) {
+    setEditing(p);
+    const { data } = await supabase.from("product_categories").select("category_id").eq("product_id", p.id);
+    setEditingExtraCats((data ?? []).map((r) => r.category_id));
+  }
 
   function startNew() {
-    setEditing({
-      name: "",
-      slug: "",
-      short_description: "",
-      category_id: cats[0]?.id ?? null,
-      cover_image: "",
-      price_per_sqm: 0,
-      min_width_cm: 40,
-      max_width_cm: 300,
-      min_height_cm: 40,
-      max_height_cm: 300,
-      min_area: 1,
-      motor_manual_price: 0,
-      motor_rf_price: 0,
-      motor_wifi_price: 0,
-      bando_price: 0,
-      active: true,
-      featured: false,
-      weight_kg: 2,
-      package_length_cm: 60,
-      package_width_cm: 15,
-      package_height_cm: 15,
-      colors: [
-        { name: "Branco", hex: "#FFFFFF" },
-        { name: "Bege", hex: "#D7C4A3" },
-        { name: "Cinza", hex: "#7E8794" },
-      ],
-    });
+    setEditing({ ...NEW_PRODUCT, category_id: cats[0]?.id ?? null });
+    setEditingExtraCats([]);
   }
 
   async function save() {
     if (!editing?.name) return toast.error("Nome obrigatório");
     setSaving(true);
-    const payload = {
-      ...editing,
-      slug: editing.slug || slugify(editing.name),
-    };
-    const { error } = editing.id
-      ? await supabase.from("products").update(payload).eq("id", editing.id)
-      : await supabase.from("products").insert(payload as never);
+    const payload = { ...editing, slug: editing.slug || slugify(editing.name) };
+    const { data, error } = editing.id
+      ? await supabase.from("products").update(payload).eq("id", editing.id).select("id").single()
+      : await supabase.from("products").insert(payload as never).select("id").single();
+    if (error) {
+      setSaving(false);
+      return toast.error(error.message);
+    }
+    const productId = data?.id ?? editing.id;
+
+    // sync product_categories (extra/secondary)
+    if (productId) {
+      await supabase.from("product_categories").delete().eq("product_id", productId);
+      if (editingExtraCats.length) {
+        await supabase.from("product_categories").insert(editingExtraCats.map((cid) => ({ product_id: productId, category_id: cid })));
+      }
+    }
     setSaving(false);
-    if (error) return toast.error(error.message);
     toast.success("Produto salvo!");
     setEditing(null);
+    setEditingExtraCats([]);
     load();
   }
 
@@ -132,6 +197,8 @@ function Catalog() {
     load();
   }
 
+  const lowStock = products.filter((p) => p.product_type === "simples" && p.stock <= p.stock_min && p.active).length;
+
   return (
     <div className="space-y-6 max-w-[1400px]">
       <div className="flex items-end justify-between gap-4 flex-wrap">
@@ -139,7 +206,7 @@ function Catalog() {
           <div className="text-xs uppercase tracking-widest text-muted-foreground">Catálogo</div>
           <h1 className="font-display text-3xl mt-1">Produtos</h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Cadastre e gerencie os produtos exibidos na loja, incluindo preço por m² e limites de medida.
+            Cadastre, organize e venda. Editor completo com fotos, medidas, frete, SEO e mais.
           </p>
         </div>
         <Button onClick={startNew} size="lg" className="shadow-glow">
@@ -147,16 +214,31 @@ function Catalog() {
         </Button>
       </div>
 
-      <Card className="p-4">
-        <div className="relative max-w-md">
+      {lowStock > 0 && (
+        <Card className="p-3 border-amber-300 bg-amber-50 text-amber-900 flex items-center gap-2 text-sm">
+          <AlertTriangle className="h-4 w-4" />
+          {lowStock} produto(s) com estoque abaixo do mínimo.
+        </Card>
+      )}
+
+      <Card className="p-4 flex flex-wrap gap-3 items-center">
+        <div className="relative flex-1 min-w-[240px] max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar produto..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
-          />
+          <Input placeholder="Buscar por nome ou SKU..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
         </div>
+        <select
+          className="h-9 rounded-md border bg-background px-3 text-sm"
+          value={filterCat}
+          onChange={(e) => setFilterCat(e.target.value)}
+        >
+          <option value="">Todas as categorias</option>
+          {cats.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.parent_id ? "↳ " : ""}{c.name}
+            </option>
+          ))}
+        </select>
+        <span className="text-xs text-muted-foreground ml-auto">{filtered.length} de {products.length}</span>
       </Card>
 
       {loading ? (
@@ -169,7 +251,8 @@ function Catalog() {
       ) : (
         <div className="grid gap-3">
           {filtered.map((p) => {
-            const cat = cats.find((c) => c.id === p.category_id);
+            const lowS = p.product_type === "simples" && p.stock <= p.stock_min && p.active;
+            const finalPrice = p.sale_price && p.sale_price > 0 ? p.sale_price : p.price;
             return (
               <Card key={p.id} className="p-4 flex items-center gap-4 hover:shadow-md transition">
                 <div className="h-16 w-16 rounded-lg bg-sand overflow-hidden shrink-0">
@@ -180,24 +263,29 @@ function Catalog() {
                     <h3 className="font-semibold truncate">{p.name}</h3>
                     {p.featured && <Badge className="bg-primary/10 text-primary border-0">Destaque</Badge>}
                     {!p.active && <Badge variant="secondary">Inativo</Badge>}
+                    {lowS && <Badge className="bg-amber-100 text-amber-900 border-0">Estoque baixo</Badge>}
                   </div>
-                  <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-3">
-                    <span>{cat?.name ?? "Sem categoria"}</span>
+                  <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-3 flex-wrap">
+                    <span>{catLabel(p.category_id)}</span>
                     <span>·</span>
-                    <span>R$ {p.price_per_sqm.toFixed(2)} /m²</span>
-                    <span>·</span>
-                    <span>{p.min_width_cm}–{p.max_width_cm} × {p.min_height_cm}–{p.max_height_cm} cm</span>
+                    {p.product_type === "metro_quadrado" ? (
+                      <span>R$ {Number(p.price_per_sqm).toFixed(2)} /m²</span>
+                    ) : (
+                      <span>
+                        R$ {Number(finalPrice).toFixed(2)}
+                        {p.sale_price && p.sale_price > 0 && p.sale_price < p.price && (
+                          <span className="line-through ml-1 opacity-60">R$ {Number(p.price).toFixed(2)}</span>
+                        )}
+                      </span>
+                    )}
+                    {p.sku && <><span>·</span><span>SKU {p.sku}</span></>}
+                    {p.product_type === "simples" && <><span>·</span><span>Estoque: {p.stock}</span></>}
                   </div>
                 </div>
-                <Link
-                  to="/produto/$slug"
-                  params={{ slug: p.slug }}
-                  className="text-muted-foreground hover:text-primary"
-                  title="Ver na loja"
-                >
+                <Link to="/produto/$slug" params={{ slug: p.slug }} className="text-muted-foreground hover:text-primary" title="Ver na loja">
                   <ExternalLink className="h-4 w-4" />
                 </Link>
-                <Button variant="ghost" size="icon" onClick={() => setEditing(p)}>
+                <Button variant="ghost" size="icon" onClick={() => startEdit(p)}>
                   <Edit className="h-4 w-4" />
                 </Button>
                 <Button variant="ghost" size="icon" onClick={() => remove(p.id)}>
@@ -209,204 +297,355 @@ function Catalog() {
         </div>
       )}
 
-      {/* Editor */}
-      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editing?.id ? "Editar produto" : "Novo produto"}</DialogTitle>
-          </DialogHeader>
-          {editing && (
-            <div className="grid gap-4">
-              <div className="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <Label>Nome</Label>
-                  <Input
-                    value={editing.name ?? ""}
-                    onChange={(e) =>
-                      setEditing({ ...editing, name: e.target.value, slug: editing.slug || slugify(e.target.value) })
-                    }
-                  />
-                </div>
-                <div>
-                  <Label>Slug (URL)</Label>
-                  <Input value={editing.slug ?? ""} onChange={(e) => setEditing({ ...editing, slug: e.target.value })} />
-                </div>
-              </div>
-
-              <div>
-                <Label>Descrição curta</Label>
-                <Textarea
-                  value={editing.short_description ?? ""}
-                  onChange={(e) => setEditing({ ...editing, short_description: e.target.value })}
-                  rows={2}
-                />
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <Label>Categoria</Label>
-                  <select
-                    className="w-full h-9 rounded-md border bg-background px-3 text-sm"
-                    value={editing.category_id ?? ""}
-                    onChange={(e) => setEditing({ ...editing, category_id: e.target.value || null })}
-                  >
-                    <option value="">Sem categoria</option>
-                    {cats.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <Label>URL da imagem de capa</Label>
-                  <Input
-                    value={editing.cover_image ?? ""}
-                    onChange={(e) => setEditing({ ...editing, cover_image: e.target.value })}
-                    placeholder="https://..."
-                  />
-                  <p className="text-[11px] text-muted-foreground mt-1">
-                    Tamanho recomendado: <strong>1200 × 1200 px</strong> (quadrada, JPG ou WebP, até 500 KB).
-                    Use fundo neutro e a persiana centralizada.
-                  </p>
-                </div>
-              </div>
-
-              <div className="rounded-lg border p-4 bg-sand/30">
-                <h4 className="font-semibold text-sm mb-3">Calculadora m²</h4>
-                <div className="grid sm:grid-cols-3 gap-3">
-                  <div>
-                    <Label className="text-xs">Preço por m² (R$)</Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      value={editing.price_per_sqm ?? 0}
-                      onChange={(e) => setEditing({ ...editing, price_per_sqm: Number(e.target.value) })}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Área mínima (m²)</Label>
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={editing.min_area ?? 1}
-                      onChange={(e) => setEditing({ ...editing, min_area: Number(e.target.value) })}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
-                  <div>
-                    <Label className="text-xs">Largura mín (cm)</Label>
-                    <Input type="number" value={editing.min_width_cm ?? 40} onChange={(e) => setEditing({ ...editing, min_width_cm: Number(e.target.value) })} />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Largura máx (cm)</Label>
-                    <Input type="number" value={editing.max_width_cm ?? 300} onChange={(e) => setEditing({ ...editing, max_width_cm: Number(e.target.value) })} />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Altura mín (cm)</Label>
-                    <Input type="number" value={editing.min_height_cm ?? 40} onChange={(e) => setEditing({ ...editing, min_height_cm: Number(e.target.value) })} />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Altura máx (cm)</Label>
-                    <Input type="number" value={editing.max_height_cm ?? 300} onChange={(e) => setEditing({ ...editing, max_height_cm: Number(e.target.value) })} />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
-                  <div>
-                    <Label className="text-xs">Manual (R$)</Label>
-                    <Input type="number" step="0.01" value={editing.motor_manual_price ?? 0} onChange={(e) => setEditing({ ...editing, motor_manual_price: Number(e.target.value) })} />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Motor RF (R$)</Label>
-                    <Input type="number" step="0.01" value={editing.motor_rf_price ?? 0} onChange={(e) => setEditing({ ...editing, motor_rf_price: Number(e.target.value) })} />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Motor Wi-Fi (R$)</Label>
-                    <Input type="number" step="0.01" value={editing.motor_wifi_price ?? 0} onChange={(e) => setEditing({ ...editing, motor_wifi_price: Number(e.target.value) })} />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Bandô (R$)</Label>
-                    <Input type="number" step="0.01" value={editing.bando_price ?? 0} onChange={(e) => setEditing({ ...editing, bando_price: Number(e.target.value) })} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Cubagem para frete (Frenet) */}
-              <div className="rounded-lg border p-4 bg-sand/30">
-                <h4 className="font-semibold text-sm mb-1">Frete · Cubagem do pacote</h4>
-                <p className="text-xs text-muted-foreground mb-3">
-                  Dimensões e peso usados para cálculo de frete via Frenet (PAC, SEDEX, Jadlog…).
-                </p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div>
-                    <Label className="text-xs">Peso (kg)</Label>
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={editing.weight_kg ?? 2}
-                      onChange={(e) => setEditing({ ...editing, weight_kg: Number(e.target.value) })}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Comprimento (cm)</Label>
-                    <Input
-                      type="number"
-                      value={editing.package_length_cm ?? 60}
-                      onChange={(e) => setEditing({ ...editing, package_length_cm: Number(e.target.value) })}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Largura (cm)</Label>
-                    <Input
-                      type="number"
-                      value={editing.package_width_cm ?? 15}
-                      onChange={(e) => setEditing({ ...editing, package_width_cm: Number(e.target.value) })}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Altura (cm)</Label>
-                    <Input
-                      type="number"
-                      value={editing.package_height_cm ?? 15}
-                      onChange={(e) => setEditing({ ...editing, package_height_cm: Number(e.target.value) })}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <ColorsEditor
-                colors={editing.colors ?? []}
-                onChange={(colors) => setEditing({ ...editing, colors })}
-              />
-
-              <div className="flex items-center gap-6">
-                <label className="flex items-center gap-2 text-sm">
-                  <Switch checked={!!editing.active} onCheckedChange={(v) => setEditing({ ...editing, active: v })} />
-                  Ativo
-                </label>
-                <label className="flex items-center gap-2 text-sm">
-                  <Switch checked={!!editing.featured} onCheckedChange={(v) => setEditing({ ...editing, featured: v })} />
-                  Destaque na home
-                </label>
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setEditing(null)}>
-              Cancelar
-            </Button>
-            <Button onClick={save} disabled={saving}>
-              {saving && <Loader2 className="h-4 w-4 animate-spin" />} Salvar produto
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ProductEditor
+        open={!!editing}
+        editing={editing}
+        setEditing={setEditing}
+        cats={cats}
+        extraCats={editingExtraCats}
+        setExtraCats={setEditingExtraCats}
+        saving={saving}
+        onSave={save}
+        onClose={() => {
+          setEditing(null);
+          setEditingExtraCats([]);
+        }}
+      />
     </div>
   );
 }
 
-type Color = { name: string; hex: string };
+/* ───────────────────── Editor em abas ───────────────────── */
+
+type EditorProps = {
+  open: boolean;
+  editing: Partial<Product> | null;
+  setEditing: (p: Partial<Product> | null) => void;
+  cats: Category[];
+  extraCats: string[];
+  setExtraCats: (ids: string[]) => void;
+  saving: boolean;
+  onSave: () => void;
+  onClose: () => void;
+};
+
+function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCats, saving, onSave, onClose }: EditorProps) {
+  const grouped = useMemo(() => {
+    const roots = cats.filter((c) => !c.parent_id);
+    return roots.map((r) => ({ root: r, children: cats.filter((c) => c.parent_id === r.id) }));
+  }, [cats]);
+
+  if (!editing) return null;
+  const e = editing;
+  const set = (patch: Partial<Product>) => setEditing({ ...e, ...patch });
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-5xl max-h-[92vh] overflow-y-auto p-0">
+        <DialogHeader className="px-6 pt-6">
+          <DialogTitle className="font-display text-2xl">{e.id ? "Editar produto" : "Novo produto"}</DialogTitle>
+          <p className="text-xs text-muted-foreground">Preencha cada aba. Tudo é salvo de uma vez no botão "Salvar produto".</p>
+        </DialogHeader>
+
+        <Tabs defaultValue="produto" className="px-6 pt-4">
+          <TabsList className="flex flex-wrap h-auto gap-1 bg-muted/40">
+            <TabsTrigger value="produto">Produto</TabsTrigger>
+            <TabsTrigger value="fotos">Fotos</TabsTrigger>
+            <TabsTrigger value="precos">Preços & Estoque</TabsTrigger>
+            <TabsTrigger value="medidas">Medidas (m²)</TabsTrigger>
+            <TabsTrigger value="entrega">Entrega</TabsTrigger>
+            <TabsTrigger value="cores">Cores</TabsTrigger>
+            <TabsTrigger value="seo">SEO</TabsTrigger>
+            <TabsTrigger value="publicacao">Publicação</TabsTrigger>
+          </TabsList>
+
+          {/* ── PRODUTO ── */}
+          <TabsContent value="produto" className="space-y-4 pt-5">
+            <div className="grid sm:grid-cols-2 gap-3">
+              <div>
+                <Label>* Nome do produto</Label>
+                <Input
+                  value={e.name ?? ""}
+                  onChange={(ev) => set({ name: ev.target.value, slug: e.slug || slugify(ev.target.value) })}
+                  placeholder="Ex: Persiana Rolô Blackout"
+                />
+              </div>
+              <div>
+                <Label>Link do produto (slug)</Label>
+                <Input value={e.slug ?? ""} onChange={(ev) => set({ slug: ev.target.value })} placeholder="persiana-rolo-blackout" />
+                <p className="text-[11px] text-muted-foreground mt-1">URL: /produto/<strong>{e.slug || "..."}</strong></p>
+              </div>
+            </div>
+
+            <div>
+              <Label>Descrição curta</Label>
+              <Textarea value={e.short_description ?? ""} onChange={(ev) => set({ short_description: ev.target.value })} rows={2} placeholder="Resumo de 1–2 linhas que aparece no card e no topo do produto." />
+            </div>
+
+            <div>
+              <Label>Detalhes do produto</Label>
+              <Textarea value={e.description ?? ""} onChange={(ev) => set({ description: ev.target.value })} rows={6} placeholder="Descreva o produto: materiais, acabamento, benefícios..." />
+            </div>
+
+            <div>
+              <Label>Instalação</Label>
+              <Textarea value={e.installation ?? ""} onChange={(ev) => set({ installation: ev.target.value })} rows={5} placeholder="Passo a passo de instalação (opcional)." />
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-3">
+              <div>
+                <Label>Tags (separe por vírgula)</Label>
+                <Input
+                  value={(e.tags ?? []).join(", ")}
+                  onChange={(ev) => set({ tags: ev.target.value.split(",").map((t) => t.trim()).filter(Boolean) })}
+                  placeholder="blackout, sala, escritório"
+                />
+                <p className="text-[11px] text-muted-foreground mt-1">Auxiliam na busca e SEO.</p>
+              </div>
+              <div>
+                <Label>URL do vídeo (YouTube/Vimeo)</Label>
+                <Input value={e.video_url ?? ""} onChange={(ev) => set({ video_url: ev.target.value })} placeholder="https://youtu.be/..." />
+              </div>
+            </div>
+
+            <FileUpload
+              label="Manual do produto (PDF)"
+              accept="application/pdf"
+              folder="manuals"
+              value={e.manual_pdf_url ?? null}
+              onChange={(url) => set({ manual_pdf_url: url })}
+            />
+
+            <div className="grid sm:grid-cols-2 gap-4 rounded-lg border p-4 bg-sand/30">
+              <div>
+                <Label>* Categoria principal</Label>
+                <select
+                  className="w-full h-9 rounded-md border bg-background px-3 text-sm mt-1"
+                  value={e.category_id ?? ""}
+                  onChange={(ev) => set({ category_id: ev.target.value || null })}
+                >
+                  <option value="">Sem categoria</option>
+                  {grouped.map(({ root, children }) => (
+                    <optgroup key={root.id} label={root.name}>
+                      <option value={root.id}>{root.name}</option>
+                      {children.map((ch) => (
+                        <option key={ch.id} value={ch.id}>↳ {ch.name}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <Label>Categorias adicionais</Label>
+                <div className="mt-1 max-h-40 overflow-y-auto rounded-md border bg-background p-2 text-sm space-y-0.5">
+                  {grouped.map(({ root, children }) => (
+                    <div key={root.id}>
+                      <CatCheck id={root.id} label={root.name} bold checked={extraCats.includes(root.id)} onToggle={(v) => setExtraCats(v ? [...extraCats, root.id] : extraCats.filter((x) => x !== root.id))} />
+                      {children.map((ch) => (
+                        <CatCheck
+                          key={ch.id}
+                          id={ch.id}
+                          label={`— ${ch.name}`}
+                          checked={extraCats.includes(ch.id)}
+                          onToggle={(v) => setExtraCats(v ? [...extraCats, ch.id] : extraCats.filter((x) => x !== ch.id))}
+                        />
+                      ))}
+                    </div>
+                  ))}
+                  {grouped.length === 0 && <p className="text-xs text-muted-foreground">Crie categorias primeiro.</p>}
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* ── FOTOS ── */}
+          <TabsContent value="fotos" className="space-y-6 pt-5">
+            <div className="grid md:grid-cols-[260px_1fr] gap-6">
+              <ImageUpload
+                label="Foto de capa"
+                folder="covers"
+                value={e.cover_image ?? null}
+                onChange={(url) => set({ cover_image: url ?? "" })}
+                recommendedSize="1200 × 1200 px"
+              />
+              <div className="border-l md:pl-6">
+                <GalleryEditor items={e.gallery ?? []} onChange={(items) => set({ gallery: items })} />
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* ── PREÇOS & ESTOQUE ── */}
+          <TabsContent value="precos" className="space-y-4 pt-5">
+            <div className="grid sm:grid-cols-3 gap-3">
+              <div>
+                <Label>Tipo do produto</Label>
+                <select
+                  className="w-full h-9 rounded-md border bg-background px-3 text-sm"
+                  value={e.product_type ?? "simples"}
+                  onChange={(ev) => set({ product_type: ev.target.value })}
+                >
+                  <option value="simples">Simples (preço fixo)</option>
+                  <option value="metro_quadrado">Metro Quadrado (calculado)</option>
+                </select>
+              </div>
+              <div>
+                <Label>SKU / Referência</Label>
+                <Input value={e.sku ?? ""} onChange={(ev) => set({ sku: ev.target.value })} placeholder="REF-12345" />
+              </div>
+              <div>
+                <Label>Tempo de processamento (dias)</Label>
+                <Input type="number" value={e.processing_days ?? 0} onChange={(ev) => set({ processing_days: Number(ev.target.value) })} />
+              </div>
+            </div>
+
+            {e.product_type === "metro_quadrado" ? (
+              <div className="rounded-lg border p-4 bg-sand/30">
+                <h4 className="font-semibold text-sm mb-3">Preço por m²</h4>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  <div>
+                    <Label className="text-xs">Preço por m² (R$)</Label>
+                    <Input type="number" step="0.01" value={e.price_per_sqm ?? 0} onChange={(ev) => set({ price_per_sqm: Number(ev.target.value) })} />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Área mínima (m²)</Label>
+                    <Input type="number" step="0.1" value={e.min_area ?? 1} onChange={(ev) => set({ min_area: Number(ev.target.value) })} />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <Label>Preço normal (R$)</Label>
+                  <Input type="number" step="0.01" value={e.price ?? 0} onChange={(ev) => set({ price: Number(ev.target.value) })} />
+                </div>
+                <div>
+                  <Label>Preço de oferta (R$) <span className="text-muted-foreground text-xs">— opcional</span></Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={e.sale_price ?? ""}
+                    onChange={(ev) => set({ sale_price: ev.target.value === "" ? null : Number(ev.target.value) })}
+                    placeholder="0,00"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="grid sm:grid-cols-2 gap-3">
+              <div>
+                <Label>Estoque atual</Label>
+                <Input type="number" value={e.stock ?? 0} onChange={(ev) => set({ stock: Number(ev.target.value) })} />
+              </div>
+              <div>
+                <Label>Estoque mínimo (alerta)</Label>
+                <Input type="number" value={e.stock_min ?? 0} onChange={(ev) => set({ stock_min: Number(ev.target.value) })} />
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* ── MEDIDAS (m²) ── */}
+          <TabsContent value="medidas" className="space-y-4 pt-5">
+            <p className="text-xs text-muted-foreground">Limites usados quando o produto é do tipo <strong>Metro Quadrado</strong>.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div><Label className="text-xs">Largura mín (cm)</Label><Input type="number" value={e.min_width_cm ?? 40} onChange={(ev) => set({ min_width_cm: Number(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Largura máx (cm)</Label><Input type="number" value={e.max_width_cm ?? 300} onChange={(ev) => set({ max_width_cm: Number(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Altura mín (cm)</Label><Input type="number" value={e.min_height_cm ?? 40} onChange={(ev) => set({ min_height_cm: Number(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Altura máx (cm)</Label><Input type="number" value={e.max_height_cm ?? 300} onChange={(ev) => set({ max_height_cm: Number(ev.target.value) })} /></div>
+            </div>
+
+            <div className="rounded-lg border p-4 bg-sand/30">
+              <h4 className="font-semibold text-sm mb-3">Acionamento e acabamentos (R$ adicional)</h4>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div><Label className="text-xs">Manual</Label><Input type="number" step="0.01" value={e.motor_manual_price ?? 0} onChange={(ev) => set({ motor_manual_price: Number(ev.target.value) })} /></div>
+                <div><Label className="text-xs">Motor RF</Label><Input type="number" step="0.01" value={e.motor_rf_price ?? 0} onChange={(ev) => set({ motor_rf_price: Number(ev.target.value) })} /></div>
+                <div><Label className="text-xs">Motor Wi-Fi</Label><Input type="number" step="0.01" value={e.motor_wifi_price ?? 0} onChange={(ev) => set({ motor_wifi_price: Number(ev.target.value) })} /></div>
+                <div><Label className="text-xs">Bandô</Label><Input type="number" step="0.01" value={e.bando_price ?? 0} onChange={(ev) => set({ bando_price: Number(ev.target.value) })} /></div>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* ── ENTREGA ── */}
+          <TabsContent value="entrega" className="space-y-4 pt-5">
+            <p className="text-xs text-muted-foreground">Dimensões e peso do <strong>pacote fechado</strong> usados para cálculo de frete via Frenet (Jadlog).</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div><Label className="text-xs">Peso (kg)</Label><Input type="number" step="0.1" value={e.weight_kg ?? 2} onChange={(ev) => set({ weight_kg: Number(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Comprimento (cm)</Label><Input type="number" value={e.package_length_cm ?? 60} onChange={(ev) => set({ package_length_cm: Number(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Largura (cm)</Label><Input type="number" value={e.package_width_cm ?? 15} onChange={(ev) => set({ package_width_cm: Number(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Altura (cm)</Label><Input type="number" value={e.package_height_cm ?? 15} onChange={(ev) => set({ package_height_cm: Number(ev.target.value) })} /></div>
+            </div>
+            <p className="text-[11px] text-muted-foreground">Dica: meça a caixa fechada. Peso em kg, dimensões em cm.</p>
+          </TabsContent>
+
+          {/* ── CORES ── */}
+          <TabsContent value="cores" className="pt-5">
+            <ColorsEditor colors={e.colors ?? []} onChange={(colors) => set({ colors })} />
+          </TabsContent>
+
+          {/* ── SEO ── */}
+          <TabsContent value="seo" className="space-y-4 pt-5">
+            <div>
+              <Label>Título SEO <span className="text-muted-foreground text-xs">(até 60 caracteres)</span></Label>
+              <Input
+                value={e.seo_title ?? ""}
+                maxLength={70}
+                onChange={(ev) => set({ seo_title: ev.target.value })}
+                placeholder={e.name ? `${e.name} | Ágil Persianas` : "Ex: Persiana Rolô Blackout | Ágil"}
+              />
+              <p className="text-[11px] text-muted-foreground mt-1">{(e.seo_title ?? "").length}/60</p>
+            </div>
+            <div>
+              <Label>Descrição SEO <span className="text-muted-foreground text-xs">(até 160 caracteres)</span></Label>
+              <Textarea
+                value={e.seo_description ?? ""}
+                maxLength={180}
+                rows={3}
+                onChange={(ev) => set({ seo_description: ev.target.value })}
+                placeholder="Frase persuasiva de até 160 caracteres que aparece nos resultados do Google."
+              />
+              <p className="text-[11px] text-muted-foreground mt-1">{(e.seo_description ?? "").length}/160</p>
+            </div>
+          </TabsContent>
+
+          {/* ── PUBLICAÇÃO ── */}
+          <TabsContent value="publicacao" className="space-y-4 pt-5">
+            <div className="rounded-lg border p-4 space-y-3 max-w-md">
+              <label className="flex items-center justify-between gap-3 text-sm">
+                <div>
+                  <div className="font-medium">Disponível para venda</div>
+                  <div className="text-[11px] text-muted-foreground">Desativar oculta o produto do site.</div>
+                </div>
+                <Switch checked={!!e.active} onCheckedChange={(v) => set({ active: v })} />
+              </label>
+              <label className="flex items-center justify-between gap-3 text-sm">
+                <div>
+                  <div className="font-medium">Destaque na home</div>
+                  <div className="text-[11px] text-muted-foreground">Aparece em "Mais vendidos / Destaques".</div>
+                </div>
+                <Switch checked={!!e.featured} onCheckedChange={(v) => set({ featured: v })} />
+              </label>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        <DialogFooter className="px-6 pb-6 pt-4 border-t bg-muted/20">
+          <Button variant="ghost" onClick={onClose}>Cancelar</Button>
+          <Button onClick={onSave} disabled={saving}>
+            {saving && <Loader2 className="h-4 w-4 animate-spin" />} Salvar produto
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function CatCheck({ id, label, bold, checked, onToggle }: { id: string; label: string; bold?: boolean; checked: boolean; onToggle: (v: boolean) => void }) {
+  return (
+    <label className={`flex items-center gap-2 px-1 py-0.5 rounded hover:bg-muted/60 cursor-pointer ${bold ? "font-semibold" : ""}`}>
+      <input type="checkbox" checked={checked} onChange={(e) => onToggle(e.target.checked)} />
+      <span>{label}</span>
+    </label>
+  );
+}
 
 function ColorsEditor({ colors, onChange }: { colors: Color[]; onChange: (c: Color[]) => void }) {
   const update = (i: number, patch: Partial<Color>) => {
@@ -426,33 +665,15 @@ function ColorsEditor({ colors, onChange }: { colors: Color[]; onChange: (c: Col
         </Button>
       </div>
       {colors.length === 0 ? (
-        <p className="text-xs text-muted-foreground">
-          Nenhuma cor cadastrada. Sem cores, o site exibirá uma paleta padrão (Branco, Bege, Cinza, Grafite).
-        </p>
+        <p className="text-xs text-muted-foreground">Nenhuma cor cadastrada.</p>
       ) : (
-        <div className="grid gap-2">
+        <div className="grid sm:grid-cols-2 gap-2">
           {colors.map((c, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <input
-                type="color"
-                value={c.hex}
-                onChange={(e) => update(i, { hex: e.target.value })}
-                className="h-9 w-12 rounded border cursor-pointer"
-              />
-              <Input
-                value={c.hex}
-                onChange={(e) => update(i, { hex: e.target.value })}
-                className="w-28 font-mono text-xs"
-                placeholder="#FFFFFF"
-              />
-              <Input
-                value={c.name}
-                onChange={(e) => update(i, { name: e.target.value })}
-                placeholder="Nome da cor"
-                className="flex-1"
-              />
+            <div key={i} className="flex items-center gap-2 rounded-md border bg-card px-2 py-1.5">
+              <input type="color" value={c.hex} onChange={(e) => update(i, { hex: e.target.value })} className="h-7 w-9 rounded border-0 cursor-pointer" />
+              <Input value={c.name} onChange={(e) => update(i, { name: e.target.value })} className="h-8" />
               <Button type="button" variant="ghost" size="icon" onClick={() => remove(i)}>
-                <Trash2 className="h-4 w-4 text-destructive" />
+                <Trash2 className="h-3.5 w-3.5 text-destructive" />
               </Button>
             </div>
           ))}
