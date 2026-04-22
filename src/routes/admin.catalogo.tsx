@@ -36,6 +36,7 @@ type Product = {
   bando_price: number;
   active: boolean;
   featured: boolean;
+  colors: { name: string; hex: string }[];
 };
 
 const slugify = (s: string) =>
@@ -90,6 +91,11 @@ function Catalog() {
       bando_price: 0,
       active: true,
       featured: false,
+      colors: [
+        { name: "Branco", hex: "#FFFFFF" },
+        { name: "Bege", hex: "#D7C4A3" },
+        { name: "Cinza", hex: "#7E8794" },
+      ],
     });
   }
 
@@ -313,6 +319,11 @@ function Catalog() {
                   </div>
                 </div>
               </div>
+
+              <ColorsEditor
+                colors={editing.colors ?? []}
+                onChange={(colors) => setEditing({ ...editing, colors })}
+              />
 
               <div className="flex items-center gap-6">
                 <label className="flex items-center gap-2 text-sm">
