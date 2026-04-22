@@ -37,6 +37,10 @@ type Product = {
   active: boolean;
   featured: boolean;
   colors: { name: string; hex: string }[];
+  weight_kg: number;
+  package_length_cm: number;
+  package_width_cm: number;
+  package_height_cm: number;
 };
 
 const slugify = (s: string) =>
@@ -91,6 +95,10 @@ function Catalog() {
       bando_price: 0,
       active: true,
       featured: false,
+      weight_kg: 2,
+      package_length_cm: 60,
+      package_width_cm: 15,
+      package_height_cm: 15,
       colors: [
         { name: "Branco", hex: "#FFFFFF" },
         { name: "Bege", hex: "#D7C4A3" },
