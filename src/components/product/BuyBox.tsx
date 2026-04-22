@@ -12,6 +12,7 @@ import {
 import { Star, ShieldCheck, Truck, Ruler, MessageCircle, ChevronRight, Info } from "lucide-react";
 import type { Product } from "@/routes/produto.$slug";
 import { toast } from "sonner";
+import { CheckoutDialog } from "./CheckoutDialog";
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
