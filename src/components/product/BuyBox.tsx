@@ -95,9 +95,7 @@ export function BuyBox({ product }: { product: Product }) {
       toast.error(validation[0]);
       return;
     }
-    toast.success("Adicionado ao carrinho!", {
-      description: `${product.name} — ${(width / 100).toFixed(2)} × ${(height / 100).toFixed(2)} m — ${BRL(total)}`,
-    });
+    setCheckoutOpen(true);
   }
 
   function handleWhats() {
