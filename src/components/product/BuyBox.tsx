@@ -323,6 +323,22 @@ export function BuyBox({ product }: { product: Product }) {
           Garantia 5 anos
         </div>
       </div>
+
+      <CheckoutDialog
+        open={checkoutOpen}
+        onOpenChange={setCheckoutOpen}
+        total={total}
+        item={{
+          productId: product.id,
+          productName: product.name,
+          widthCm: width,
+          heightCm: height,
+          motor,
+          color,
+          bando,
+          unitPrice: product.price_per_sqm,
+        }}
+      />
     </div>
   );
 }
