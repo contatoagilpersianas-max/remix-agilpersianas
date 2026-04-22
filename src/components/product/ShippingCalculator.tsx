@@ -97,7 +97,7 @@ export function ShippingCalculator({
             <Input
               id={`cep-${productId}`}
               value={cep}
-              onChange={(e) => setCep(maskCep(e.target.value))}
+              onChange={(e) => updateCep(e.target.value)}
               placeholder="00000-000"
               inputMode="numeric"
               className="pl-9 h-10"

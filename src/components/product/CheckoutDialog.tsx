@@ -263,13 +263,8 @@ export function CheckoutDialog({
                   invoiceValue={baseSubtotal}
                   selectedCode={shipping?.serviceCode ?? null}
                   onSelect={(s) => setShipping(s)}
+                  onCepChange={setCep}
                   compact
-                />
-                {/* CEP visível para gravar no pedido (sincronizado pelo cálculo) */}
-                <input
-                  type="hidden"
-                  value={cep}
-                  onChange={(e) => setCep(e.target.value)}
                 />
               </div>
 
