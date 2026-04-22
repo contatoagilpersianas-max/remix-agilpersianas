@@ -9,20 +9,48 @@ import {
   ShieldCheck,
   CreditCard,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import logoAgil from "@/assets/agil-logo.png";
 
-const COLS = [
+interface FooterLink {
+  label: string;
+  to?: string;
+  href?: string;
+}
+
+const COLS: { title: string; links: FooterLink[] }[] = [
   {
     title: "Produtos",
-    links: ["Rolô", "Romana", "Double Vision", "Painel", "Horizontais", "Verticais", "Toldos"],
+    links: [
+      { label: "Persiana Rolô Blackout", to: "/persiana-rolo-blackout" },
+      { label: "Persiana Solar Screen", to: "/persiana-solar-screen" },
+      { label: "Cortina Romana", to: "/cortina-romana" },
+      { label: "Double Vision", to: "/persiana-double-vision" },
+      { label: "Telas Mosquiteiras", href: "#telas" },
+      { label: "Toldos e Automação", href: "#automacao" },
+    ],
   },
   {
     title: "Atendimento",
-    links: ["Como medir", "Como instalar", "Trocas e devoluções", "Frete e prazo", "Garantia", "FAQ"],
+    links: [
+      { label: "Como medir", to: "/blog/$slug", href: "/blog/como-medir-janela-persiana" },
+      { label: "Escolha de tecidos", href: "/blog/como-escolher-tecido-persiana" },
+      { label: "Automação", href: "/blog/automacao-persianas-casa-inteligente" },
+      { label: "Frete e prazo", href: "#frete" },
+      { label: "Garantia 5 anos", href: "#garantia" },
+      { label: "FAQ", href: "#faq" },
+    ],
   },
   {
-    title: "Institucional",
-    links: ["Sobre a Ágil", "Showroom", "Trabalhe conosco", "Blog", "Política de privacidade", "Termos de uso"],
+    title: "Onde atendemos",
+    links: [
+      { label: "Juiz de Fora — MG", to: "/persiana-juiz-de-fora" },
+      { label: "Rio de Janeiro", to: "/persiana-rio-de-janeiro" },
+      { label: "Belo Horizonte", to: "/persiana-belo-horizonte" },
+      { label: "Blog Ágil", to: "/blog" },
+      { label: "Trabalhe conosco", href: "#carreiras" },
+      { label: "Política de privacidade", href: "#privacidade" },
+    ],
   },
 ];
 
