@@ -350,3 +350,59 @@ function Catalog() {
     </div>
   );
 }
+
+type Color = { name: string; hex: string };
+
+function ColorsEditor({ colors, onChange }: { colors: Color[]; onChange: (c: Color[]) => void }) {
+  const update = (i: number, patch: Partial<Color>) => {
+    const next = [...colors];
+    next[i] = { ...next[i], ...patch };
+    onChange(next);
+  };
+  const remove = (i: number) => onChange(colors.filter((_, idx) => idx !== i));
+  const add = () => onChange([...colors, { name: "Nova cor", hex: "#cccccc" }]);
+
+  return (
+    <div className="rounded-lg border p-4 bg-sand/30">
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="font-semibold text-sm">Cores disponíveis</h4>
+        <Button type="button" size="sm" variant="outline" onClick={add}>
+          <Plus className="h-3.5 w-3.5" /> Adicionar
+        </Button>
+      </div>
+      {colors.length === 0 ? (
+        <p className="text-xs text-muted-foreground">
+          Nenhuma cor cadastrada. Sem cores, o site exibirá uma paleta padrão (Branco, Bege, Cinza, Grafite).
+        </p>
+      ) : (
+        <div className="grid gap-2">
+          {colors.map((c, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <input
+                type="color"
+                value={c.hex}
+                onChange={(e) => update(i, { hex: e.target.value })}
+                className="h-9 w-12 rounded border cursor-pointer"
+              />
+              <Input
+                value={c.hex}
+                onChange={(e) => update(i, { hex: e.target.value })}
+                className="w-28 font-mono text-xs"
+                placeholder="#FFFFFF"
+              />
+              <Input
+                value={c.name}
+                onChange={(e) => update(i, { name: e.target.value })}
+                placeholder="Nome da cor"
+                className="flex-1"
+              />
+              <Button type="button" variant="ghost" size="icon" onClick={() => remove(i)}>
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
