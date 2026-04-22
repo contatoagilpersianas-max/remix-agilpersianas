@@ -33,7 +33,7 @@ const COLS: { title: string; links: FooterLink[] }[] = [
   {
     title: "Atendimento",
     links: [
-      { label: "Como medir", to: "/blog/$slug", href: "/blog/como-medir-janela-persiana" },
+      { label: "Como medir", href: "/blog/como-medir-janela-persiana" },
       { label: "Escolha de tecidos", href: "/blog/como-escolher-tecido-persiana" },
       { label: "Automação", href: "/blog/automacao-persianas-casa-inteligente" },
       { label: "Frete e prazo", href: "#frete" },
