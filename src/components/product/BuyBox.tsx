@@ -294,6 +294,21 @@ export function BuyBox({ product }: { product: Product }) {
         </div>
       </div>
 
+      {/* Frete */}
+      <ShippingCalculator
+        productId={product.id}
+        invoiceValue={subtotal}
+        selectedCode={shipping?.serviceCode ?? null}
+        onSelect={setShipping}
+      />
+
+      {shipping && (
+        <div className="rounded-xl bg-sand/40 p-3 text-sm flex justify-between">
+          <span className="text-muted-foreground">Frete ({shipping.carrier})</span>
+          <span className="font-semibold">{BRL(shipping.price)}</span>
+        </div>
+      )}
+
       {/* CTAs */}
       <div className="space-y-3 pt-2">
         <Button
@@ -333,6 +348,8 @@ export function BuyBox({ product }: { product: Product }) {
         open={checkoutOpen}
         onOpenChange={setCheckoutOpen}
         total={total}
+        subtotal={subtotal}
+        shipping={shipping}
         item={{
           productId: product.id,
           productName: product.name,
