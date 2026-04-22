@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Search, User, ShoppingBag, Menu, X, Heart } from "lucide-react";
 import { useState } from "react";
+import logoAgil from "@/assets/agil-logo.png";
 
 const MOBILE_LINKS = [
   "Rolô", "Romana", "Double Vision", "Painel", "Horizontal", "Vertical",
@@ -14,21 +15,13 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border/60">
       <div className="container-premium grid h-20 grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-8">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <div
-            className="flex h-11 w-11 items-center justify-center rounded-md font-display text-xl font-bold shadow-md"
-            style={{ backgroundColor: "#F57C00", color: "#fff" }}
-          >
-            Á
-          </div>
-          <div className="flex flex-col leading-none">
-            <span className="font-display text-xl md:text-2xl font-bold tracking-tight text-foreground">
-              ágil <span style={{ color: "#F57C00" }}>Persianas</span>
-            </span>
-            <span className="mt-0.5 text-[9px] md:text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-              Conforto sob medida
-            </span>
-          </div>
+        <Link to="/" className="flex items-center shrink-0" aria-label="Ágil Persianas">
+          <img
+            src={logoAgil}
+            alt="Ágil Persianas"
+            className="h-9 md:h-11 w-auto select-none"
+            draggable={false}
+          />
         </Link>
 
         {/* Busca central */}
