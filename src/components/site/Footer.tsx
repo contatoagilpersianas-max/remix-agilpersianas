@@ -5,13 +5,13 @@ import {
   MessageCircle,
   Phone,
   Mail,
-  MapPin,
   ShieldCheck,
   CreditCard,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import logoAgil from "@/assets/agil-logo.png";
 import { type NavColumn, validateNavLinks } from "@/lib/nav";
+import { SITE_CONFIG, whatsappLink } from "@/lib/site-config";
 
 const COLS: NavColumn[] = [
   {
@@ -21,8 +21,7 @@ const COLS: NavColumn[] = [
       { label: "Persiana Solar Screen", to: "/persiana-solar-screen" },
       { label: "Cortina Romana", to: "/cortina-romana" },
       { label: "Double Vision", to: "/persiana-double-vision" },
-      { label: "Telas Mosquiteiras", href: "#telas" },
-      { label: "Toldos e Automação", href: "#automacao" },
+      { label: "Catálogo completo", to: "/catalogo" },
     ],
   },
   {
@@ -37,13 +36,12 @@ const COLS: NavColumn[] = [
     ],
   },
   {
-    title: "Onde atendemos",
+    title: "Ágil",
     links: [
-      { label: "Juiz de Fora — MG", to: "/persiana-juiz-de-fora" },
-      { label: "Rio de Janeiro", to: "/persiana-rio-de-janeiro" },
-      { label: "Belo Horizonte", to: "/persiana-belo-horizonte" },
+      { label: "Persiana Juiz de Fora", to: "/persiana-juiz-de-fora" },
+      { label: "Persiana Rio de Janeiro", to: "/persiana-rio-de-janeiro" },
+      { label: "Persiana Belo Horizonte", to: "/persiana-belo-horizonte" },
       { label: "Blog Ágil", to: "/blog" },
-      { label: "Trabalhe conosco", href: "#carreiras" },
       { label: "Política de privacidade", href: "#privacidade" },
     ],
   },
@@ -66,35 +64,32 @@ export function Footer() {
           <ul className="mt-6 space-y-3 text-sm">
             <li className="flex items-start gap-3">
               <Phone className="mt-0.5 h-4 w-4 text-primary-glow" />
-              <a href="tel:+551140028922" className="opacity-80 hover:opacity-100">
-                (11) 4002-8922
+              <a
+                href={`tel:+${SITE_CONFIG.whatsappNumber}`}
+                className="opacity-80 hover:opacity-100"
+              >
+                {SITE_CONFIG.phoneDisplay}
               </a>
             </li>
             <li className="flex items-start gap-3">
               <MessageCircle className="mt-0.5 h-4 w-4 text-primary-glow" />
               <a
-                href="https://wa.me/5511999999999"
+                href={whatsappLink()}
                 target="_blank"
                 rel="noreferrer"
                 className="opacity-80 hover:opacity-100"
               >
-                WhatsApp · seg a sáb, 8h–20h
+                WhatsApp {SITE_CONFIG.whatsappDisplay} · {SITE_CONFIG.hours}
               </a>
             </li>
             <li className="flex items-start gap-3">
               <Mail className="mt-0.5 h-4 w-4 text-primary-glow" />
               <a
-                href="mailto:contato@agilpersianas.com.br"
+                href={`mailto:${SITE_CONFIG.email}`}
                 className="opacity-80 hover:opacity-100"
               >
-                contato@agilpersianas.com.br
+                {SITE_CONFIG.email}
               </a>
-            </li>
-            <li className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 text-primary-glow" />
-              <span className="opacity-80">
-                Showroom — Av. das Persianas, 1234 · São Paulo, SP
-              </span>
             </li>
           </ul>
 
@@ -175,7 +170,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container-premium flex flex-col items-center justify-between gap-3 py-6 text-xs text-white/60 md:flex-row">
           <div>
-            © {new Date().getFullYear()} Ágil Persianas — CNPJ 00.000.000/0001-00. Todos os direitos reservados.
+            © {new Date().getFullYear()} {SITE_CONFIG.brand} — CNPJ {SITE_CONFIG.cnpj}. Todos os direitos reservados.
           </div>
           <div className="flex gap-5">
             <a href="#" className="hover:text-white">Privacidade</a>

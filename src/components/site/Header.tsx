@@ -1,15 +1,33 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Search, User, ShoppingBag, Menu, X, Heart } from "lucide-react";
 import { useState } from "react";
 import logoAgil from "@/assets/agil-logo.png";
+import { supabase } from "@/integrations/supabase/client";
+import { useCart } from "@/lib/cart";
+import { whatsappLink } from "@/lib/site-config";
 
-const MOBILE_LINKS = [
-  "Rolô", "Romana", "Double Vision", "Painel", "Horizontal", "Vertical",
-  "Tela Mosquiteira", "Toldos", "Automação", "Ambientes", "Ofertas",
-];
+type Cat = { id: string; name: string; slug: string; parent_id: string | null; show_in_menu: boolean | null };
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { count, setOpen: setCartOpen } = useCart();
+
+  const { data: cats = [] } = useQuery({
+    queryKey: ["mobile-cats"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("categories")
+        .select("id,name,slug,parent_id,show_in_menu")
+        .eq("active", true)
+        .order("position");
+      return (data ?? []) as Cat[];
+    },
+    staleTime: 0,
+    refetchOnMount: "always",
+  });
+
+  const mobileLinks = cats.filter((c) => c.show_in_menu !== false);
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border/60">
@@ -26,7 +44,11 @@ export function Header() {
 
         {/* Busca central */}
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault();
+            const q = (e.currentTarget.querySelector('input[type="search"]') as HTMLInputElement)?.value;
+            if (q) window.location.assign(`/catalogo?q=${encodeURIComponent(q)}`);
+          }}
           className="hidden md:flex items-center h-12 w-full max-w-2xl mx-auto rounded-full border border-border bg-secondary/40 px-5 transition focus-within:border-primary focus-within:bg-background"
         >
           <Search className="h-4 w-4 text-muted-foreground shrink-0" />
@@ -60,6 +82,7 @@ export function Header() {
             <User className="h-5 w-5" />
           </Link>
           <button
+            onClick={() => setCartOpen(true)}
             aria-label="Carrinho"
             className="inline-flex h-11 items-center gap-2 rounded-full bg-foreground px-4 md:px-5 text-[12px] font-bold uppercase tracking-[0.14em] text-background transition hover:bg-primary"
           >
@@ -69,7 +92,7 @@ export function Header() {
               className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold"
               style={{ backgroundColor: "#F57C00", color: "#fff" }}
             >
-              0
+              {count}
             </span>
           </button>
           <button
@@ -85,7 +108,11 @@ export function Header() {
       {/* Busca mobile */}
       <div className="md:hidden border-t border-border/60 bg-background px-4 py-3">
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault();
+            const q = (e.currentTarget.querySelector('input[type="search"]') as HTMLInputElement)?.value;
+            if (q) window.location.assign(`/catalogo?q=${encodeURIComponent(q)}`);
+          }}
           className="flex items-center h-11 rounded-full border border-border bg-secondary/40 px-4"
         >
           <Search className="h-4 w-4 text-muted-foreground shrink-0" />
@@ -100,19 +127,24 @@ export function Header() {
       {/* Menu mobile */}
       {open && (
         <div className="lg:hidden border-t border-border bg-background">
-          <div className="container-premium space-y-1 py-3">
-            {MOBILE_LINKS.map((item) => (
+          <div className="container-premium space-y-1 py-3 max-h-[70vh] overflow-y-auto">
+            {mobileLinks.map((item) => (
               <Link
-                key={item}
-                to="/"
-                className="block rounded-md px-3 py-2.5 text-sm font-semibold text-foreground/85 hover:bg-secondary"
+                key={item.id}
+                to="/catalogo"
+                search={{ categoria: item.slug }}
+                className={`block rounded-md px-3 py-2.5 text-sm hover:bg-secondary ${
+                  !item.parent_id
+                    ? "font-bold text-primary uppercase tracking-wider"
+                    : "font-medium text-foreground/85 pl-6"
+                }`}
                 onClick={() => setOpen(false)}
               >
-                {item}
+                {!item.parent_id ? item.name : `↳ ${item.name}`}
               </Link>
             ))}
             <a
-              href="https://wa.me/5511999999999"
+              href={whatsappLink()}
               target="_blank"
               rel="noreferrer"
               className="mt-2 flex h-11 items-center justify-center rounded-full px-6 text-[12px] font-bold uppercase tracking-[0.14em] text-white shadow-lg"
