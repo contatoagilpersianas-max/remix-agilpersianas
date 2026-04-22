@@ -14,6 +14,8 @@ import { Loader2, Copy, ExternalLink, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { createAsaasCharge } from "@/lib/asaas.functions";
+import { ShippingCalculator } from "./ShippingCalculator";
+import type { ShippingQuote } from "@/lib/frenet.functions";
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -35,6 +37,8 @@ type Props = {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   total: number;
+  subtotal?: number;
+  shipping?: ShippingQuote | null;
   item: CheckoutItem;
 };
 
@@ -46,14 +50,27 @@ type ChargeResult = {
   billingType: BillingType;
 };
 
-export function CheckoutDialog({ open, onOpenChange, total, item }: Props) {
+export function CheckoutDialog({
+  open,
+  onOpenChange,
+  total,
+  subtotal,
+  shipping: initialShipping,
+  item,
+}: Props) {
   const [step, setStep] = useState<"form" | "loading" | "success">("form");
   const [billingType, setBillingType] = useState<BillingType>("PIX");
   const [name, setName] = useState("");
   const [cpfCnpj, setCpfCnpj] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [cep, setCep] = useState("");
+  const [shipping, setShipping] = useState<ShippingQuote | null>(initialShipping ?? null);
   const [result, setResult] = useState<ChargeResult | null>(null);
+
+  const baseSubtotal = subtotal ?? total;
+  const shippingCost = shipping?.price ?? 0;
+  const finalTotal = baseSubtotal + shippingCost;
 
   const createCharge = useServerFn(createAsaasCharge);
 
@@ -68,13 +85,10 @@ export function CheckoutDialog({ open, onOpenChange, total, item }: Props) {
     const digits = cpfCnpj.replace(/\D/g, "");
     if (digits.length !== 11 && digits.length !== 14)
       return toast.error("CPF ou CNPJ inválido");
+    if (!shipping) return toast.error("Calcule e selecione o frete antes de continuar");
 
     setStep("loading");
     try {
-      // 1. Cria o pedido (RLS permite admin; aqui usamos public insert via RPC seria ideal,
-      //    mas como orders só permite admin gerenciar, usamos um insert anônimo via função.
-      //    Para manter simples, criamos via supabase com auth pública — tabela aceita insert
-      //    se houver policy. Caso contrário, este insert será negado e cairá no catch.)
       const { data: order, error: orderErr } = await supabase
         .from("orders")
         .insert({
@@ -93,8 +107,11 @@ export function CheckoutDialog({ open, onOpenChange, total, item }: Props) {
               unit_price: item.unitPrice,
             },
           ],
-          subtotal: total,
-          total,
+          subtotal: baseSubtotal,
+          total: finalTotal,
+          notes: shipping
+            ? `Frete: ${shipping.carrier} (${shipping.serviceDescription}) - ${shipping.deliveryDays}d - R$ ${shipping.price.toFixed(2)} | CEP ${cep || "-"}`
+            : null,
         })
         .select("id")
         .single();
@@ -115,6 +132,7 @@ export function CheckoutDialog({ open, onOpenChange, total, item }: Props) {
             cpfCnpj: digits,
             email: email || undefined,
             phone: phone || undefined,
+            postalCode: cep.replace(/\D/g, "") || undefined,
           },
         },
       });
@@ -152,14 +170,14 @@ export function CheckoutDialog({ open, onOpenChange, total, item }: Props) {
         if (!v) setTimeout(reset, 200);
       }}
     >
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         {step === "form" && (
           <>
             <DialogHeader>
               <DialogTitle className="font-display text-2xl">Finalizar compra</DialogTitle>
               <DialogDescription>
-                Total <strong className="text-foreground">{BRL(total)}</strong> ·{" "}
-                {item.productName}
+                {item.productName} ·{" "}
+                <strong className="text-foreground">{BRL(finalTotal)}</strong>
               </DialogDescription>
             </DialogHeader>
 
@@ -235,8 +253,39 @@ export function CheckoutDialog({ open, onOpenChange, total, item }: Props) {
                 </div>
               </div>
 
-              <Button type="submit" size="lg" className="w-full h-12">
-                Gerar cobrança · {BRL(total)}
+              {/* Frete */}
+              <div className="rounded-xl border p-3 bg-sand/30 space-y-2">
+                <div className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Entrega
+                </div>
+                <ShippingCalculator
+                  productId={item.productId}
+                  invoiceValue={baseSubtotal}
+                  selectedCode={shipping?.serviceCode ?? null}
+                  onSelect={(s) => setShipping(s)}
+                  onCepChange={setCep}
+                  compact
+                />
+              </div>
+
+              {/* Resumo */}
+              <div className="rounded-xl bg-muted/40 p-3 text-sm space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span>{BRL(baseSubtotal)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Frete</span>
+                  <span>{shipping ? BRL(shippingCost) : "—"}</span>
+                </div>
+                <div className="flex justify-between font-display text-base pt-1 border-t">
+                  <span>Total</span>
+                  <span>{BRL(finalTotal)}</span>
+                </div>
+              </div>
+
+              <Button type="submit" size="lg" className="w-full h-12" disabled={!shipping}>
+                Gerar cobrança · {BRL(finalTotal)}
               </Button>
               <p className="text-[11px] text-center text-muted-foreground">
                 Pagamento processado com segurança via Asaas. Seus dados não são

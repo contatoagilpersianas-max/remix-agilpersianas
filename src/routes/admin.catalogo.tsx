@@ -37,6 +37,10 @@ type Product = {
   active: boolean;
   featured: boolean;
   colors: { name: string; hex: string }[];
+  weight_kg: number;
+  package_length_cm: number;
+  package_width_cm: number;
+  package_height_cm: number;
 };
 
 const slugify = (s: string) =>
@@ -91,6 +95,10 @@ function Catalog() {
       bando_price: 0,
       active: true,
       featured: false,
+      weight_kg: 2,
+      package_length_cm: 60,
+      package_width_cm: 15,
+      package_height_cm: 15,
       colors: [
         { name: "Branco", hex: "#FFFFFF" },
         { name: "Bege", hex: "#D7C4A3" },
@@ -316,6 +324,49 @@ function Catalog() {
                   <div>
                     <Label className="text-xs">Bandô (R$)</Label>
                     <Input type="number" step="0.01" value={editing.bando_price ?? 0} onChange={(e) => setEditing({ ...editing, bando_price: Number(e.target.value) })} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Cubagem para frete (Frenet) */}
+              <div className="rounded-lg border p-4 bg-sand/30">
+                <h4 className="font-semibold text-sm mb-1">Frete · Cubagem do pacote</h4>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Dimensões e peso usados para cálculo de frete via Frenet (PAC, SEDEX, Jadlog…).
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div>
+                    <Label className="text-xs">Peso (kg)</Label>
+                    <Input
+                      type="number"
+                      step="0.1"
+                      value={editing.weight_kg ?? 2}
+                      onChange={(e) => setEditing({ ...editing, weight_kg: Number(e.target.value) })}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Comprimento (cm)</Label>
+                    <Input
+                      type="number"
+                      value={editing.package_length_cm ?? 60}
+                      onChange={(e) => setEditing({ ...editing, package_length_cm: Number(e.target.value) })}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Largura (cm)</Label>
+                    <Input
+                      type="number"
+                      value={editing.package_width_cm ?? 15}
+                      onChange={(e) => setEditing({ ...editing, package_width_cm: Number(e.target.value) })}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Altura (cm)</Label>
+                    <Input
+                      type="number"
+                      value={editing.package_height_cm ?? 15}
+                      onChange={(e) => setEditing({ ...editing, package_height_cm: Number(e.target.value) })}
+                    />
                   </div>
                 </div>
               </div>
