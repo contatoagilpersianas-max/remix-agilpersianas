@@ -2,18 +2,26 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 
+export type GalleryImage = string | { url: string; caption?: string; color?: string };
+
+function normalize(images: GalleryImage[]): { url: string; caption?: string }[] {
+  return images.map((i) => (typeof i === "string" ? { url: i } : { url: i.url, caption: i.caption }));
+}
+
 export function ProductGallery({
   images,
   alt,
   badge,
 }: {
-  images: string[];
+  images: GalleryImage[];
   alt: string;
   badge?: string | null;
 }) {
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
-  const safe = images.length ? images : ["/placeholder.svg"];
+  const list = normalize(images);
+  const safe = list.length ? list : [{ url: "/placeholder.svg" }];
+  const current = safe[active];
 
   return (
     <div>
@@ -33,11 +41,16 @@ export function ProductGallery({
         </button>
         <div className="aspect-[4/5] sm:aspect-square w-full overflow-hidden">
           <img
-            src={safe[active]}
-            alt={alt}
+            src={current.url}
+            alt={current.caption || alt}
             className="w-full h-full object-cover transition-transform duration-700 ease-premium group-hover:scale-[1.04]"
           />
         </div>
+        {current.caption && (
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white text-sm px-5 py-3">
+            {current.caption}
+          </div>
+        )}
         {safe.length > 1 && (
           <>
             <button
@@ -67,8 +80,9 @@ export function ProductGallery({
               className={`aspect-square rounded-xl overflow-hidden border-2 transition ${
                 i === active ? "border-primary shadow-md" : "border-transparent opacity-70 hover:opacity-100"
               }`}
+              title={img.caption}
             >
-              <img src={img} alt="" className="w-full h-full object-cover" />
+              <img src={img.url} alt={img.caption || ""} className="w-full h-full object-cover" />
             </button>
           ))}
         </div>
@@ -79,7 +93,7 @@ export function ProductGallery({
           onClick={() => setZoomed(false)}
           className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out animate-fade-up"
         >
-          <img src={safe[active]} alt={alt} className="max-h-[90vh] max-w-full rounded-lg" />
+          <img src={current.url} alt={alt} className="max-h-[90vh] max-w-full rounded-lg" />
         </div>
       )}
     </div>
