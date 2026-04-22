@@ -1,6 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, User, ShoppingBag, Menu, X, Heart } from "lucide-react";
 import { useState } from "react";
+
+const MOBILE_LINKS = [
+  "Rolô", "Romana", "Double Vision", "Painel", "Horizontal", "Vertical",
+  "Tela Mosquiteira", "Toldos", "Automação", "Ambientes", "Ofertas",
+];
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -11,14 +16,14 @@ export function Header() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <div
-            className="flex h-11 w-11 items-center justify-center rounded-md font-display text-xl font-bold"
-            style={{ backgroundColor: "#E2763A", color: "#fff" }}
+            className="flex h-11 w-11 items-center justify-center rounded-md font-display text-xl font-bold shadow-md"
+            style={{ backgroundColor: "#F57C00", color: "#fff" }}
           >
             Á
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-display text-xl md:text-2xl font-bold tracking-tight text-foreground">
-              ágil <span className="text-primary">Persianas</span>
+              ágil <span style={{ color: "#F57C00" }}>Persianas</span>
             </span>
             <span className="mt-0.5 text-[9px] md:text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
               Conforto sob medida
@@ -37,10 +42,23 @@ export function Header() {
             placeholder="O que você procura? Ex: persiana rolô blackout"
             className="flex-1 bg-transparent px-3 text-sm outline-none placeholder:text-muted-foreground"
           />
+          <button
+            type="submit"
+            className="hidden md:inline-flex h-9 items-center rounded-full px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-white"
+            style={{ backgroundColor: "#F57C00" }}
+          >
+            Buscar
+          </button>
         </form>
 
         {/* Ações */}
         <div className="flex items-center gap-1 md:gap-2">
+          <button
+            aria-label="Favoritos"
+            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full text-foreground/70 hover:text-primary transition"
+          >
+            <Heart className="h-5 w-5" />
+          </button>
           <Link
             to="/auth"
             aria-label="Minha conta"
@@ -56,7 +74,7 @@ export function Header() {
             <span className="hidden sm:inline">Carrinho</span>
             <span
               className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold"
-              style={{ backgroundColor: "#E2763A", color: "#fff" }}
+              style={{ backgroundColor: "#F57C00", color: "#fff" }}
             >
               0
             </span>
@@ -90,11 +108,11 @@ export function Header() {
       {open && (
         <div className="lg:hidden border-t border-border bg-background">
           <div className="container-premium space-y-1 py-3">
-            {["Rolô", "Romana", "Double Vision", "Painel", "Horizontal", "Vertical", "Tela Mosquiteira", "Toldos", "Ambientes"].map((item) => (
+            {MOBILE_LINKS.map((item) => (
               <Link
                 key={item}
                 to="/"
-                className="block rounded-md px-3 py-2.5 text-sm font-semibold text-foreground/80 hover:bg-secondary"
+                className="block rounded-md px-3 py-2.5 text-sm font-semibold text-foreground/85 hover:bg-secondary"
                 onClick={() => setOpen(false)}
               >
                 {item}
@@ -104,7 +122,8 @@ export function Header() {
               href="https://wa.me/5511999999999"
               target="_blank"
               rel="noreferrer"
-              className="mt-2 flex h-11 items-center justify-center rounded-full bg-primary px-6 text-[12px] font-bold uppercase tracking-[0.14em] text-primary-foreground"
+              className="mt-2 flex h-11 items-center justify-center rounded-full px-6 text-[12px] font-bold uppercase tracking-[0.14em] text-white shadow-lg"
+              style={{ backgroundColor: "#F57C00" }}
             >
               Solicitar orçamento
             </a>
