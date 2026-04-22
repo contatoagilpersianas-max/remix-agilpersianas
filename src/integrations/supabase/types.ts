@@ -94,6 +94,10 @@ export type Database = {
       }
       orders: {
         Row: {
+          asaas_invoice_url: string | null
+          asaas_payment_id: string | null
+          asaas_pix_payload: string | null
+          asaas_pix_qrcode: string | null
           created_at: string
           customer_address: string | null
           customer_email: string | null
@@ -112,6 +116,10 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          asaas_invoice_url?: string | null
+          asaas_payment_id?: string | null
+          asaas_pix_payload?: string | null
+          asaas_pix_qrcode?: string | null
           created_at?: string
           customer_address?: string | null
           customer_email?: string | null
@@ -130,6 +138,10 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          asaas_invoice_url?: string | null
+          asaas_payment_id?: string | null
+          asaas_pix_payload?: string | null
+          asaas_pix_qrcode?: string | null
           created_at?: string
           customer_address?: string | null
           customer_email?: string | null
