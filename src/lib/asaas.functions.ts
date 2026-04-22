@@ -16,6 +16,7 @@ async function asaasFetch(path: string, init?: RequestInit) {
     ...init,
     headers: {
       "Content-Type": "application/json",
+      "User-Agent": "AgilPersianas/1.0 (+https://agil2.lovable.app)",
       access_token: apiKey,
       ...(init?.headers ?? {}),
     },
