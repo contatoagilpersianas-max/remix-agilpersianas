@@ -21,6 +21,7 @@ type Props = {
   quantity?: number;
   selectedCode?: string | null;
   onSelect?: (q: ShippingQuote) => void;
+  onCepChange?: (cep: string) => void;
   compact?: boolean;
 };
 
@@ -30,12 +31,19 @@ export function ShippingCalculator({
   quantity = 1,
   selectedCode = null,
   onSelect,
+  onCepChange,
   compact = false,
 }: Props) {
   const [cep, setCep] = useState("");
   const [loading, setLoading] = useState(false);
   const [services, setServices] = useState<ShippingQuote[] | null>(null);
   const quote = useServerFn(quoteShipping);
+
+  function updateCep(v: string) {
+    const next = maskCep(v);
+    setCep(next);
+    onCepChange?.(next);
+  }
 
   async function handleQuote(e?: React.FormEvent) {
     e?.preventDefault();
