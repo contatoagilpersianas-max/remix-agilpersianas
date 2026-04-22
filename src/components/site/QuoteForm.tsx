@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Send, CheckCircle2 } from "lucide-react";
+import { trackLead } from "@/lib/analytics";
 
 type Props = {
   defaultInterest?: string;
@@ -43,6 +44,12 @@ export function QuoteForm({ defaultInterest, source = "site", compact = false }:
       toast.error("Erro ao enviar. Tente o WhatsApp.");
       return;
     }
+    trackLead({
+      content_name: interest || "orcamento_geral",
+      source,
+      value: 1,
+      currency: "BRL",
+    });
     setDone(true);
     toast.success("Recebemos! Entraremos em contato em breve.");
   }

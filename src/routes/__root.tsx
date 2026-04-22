@@ -2,8 +2,14 @@ import { Outlet, Link, createRootRouteWithContext, HeadContent, Scripts } from "
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
+import { SocialProofToasts } from "@/components/site/SocialProofToasts";
+import { META_PIXEL_ID, GA4_MEASUREMENT_ID } from "@/lib/analytics";
 
 import appCss from "../styles.css?url";
+
+const PIXEL_SNIPPET = `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${META_PIXEL_ID}');fbq('track','PageView');`;
+
+const GA4_INIT = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('js',new Date());gtag('config','${GA4_MEASUREMENT_ID}',{send_page_view:true});`;
 
 function NotFoundComponent() {
   return (
@@ -63,7 +69,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify(ORG_JSONLD) }],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(ORG_JSONLD) },
+      { children: PIXEL_SNIPPET },
+      { src: `https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`, async: true },
+      { children: GA4_INIT },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -91,6 +102,7 @@ function RootComponent() {
       <AuthProvider>
         <Outlet />
         <Toaster richColors position="top-right" />
+        <SocialProofToasts />
       </AuthProvider>
     </QueryClientProvider>
   );
