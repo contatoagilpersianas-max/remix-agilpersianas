@@ -1,4 +1,5 @@
-// Projetos / Ambientes — quarto, sala, escritório, sacada, corporativo
+// Projetos / Ambientes — quarto, sala, escritório, sacada
+import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import quarto from "@/assets/ambiente-quarto.jpg";
 import sala from "@/assets/ambiente-sala.jpg";
@@ -6,10 +7,10 @@ import escritorio from "@/assets/ambiente-escritorio.jpg";
 import sacada from "@/assets/ambiente-sacada.jpg";
 
 const ROOMS = [
-  { name: "Quarto", desc: "Blackout para escurecer 100%", img: quarto },
-  { name: "Sala", desc: "Double Vision e screen", img: sala },
-  { name: "Escritório", desc: "Tela solar antirreflexo", img: escritorio },
-  { name: "Sacada", desc: "Toldo retrátil e tela", img: sacada },
+  { name: "Quarto", desc: "Blackout para escurecer 100%", img: quarto, slug: "quarto" },
+  { name: "Sala", desc: "Double Vision e screen", img: sala, slug: "sala" },
+  { name: "Escritório", desc: "Tela solar antirreflexo", img: escritorio, slug: "escritorio" },
+  { name: "Sacada", desc: "Toldo retrátil e tela", img: sacada, slug: "sacada" },
 ];
 
 export function RoomsSection() {
@@ -36,9 +37,10 @@ export function RoomsSection() {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
           {ROOMS.map((r) => (
-            <a
-              key={r.name}
-              href="#categorias"
+            <Link
+              key={r.slug}
+              to="/catalogo"
+              search={{ ambiente: r.slug }}
               className="group relative block aspect-[3/4] overflow-hidden rounded-2xl bg-foreground shadow-md"
             >
               <img
@@ -51,14 +53,22 @@ export function RoomsSection() {
                 className="absolute inset-0"
                 style={{
                   background:
-                    "linear-gradient(180deg, transparent 45%, rgba(15,10,5,0.85) 100%)",
+                    "linear-gradient(180deg, transparent 35%, rgba(15,10,5,0.92) 100%)",
                 }}
               />
               <div className="absolute inset-x-0 bottom-0 p-5 text-white">
                 <div className="flex items-end justify-between">
                   <div>
-                    <h3 className="font-display text-xl font-semibold">{r.name}</h3>
-                    <p className="mt-1 text-[12px] uppercase tracking-[0.16em] opacity-80">
+                    <h3
+                      className="font-display text-xl font-semibold drop-shadow-lg"
+                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
+                    >
+                      {r.name}
+                    </h3>
+                    <p
+                      className="mt-1 text-[12px] uppercase tracking-[0.16em] opacity-90"
+                      style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+                    >
                       {r.desc}
                     </p>
                   </div>
@@ -70,7 +80,7 @@ export function RoomsSection() {
                   </span>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import { useLocation } from "@tanstack/react-router";
-
-const PHONE = "5511999999999";
+import { whatsappLink } from "@/lib/site-config";
 
 export function WhatsAppFAB() {
   const location = useLocation();
@@ -11,7 +10,7 @@ export function WhatsAppFAB() {
   const text = slug
     ? `Olá! Vim do site e quero um orçamento para: ${decodeURIComponent(slug).replace(/-/g, " ")}.`
     : "Olá! Vim do site da Ágil Persianas e quero um orçamento.";
-  const href = `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`;
+  const href = whatsappLink(text);
 
   return (
     <a

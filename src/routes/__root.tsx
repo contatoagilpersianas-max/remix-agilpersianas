@@ -2,6 +2,8 @@ import { Outlet, Link, createRootRouteWithContext, HeadContent, Scripts } from "
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
+import { CartProvider } from "@/lib/cart";
+import { CartDrawer } from "@/components/site/CartDrawer";
 import { SocialProofToasts } from "@/components/site/SocialProofToasts";
 import { META_PIXEL_ID, GA4_MEASUREMENT_ID } from "@/lib/analytics";
 
@@ -100,9 +102,12 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
-        <Toaster richColors position="top-right" />
-        <SocialProofToasts />
+        <CartProvider>
+          <Outlet />
+          <CartDrawer />
+          <Toaster richColors position="top-right" />
+          <SocialProofToasts />
+        </CartProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

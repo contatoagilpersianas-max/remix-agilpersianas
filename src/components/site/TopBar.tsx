@@ -1,4 +1,5 @@
 import { Phone, MessageCircle, Truck, CreditCard } from "lucide-react";
+import { SITE_CONFIG, whatsappLink } from "@/lib/site-config";
 
 export function TopBar() {
   return (
@@ -6,21 +7,21 @@ export function TopBar() {
       <div className="container-premium flex h-9 items-center justify-between gap-4">
         <div className="hidden items-center gap-5 md:flex">
           <a
-            href="tel:+551140028922"
+            href={`tel:+${SITE_CONFIG.whatsappNumber}`}
             className="flex items-center gap-1.5 opacity-85 transition hover:opacity-100"
           >
             <Phone className="h-3.5 w-3.5" />
-            (11) 4002-8922
+            {SITE_CONFIG.phoneDisplay}
           </a>
           <a
-            href="https://wa.me/5511999999999"
+            href={whatsappLink()}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1.5 opacity-85 transition hover:opacity-100"
             style={{ color: "#FFB877" }}
           >
             <MessageCircle className="h-3.5 w-3.5" />
-            WhatsApp
+            WhatsApp {SITE_CONFIG.whatsappDisplay}
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center gap-4 md:flex-none md:justify-end">
