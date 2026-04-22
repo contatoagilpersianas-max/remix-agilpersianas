@@ -35,7 +35,19 @@ type CartContextType = {
   clear: () => void;
 };
 
-const CartContext = createContext<CartContextType | null>(null);
+const noop = () => {};
+const defaultCartContext: CartContextType = {
+  items: [],
+  count: 0,
+  subtotal: 0,
+  open: false,
+  setOpen: noop,
+  addItem: noop,
+  removeItem: noop,
+  updateQty: noop,
+  clear: noop,
+};
+const CartContext = createContext<CartContextType>(defaultCartContext);
 const STORAGE_KEY = "agil:cart";
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -98,9 +110,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 }
 
 export function useCart(): CartContextType {
-  const ctx = useContext(CartContext);
-  if (!ctx) throw new Error("useCart precisa estar dentro de <CartProvider>");
-  return ctx;
+  return useContext(CartContext);
 }
 
 export const formatBRL = (n: number) =>
