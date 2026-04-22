@@ -112,7 +112,7 @@ export function Hero() {
           >
             <span className="inline-flex items-center gap-1.5">
               <Ruler className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
-              Sob medida ao cm
+              Sob medida
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
@@ -167,8 +167,8 @@ export function Hero() {
                   {m.v}
                 </div>
                 <div
-                  className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em]"
-                  style={{ color: "rgba(245,237,224,0.65)" }}
+                  className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em]"
+                  style={{ color: "#f5ede0" }}
                 >
                   {m.l}
                 </div>
