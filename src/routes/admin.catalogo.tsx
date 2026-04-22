@@ -15,6 +15,8 @@ import { toast } from "sonner";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { FileUpload } from "@/components/admin/FileUpload";
 import { GalleryEditor, type GalleryItem } from "@/components/admin/GalleryEditor";
+import { FeaturesEditor } from "@/components/admin/FeaturesEditor";
+import { FAQEditor, type FAQItem } from "@/components/admin/FAQEditor";
 
 export const Route = createFileRoute("/admin/catalogo")({ component: Catalog });
 
@@ -58,6 +60,8 @@ type Product = {
   seo_title: string | null;
   seo_description: string | null;
   colors: Color[];
+  features: string[];
+  faq: FAQItem[];
   active: boolean;
   featured: boolean;
 };
@@ -102,6 +106,8 @@ const NEW_PRODUCT: Partial<Product> = {
   seo_description: "",
   active: true,
   featured: false,
+  features: [],
+  faq: [],
   colors: [
     { name: "Branco", hex: "#FFFFFF" },
     { name: "Bege", hex: "#D7C4A3" },
