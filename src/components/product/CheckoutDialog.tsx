@@ -14,6 +14,8 @@ import { Loader2, Copy, ExternalLink, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { createAsaasCharge } from "@/lib/asaas.functions";
+import { ShippingCalculator } from "./ShippingCalculator";
+import type { ShippingQuote } from "@/lib/frenet.functions";
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -35,6 +37,8 @@ type Props = {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   total: number;
+  subtotal?: number;
+  shipping?: ShippingQuote | null;
   item: CheckoutItem;
 };
 
@@ -46,14 +50,27 @@ type ChargeResult = {
   billingType: BillingType;
 };
 
-export function CheckoutDialog({ open, onOpenChange, total, item }: Props) {
+export function CheckoutDialog({
+  open,
+  onOpenChange,
+  total,
+  subtotal,
+  shipping: initialShipping,
+  item,
+}: Props) {
   const [step, setStep] = useState<"form" | "loading" | "success">("form");
   const [billingType, setBillingType] = useState<BillingType>("PIX");
   const [name, setName] = useState("");
   const [cpfCnpj, setCpfCnpj] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [cep, setCep] = useState("");
+  const [shipping, setShipping] = useState<ShippingQuote | null>(initialShipping ?? null);
   const [result, setResult] = useState<ChargeResult | null>(null);
+
+  const baseSubtotal = subtotal ?? total;
+  const shippingCost = shipping?.price ?? 0;
+  const finalTotal = baseSubtotal + shippingCost;
 
   const createCharge = useServerFn(createAsaasCharge);
 
