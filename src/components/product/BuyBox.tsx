@@ -12,6 +12,7 @@ import {
 import { Star, ShieldCheck, Truck, Ruler, MessageCircle, ChevronRight, Info } from "lucide-react";
 import type { Product } from "@/routes/produto.$slug";
 import { toast } from "sonner";
+import { CheckoutDialog } from "./CheckoutDialog";
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -39,6 +40,7 @@ export function BuyBox({ product }: { product: Product }) {
   const [side, setSide] = useState<Side>("right");
   const [motor, setMotor] = useState<Motor>("manual");
   const [bando, setBando] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   // Garante cores padrão caso o produto não tenha cores cadastradas
   const productColors = useMemo(() => {
     if (Array.isArray(product.colors) && product.colors.length > 0) {
@@ -93,9 +95,7 @@ export function BuyBox({ product }: { product: Product }) {
       toast.error(validation[0]);
       return;
     }
-    toast.success("Adicionado ao carrinho!", {
-      description: `${product.name} — ${(width / 100).toFixed(2)} × ${(height / 100).toFixed(2)} m — ${BRL(total)}`,
-    });
+    setCheckoutOpen(true);
   }
 
   function handleWhats() {
@@ -323,6 +323,22 @@ export function BuyBox({ product }: { product: Product }) {
           Garantia 5 anos
         </div>
       </div>
+
+      <CheckoutDialog
+        open={checkoutOpen}
+        onOpenChange={setCheckoutOpen}
+        total={total}
+        item={{
+          productId: product.id,
+          productName: product.name,
+          widthCm: width,
+          heightCm: height,
+          motor,
+          color,
+          bando,
+          unitPrice: product.price_per_sqm,
+        }}
+      />
     </div>
   );
 }
