@@ -13,6 +13,8 @@ import { Star, ShieldCheck, Truck, Ruler, MessageCircle, ChevronRight, Info } fr
 import type { Product } from "@/routes/produto.$slug";
 import { toast } from "sonner";
 import { CheckoutDialog } from "./CheckoutDialog";
+import { ShippingCalculator } from "./ShippingCalculator";
+import type { ShippingQuote } from "@/lib/frenet.functions";
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -41,6 +43,7 @@ export function BuyBox({ product }: { product: Product }) {
   const [motor, setMotor] = useState<Motor>("manual");
   const [bando, setBando] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [shipping, setShipping] = useState<ShippingQuote | null>(null);
   // Garante cores padrão caso o produto não tenha cores cadastradas
   const productColors = useMemo(() => {
     if (Array.isArray(product.colors) && product.colors.length > 0) {
@@ -81,11 +84,13 @@ export function BuyBox({ product }: { product: Product }) {
         ? product.motor_rf_price
         : product.motor_wifi_price;
 
-  const total = useMemo(() => {
+  const subtotal = useMemo(() => {
     const area = Math.max((width * height) / 10000, product.min_area);
     return area * product.price_per_sqm + motorPrice + (bando ? product.bando_price : 0);
   }, [width, height, motor, bando, product, motorPrice]);
 
+  const shippingCost = shipping?.price ?? 0;
+  const total = subtotal + shippingCost;
   const pix = total * 0.95;
   const installment = total / 12;
   const suggestMotor = width >= 220 && motor === "manual";
