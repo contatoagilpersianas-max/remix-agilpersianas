@@ -15,6 +15,10 @@ import { Testimonials } from "@/components/site/Testimonials";
 import { Newsletter } from "@/components/site/Newsletter";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
+import { RoomsSection } from "@/components/site/RoomsSection";
+import { AutomationSection } from "@/components/site/AutomationSection";
+import { MosquitoSection } from "@/components/site/MosquitoSection";
+import { B2BSection } from "@/components/site/B2BSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,14 +52,22 @@ function Index() {
         <PromoStrip />
         {/* Selos de confiança imediatamente após o hero */}
         <TrustBar />
-        {/* Categorias visuais — navegação rápida */}
+        {/* Categorias visuais — grid editorial 9 itens */}
         <Categories />
-        {/* Mais vendidos com gatilhos de conversão */}
+        {/* Mais vendidos */}
         <FeaturedProducts />
+        {/* Inspiração por ambiente */}
+        <RoomsSection />
         {/* Banners promo dupla */}
         <CategoryBanners />
-        {/* CTA forte para captura de lead via WhatsApp */}
+        {/* Automação residencial */}
+        <AutomationSection />
+        {/* Tela mosquiteira */}
+        <MosquitoSection />
+        {/* CTA medida */}
         <MeasureCTA />
+        {/* B2B */}
+        <B2BSection />
         {/* Descontos */}
         <DiscountsGrid />
         {/* Prova social */}
