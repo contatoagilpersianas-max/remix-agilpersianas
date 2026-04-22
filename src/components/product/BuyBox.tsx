@@ -39,7 +39,19 @@ export function BuyBox({ product }: { product: Product }) {
   const [side, setSide] = useState<Side>("right");
   const [motor, setMotor] = useState<Motor>("manual");
   const [bando, setBando] = useState(false);
-  const [color, setColor] = useState(product.colors?.[0]?.name ?? "");
+  // Garante cores padrão caso o produto não tenha cores cadastradas
+  const productColors = useMemo(() => {
+    if (Array.isArray(product.colors) && product.colors.length > 0) {
+      return product.colors.filter((c) => c && c.name && c.hex);
+    }
+    return [
+      { name: "Branco", hex: "#FFFFFF" },
+      { name: "Bege", hex: "#D7C4A3" },
+      { name: "Cinza", hex: "#7E8794" },
+      { name: "Grafite", hex: "#3A3A3A" },
+    ];
+  }, [product.colors]);
+  const [color, setColor] = useState(productColors[0]?.name ?? "Branco");
 
   const widthOptions = useMemo(
     () => buildMeasureOptions(product.min_width_cm, product.max_width_cm),
@@ -255,28 +267,26 @@ export function BuyBox({ product }: { product: Product }) {
           </button>
         </div>
 
-        {product.colors?.length > 0 && (
-          <div>
-            <Label className="text-xs uppercase tracking-wide text-muted-foreground mb-2 block">
-              Cor: <span className="text-foreground font-medium">{color}</span>
-            </Label>
-            <div className="flex gap-2">
-              {product.colors.map((c) => (
-                <button
-                  key={c.name}
-                  type="button"
-                  onClick={() => setColor(c.name)}
-                  className={`h-10 w-10 rounded-full border-2 transition ${
-                    color === c.name ? "border-primary scale-110 shadow-md" : "border-border"
-                  }`}
-                  style={{ backgroundColor: c.hex }}
-                  title={c.name}
-                  aria-label={c.name}
-                />
-              ))}
-            </div>
+        <div>
+          <Label className="text-xs uppercase tracking-wide text-muted-foreground mb-2 block">
+            Cor: <span className="text-foreground font-medium">{color}</span>
+          </Label>
+          <div className="flex gap-2 flex-wrap">
+            {productColors.map((c) => (
+              <button
+                key={c.name}
+                type="button"
+                onClick={() => setColor(c.name)}
+                className={`h-10 w-10 rounded-full border-2 transition ${
+                  color === c.name ? "border-primary scale-110 shadow-md" : "border-border"
+                }`}
+                style={{ backgroundColor: c.hex }}
+                title={c.name}
+                aria-label={c.name}
+              />
+            ))}
           </div>
-        )}
+        </div>
       </div>
 
       {/* CTAs */}
