@@ -11,15 +11,15 @@ const SLIDES = [
     titleTop: "A luz certa.",
     titleBottom: "Para cada ambiente.",
     subtitle:
-      "Persianas, cortinas e toldos sob medida com tecidos premium e parcelamento em até 12×.",
+      "Persianas, cortinas e toldos sob medida com acabamento premium e parcelamento em até 12×.",
   },
   {
     img: heroBedroom,
-    badge: "✦ Linha Premium — Tecidos exclusivos",
+    badge: "✦ Linha Premium — Acabamento exclusivo",
     titleTop: "Privacidade.",
     titleBottom: "Conforto. Design.",
     subtitle:
-      "Persianas blackout sob medida ao centímetro. Acabamento premium com instalação simples.",
+      "Persianas blackout sob medida com acabamento premium e fácil instalação.",
   },
 ];
 
