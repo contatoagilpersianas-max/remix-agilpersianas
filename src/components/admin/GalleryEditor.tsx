@@ -58,7 +58,7 @@ export function GalleryEditor({ items, onChange }: Props) {
         <div>
           <h4 className="font-semibold text-sm">Galeria de fotos</h4>
           <p className="text-[11px] text-muted-foreground">
-            Recomendado: <strong>1024 × 1024 px</strong> · JPG ou WebP · até 5 MB cada.
+            Recomendado: <strong>1200 × 1200 px</strong> · JPG ou WebP · até 5 MB cada.
             Você pode enviar várias fotos de uma vez.
           </p>
         </div>

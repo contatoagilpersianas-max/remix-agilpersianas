@@ -481,6 +481,12 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
             </div>
           </TabsContent>
 
+          {/* ── CONTEÚDO (features + FAQ) ── */}
+          <TabsContent value="conteudo" className="space-y-6 pt-5">
+            <FeaturesEditor items={e.features ?? []} onChange={(features) => set({ features })} />
+            <FAQEditor items={e.faq ?? []} onChange={(faq) => set({ faq })} />
+          </TabsContent>
+
           {/* ── PREÇOS & ESTOQUE ── */}
           <TabsContent value="precos" className="space-y-4 pt-5">
             <div className="grid sm:grid-cols-3 gap-3">
