@@ -61,7 +61,7 @@ function Catalog() {
       supabase.from("products").select("*").order("created_at", { ascending: false }),
       supabase.from("categories").select("id,name,slug").order("position"),
     ]);
-    setProducts((p as Product[]) ?? []);
+    setProducts(((p ?? []) as unknown) as Product[]);
     setCats((c as Category[]) ?? []);
     setLoading(false);
   }
