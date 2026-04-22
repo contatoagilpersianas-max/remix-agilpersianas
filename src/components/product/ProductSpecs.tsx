@@ -18,7 +18,7 @@ export function ProductSpecs({ product }: { product: Product }) {
     {
       icon: Wrench,
       title: "Instalação simples ou assistida",
-      desc: "Acompanha kit completo, manual e vídeo. Instalação opcional em capitais.",
+      desc: "Acompanha kit completo e guia ilustrado. Instalação opcional em capitais.",
     },
     {
       icon: ShieldCheck,
@@ -48,8 +48,8 @@ export function ProductSpecs({ product }: { product: Product }) {
             Tudo que você precisa saber
           </h2>
           <p className="text-muted-foreground mt-4 leading-relaxed">
-            Produzido na nossa fábrica em Juiz de Fora — MG, com tecidos selecionados
-            e mecanismos de alta durabilidade.
+            Fabricação própria com tecidos selecionados e mecanismos de alta
+            durabilidade. Controle total da qualidade do corte ao acabamento.
           </p>
 
           {/* Tabela de medidas */}

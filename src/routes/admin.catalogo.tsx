@@ -15,6 +15,8 @@ import { toast } from "sonner";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { FileUpload } from "@/components/admin/FileUpload";
 import { GalleryEditor, type GalleryItem } from "@/components/admin/GalleryEditor";
+import { FeaturesEditor } from "@/components/admin/FeaturesEditor";
+import { FAQEditor, type FAQItem } from "@/components/admin/FAQEditor";
 
 export const Route = createFileRoute("/admin/catalogo")({ component: Catalog });
 
@@ -58,6 +60,8 @@ type Product = {
   seo_title: string | null;
   seo_description: string | null;
   colors: Color[];
+  features: string[];
+  faq: FAQItem[];
   active: boolean;
   featured: boolean;
 };
@@ -102,6 +106,8 @@ const NEW_PRODUCT: Partial<Product> = {
   seo_description: "",
   active: true,
   featured: false,
+  features: [],
+  faq: [],
   colors: [
     { name: "Branco", hex: "#FFFFFF" },
     { name: "Bege", hex: "#D7C4A3" },
@@ -351,6 +357,7 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
           <TabsList className="flex flex-wrap h-auto gap-1 bg-muted/40">
             <TabsTrigger value="produto">Produto</TabsTrigger>
             <TabsTrigger value="fotos">Fotos</TabsTrigger>
+            <TabsTrigger value="conteudo">Características & FAQ</TabsTrigger>
             <TabsTrigger value="precos">Preços & Estoque</TabsTrigger>
             <TabsTrigger value="medidas">Medidas (m²)</TabsTrigger>
             <TabsTrigger value="entrega">Entrega</TabsTrigger>
@@ -472,6 +479,12 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
                 <GalleryEditor items={e.gallery ?? []} onChange={(items) => set({ gallery: items })} />
               </div>
             </div>
+          </TabsContent>
+
+          {/* ── CONTEÚDO (features + FAQ) ── */}
+          <TabsContent value="conteudo" className="space-y-6 pt-5">
+            <FeaturesEditor items={e.features ?? []} onChange={(features) => set({ features })} />
+            <FAQEditor items={e.faq ?? []} onChange={(faq) => set({ faq })} />
           </TabsContent>
 
           {/* ── PREÇOS & ESTOQUE ── */}

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
-import { ProductGallery } from "@/components/product/ProductGallery";
+import { ProductGallery, type GalleryImage } from "@/components/product/ProductGallery";
 import { BuyBox } from "@/components/product/BuyBox";
 import { TrustBar } from "@/components/product/TrustBar";
 import { BenefitsGrid } from "@/components/product/BenefitsGrid";
@@ -13,6 +13,10 @@ import { HowToMeasure } from "@/components/product/HowToMeasure";
 import { ProductFAQ } from "@/components/product/ProductFAQ";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { ProductSpecs } from "@/components/product/ProductSpecs";
+import { ProductDescription } from "@/components/product/ProductDescription";
+import { ProductInstallation } from "@/components/product/ProductInstallation";
+import { ProductManual } from "@/components/product/ProductManual";
+import { ProductVideo } from "@/components/product/ProductVideo";
 import { QuoteSection } from "@/components/site/QuoteSection";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -20,15 +24,20 @@ export const Route = createFileRoute("/produto/$slug")({
   component: ProductPage,
 });
 
+type Category = { id: string; name: string; slug: string; parent_id: string | null };
+
 export type Product = {
   id: string;
   name: string;
   slug: string;
   short_description: string | null;
   description: string | null;
+  installation: string | null;
+  manual_pdf_url: string | null;
+  video_url: string | null;
   category_id: string | null;
   cover_image: string | null;
-  gallery: string[];
+  gallery: GalleryImage[];
   price_per_sqm: number;
   min_area: number;
   min_width_cm: number;
@@ -50,6 +59,7 @@ export type Product = {
 function ProductPage() {
   const { slug } = useParams({ from: "/produto/$slug" });
   const [product, setProduct] = useState<Product | null>(null);
+  const [breadcrumb, setBreadcrumb] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,9 +71,26 @@ function ProductPage() {
       .eq("slug", slug)
       .eq("active", true)
       .maybeSingle()
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         if (!mounted) return;
         setProduct(data as unknown as Product);
+        // build hierarchical breadcrumb
+        if (data?.category_id) {
+          const { data: cats } = await supabase
+            .from("categories")
+            .select("id,name,slug,parent_id");
+          const map = new Map<string, Category>();
+          (cats ?? []).forEach((c) => map.set(c.id, c as Category));
+          const chain: Category[] = [];
+          let cur = map.get(data.category_id);
+          while (cur) {
+            chain.unshift(cur);
+            cur = cur.parent_id ? map.get(cur.parent_id) : undefined;
+          }
+          if (mounted) setBreadcrumb(chain);
+        } else {
+          setBreadcrumb([]);
+        }
         setLoading(false);
       });
     return () => {
@@ -71,10 +98,18 @@ function ProductPage() {
     };
   }, [slug]);
 
-  const images = useMemo(() => {
+  const images = useMemo<GalleryImage[]>(() => {
     if (!product) return [];
     const list = Array.isArray(product.gallery) ? product.gallery : [];
-    return list.length ? list : product.cover_image ? [product.cover_image] : [];
+    if (list.length) return list;
+    return product.cover_image ? [product.cover_image] : [];
+  }, [product]);
+
+  // SEO – injeta título quando produto carrega
+  useEffect(() => {
+    if (product) {
+      document.title = `${product.name} | Ágil Persianas`;
+    }
   }, [product]);
 
   if (loading) {
@@ -112,12 +147,23 @@ function ProductPage() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Breadcrumb */}
+      {/* Breadcrumb hierárquico */}
       <div className="border-b border-border/60">
         <div className="container-premium py-3 text-xs text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Home</Link>
-          <span className="mx-2">/</span>
-          <span>Persianas</span>
+          {breadcrumb.length > 0 ? (
+            breadcrumb.map((c) => (
+              <span key={c.id}>
+                <span className="mx-2">/</span>
+                <span className="hover:text-foreground">{c.name}</span>
+              </span>
+            ))
+          ) : (
+            <>
+              <span className="mx-2">/</span>
+              <span>Persianas</span>
+            </>
+          )}
           <span className="mx-2">/</span>
           <span className="text-foreground">{product.name}</span>
         </div>
@@ -132,11 +178,31 @@ function ProductPage() {
       </section>
 
       <TrustBar />
+
+      {/* Descrição rica vinda do admin */}
+      <ProductDescription short={product.short_description} long={product.description} />
+
       <ProductSpecs product={product} />
-      <BenefitsGrid features={product.features} />
+
+      {/* Características vindas do admin */}
+      <BenefitsGrid features={product.features ?? []} />
+
       <LifestyleSection />
+
+      {/* Instalação rica do admin */}
+      <ProductInstallation text={product.installation} />
+
+      {/* Manual em PDF */}
+      <ProductManual url={product.manual_pdf_url} />
+
+      {/* Vídeo do produto */}
+      <ProductVideo url={product.video_url} title={`${product.name} em ação`} />
+
       <HowToMeasure />
-      <ProductFAQ items={product.faq} />
+
+      {/* FAQ vindas do admin */}
+      <ProductFAQ items={product.faq ?? []} />
+
       <RelatedProducts categoryId={product.category_id} excludeId={product.id} />
       <QuoteSection />
 
