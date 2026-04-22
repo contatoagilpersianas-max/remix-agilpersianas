@@ -11,14 +11,9 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import logoAgil from "@/assets/agil-logo.png";
+import { type NavColumn, validateNavLinks } from "@/lib/nav";
 
-interface FooterLink {
-  label: string;
-  to?: string;
-  href?: string;
-}
-
-const COLS: { title: string; links: FooterLink[] }[] = [
+const COLS: NavColumn[] = [
   {
     title: "Produtos",
     links: [
@@ -57,7 +52,6 @@ const COLS: { title: string; links: FooterLink[] }[] = [
 export function Footer() {
   return (
     <footer className="bg-graphite text-graphite-foreground">
-      {/* Top: brand + columns */}
       <div className="container-premium grid gap-12 py-16 md:grid-cols-12 md:py-20">
         <div className="md:col-span-4">
           <div className="rounded-xl bg-white/95 px-4 py-3 inline-block">
@@ -109,6 +103,7 @@ export function Footer() {
               <a
                 key={i}
                 href="#"
+                aria-label="Rede social"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 transition hover:bg-primary hover:border-primary"
               >
                 <Icon className="h-4 w-4" />
@@ -117,31 +112,37 @@ export function Footer() {
           </div>
         </div>
 
-        {COLS.map((col) => (
-          <div key={col.title} className="md:col-span-2">
-            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-primary-glow">
-              {col.title}
+        {COLS.map((col) => {
+          const safeLinks = validateNavLinks(col.links, `Footer/${col.title}`);
+          return (
+            <div key={col.title} className="md:col-span-2">
+              <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-primary-glow">
+                {col.title}
+              </div>
+              <ul className="space-y-2.5 text-sm">
+                {safeLinks.map((l) => (
+                  <li key={l.label}>
+                    {"to" in l && l.to ? (
+                      <Link
+                        to={l.to}
+                        className="text-white/75 transition hover:text-white"
+                      >
+                        {l.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={l.href}
+                        className="text-white/75 transition hover:text-white"
+                      >
+                        {l.label}
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="space-y-2.5 text-sm">
-              {col.links.map((l) => (
-                <li key={l.label}>
-                  {l.to && !l.href ? (
-                    <Link to={l.to} className="text-white/75 transition hover:text-white">
-                      {l.label}
-                    </Link>
-                  ) : (
-                    <a
-                      href={l.href ?? "#"}
-                      className="text-white/75 transition hover:text-white"
-                    >
-                      {l.label}
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+          );
+        })}
 
         <div className="md:col-span-2">
           <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-primary-glow">
@@ -171,7 +172,6 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Bottom */}
       <div className="border-t border-white/10">
         <div className="container-premium flex flex-col items-center justify-between gap-3 py-6 text-xs text-white/60 md:flex-row">
           <div>
