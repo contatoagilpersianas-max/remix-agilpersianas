@@ -5,7 +5,7 @@ const ITEMS = [
   {
     icon: Scissors,
     title: "Fabricação sob medida",
-    desc: "Cortado ao centímetro exato da sua janela",
+    desc: "Cada peça produzida exatamente no tamanho da sua janela",
   },
   {
     icon: Truck,
@@ -14,8 +14,8 @@ const ITEMS = [
   },
   {
     icon: BadgeCheck,
-    title: "Tecidos premium importados",
-    desc: "Linha selecionada com acabamento de alto padrão",
+    title: "Acabamento premium",
+    desc: "Tecidos selecionados e mecanismos de alta durabilidade",
   },
   {
     icon: Headphones,

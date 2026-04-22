@@ -11,15 +11,15 @@ const SLIDES = [
     titleTop: "A luz certa.",
     titleBottom: "Para cada ambiente.",
     subtitle:
-      "Persianas, cortinas e toldos sob medida com tecidos premium e parcelamento em até 12×.",
+      "Persianas, cortinas e toldos sob medida com acabamento premium e parcelamento em até 12×.",
   },
   {
     img: heroBedroom,
-    badge: "✦ Linha Premium — Tecidos exclusivos",
+    badge: "✦ Linha Premium — Acabamento exclusivo",
     titleTop: "Privacidade.",
     titleBottom: "Conforto. Design.",
     subtitle:
-      "Persianas blackout sob medida ao centímetro. Acabamento premium com instalação simples.",
+      "Persianas blackout sob medida com acabamento premium e fácil instalação.",
   },
 ];
 
@@ -112,7 +112,7 @@ export function Hero() {
           >
             <span className="inline-flex items-center gap-1.5">
               <Ruler className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
-              Sob medida ao cm
+              Sob medida
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5" style={{ color: "#E2763A" }} />
@@ -167,8 +167,8 @@ export function Hero() {
                   {m.v}
                 </div>
                 <div
-                  className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em]"
-                  style={{ color: "rgba(245,237,224,0.65)" }}
+                  className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em]"
+                  style={{ color: "#f5ede0" }}
                 >
                   {m.l}
                 </div>

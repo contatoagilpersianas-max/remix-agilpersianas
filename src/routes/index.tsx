@@ -5,7 +5,7 @@ import { CategoryNav } from "@/components/site/CategoryNav";
 import { Hero } from "@/components/site/Hero";
 import { PromoStrip } from "@/components/site/PromoStrip";
 import { TrustBar } from "@/components/site/TrustBar";
-import { BenefitsRow } from "@/components/site/BenefitsRow";
+// BenefitsRow removido — informação já está no TrustBar do topo
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 import { CategoryBanners } from "@/components/site/CategoryBanners";
 import { Categories } from "@/components/site/Categories";
@@ -54,8 +54,6 @@ function Index() {
         <FeaturedProducts />
         {/* Banners promo dupla */}
         <CategoryBanners />
-        {/* Benefícios cards */}
-        <BenefitsRow />
         {/* CTA forte para captura de lead via WhatsApp */}
         <MeasureCTA />
         {/* Descontos */}

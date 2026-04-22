@@ -1,8 +1,14 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Star, ShieldCheck, Truck, Ruler, MessageCircle, ChevronRight, Info } from "lucide-react";
 import type { Product } from "@/routes/produto.$slug";
 import { toast } from "sonner";
@@ -10,25 +16,47 @@ import { toast } from "sonner";
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+// Gera lista de opções em cm, com label "0.30 m (300 mm)"
+function buildMeasureOptions(minCm: number, maxCm: number) {
+  const opts: { cm: number; label: string }[] = [];
+  for (let cm = minCm; cm <= maxCm; cm++) {
+    const meters = (cm / 100).toFixed(2);
+    const mm = cm * 10;
+    opts.push({ cm, label: `${meters} m (${mm} mm)` });
+  }
+  return opts;
+}
+
 type Motor = "manual" | "rf" | "wifi";
 type Mount = "inside" | "outside";
 type Side = "left" | "right";
 
 export function BuyBox({ product }: { product: Product }) {
-  const [width, setWidth] = useState(180);
-  const [height, setHeight] = useState(160);
+  // Inicia com a medida mínima do produto
+  const [width, setWidth] = useState(product.min_width_cm);
+  const [height, setHeight] = useState(product.min_height_cm);
   const [mount, setMount] = useState<Mount>("inside");
   const [side, setSide] = useState<Side>("right");
   const [motor, setMotor] = useState<Motor>("manual");
   const [bando, setBando] = useState(false);
   const [color, setColor] = useState(product.colors?.[0]?.name ?? "");
 
+  const widthOptions = useMemo(
+    () => buildMeasureOptions(product.min_width_cm, product.max_width_cm),
+    [product.min_width_cm, product.max_width_cm],
+  );
+  const heightOptions = useMemo(
+    () => buildMeasureOptions(product.min_height_cm, product.max_height_cm),
+    [product.min_height_cm, product.max_height_cm],
+  );
+
   const validation = useMemo(() => {
     const errors: string[] = [];
-    if (width < product.min_width_cm) errors.push(`Largura mínima ${product.min_width_cm} cm`);
-    if (width > product.max_width_cm) errors.push(`Largura máxima ${product.max_width_cm} cm`);
-    if (height < product.min_height_cm) errors.push(`Altura mínima ${product.min_height_cm} cm`);
-    if (height > product.max_height_cm) errors.push(`Altura máxima ${product.max_height_cm} cm`);
+    const fmt = (cm: number) => `${(cm / 100).toFixed(2)} m`;
+    if (width < product.min_width_cm) errors.push(`Largura mínima ${fmt(product.min_width_cm)}`);
+    if (width > product.max_width_cm) errors.push(`Largura máxima ${fmt(product.max_width_cm)}`);
+    if (height < product.min_height_cm) errors.push(`Altura mínima ${fmt(product.min_height_cm)}`);
+    if (height > product.max_height_cm) errors.push(`Altura máxima ${fmt(product.max_height_cm)}`);
     return errors;
   }, [width, height, product]);
 
@@ -54,14 +82,14 @@ export function BuyBox({ product }: { product: Product }) {
       return;
     }
     toast.success("Adicionado ao carrinho!", {
-      description: `${product.name} — ${width}×${height} cm — ${BRL(total)}`,
+      description: `${product.name} — ${(width / 100).toFixed(2)} × ${(height / 100).toFixed(2)} m — ${BRL(total)}`,
     });
   }
 
   function handleWhats() {
     const msg = encodeURIComponent(
       `Olá! Tenho interesse na *${product.name}*\n\n` +
-        `📐 Medidas: ${width} × ${height} cm\n` +
+        `📐 Medidas: ${(width / 100).toFixed(2)} m × ${(height / 100).toFixed(2)} m\n` +
         `🔧 Acionamento: ${motor === "manual" ? "Manual" : motor === "rf" ? "Motor RF" : "Motor Wi-Fi"}\n` +
         `🎨 Cor: ${color}\n` +
         `${bando ? "✨ Com bandô\n" : ""}` +
@@ -127,26 +155,46 @@ export function BuyBox({ product }: { product: Product }) {
               <Info className="h-3.5 w-3.5" /> Como medir
             </a>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <Label className="text-xs uppercase tracking-wide text-muted-foreground">Largura (cm)</Label>
-              <Input
-                type="number"
-                value={width}
-                onChange={(e) => setWidth(Number(e.target.value) || 0)}
-                className="h-12 text-lg font-medium"
-              />
-              <p className="text-[10px] text-muted-foreground mt-1">{product.min_width_cm} – {product.max_width_cm} cm</p>
+              <Label className="text-xs uppercase tracking-wide text-muted-foreground">
+                Largura da Persiana
+              </Label>
+              <Select
+                value={String(width)}
+                onValueChange={(v) => setWidth(Number(v))}
+              >
+                <SelectTrigger className="h-12 text-base font-medium mt-1">
+                  <SelectValue placeholder="Selecione a opção" />
+                </SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {widthOptions.map((o) => (
+                    <SelectItem key={o.cm} value={String(o.cm)}>
+                      {o.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
-              <Label className="text-xs uppercase tracking-wide text-muted-foreground">Altura (cm)</Label>
-              <Input
-                type="number"
-                value={height}
-                onChange={(e) => setHeight(Number(e.target.value) || 0)}
-                className="h-12 text-lg font-medium"
-              />
-              <p className="text-[10px] text-muted-foreground mt-1">{product.min_height_cm} – {product.max_height_cm} cm</p>
+              <Label className="text-xs uppercase tracking-wide text-muted-foreground">
+                Altura da Persiana
+              </Label>
+              <Select
+                value={String(height)}
+                onValueChange={(v) => setHeight(Number(v))}
+              >
+                <SelectTrigger className="h-12 text-base font-medium mt-1">
+                  <SelectValue placeholder="Selecione a opção" />
+                </SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {heightOptions.map((o) => (
+                    <SelectItem key={o.cm} value={String(o.cm)}>
+                      {o.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           {validation.map((err) => (

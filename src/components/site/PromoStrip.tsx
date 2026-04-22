@@ -1,12 +1,12 @@
 const ITEMS = [
-  "Sob medida ao cm",
+  "Sob medida",
   "Garantia de 5 anos",
   "Envio para todo o Brasil",
   "Parcele em até 12×",
   "5% de desconto no PIX",
   "Catálogo com mais de 200 modelos",
   "Atendimento via WhatsApp",
-  "Tecidos premium importados",
+  "Acabamento premium",
 ];
 
 export function PromoStrip() {
