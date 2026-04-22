@@ -38,14 +38,19 @@ export function FeaturedProducts() {
     <section id="catalogo" className="bg-background py-16 md:py-20">
       <div className="container-premium">
         <div className="mb-10 flex flex-col items-center text-center md:mb-12">
-          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+          <span
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em]"
+            style={{ backgroundColor: "rgba(184,84,28,0.10)", color: "#B8541C" }}
+          >
             <Flame className="h-3.5 w-3.5" /> Mês do Consumidor
           </span>
           <h2 className="mt-4 font-display text-3xl font-medium md:text-5xl">
             Os mais vendidos da semana
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground md:text-base">
-            Persianas com tecidos exclusivos e até <strong className="text-primary">70% OFF</strong> — sob medida ao cm com envio para todo o Brasil.
+            Persianas com tecidos exclusivos e até{" "}
+            <strong style={{ color: "#B8541C" }}>70% OFF</strong> — sob medida ao
+            cm com envio para todo o Brasil.
           </p>
         </div>
 
@@ -140,7 +145,7 @@ function ProductCard({ product }: { product: Product }) {
           <span className="font-display text-xl font-bold text-foreground">
             {fmt(price_per_sqm)}
           </span>
-          <span className="text-[11px] font-semibold text-primary">
+          <span className="text-[11px] font-semibold" style={{ color: "#B8541C" }}>
             ou {fmt(pixPrice)} no PIX (-5%)
           </span>
           <span className="mt-0.5 text-[11px] text-muted-foreground">

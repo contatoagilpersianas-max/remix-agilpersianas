@@ -1,0 +1,1 @@
+UPDATE public.products SET cover_image = REPLACE(cover_image, '/src/assets/', '/products/') WHERE cover_image LIKE '/src/assets/%';
