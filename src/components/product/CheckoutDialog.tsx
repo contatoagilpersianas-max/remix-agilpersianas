@@ -85,13 +85,10 @@ export function CheckoutDialog({
     const digits = cpfCnpj.replace(/\D/g, "");
     if (digits.length !== 11 && digits.length !== 14)
       return toast.error("CPF ou CNPJ inválido");
+    if (!shipping) return toast.error("Calcule e selecione o frete antes de continuar");
 
     setStep("loading");
     try {
-      // 1. Cria o pedido (RLS permite admin; aqui usamos public insert via RPC seria ideal,
-      //    mas como orders só permite admin gerenciar, usamos um insert anônimo via função.
-      //    Para manter simples, criamos via supabase com auth pública — tabela aceita insert
-      //    se houver policy. Caso contrário, este insert será negado e cairá no catch.)
       const { data: order, error: orderErr } = await supabase
         .from("orders")
         .insert({
@@ -110,8 +107,11 @@ export function CheckoutDialog({
               unit_price: item.unitPrice,
             },
           ],
-          subtotal: total,
-          total,
+          subtotal: baseSubtotal,
+          total: finalTotal,
+          notes: shipping
+            ? `Frete: ${shipping.carrier} (${shipping.serviceDescription}) - ${shipping.deliveryDays}d - R$ ${shipping.price.toFixed(2)} | CEP ${cep || "-"}`
+            : null,
         })
         .select("id")
         .single();
@@ -132,6 +132,7 @@ export function CheckoutDialog({
             cpfCnpj: digits,
             email: email || undefined,
             phone: phone || undefined,
+            postalCode: cep.replace(/\D/g, "") || undefined,
           },
         },
       });
