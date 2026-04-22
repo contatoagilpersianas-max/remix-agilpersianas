@@ -6,8 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Plus, Edit, Trash2, Tag, Loader2, ArrowUp, ArrowDown, ChevronRight, ChevronDown, FolderTree } from "lucide-react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Tag,
+  Loader2,
+  ArrowUp,
+  ArrowDown,
+  ChevronRight,
+  ChevronDown,
+  FolderTree,
+  X,
+  ChevronsDownUp,
+  ChevronsUpDown,
+  Check,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/categorias")({ component: Categories });
@@ -23,7 +37,12 @@ type Cat = {
 };
 
 const slugify = (s: string) =>
-  s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
 function Categories() {
   const [rows, setRows] = useState<Cat[]>([]);
@@ -31,12 +50,34 @@ function Categories() {
   const [editing, setEditing] = useState<Partial<Cat> | null>(null);
   const [saving, setSaving] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
-  async function load() {
+  async function load(focusId?: string) {
     setLoading(true);
     const { data } = await supabase.from("categories").select("*").order("position");
-    setRows((data as Cat[]) ?? []);
+    const list = (data as Cat[]) ?? [];
+    setRows(list);
     setLoading(false);
+    // expand all by default on first load so the hierarchy is visible
+    setExpanded((prev) => {
+      if (prev.size > 0) return prev;
+      return new Set(list.filter((r) => list.some((x) => x.parent_id === r.id)).map((r) => r.id));
+    });
+    if (focusId) {
+      // ensure ancestors are expanded
+      setExpanded((prev) => {
+        const next = new Set(prev);
+        let cur = list.find((r) => r.id === focusId);
+        while (cur?.parent_id) {
+          next.add(cur.parent_id);
+          cur = list.find((r) => r.id === cur!.parent_id);
+        }
+        return next;
+      });
+      setHighlightId(focusId);
+      setTimeout(() => setHighlightId(null), 1800);
+    }
   }
   useEffect(() => {
     load();
@@ -48,6 +89,13 @@ function Categories() {
     return { roots, childrenOf };
   }, [rows]);
 
+  const stats = useMemo(() => {
+    const roots = rows.filter((r) => !r.parent_id).length;
+    const subs = rows.filter((r) => r.parent_id).length;
+    const inactive = rows.filter((r) => !r.active).length;
+    return { roots, subs, inactive, total: rows.length };
+  }, [rows]);
+
   async function save() {
     if (!editing?.name) return toast.error("Nome obrigatório");
     setSaving(true);
@@ -56,19 +104,34 @@ function Categories() {
       slug: editing.slug || slugify(editing.name),
       parent_id: editing.parent_id || null,
     };
-    // prevent self-parent
     if (payload.id && payload.parent_id === payload.id) {
       setSaving(false);
       return toast.error("Categoria não pode ser pai dela mesma");
     }
-    const { error } = editing.id
-      ? await supabase.from("categories").update(payload).eq("id", editing.id)
-      : await supabase.from("categories").insert(payload as never);
-    setSaving(false);
-    if (error) return toast.error(error.message);
-    toast.success("Categoria salva");
-    setEditing(null);
-    load();
+    if (editing.id) {
+      const { error } = await supabase.from("categories").update(payload).eq("id", editing.id);
+      setSaving(false);
+      if (error) return toast.error(error.message);
+      toast.success("Categoria atualizada");
+      setEditing(null);
+      load(editing.id);
+    } else {
+      const { data, error } = await supabase
+        .from("categories")
+        .insert(payload as never)
+        .select("id")
+        .single();
+      setSaving(false);
+      if (error) return toast.error(error.message);
+      toast.success("Categoria criada");
+      const newId = (data as { id: string } | null)?.id;
+      // auto-expand parent so the new child becomes visible immediately
+      if (payload.parent_id) {
+        setExpanded((prev) => new Set(prev).add(payload.parent_id as string));
+      }
+      setEditing(null);
+      load(newId);
+    }
   }
 
   async function remove(id: string) {
@@ -77,6 +140,7 @@ function Categories() {
     if (!hasChildren && !confirm("Excluir categoria?")) return;
     const { error } = await supabase.from("categories").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    if (editing?.id === id) setEditing(null);
     load();
   }
 
@@ -91,69 +155,164 @@ function Categories() {
       supabase.from("categories").update({ position: swap.position }).eq("id", id),
       supabase.from("categories").update({ position: cat.position }).eq("id", swap.id),
     ]);
-    load();
+    load(id);
+  }
+
+  async function toggleActive(c: Cat) {
+    await supabase.from("categories").update({ active: !c.active }).eq("id", c.id);
+    load(c.id);
   }
 
   function toggle(id: string) {
-    const next = new Set(expanded);
-    next.has(id) ? next.delete(id) : next.add(id);
-    setExpanded(next);
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function expandAll() {
+    setExpanded(new Set(rows.filter((r) => rows.some((x) => x.parent_id === r.id)).map((r) => r.id)));
+  }
+  function collapseAll() {
+    setExpanded(new Set());
   }
 
   function startNew(parent_id: string | null = null) {
     const siblings = rows.filter((r) => r.parent_id === parent_id);
-    setEditing({ active: true, position: siblings.length, parent_id });
+    setEditing({ active: true, position: siblings.length, parent_id, name: "", slug: "", icon: "" });
   }
 
+  // Filter logic — when searching, show matching nodes plus their ancestors
+  const visibleIds = useMemo(() => {
+    if (!search.trim()) return null;
+    const q = search.toLowerCase();
+    const matches = rows.filter((r) => r.name.toLowerCase().includes(q) || r.slug.toLowerCase().includes(q));
+    const keep = new Set<string>();
+    for (const m of matches) {
+      keep.add(m.id);
+      let cur: Cat | undefined = m;
+      while (cur?.parent_id) {
+        keep.add(cur.parent_id);
+        cur = rows.find((r) => r.id === cur!.parent_id);
+      }
+      // include children of matches
+      const stack = [m.id];
+      while (stack.length) {
+        const id = stack.pop()!;
+        for (const c of rows.filter((r) => r.parent_id === id)) {
+          keep.add(c.id);
+          stack.push(c.id);
+        }
+      }
+    }
+    return keep;
+  }, [search, rows]);
+
   function renderRow(c: Cat, depth: number) {
-    const children = tree.childrenOf(c.id);
+    if (visibleIds && !visibleIds.has(c.id)) return null;
+    const children = tree.childrenOf(c.id).sort((a, b) => a.position - b.position);
     const siblings = rows.filter((r) => r.parent_id === c.parent_id).sort((a, b) => a.position - b.position);
     const sIdx = siblings.findIndex((r) => r.id === c.id);
-    const isOpen = expanded.has(c.id);
+    const isOpen = expanded.has(c.id) || !!visibleIds;
+    const isSelected = editing?.id === c.id;
+    const isHighlighted = highlightId === c.id;
+
     return (
       <div key={c.id}>
-        <Card className="p-3 flex items-center gap-3 hover:shadow-md transition" style={{ marginLeft: depth * 24 }}>
-          <button
-            onClick={() => children.length && toggle(c.id)}
-            className={`h-6 w-6 flex items-center justify-center rounded ${children.length ? "hover:bg-muted text-muted-foreground" : "opacity-30"}`}
-            aria-label="Expandir"
+        <div className="relative" style={{ paddingLeft: depth * 22 }}>
+          {/* tree guide line */}
+          {depth > 0 && (
+            <span className="absolute left-0 top-0 bottom-0 border-l border-dashed border-border" style={{ left: depth * 22 - 12 }} />
+          )}
+          <Card
+            className={`p-2.5 flex items-center gap-2 transition-all ${
+              isSelected ? "ring-2 ring-primary border-primary/40" : "hover:shadow-sm"
+            } ${isHighlighted ? "animate-pulse bg-primary/5" : ""} ${!c.active ? "opacity-60" : ""}`}
           >
-            {children.length ? (isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />) : <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />}
-          </button>
-          <div className="flex flex-col">
-            <button disabled={sIdx === 0} onClick={() => move(c.id, -1)} className="text-muted-foreground hover:text-primary disabled:opacity-30">
-              <ArrowUp className="h-3.5 w-3.5" />
+            <button
+              onClick={() => children.length && toggle(c.id)}
+              className={`h-6 w-6 flex items-center justify-center rounded shrink-0 ${
+                children.length ? "hover:bg-muted text-muted-foreground" : "opacity-30"
+              }`}
+              aria-label="Expandir"
+            >
+              {children.length ? (
+                isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />
+              ) : (
+                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
+              )}
             </button>
-            <button disabled={sIdx === siblings.length - 1} onClick={() => move(c.id, 1)} className="text-muted-foreground hover:text-primary disabled:opacity-30">
-              <ArrowDown className="h-3.5 w-3.5" />
-            </button>
-          </div>
-          <div className={`h-9 w-9 rounded-lg flex items-center justify-center text-base ${depth === 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
-            {c.icon ?? (depth === 0 ? "▦" : "↳")}
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="font-semibold flex items-center gap-2">
-              {c.name}
-              {!c.active && <span className="text-[10px] uppercase text-muted-foreground">inativa</span>}
+            <div className="flex flex-col shrink-0">
+              <button
+                disabled={sIdx === 0}
+                onClick={() => move(c.id, -1)}
+                className="text-muted-foreground hover:text-primary disabled:opacity-30 leading-none"
+              >
+                <ArrowUp className="h-3 w-3" />
+              </button>
+              <button
+                disabled={sIdx === siblings.length - 1}
+                onClick={() => move(c.id, 1)}
+                className="text-muted-foreground hover:text-primary disabled:opacity-30 leading-none"
+              >
+                <ArrowDown className="h-3 w-3" />
+              </button>
             </div>
-            <div className="text-xs text-muted-foreground">/{c.slug} · {children.length} subcategoria(s)</div>
-          </div>
-          <Button variant="ghost" size="sm" onClick={() => startNew(c.id)} title="Adicionar subcategoria">
-            <Plus className="h-3.5 w-3.5" /> Sub
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => setEditing(c)}>
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => remove(c.id)}>
-            <Trash2 className="h-4 w-4 text-destructive" />
-          </Button>
-        </Card>
-        {isOpen && children.sort((a, b) => a.position - b.position).map((ch) => renderRow(ch, depth + 1))}
+            <div
+              className={`h-8 w-8 rounded-md flex items-center justify-center text-sm shrink-0 ${
+                depth === 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {c.icon || (depth === 0 ? "▦" : "↳")}
+            </div>
+            <button onClick={() => setEditing(c)} className="flex-1 min-w-0 text-left">
+              <div className="font-semibold text-sm flex items-center gap-2 truncate">
+                {c.name}
+                {!c.active && (
+                  <span className="text-[10px] uppercase font-medium px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                    inativa
+                  </span>
+                )}
+              </div>
+              <div className="text-[11px] text-muted-foreground truncate">
+                /{c.slug}
+                {children.length > 0 && <> · {children.length} sub</>}
+              </div>
+            </button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-7 px-2 text-xs"
+              onClick={() => {
+                setExpanded((prev) => new Set(prev).add(c.id));
+                startNew(c.id);
+              }}
+              title="Adicionar subcategoria"
+            >
+              <Plus className="h-3 w-3" /> Sub
+            </Button>
+            <button
+              onClick={() => toggleActive(c)}
+              className="h-7 w-7 flex items-center justify-center rounded hover:bg-muted text-muted-foreground"
+              title={c.active ? "Desativar" : "Ativar"}
+            >
+              {c.active ? <Check className="h-3.5 w-3.5 text-primary" /> : <X className="h-3.5 w-3.5" />}
+            </button>
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setEditing(c)}>
+              <Edit className="h-3.5 w-3.5" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => remove(c.id)}>
+              <Trash2 className="h-3.5 w-3.5 text-destructive" />
+            </Button>
+          </Card>
+        </div>
+        {isOpen && children.map((ch) => renderRow(ch, depth + 1))}
       </div>
     );
   }
 
-  // categorias disponíveis para "pai" (exclui a própria + descendentes para evitar loop)
+  // categorias disponíveis para "pai" (exclui a própria + descendentes)
   const parentOptions = useMemo(() => {
     if (!editing?.id) return rows;
     const blocked = new Set<string>([editing.id]);
@@ -170,8 +329,21 @@ function Categories() {
     return rows.filter((r) => !blocked.has(r.id));
   }, [rows, editing?.id]);
 
+  // Build breadcrumb of selected/edited category
+  const editingPath = useMemo(() => {
+    if (!editing?.parent_id) return [];
+    const path: Cat[] = [];
+    let cur = rows.find((r) => r.id === editing.parent_id);
+    while (cur) {
+      path.unshift(cur);
+      cur = cur.parent_id ? rows.find((r) => r.id === cur!.parent_id) : undefined;
+    }
+    return path;
+  }, [editing?.parent_id, rows]);
+
   return (
-    <div className="space-y-6 max-w-[1100px]">
+    <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground flex items-center gap-2">
@@ -179,81 +351,194 @@ function Categories() {
           </div>
           <h1 className="font-display text-3xl mt-1">Categorias & Subcategorias</h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Organize seus produtos em coleções e subcoleções (ex: <em>Ambientes › Sala</em>, <em>Horizontal › Alumínio 25mm</em>).
+            Veja toda a hierarquia, edite e crie subcategorias sem perder o contexto.
           </p>
         </div>
-        <Button size="lg" onClick={() => startNew(null)}>
-          <Plus className="h-4 w-4" /> Nova categoria
-        </Button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="text-xs text-muted-foreground bg-muted/50 rounded-md px-3 py-1.5">
+            <strong className="text-foreground">{stats.roots}</strong> raízes ·{" "}
+            <strong className="text-foreground">{stats.subs}</strong> subs
+            {stats.inactive > 0 && <> · <strong className="text-foreground">{stats.inactive}</strong> inativas</>}
+          </div>
+          <Button size="lg" onClick={() => startNew(null)}>
+            <Plus className="h-4 w-4" /> Nova categoria
+          </Button>
+        </div>
       </div>
 
-      {loading ? (
-        <div className="text-center py-10 text-sm text-muted-foreground">Carregando...</div>
-      ) : tree.roots.length === 0 ? (
-        <Card className="p-12 text-center">
-          <Tag className="h-10 w-10 text-muted-foreground/50 mx-auto mb-3" />
-          <p className="text-muted-foreground">Nenhuma categoria ainda. Crie a primeira!</p>
-        </Card>
-      ) : (
-        <div className="grid gap-2">
-          {tree.roots.sort((a, b) => a.position - b.position).map((c) => renderRow(c, 0))}
-        </div>
-      )}
+      {/* Two-column layout: tree + side editor */}
+      <div className="grid lg:grid-cols-[1fr_380px] gap-6 items-start">
+        {/* TREE */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Input
+              placeholder="Buscar categoria..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="max-w-xs"
+            />
+            <Button variant="outline" size="sm" onClick={expandAll} className="gap-1">
+              <ChevronsUpDown className="h-3.5 w-3.5" /> Expandir tudo
+            </Button>
+            <Button variant="outline" size="sm" onClick={collapseAll} className="gap-1">
+              <ChevronsDownUp className="h-3.5 w-3.5" /> Recolher tudo
+            </Button>
+          </div>
 
-      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>{editing?.id ? "Editar categoria" : "Nova categoria"}</DialogTitle>
-          </DialogHeader>
-          {editing && (
-            <div className="grid gap-3">
-              <div>
-                <Label>Nome</Label>
-                <Input
-                  value={editing.name ?? ""}
-                  onChange={(e) => setEditing({ ...editing, name: e.target.value, slug: editing.slug || slugify(e.target.value) })}
-                />
-              </div>
-              <div>
-                <Label>Slug (URL)</Label>
-                <Input value={editing.slug ?? ""} onChange={(e) => setEditing({ ...editing, slug: e.target.value })} />
-              </div>
-              <div>
-                <Label>Categoria pai (opcional)</Label>
-                <select
-                  className="w-full h-9 rounded-md border bg-background px-3 text-sm"
-                  value={editing.parent_id ?? ""}
-                  onChange={(e) => setEditing({ ...editing, parent_id: e.target.value || null })}
-                >
-                  <option value="">— Nenhuma (categoria raiz) —</option>
-                  {parentOptions.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.parent_id ? "↳ " : ""}{c.name}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-[11px] text-muted-foreground mt-1">Use para criar subcategorias (ex: pai = "Ambientes", esta = "Sala").</p>
-              </div>
-              <div>
-                <Label>Ícone (emoji ou texto)</Label>
-                <Input value={editing.icon ?? ""} onChange={(e) => setEditing({ ...editing, icon: e.target.value })} placeholder="▦" />
-              </div>
-              <label className="flex items-center gap-2 text-sm">
-                <Switch checked={!!editing.active} onCheckedChange={(v) => setEditing({ ...editing, active: v })} />
-                Ativa (visível no site)
-              </label>
+          {loading ? (
+            <div className="text-center py-10 text-sm text-muted-foreground">
+              <Loader2 className="h-5 w-5 animate-spin mx-auto mb-2" />
+              Carregando...
+            </div>
+          ) : tree.roots.length === 0 ? (
+            <Card className="p-12 text-center">
+              <Tag className="h-10 w-10 text-muted-foreground/50 mx-auto mb-3" />
+              <p className="text-muted-foreground mb-4">Nenhuma categoria ainda. Crie a primeira!</p>
+              <Button onClick={() => startNew(null)}>
+                <Plus className="h-4 w-4" /> Criar primeira categoria
+              </Button>
+            </Card>
+          ) : (
+            <div className="space-y-1.5">
+              {tree.roots.sort((a, b) => a.position - b.position).map((c) => renderRow(c, 0))}
             </div>
           )}
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setEditing(null)}>
-              Cancelar
-            </Button>
-            <Button onClick={save} disabled={saving}>
-              {saving && <Loader2 className="h-4 w-4 animate-spin" />} Salvar
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+
+          <p className="text-[11px] text-muted-foreground">
+            💡 Clique em qualquer categoria para editar no painel ao lado. Use{" "}
+            <span className="font-mono text-foreground">+ Sub</span> para criar uma subcategoria dentro dela.
+          </p>
+        </div>
+
+        {/* SIDE EDITOR */}
+        <Card className="p-5 lg:sticky lg:top-4 space-y-4">
+          {!editing ? (
+            <div className="text-center py-8">
+              <Edit className="h-8 w-8 mx-auto text-muted-foreground/40 mb-3" />
+              <p className="text-sm text-muted-foreground mb-4">Selecione uma categoria para editar</p>
+              <Button variant="outline" size="sm" onClick={() => startNew(null)} className="gap-1">
+                <Plus className="h-3.5 w-3.5" /> Nova categoria raiz
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <div className="text-xs uppercase tracking-widest text-muted-foreground">
+                    {editing.id ? "Editando" : "Nova categoria"}
+                  </div>
+                  {editingPath.length > 0 && (
+                    <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1 flex-wrap">
+                      {editingPath.map((p, i) => (
+                        <span key={p.id} className="flex items-center gap-1">
+                          {i > 0 && <ChevronRight className="h-3 w-3" />}
+                          <span className="text-foreground/70">{p.name}</span>
+                        </span>
+                      ))}
+                      <ChevronRight className="h-3 w-3" />
+                      <span className="font-medium text-foreground">{editing.name || "(sem nome)"}</span>
+                    </div>
+                  )}
+                </div>
+                <button onClick={() => setEditing(null)} className="text-muted-foreground hover:text-foreground">
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="grid gap-3">
+                <div>
+                  <Label className="text-xs">Nome</Label>
+                  <Input
+                    autoFocus
+                    value={editing.name ?? ""}
+                    onChange={(e) =>
+                      setEditing({
+                        ...editing,
+                        name: e.target.value,
+                        slug: editing.id ? editing.slug : slugify(e.target.value),
+                      })
+                    }
+                    placeholder="Ex: Persianas Horizontais"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs">Slug (URL)</Label>
+                  <Input
+                    value={editing.slug ?? ""}
+                    onChange={(e) => setEditing({ ...editing, slug: e.target.value })}
+                    placeholder="persianas-horizontais"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs">Categoria pai</Label>
+                  <select
+                    className="w-full h-9 rounded-md border bg-background px-3 text-sm"
+                    value={editing.parent_id ?? ""}
+                    onChange={(e) => setEditing({ ...editing, parent_id: e.target.value || null })}
+                  >
+                    <option value="">— Nenhuma (categoria raiz) —</option>
+                    {parentOptions.map((c) => {
+                      // build label with hierarchy
+                      const path: string[] = [c.name];
+                      let cur = c;
+                      while (cur.parent_id) {
+                        const p = rows.find((r) => r.id === cur.parent_id);
+                        if (!p) break;
+                        path.unshift(p.name);
+                        cur = p;
+                      }
+                      return (
+                        <option key={c.id} value={c.id}>
+                          {path.join(" › ")}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div>
+                  <Label className="text-xs">Ícone (emoji)</Label>
+                  <Input
+                    value={editing.icon ?? ""}
+                    onChange={(e) => setEditing({ ...editing, icon: e.target.value })}
+                    placeholder="▦  ou  🪟"
+                  />
+                </div>
+                <label className="flex items-center gap-2 text-sm py-1">
+                  <Switch
+                    checked={!!editing.active}
+                    onCheckedChange={(v) => setEditing({ ...editing, active: v })}
+                  />
+                  Ativa (visível no site)
+                </label>
+              </div>
+
+              <div className="flex gap-2 pt-2 border-t">
+                <Button variant="ghost" onClick={() => setEditing(null)} className="flex-1">
+                  Cancelar
+                </Button>
+                <Button onClick={save} disabled={saving} className="flex-1">
+                  {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {editing.id ? "Salvar" : "Criar"}
+                </Button>
+              </div>
+
+              {editing.id && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1"
+                  onClick={() => {
+                    setExpanded((prev) => new Set(prev).add(editing.id as string));
+                    startNew(editing.id as string);
+                  }}
+                >
+                  <Plus className="h-3.5 w-3.5" /> Adicionar subcategoria dentro desta
+                </Button>
+              )}
+            </>
+          )}
+        </Card>
+      </div>
     </div>
   );
 }
