@@ -19,6 +19,7 @@ import { RoomsSection } from "@/components/site/RoomsSection";
 import { AutomationSection } from "@/components/site/AutomationSection";
 import { MosquitoSection } from "@/components/site/MosquitoSection";
 import { B2BSection } from "@/components/site/B2BSection";
+import { QuoteSection } from "@/components/site/QuoteSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -68,6 +69,8 @@ function Index() {
         <MeasureCTA />
         {/* B2B */}
         <B2BSection />
+        {/* Captura de leads — formulário público alimenta CRM */}
+        <QuoteSection />
         {/* Descontos */}
         <DiscountsGrid />
         {/* Prova social */}
