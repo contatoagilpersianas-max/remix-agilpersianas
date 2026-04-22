@@ -370,6 +370,8 @@ function Catalog() {
                   </div>
                 </div>
               </div>
+
+              <ColorsEditor
                 colors={editing.colors ?? []}
                 onChange={(colors) => setEditing({ ...editing, colors })}
               />
