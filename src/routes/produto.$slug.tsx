@@ -12,6 +12,8 @@ import { LifestyleSection } from "@/components/product/LifestyleSection";
 import { HowToMeasure } from "@/components/product/HowToMeasure";
 import { ProductFAQ } from "@/components/product/ProductFAQ";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
+import { ProductSpecs } from "@/components/product/ProductSpecs";
+import { StickyBuyBar } from "@/components/product/StickyBuyBar";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/produto/$slug")({
@@ -130,6 +132,7 @@ function ProductPage() {
       </section>
 
       <TrustBar />
+      <ProductSpecs product={product} />
       <BenefitsGrid features={product.features} />
       <LifestyleSection />
       <HowToMeasure />
@@ -138,6 +141,7 @@ function ProductPage() {
 
       <Footer />
       <WhatsAppFAB />
+      <StickyBuyBar name={product.name} pricePerSqm={product.price_per_sqm} />
     </div>
   );
 }
