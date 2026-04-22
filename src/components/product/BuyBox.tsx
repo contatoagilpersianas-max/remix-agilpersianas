@@ -81,14 +81,14 @@ export function BuyBox({ product }: { product: Product }) {
       return;
     }
     toast.success("Adicionado ao carrinho!", {
-      description: `${product.name} — ${width}×${height} cm — ${BRL(total)}`,
+      description: `${product.name} — ${(width / 100).toFixed(2)} × ${(height / 100).toFixed(2)} m — ${BRL(total)}`,
     });
   }
 
   function handleWhats() {
     const msg = encodeURIComponent(
       `Olá! Tenho interesse na *${product.name}*\n\n` +
-        `📐 Medidas: ${width} × ${height} cm\n` +
+        `📐 Medidas: ${(width / 100).toFixed(2)} m × ${(height / 100).toFixed(2)} m\n` +
         `🔧 Acionamento: ${motor === "manual" ? "Manual" : motor === "rf" ? "Motor RF" : "Motor Wi-Fi"}\n` +
         `🎨 Cor: ${color}\n` +
         `${bando ? "✨ Com bandô\n" : ""}` +
