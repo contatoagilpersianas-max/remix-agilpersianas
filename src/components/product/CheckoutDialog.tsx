@@ -16,6 +16,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { createAsaasCharge } from "@/lib/asaas.functions";
 import { ShippingCalculator } from "./ShippingCalculator";
 import type { ShippingQuote } from "@/lib/frenet.functions";
+import { applyWelcomeCoupon, registerCouponUsage, WELCOME_COUPON } from "@/lib/coupon";
+import { Tag } from "lucide-react";
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -67,10 +69,36 @@ export function CheckoutDialog({
   const [cep, setCep] = useState("");
   const [shipping, setShipping] = useState<ShippingQuote | null>(initialShipping ?? null);
   const [result, setResult] = useState<ChargeResult | null>(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponMsg, setCouponMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const baseSubtotal = subtotal ?? total;
   const shippingCost = shipping?.price ?? 0;
-  const finalTotal = baseSubtotal + shippingCost;
+  const finalTotal = Math.max(0, baseSubtotal + shippingCost - couponDiscount);
+
+  async function handleApplyCoupon() {
+    if (!email) {
+      setCouponMsg({ ok: false, text: "Informe seu e-mail acima para validar o cupom." });
+      return;
+    }
+    if (couponCode.trim().toUpperCase() !== WELCOME_COUPON.code) {
+      setCouponMsg({ ok: false, text: "Cupom não reconhecido." });
+      setCouponDiscount(0);
+      return;
+    }
+    setCouponLoading(true);
+    const r = await applyWelcomeCoupon(email, baseSubtotal);
+    setCouponLoading(false);
+    if (!r.ok) {
+      setCouponDiscount(0);
+      setCouponMsg({ ok: false, text: r.reason ?? "Cupom inválido." });
+      return;
+    }
+    setCouponDiscount(r.discount);
+    setCouponMsg({ ok: true, text: `Cupom aplicado: -${BRL(r.discount)}` });
+  }
 
   const createCharge = useServerFn(createAsaasCharge);
 
