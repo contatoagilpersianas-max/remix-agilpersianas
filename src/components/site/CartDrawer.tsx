@@ -6,7 +6,7 @@ import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart, formatBRL } from "@/lib/cart";
 
 export function CartDrawer() {
-  const { open, setOpen, items, subtotal, removeItem, updateQty, count } = useCart();
+  const { open, setOpen, items, subtotal, removeItem, updateQty, count, hydrated } = useCart();
 
   // Fecha drawer quando rota muda — uso simples via popstate
   useEffect(() => {
