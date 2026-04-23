@@ -19,13 +19,12 @@ import type { ShippingQuote } from "@/lib/frenet.functions";
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-// Gera lista de opções em cm, com label "0.30 m (300 mm)"
+// Gera lista de opções em cm, com label "0,30 (30 cm)"
 function buildMeasureOptions(minCm: number, maxCm: number) {
   const opts: { cm: number; label: string }[] = [];
   for (let cm = minCm; cm <= maxCm; cm++) {
-    const meters = (cm / 100).toFixed(2);
-    const mm = cm * 10;
-    opts.push({ cm, label: `${meters} m (${mm} mm)` });
+    const meters = (cm / 100).toFixed(2).replace(".", ",");
+    opts.push({ cm, label: `${meters} (${cm} cm)` });
   }
   return opts;
 }
