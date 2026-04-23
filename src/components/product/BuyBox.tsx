@@ -33,7 +33,13 @@ type Motor = "manual" | "rf" | "wifi";
 type Mount = "inside" | "outside";
 type Side = "left" | "right";
 
-export function BuyBox({ product }: { product: Product }) {
+export function BuyBox({
+  product,
+  onColorChange,
+}: {
+  product: Product;
+  onColorChange?: (color: string) => void;
+}) {
   // Inicia com a medida mínima do produto
   const [width, setWidth] = useState(product.min_width_cm);
   const [height, setHeight] = useState(product.min_height_cm);
@@ -56,6 +62,11 @@ export function BuyBox({ product }: { product: Product }) {
     ];
   }, [product.colors]);
   const [color, setColor] = useState(productColors[0]?.name ?? "Branco");
+
+  // Notifica o pai (página do produto) para sincronizar a galeria.
+  useEffect(() => {
+    onColorChange?.(color);
+  }, [color, onColorChange]);
 
   const widthOptions = useMemo(
     () => buildMeasureOptions(product.min_width_cm, product.max_width_cm),
