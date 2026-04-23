@@ -4,7 +4,7 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 type Cat = {
@@ -15,6 +15,7 @@ type Cat = {
   icon: string | null;
   show_in_menu: boolean | null;
   position: number;
+  bestseller?: boolean | null;
 };
 
 export function CategoryNav() {
@@ -23,7 +24,7 @@ export function CategoryNav() {
     queryFn: async () => {
       const { data } = await supabase
         .from("categories")
-        .select("id,name,slug,parent_id,icon,show_in_menu,position,active")
+        .select("id,name,slug,parent_id,icon,show_in_menu,position,active,bestseller")
         .eq("active", true)
         .order("position");
       return (data ?? []) as Cat[];
@@ -32,9 +33,9 @@ export function CategoryNav() {
     refetchOnMount: "always",
   });
 
-  const roots = cats.filter((c) => !c.parent_id && c.show_in_menu !== false);
-  const childrenOf = (id: string) =>
-    cats.filter((c) => c.parent_id === id && c.show_in_menu !== false);
+  const visibleCats = useMemo(() => cats.filter((c) => c.show_in_menu !== false), [cats]);
+  const roots = useMemo(() => visibleCats.filter((c) => !c.parent_id), [visibleCats]);
+  const childrenOf = (id: string) => visibleCats.filter((c) => c.parent_id === id);
 
   const [openId, setOpenId] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -79,7 +80,7 @@ export function CategoryNav() {
   return (
     <nav ref={navRef} className="hidden border-t border-border/60 bg-background lg:block">
       <div className="container-premium">
-        <ul className="flex h-14 items-center gap-1 overflow-x-auto">
+        <ul className="flex min-h-14 items-center gap-1 overflow-x-auto no-scrollbar">
           {roots.map((cat) => {
             const subs = childrenOf(cat.id);
             const isOpen = openId === cat.id;
@@ -97,7 +98,9 @@ export function CategoryNav() {
                     onClick={() => (isOpen ? setOpenId(null) : openNow(cat.id))}
                     aria-expanded={isOpen}
                     aria-haspopup="true"
-                    className="inline-flex h-14 items-center gap-1.5 px-3 text-[12px] font-semibold uppercase tracking-[0.18em] transition hover:text-primary"
+                    className={`inline-flex h-14 items-center gap-1.5 rounded-t-md px-4 text-[12px] font-semibold uppercase tracking-[0.12em] transition hover:text-primary ${
+                      isOpen ? "bg-secondary text-primary" : "text-foreground"
+                    }`}
                   >
                     {cat.icon && <span className="text-base">{cat.icon}</span>}
                     {cat.name}
@@ -109,7 +112,7 @@ export function CategoryNav() {
                   <Link
                     to="/catalogo"
                     search={{ categoria: cat.slug }}
-                    className="inline-flex h-14 items-center gap-1.5 px-3 text-[12px] font-semibold uppercase tracking-[0.18em] transition hover:text-primary"
+                    className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-semibold uppercase tracking-[0.12em] transition hover:text-primary"
                   >
                     {cat.icon && <span className="text-base">{cat.icon}</span>}
                     {cat.name}
@@ -118,48 +121,47 @@ export function CategoryNav() {
 
                 {hasSubs && isOpen && (
                   <div
-                    className="absolute left-0 top-full z-50"
+                    className="absolute left-0 top-full z-50 w-[360px]"
                     onMouseEnter={cancelClose}
                     onMouseLeave={scheduleClose}
                   >
-                    {/* Bridge invisível para evitar gap entre botão e painel */}
-                    <div className="h-2 w-full" aria-hidden />
                     <div
-                      className="overflow-hidden rounded-xl border border-border bg-popover shadow-2xl animate-in fade-in slide-in-from-top-1"
-                      style={{ minWidth: 280 }}
+                      className="overflow-hidden rounded-b-xl rounded-tr-xl border border-border bg-popover shadow-2xl animate-in fade-in slide-in-from-top-1"
                     >
                       <div className="p-3">
-                        <Link
-                          to="/catalogo"
-                          search={{ categoria: cat.slug }}
-                          onClick={() => setOpenId(null)}
-                          className="block rounded-md px-3 py-2 mb-2 bg-primary/10 text-primary font-bold text-[12px] uppercase tracking-wider hover:bg-primary/15 transition"
-                        >
-                          Ver tudo de {cat.name} →
-                        </Link>
-                        <ul className="space-y-0.5 max-h-[60vh] overflow-y-auto">
+                        <ul className="space-y-2 max-h-[60vh] overflow-y-auto">
                           {subs.map((sub) => {
                             const grand = childrenOf(sub.id);
                             return (
-                              <li key={sub.id}>
-                                <Link
-                                  to="/catalogo"
-                                  search={{ categoria: sub.slug }}
-                                  onClick={() => setOpenId(null)}
-                                  className="block rounded-md px-3 py-1.5 text-sm text-foreground/85 transition hover:bg-secondary hover:text-foreground"
-                                >
-                                  {sub.icon && <span className="mr-2">{sub.icon}</span>}
-                                  {sub.name}
-                                </Link>
+                              <li key={sub.id} className="rounded-lg bg-secondary/45 px-3 py-3">
+                                <div className="flex items-center justify-between gap-3">
+                                  <Link
+                                    to="/catalogo"
+                                    search={{ categoria: sub.slug }}
+                                    onClick={() => setOpenId(null)}
+                                    className="min-w-0 text-base font-medium text-foreground transition hover:text-primary"
+                                  >
+                                    {sub.icon && <span className="mr-2">{sub.icon}</span>}
+                                    {sub.name}
+                                  </Link>
+                                  <button
+                                    type="button"
+                                    onClick={() => setOpenId(isOpen ? null : cat.id)}
+                                    aria-label={`Abrir ${sub.name}`}
+                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-background text-primary shadow-sm"
+                                  >
+                                    <ChevronDown className="h-4 w-4" />
+                                  </button>
+                                </div>
                                 {grand.length > 0 && (
-                                  <ul className="ml-3 border-l border-border/60 pl-2">
+                                  <ul className="mt-3 space-y-1 border-l border-border/60 pl-3">
                                     {grand.map((g) => (
                                       <li key={g.id}>
                                         <Link
                                           to="/catalogo"
                                           search={{ categoria: g.slug }}
                                           onClick={() => setOpenId(null)}
-                                          className="block rounded-md px-3 py-1 text-xs text-foreground/70 transition hover:bg-secondary hover:text-foreground"
+                                          className="block rounded-md px-2 py-1.5 text-sm text-foreground/80 transition hover:bg-background hover:text-foreground"
                                         >
                                           {g.name}
                                         </Link>
@@ -170,6 +172,16 @@ export function CategoryNav() {
                               </li>
                             );
                           })}
+                          <li>
+                            <Link
+                              to="/catalogo"
+                              search={{ categoria: cat.slug }}
+                              onClick={() => setOpenId(null)}
+                              className="block rounded-lg border border-dashed border-primary/30 px-3 py-3 text-sm font-semibold text-primary transition hover:bg-primary/10"
+                            >
+                              Ver todos de {cat.name}
+                            </Link>
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -181,10 +193,10 @@ export function CategoryNav() {
           <li className="ml-auto">
             <Link
               to="/catalogo"
-              className="inline-flex h-14 items-center gap-1.5 px-3 text-[12px] font-bold uppercase tracking-[0.18em]"
-              style={{ color: "#B8541C" }}
+              search={{ destaque: "mais-vendidos" }}
+              className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-bold uppercase tracking-[0.12em] text-primary"
             >
-              Ofertas
+              Mais vendidos
             </Link>
           </li>
         </ul>
