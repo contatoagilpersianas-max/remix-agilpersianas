@@ -111,7 +111,6 @@ export function CategoryNav() {
                 key={cat.id}
                 className="relative shrink-0"
                 onMouseEnter={() => hasSubs && openNow(cat.id)}
-                onMouseLeave={() => hasSubs && scheduleClose()}
               >
                 {hasSubs ? (
                   <button
@@ -156,7 +155,11 @@ export function CategoryNav() {
       </div>
 
       {openCat && (
-        <div className="border-t border-border/60 bg-secondary/25">
+        <div
+          className="border-t border-border/60 bg-secondary/25"
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
+        >
           <div className="container-premium py-4">
             <div className="max-w-2xl space-y-2 animate-in fade-in slide-in-from-top-1">
               {openSubs.map((sub) => {
