@@ -102,8 +102,8 @@ export function CategoryNav() {
 
   // Fecha ao clicar fora / ESC
   useEffect(() => {
-    if (!openId) return;
-    function onDoc(e: MouseEvent) {
+    if (!openId && !mobileOpenId) return;
+    function onDoc(e: Event) {
       if (!navRef.current?.contains(e.target as Node)) closeAll();
     }
     function onEsc(e: KeyboardEvent) {
