@@ -349,8 +349,8 @@ export function BuyBox({
           Entrega Brasil
         </div>
         <div>
-          <ShieldCheck className="h-5 w-5 mx-auto text-primary mb-1" />
-          Garantia 5 anos
+          <Wrench className="h-5 w-5 mx-auto text-primary mb-1" />
+          Instalação simples
         </div>
       </div>
 

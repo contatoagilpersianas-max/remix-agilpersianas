@@ -121,11 +121,11 @@ export function Hero() {
           >
             <span className="inline-flex items-center gap-1.5">
               <Ruler className="h-3.5 w-3.5" style={{ color: "#FFB877" }} />
-              Sob medida
+              Sob medida exata
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5" style={{ color: "#FFB877" }} />
-              Garantia 5 anos
+              Produção própria · Instalação simples
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Star className="h-3.5 w-3.5 fill-current" style={{ color: "#FFB877" }} />

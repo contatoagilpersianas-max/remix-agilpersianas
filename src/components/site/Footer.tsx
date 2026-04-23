@@ -31,7 +31,7 @@ const COLS: NavColumn[] = [
       { label: "Escolha de tecidos", href: "/blog/como-escolher-tecido-persiana" },
       { label: "Automação", href: "/blog/automacao-persianas-casa-inteligente" },
       { label: "Frete e prazo", href: "#frete" },
-      { label: "Garantia 5 anos", href: "#garantia" },
+      { label: "Instalação simples", href: "#instalacao" },
       { label: "FAQ", href: "#faq" },
     ],
   },
