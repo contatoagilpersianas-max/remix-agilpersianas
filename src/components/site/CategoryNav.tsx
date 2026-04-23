@@ -1,9 +1,11 @@
-// Mega Menu dinâmico — usa categorias do banco com show_in_menu=true.
-// Suporta hover (desktop) E clique (mobile/touch) para abrir submenus.
-// Usa delay no fechamento para evitar flicker ao mover o mouse para o submenu.
+// Mega Menu profissional — estilo Hunter Douglas / Amazon.
+// - Dropdown flutuante, posicionado abaixo do item ativo (não ocupa a página inteira).
+// - Largura compacta com colunas (sub + grand-children visíveis lado a lado).
+// - Hover (desktop) com delay anti-flicker + clique (mobile).
+// - Não empurra o conteúdo da página: usa `absolute` sobre overlay.
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -37,7 +39,7 @@ export function CategoryNav() {
   const childrenOf = (id: string) => visibleCats.filter((c) => c.parent_id === id);
 
   const [openId, setOpenId] = useState<string | null>(null);
-  const [expandedSubId, setExpandedSubId] = useState<string | null>(null);
+  const [hoverSubId, setHoverSubId] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -49,28 +51,20 @@ export function CategoryNav() {
   };
   const scheduleClose = () => {
     cancelClose();
-    closeTimer.current = setTimeout(() => setOpenId(null), 180);
+    closeTimer.current = setTimeout(() => setOpenId(null), 160);
   };
   const openNow = (id: string) => {
     cancelClose();
     setOpenId(id);
+    setHoverSubId(null);
   };
 
   const openCat = useMemo(() => roots.find((cat) => cat.id === openId) ?? null, [roots, openId]);
   const openSubs = openCat ? childrenOf(openCat.id) : [];
-
-  useEffect(() => {
-    if (!openCat) {
-      setExpandedSubId(null);
-      return;
-    }
-
-    const withChildren = openSubs.find((sub) => childrenOf(sub.id).length > 0);
-    setExpandedSubId((prev) => {
-      if (prev && openSubs.some((sub) => sub.id === prev)) return prev;
-      return withChildren?.id ?? null;
-    });
-  }, [openCat, openSubs]);
+  const activeSub = hoverSubId
+    ? openSubs.find((s) => s.id === hoverSubId)
+    : openSubs.find((s) => childrenOf(s.id).length > 0) ?? null;
+  const grand = activeSub ? childrenOf(activeSub.id) : [];
 
   // Fecha ao clicar fora / ESC
   useEffect(() => {
@@ -96,12 +90,12 @@ export function CategoryNav() {
   return (
     <nav
       ref={navRef}
-      className="border-t border-border/60 bg-background"
-      onMouseEnter={cancelClose}
+      className="relative border-t border-border/60 bg-background"
       onMouseLeave={() => openId && scheduleClose()}
+      onMouseEnter={cancelClose}
     >
       <div className="container-premium">
-        <ul className="flex min-h-14 items-center gap-1 overflow-x-auto no-scrollbar">
+        <ul className="flex min-h-12 items-center gap-0.5 overflow-x-auto no-scrollbar">
           {roots.map((cat) => {
             const subs = childrenOf(cat.id);
             const isOpen = openId === cat.id;
@@ -118,8 +112,8 @@ export function CategoryNav() {
                     onClick={() => (isOpen ? setOpenId(null) : openNow(cat.id))}
                     aria-expanded={isOpen}
                     aria-haspopup="true"
-                    className={`inline-flex h-14 items-center gap-1.5 rounded-t-md px-4 text-[12px] font-semibold uppercase tracking-[0.12em] transition hover:text-primary ${
-                      isOpen ? "bg-secondary text-primary" : "text-foreground"
+                    className={`relative inline-flex h-12 items-center gap-1.5 px-3.5 text-[12px] font-semibold uppercase tracking-[0.1em] transition hover:text-primary ${
+                      isOpen ? "text-primary" : "text-foreground"
                     }`}
                   >
                     {cat.icon && <span className="text-base">{cat.icon}</span>}
@@ -127,18 +121,20 @@ export function CategoryNav() {
                     <ChevronDown
                       className={`h-3 w-3 opacity-60 transition ${isOpen ? "rotate-180" : ""}`}
                     />
+                    {isOpen && (
+                      <span className="absolute inset-x-2 -bottom-px h-0.5 bg-primary" />
+                    )}
                   </button>
                 ) : (
                   <Link
                     to="/catalogo"
                     search={{ categoria: cat.slug }}
-                    className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-semibold uppercase tracking-[0.12em] transition hover:text-primary"
+                    className="inline-flex h-12 items-center gap-1.5 px-3.5 text-[12px] font-semibold uppercase tracking-[0.1em] transition hover:text-primary"
                   >
                     {cat.icon && <span className="text-base">{cat.icon}</span>}
                     {cat.name}
                   </Link>
                 )}
-
               </li>
             );
           })}
@@ -146,7 +142,7 @@ export function CategoryNav() {
             <Link
               to="/catalogo"
               search={{ q: "" }}
-              className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-bold uppercase tracking-[0.12em] text-primary"
+              className="inline-flex h-12 items-center gap-1.5 px-3.5 text-[12px] font-bold uppercase tracking-[0.1em] text-primary"
             >
               Mais vendidos
             </Link>
@@ -154,84 +150,82 @@ export function CategoryNav() {
         </ul>
       </div>
 
-      {openCat && (
+      {/* Mega menu flutuante — não empurra a página */}
+      {openCat && openSubs.length > 0 && (
         <div
-          className="border-t border-border/60 bg-secondary/25"
+          className="absolute left-0 right-0 top-full z-50 border-t border-border/60 bg-background shadow-2xl animate-in fade-in slide-in-from-top-1 duration-150"
           onMouseEnter={cancelClose}
           onMouseLeave={scheduleClose}
         >
-          <div className="container-premium py-4">
-            <div className="max-w-2xl space-y-2 animate-in fade-in slide-in-from-top-1">
-              {openSubs.map((sub) => {
-                const grand = childrenOf(sub.id);
-                const isExpanded = expandedSubId === sub.id;
-
-                return (
-                  <div key={sub.id} className="rounded-xl bg-background p-2 shadow-sm">
-                    <div className="flex items-center gap-3">
-                      <Link
-                        to="/catalogo"
-                        search={{ categoria: sub.slug }}
-                        onClick={() => setOpenId(null)}
-                        className="min-w-0 flex-1 rounded-lg px-4 py-3 text-left text-[15px] font-medium text-foreground transition hover:bg-secondary hover:text-primary"
-                      >
-                        {sub.icon && <span className="mr-2">{sub.icon}</span>}
-                        {sub.name}
-                      </Link>
-
-                      {grand.length > 0 ? (
-                        <button
-                          type="button"
-                          onClick={() => setExpandedSubId((prev) => (prev === sub.id ? null : sub.id))}
-                          aria-expanded={isExpanded}
-                          aria-label={`Abrir submenu de ${sub.name}`}
-                          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary transition hover:bg-primary/10"
-                        >
-                          <ChevronDown className={`h-4 w-4 transition ${isExpanded ? "rotate-180" : ""}`} />
-                        </button>
-                      ) : (
+          <div className="container-premium py-6">
+            <div className={`grid gap-8 ${grand.length > 0 ? "grid-cols-[260px_1fr]" : "grid-cols-1"}`}>
+              {/* Coluna 1 — subcategorias */}
+              <div>
+                <div className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                  {openCat.name}
+                </div>
+                <ul className="space-y-0.5">
+                  {openSubs.map((sub) => {
+                    const subGrand = childrenOf(sub.id);
+                    const isActive = activeSub?.id === sub.id;
+                    return (
+                      <li key={sub.id}>
                         <Link
                           to="/catalogo"
                           search={{ categoria: sub.slug }}
                           onClick={() => setOpenId(null)}
-                          aria-label={`Ver ${sub.name}`}
-                          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary transition hover:bg-primary/10"
+                          onMouseEnter={() => subGrand.length > 0 && setHoverSubId(sub.id)}
+                          className={`group flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm transition ${
+                            isActive
+                              ? "bg-secondary text-primary"
+                              : "text-foreground hover:bg-secondary hover:text-primary"
+                          }`}
                         >
-                          <ChevronDown className="h-4 w-4 -rotate-90" />
+                          <span className="truncate">
+                            {sub.icon && <span className="mr-1.5">{sub.icon}</span>}
+                            {sub.name}
+                          </span>
+                          {subGrand.length > 0 && (
+                            <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-50 group-hover:opacity-100" />
+                          )}
                         </Link>
-                      )}
-                    </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <Link
+                  to="/catalogo"
+                  search={{ categoria: openCat.slug }}
+                  onClick={() => setOpenId(null)}
+                  className="mt-3 inline-flex items-center gap-1 px-3 text-xs font-semibold text-primary hover:underline"
+                >
+                  Ver tudo de {openCat.name}
+                  <ChevronRight className="h-3 w-3" />
+                </Link>
+              </div>
 
-                    {grand.length > 0 && isExpanded && (
-                      <div className="border-t border-border/60 px-2 pb-2 pt-3">
-                        <ul className="space-y-1">
-                          {grand.map((g) => (
-                            <li key={g.id}>
-                              <Link
-                                to="/catalogo"
-                                search={{ categoria: g.slug }}
-                                onClick={() => setOpenId(null)}
-                                className="block rounded-lg px-3 py-2 text-sm text-foreground/80 transition hover:bg-secondary hover:text-foreground"
-                              >
-                                {g.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+              {/* Coluna 2 — modelos do submenu ativo */}
+              {grand.length > 0 && activeSub && (
+                <div className="border-l border-border/60 pl-8">
+                  <div className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                    {activeSub.name}
                   </div>
-                );
-              })}
-
-              <Link
-                to="/catalogo"
-                search={{ categoria: openCat.slug }}
-                onClick={() => setOpenId(null)}
-                className="inline-flex rounded-lg px-2 py-1 text-sm font-semibold text-primary transition hover:underline"
-              >
-                Ver tudo de {openCat.name}
-              </Link>
+                  <ul className="grid grid-cols-2 gap-x-6 gap-y-1">
+                    {grand.map((g) => (
+                      <li key={g.id}>
+                        <Link
+                          to="/catalogo"
+                          search={{ categoria: g.slug }}
+                          onClick={() => setOpenId(null)}
+                          className="block rounded-md px-2 py-1.5 text-sm text-foreground/80 transition hover:bg-secondary hover:text-primary"
+                        >
+                          {g.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>
