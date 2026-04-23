@@ -1,16 +1,16 @@
 import { QuoteForm } from "./QuoteForm";
-import { Clock, ShieldCheck, Truck, Award, Headphones, BadgePercent } from "lucide-react";
+import { Clock, Wrench, Truck, Factory, Headphones, BadgePercent, Ruler } from "lucide-react";
 
 const HIGHLIGHTS = [
   {
-    icon: Award,
-    title: "Garantia de 5 anos",
-    desc: "Em todos os mecanismos e tecidos selecionados.",
+    icon: Factory,
+    title: "Produção própria",
+    desc: "Fábrica e showroom técnico — sem atravessadores.",
   },
   {
-    icon: Truck,
-    title: "Entrega para todo o Brasil",
-    desc: "Frete calculado em tempo real direto na página do produto.",
+    icon: Ruler,
+    title: "Sob medida exata",
+    desc: "Cortado ao centímetro para a sua janela.",
   },
   {
     icon: BadgePercent,
@@ -18,9 +18,9 @@ const HIGHLIGHTS = [
     desc: "Parcele no cartão ou ganhe 5% de desconto à vista no Pix.",
   },
   {
-    icon: Headphones,
-    title: "Atendimento humano",
-    desc: "Especialistas no WhatsApp para tirar suas dúvidas.",
+    icon: Wrench,
+    title: "Instalação simples",
+    desc: "Vídeo passo a passo no app — fácil de montar em casa.",
   },
 ];
 
@@ -52,9 +52,9 @@ export function QuoteSection() {
               </li>
               <li className="flex items-center gap-3">
                 <span className="h-9 w-9 rounded-full bg-primary/15 text-primary flex items-center justify-center">
-                  <ShieldCheck className="h-4 w-4" />
+                  <Factory className="h-4 w-4" />
                 </span>
-                Garantia de 5 anos em todos os produtos
+                Produção própria e sob medida exata
               </li>
               <li className="flex items-center gap-3">
                 <span className="h-9 w-9 rounded-full bg-primary/15 text-primary flex items-center justify-center">
