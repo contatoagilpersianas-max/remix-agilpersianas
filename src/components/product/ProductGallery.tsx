@@ -1,26 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 
 export type GalleryImage = string | { url: string; caption?: string; color?: string };
 
-function normalize(images: GalleryImage[]): { url: string; caption?: string }[] {
-  return images.map((i) => (typeof i === "string" ? { url: i } : { url: i.url, caption: i.caption }));
+function normalize(images: GalleryImage[]): { url: string; caption?: string; color?: string }[] {
+  return images.map((i) =>
+    typeof i === "string" ? { url: i } : { url: i.url, caption: i.caption, color: i.color },
+  );
 }
 
 export function ProductGallery({
   images,
   alt,
   badge,
+  activeColor,
 }: {
   images: GalleryImage[];
   alt: string;
   badge?: string | null;
+  /** Quando muda, troca a imagem principal para a 1ª que tenha esta cor. */
+  activeColor?: string | null;
 }) {
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const list = normalize(images);
   const safe = list.length ? list : [{ url: "/placeholder.svg" }];
+
+  useEffect(() => {
+    if (!activeColor) return;
+    const idx = safe.findIndex(
+      (img) => img.color && img.color.toLowerCase() === activeColor.toLowerCase(),
+    );
+    if (idx >= 0) setActive(idx);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeColor]);
+
   const current = safe[active];
 
   return (
