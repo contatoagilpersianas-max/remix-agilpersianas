@@ -591,7 +591,11 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
 
           {/* ── CORES ── */}
           <TabsContent value="cores" className="pt-5">
-            <ColorsEditor colors={e.colors ?? []} onChange={(colors) => set({ colors })} />
+            <ColorsEditor
+              colors={e.colors ?? []}
+              gallery={e.gallery ?? []}
+              onChange={(colors) => set({ colors })}
+            />
           </TabsContent>
 
           {/* ── SEO ── */}
@@ -660,7 +664,15 @@ function CatCheck({ id, label, bold, checked, onToggle }: { id: string; label: s
   );
 }
 
-function ColorsEditor({ colors, onChange }: { colors: Color[]; onChange: (c: Color[]) => void }) {
+function ColorsEditor({
+  colors,
+  gallery,
+  onChange,
+}: {
+  colors: Color[];
+  gallery: GalleryItem[];
+  onChange: (c: Color[]) => void;
+}) {
   const update = (i: number, patch: Partial<Color>) => {
     const next = [...colors];
     next[i] = { ...next[i], ...patch };
@@ -669,27 +681,78 @@ function ColorsEditor({ colors, onChange }: { colors: Color[]; onChange: (c: Col
   const remove = (i: number) => onChange(colors.filter((_, idx) => idx !== i));
   const add = () => onChange([...colors, { name: "Nova cor", hex: "#cccccc" }]);
 
+  // Mapa case-insensitive de cores presentes na galeria
+  const galleryColors = new Set(
+    (gallery ?? [])
+      .map((g) => (g.color ?? "").trim().toLowerCase())
+      .filter(Boolean),
+  );
+
+  const missing = colors.filter(
+    (c) => c.name && !galleryColors.has(c.name.trim().toLowerCase()),
+  );
+
   return (
-    <div className="rounded-lg border p-4 bg-sand/30">
-      <div className="flex items-center justify-between mb-3">
-        <h4 className="font-semibold text-sm">Cores disponíveis</h4>
+    <div className="rounded-lg border p-4 bg-sand/30 space-y-3">
+      <div className="flex items-center justify-between">
+        <div>
+          <h4 className="font-semibold text-sm">Cores disponíveis</h4>
+          <p className="text-[11px] text-muted-foreground">
+            Cada cor selecionável deve ter ao menos uma foto na <strong>Galeria</strong> com o
+            campo <em>“Cor associada”</em> preenchido.
+          </p>
+        </div>
         <Button type="button" size="sm" variant="outline" onClick={add}>
           <Plus className="h-3.5 w-3.5" /> Adicionar
         </Button>
       </div>
+
+      {missing.length > 0 && (
+        <div className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+          ⚠ Sem foto associada na galeria:{" "}
+          <strong>{missing.map((c) => c.name).join(", ")}</strong>. Vá na aba{" "}
+          <strong>Fotos</strong> e preencha o campo <em>Cor associada</em> com o mesmo nome.
+        </div>
+      )}
+
       {colors.length === 0 ? (
         <p className="text-xs text-muted-foreground">Nenhuma cor cadastrada.</p>
       ) : (
         <div className="grid sm:grid-cols-2 gap-2">
-          {colors.map((c, i) => (
-            <div key={i} className="flex items-center gap-2 rounded-md border bg-card px-2 py-1.5">
-              <input type="color" value={c.hex} onChange={(e) => update(i, { hex: e.target.value })} className="h-7 w-9 rounded border-0 cursor-pointer" />
-              <Input value={c.name} onChange={(e) => update(i, { name: e.target.value })} className="h-8" />
-              <Button type="button" variant="ghost" size="icon" onClick={() => remove(i)}>
-                <Trash2 className="h-3.5 w-3.5 text-destructive" />
-              </Button>
-            </div>
-          ))}
+          {colors.map((c, i) => {
+            const ok = galleryColors.has((c.name ?? "").trim().toLowerCase());
+            return (
+              <div
+                key={i}
+                className={`flex items-center gap-2 rounded-md border bg-card px-2 py-1.5 ${
+                  ok ? "" : "border-amber-300"
+                }`}
+                title={ok ? "Foto encontrada" : "Sem foto associada na galeria"}
+              >
+                <input
+                  type="color"
+                  value={c.hex}
+                  onChange={(e) => update(i, { hex: e.target.value })}
+                  className="h-7 w-9 rounded border-0 cursor-pointer"
+                />
+                <Input
+                  value={c.name}
+                  onChange={(e) => update(i, { name: e.target.value })}
+                  className="h-8"
+                />
+                <span
+                  className={`text-[10px] font-bold uppercase tracking-wider ${
+                    ok ? "text-success" : "text-amber-700"
+                  }`}
+                >
+                  {ok ? "✓ foto" : "sem foto"}
+                </span>
+                <Button type="button" variant="ghost" size="icon" onClick={() => remove(i)}>
+                  <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                </Button>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

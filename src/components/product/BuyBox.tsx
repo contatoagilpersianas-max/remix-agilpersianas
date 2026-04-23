@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { CheckoutDialog } from "./CheckoutDialog";
 import { ShippingCalculator } from "./ShippingCalculator";
 import type { ShippingQuote } from "@/lib/frenet.functions";
+import { loadSelection, saveSelection } from "@/lib/product-selection";
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -40,9 +41,11 @@ export function BuyBox({
   product: Product;
   onColorChange?: (color: string) => void;
 }) {
-  // Inicia com a medida mínima do produto
-  const [width, setWidth] = useState(product.min_width_cm);
-  const [height, setHeight] = useState(product.min_height_cm);
+  // Restaurar seleção persistida (sessionStorage por slug)
+  const initial = useMemo(() => loadSelection(product.slug), [product.slug]);
+
+  const [width, setWidth] = useState(initial.widthCm ?? product.min_width_cm);
+  const [height, setHeight] = useState(initial.heightCm ?? product.min_height_cm);
   const [mount, setMount] = useState<Mount>("inside");
   const [side, setSide] = useState<Side>("right");
   const [motor, setMotor] = useState<Motor>("manual");
@@ -61,12 +64,22 @@ export function BuyBox({
       { name: "Grafite", hex: "#3A3A3A" },
     ];
   }, [product.colors]);
-  const [color, setColor] = useState(productColors[0]?.name ?? "Branco");
+  const [color, setColor] = useState(
+    initial.color && productColors.some((c) => c.name === initial.color)
+      ? initial.color
+      : (productColors[0]?.name ?? "Branco"),
+  );
 
-  // Notifica o pai (página do produto) para sincronizar a galeria.
+  // Notifica o pai (página do produto) para sincronizar a galeria + persiste.
   useEffect(() => {
     onColorChange?.(color);
-  }, [color, onColorChange]);
+    saveSelection(product.slug, { color });
+  }, [color, onColorChange, product.slug]);
+
+  // Persiste medidas
+  useEffect(() => {
+    saveSelection(product.slug, { widthCm: width, heightCm: height });
+  }, [width, height, product.slug]);
 
   const widthOptions = useMemo(
     () => buildMeasureOptions(product.min_width_cm, product.max_width_cm),

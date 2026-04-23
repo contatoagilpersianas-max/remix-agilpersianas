@@ -1,8 +1,6 @@
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { TopBar } from "@/components/site/TopBar";
-import { Header } from "@/components/site/Header";
-import { CategoryNav } from "@/components/site/CategoryNav";
+import { SiteHeader } from "@/components/site/SiteHeader";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
 import { CartDrawer } from "@/components/site/CartDrawer";
@@ -95,9 +93,7 @@ function CatalogoPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <TopBar />
-      <Header />
-      <CategoryNav />
+      <SiteHeader />
 
       <main className="container-premium py-10 md:py-14">
         <header className="mb-8">

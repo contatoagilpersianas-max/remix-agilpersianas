@@ -6,7 +6,7 @@ import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart, formatBRL } from "@/lib/cart";
 
 export function CartDrawer() {
-  const { open, setOpen, items, subtotal, removeItem, updateQty, count } = useCart();
+  const { open, setOpen, items, subtotal, removeItem, updateQty, count, hydrated } = useCart();
 
   // Fecha drawer quando rota muda — uso simples via popstate
   useEffect(() => {
@@ -28,15 +28,20 @@ export function CartDrawer() {
             <h2 className="font-display text-lg">
               Carrinho{" "}
               <span className="text-sm font-normal text-muted-foreground">
-                ({count} {count === 1 ? "item" : "itens"})
+                {hydrated ? `(${count} ${count === 1 ? "item" : "itens"})` : "(…)"}
               </span>
             </h2>
           </div>
         </header>
 
-        {/* Body */}
+        {/* Body — só renderiza após hidratação para evitar flash de "vazio" */}
         <div className="flex-1 overflow-y-auto px-4 py-3">
-          {items.length === 0 ? (
+          {!hydrated ? (
+            <div className="flex flex-col items-center justify-center h-full text-center py-12">
+              <div className="h-10 w-10 rounded-full border-2 border-primary/30 border-t-primary animate-spin mb-3" />
+              <p className="text-sm text-muted-foreground">Carregando carrinho…</p>
+            </div>
+          ) : items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center py-12">
               <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4">
                 <ShoppingBag className="h-7 w-7 text-muted-foreground" />
@@ -181,7 +186,7 @@ export function CartDrawer() {
         </div>
 
         {/* Footer fixo com totais e CTAs */}
-        {items.length > 0 && (
+        {hydrated && items.length > 0 && (
           <footer className="border-t bg-background px-5 py-4 space-y-3">
             <div className="flex items-baseline justify-between">
               <div>

@@ -30,7 +30,7 @@ export function Header() {
   const mobileLinks = cats.filter((c) => c.show_in_menu !== false);
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border/60">
+    <header className="bg-background/95 backdrop-blur-lg border-b border-border/60">
       <div className="container-premium grid h-20 grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-8">
         {/* Logo */}
         <Link to="/" className="flex items-center shrink-0" aria-label="Ágil Persianas">
