@@ -11,7 +11,7 @@ type Cat = { id: string; name: string; slug: string; parent_id: string | null; s
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const { count, setOpen: setCartOpen } = useCart();
+  const { count, setOpen: setCartOpen, hydrated } = useCart();
 
   const { data: cats = [] } = useQuery({
     queryKey: ["mobile-cats"],
