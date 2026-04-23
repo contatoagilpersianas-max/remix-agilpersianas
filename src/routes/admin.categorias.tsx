@@ -35,6 +35,7 @@ type Cat = {
   active: boolean;
   parent_id: string | null;
   show_in_menu: boolean;
+  bestseller: boolean;
 };
 
 const slugify = (s: string) =>
@@ -181,7 +182,7 @@ function Categories() {
 
   function startNew(parent_id: string | null = null) {
     const siblings = rows.filter((r) => r.parent_id === parent_id);
-    setEditing({ active: true, position: siblings.length, parent_id, name: "", slug: "", icon: "" });
+    setEditing({ active: true, show_in_menu: true, bestseller: false, position: siblings.length, parent_id, name: "", slug: "", icon: "" });
   }
 
   // Filter logic — when searching, show matching nodes plus their ancestors
@@ -517,6 +518,13 @@ function Categories() {
                     onCheckedChange={(v) => setEditing({ ...editing, show_in_menu: v })}
                   />
                   Mostrar na barra de categorias
+                </label>
+                <label className="flex items-center gap-2 text-sm py-1">
+                  <Switch
+                    checked={editing.bestseller ?? false}
+                    onCheckedChange={(v) => setEditing({ ...editing, bestseller: v })}
+                  />
+                  Marcar como mais vendida
                 </label>
               </div>
 
