@@ -18,7 +18,7 @@ import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
 import { RoomsSection } from "@/components/site/RoomsSection";
 import { AutomationSection } from "@/components/site/AutomationSection";
 import { MosquitoSection } from "@/components/site/MosquitoSection";
-import { B2BSection } from "@/components/site/B2BSection";
+// B2BSection removido a pedido do cliente (anexo 2)
 import { QuoteSection } from "@/components/site/QuoteSection";
 
 export const Route = createFileRoute("/")({
@@ -61,14 +61,12 @@ function Index() {
         <RoomsSection />
         {/* Banners promo dupla */}
         <CategoryBanners />
+        {/* Tela mosquiteira — priorizada antes da automação */}
+        <MosquitoSection />
         {/* Automação residencial */}
         <AutomationSection />
-        {/* Tela mosquiteira */}
-        <MosquitoSection />
         {/* CTA medida */}
         <MeasureCTA />
-        {/* B2B */}
-        <B2BSection />
         {/* Captura de leads — formulário público alimenta CRM */}
         <QuoteSection />
         {/* Descontos */}
