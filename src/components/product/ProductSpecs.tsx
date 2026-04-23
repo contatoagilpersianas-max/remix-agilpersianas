@@ -1,4 +1,4 @@
-import { Truck, Wrench, ShieldCheck, Package, Clock, CreditCard } from "lucide-react";
+import { Truck, Wrench, Factory, Package, Clock, CreditCard } from "lucide-react";
 import type { Product } from "@/routes/produto.$slug";
 
 const fmt = (cm: number) => `${(cm / 100).toFixed(2)} m`;
@@ -17,13 +17,13 @@ export function ProductSpecs({ product }: { product: Product }) {
     },
     {
       icon: Wrench,
-      title: "Instalação simples ou assistida",
-      desc: "Acompanha kit completo e guia ilustrado. Instalação opcional em capitais.",
+      title: "Instalação simples",
+      desc: "Acompanha kit completo, guia ilustrado e vídeo passo a passo no app.",
     },
     {
-      icon: ShieldCheck,
-      title: "Garantia 5 anos",
-      desc: "Cobertura completa de mecanismo e acabamento. Pós-venda dedicado.",
+      icon: Factory,
+      title: "Produção própria",
+      desc: "Fabricação em nossa unidade — controle total de qualidade e prazo.",
     },
     {
       icon: CreditCard,

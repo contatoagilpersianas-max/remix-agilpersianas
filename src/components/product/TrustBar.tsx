@@ -1,10 +1,11 @@
-import { Ruler, Truck, ShieldCheck, Headset } from "lucide-react";
+import { Ruler, Truck, Factory, Wrench } from "lucide-react";
 
+// Gatilhos da página de produto (premium, alinhado com o site)
 const items = [
-  { icon: Ruler, title: "Sob Medida", sub: "Ao centímetro exato" },
-  { icon: Truck, title: "Entrega Nacional", sub: "Para todo o Brasil" },
-  { icon: ShieldCheck, title: "Garantia 5 anos", sub: "Cobertura completa" },
-  { icon: Headset, title: "Atendimento Especialista", sub: "Time técnico dedicado" },
+  { icon: Ruler, title: "Sob medida exata", sub: "Cortado ao centímetro" },
+  { icon: Factory, title: "Produção própria", sub: "Fábrica + showroom técnico" },
+  { icon: Truck, title: "Entrega Brasil", sub: "Frete calculado em tempo real" },
+  { icon: Wrench, title: "Instalação simples", sub: "Vídeo passo a passo" },
 ];
 
 export function TrustBar() {

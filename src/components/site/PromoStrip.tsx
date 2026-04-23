@@ -1,12 +1,12 @@
 const ITEMS = [
-  "Sob medida",
-  "Garantia de 5 anos",
+  "Sob medida exata",
+  "Produção própria",
+  "Instalação simples",
   "Envio para todo o Brasil",
   "Parcele em até 12×",
   "5% de desconto no PIX",
   "Catálogo com mais de 200 modelos",
   "Atendimento via WhatsApp",
-  "Acabamento premium",
 ];
 
 export function PromoStrip() {

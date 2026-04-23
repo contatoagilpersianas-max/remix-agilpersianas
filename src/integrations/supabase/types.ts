@@ -61,6 +61,30 @@ export type Database = {
           },
         ]
       }
+      coupon_redemptions: {
+        Row: {
+          code: string
+          created_at: string
+          email: string
+          id: string
+          order_id: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          email: string
+          id?: string
+          order_id?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          email?: string
+          id?: string
+          order_id?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           assigned_to: string | null
@@ -532,6 +556,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_first_purchase: { Args: { _email: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"

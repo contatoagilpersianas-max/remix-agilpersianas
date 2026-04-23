@@ -5,6 +5,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { CartProvider } from "@/lib/cart";
 import { CartDrawer } from "@/components/site/CartDrawer";
 import { SocialProofToasts } from "@/components/site/SocialProofToasts";
+import { useSiteTheme } from "@/lib/theme";
 import { META_PIXEL_ID, GA4_MEASUREMENT_ID } from "@/lib/analytics";
 
 import appCss from "../styles.css?url";
@@ -99,6 +100,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useSiteTheme();
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

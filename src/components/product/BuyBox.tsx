@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Star, ShieldCheck, Truck, Ruler, MessageCircle, ChevronRight, Info } from "lucide-react";
+import { Star, Truck, Ruler, MessageCircle, ChevronRight, Info, Wrench } from "lucide-react";
 import type { Product } from "@/routes/produto.$slug";
 import { toast } from "sonner";
 import { CheckoutDialog } from "./CheckoutDialog";
@@ -349,8 +349,8 @@ export function BuyBox({
           Entrega Brasil
         </div>
         <div>
-          <ShieldCheck className="h-5 w-5 mx-auto text-primary mb-1" />
-          Garantia 5 anos
+          <Wrench className="h-5 w-5 mx-auto text-primary mb-1" />
+          Instalação simples
         </div>
       </div>
 

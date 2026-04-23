@@ -1,22 +1,28 @@
 import { Star, Quote } from "lucide-react";
+import t1 from "@/assets/testimonial-1.jpg";
+import t2 from "@/assets/testimonial-2.jpg";
+import t3 from "@/assets/testimonial-3.jpg";
 
 const ITEMS = [
   {
     name: "Marina Lopes",
     city: "São Paulo, SP",
     rating: 5,
+    photo: t1,
     text: "Comprei rolô blackout para o quarto do bebê. Chegou perfeito, montei sozinha e o quarto fica totalmente escuro. Recomendo muito!",
   },
   {
     name: "Rafael Andrade",
     city: "Belo Horizonte, MG",
     rating: 5,
+    photo: t2,
     text: "Atendimento via WhatsApp foi excelente. Tiraram todas as dúvidas sobre medida. Acabamento de primeira linha.",
   },
   {
     name: "Juliana Castro",
     city: "Curitiba, PR",
     rating: 5,
+    photo: t3,
     text: "Já é a terceira persiana que compro com a Ágil. Tecido lindo, durável e o preço continua ótimo. Virei fã.",
   },
 ];
@@ -60,9 +66,19 @@ export function Testimonials() {
               <blockquote className="mt-4 leading-relaxed text-foreground/90">
                 "{it.text}"
               </blockquote>
-              <figcaption className="mt-5 border-t border-border pt-4">
-                <div className="font-semibold">{it.name}</div>
-                <div className="text-sm text-muted-foreground">{it.city}</div>
+              <figcaption className="mt-5 flex items-center gap-3 border-t border-border pt-4">
+                <img
+                  src={it.photo}
+                  alt={it.name}
+                  loading="lazy"
+                  width={48}
+                  height={48}
+                  className="h-12 w-12 rounded-full object-cover ring-2 ring-primary/20"
+                />
+                <div>
+                  <div className="font-semibold">{it.name}</div>
+                  <div className="text-sm text-muted-foreground">{it.city}</div>
+                </div>
               </figcaption>
             </figure>
           ))}
