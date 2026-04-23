@@ -116,7 +116,7 @@ function ProductPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Header />
+        <SiteHeader />
         <div className="container-premium py-10 grid lg:grid-cols-2 gap-10">
           <Skeleton className="aspect-square rounded-2xl" />
           <div className="space-y-4">
@@ -134,7 +134,7 @@ function ProductPage() {
   if (!product) {
     return (
       <div className="min-h-screen bg-background">
-        <Header />
+        <SiteHeader />
         <div className="container-premium py-20 text-center">
           <h1 className="text-2xl font-display">Produto não encontrado</h1>
           <Link to="/" className="text-primary underline mt-4 inline-block">Voltar à home</Link>
@@ -146,7 +146,7 @@ function ProductPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <SiteHeader />
 
       {/* Breadcrumb hierárquico */}
       <div className="border-b border-border/60">
