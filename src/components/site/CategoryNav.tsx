@@ -96,7 +96,7 @@ export function CategoryNav() {
   return (
     <nav
       ref={navRef}
-      className="hidden border-t border-border/60 bg-background lg:block"
+      className="border-t border-border/60 bg-background"
       onMouseEnter={cancelClose}
       onMouseLeave={() => openId && scheduleClose()}
     >
