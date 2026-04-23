@@ -303,6 +303,38 @@ export function CheckoutDialog({
                 />
               </div>
 
+              {/* Cupom de boas-vindas */}
+              <div className="rounded-xl border border-dashed border-primary/40 p-3 bg-primary/5 space-y-2">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary">
+                  <Tag className="h-3.5 w-3.5" /> Cupom de desconto
+                </div>
+                <div className="flex gap-2">
+                  <Input
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    placeholder="Ex.: BEMVINDO10"
+                    className="h-9 uppercase"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleApplyCoupon}
+                    disabled={couponLoading || !couponCode}
+                  >
+                    {couponLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Aplicar"}
+                  </Button>
+                </div>
+                {couponMsg && (
+                  <p className={`text-[11px] ${couponMsg.ok ? "text-success" : "text-destructive"}`}>
+                    {couponMsg.text}
+                  </p>
+                )}
+                <p className="text-[10px] text-muted-foreground">
+                  💡 {WELCOME_COUPON.label} — válido apenas na 1ª compra (validamos pelo seu e-mail).
+                </p>
+              </div>
+
               {/* Resumo */}
               <div className="rounded-xl bg-muted/40 p-3 text-sm space-y-1">
                 <div className="flex justify-between">
@@ -313,6 +345,12 @@ export function CheckoutDialog({
                   <span className="text-muted-foreground">Frete</span>
                   <span>{shipping ? BRL(shippingCost) : "—"}</span>
                 </div>
+                {couponDiscount > 0 && (
+                  <div className="flex justify-between text-success">
+                    <span>Cupom {WELCOME_COUPON.code}</span>
+                    <span>-{BRL(couponDiscount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between font-display text-base pt-1 border-t">
                   <span>Total</span>
                   <span>{BRL(finalTotal)}</span>
