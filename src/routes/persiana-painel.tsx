@@ -88,7 +88,7 @@ function PainelPage() {
         { title: "Motorização Wi-Fi", description: "Controle pelo app, Alexa ou Google Home." },
         { title: "Trilhos curvos", description: "Sob consulta — cobrem janelas em L ou em arco." },
       ]}
-      benefits Title="Por que escolher o painel japonês"
+      benefitsTitle="Por que escolher o painel japonês"
       faq={[
         {
           q: "Painel japonês serve como divisória?",
