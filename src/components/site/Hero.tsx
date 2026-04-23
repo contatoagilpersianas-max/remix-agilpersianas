@@ -163,7 +163,7 @@ export function Hero() {
               { v: "+20 mil", l: "Clientes" },
               { v: "4.9 ★", l: "Avaliação" },
               { v: "5 anos", l: "Garantia" },
-              { v: "12×", l: "Parcelado" },
+              { v: "6×", l: "Sem juros" },
             ].map((m) => (
               <div key={m.l}>
                 <div

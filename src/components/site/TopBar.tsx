@@ -31,7 +31,7 @@ export function TopBar() {
           </span>
           <span className="flex items-center gap-1.5 opacity-85">
             <CreditCard className="h-3.5 w-3.5" style={{ color: "#F57C00" }} />
-            Até 12× sem juros
+            Até 6× sem juros
           </span>
         </div>
       </div>

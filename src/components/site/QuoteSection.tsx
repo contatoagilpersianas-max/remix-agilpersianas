@@ -14,7 +14,7 @@ const HIGHLIGHTS = [
   },
   {
     icon: BadgePercent,
-    title: "12× sem juros",
+    title: "Até 6× sem juros",
     desc: "Parcele no cartão ou ganhe 5% de desconto à vista no Pix.",
   },
   {
