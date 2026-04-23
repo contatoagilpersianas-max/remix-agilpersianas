@@ -1,10 +1,10 @@
-import { Ruler, CreditCard, Package, ShieldCheck } from "lucide-react";
+import { Ruler, CreditCard, Package, Wrench } from "lucide-react";
 
 const ITEMS = [
   {
     icon: Ruler,
-    title: "Sob medida ao cm",
-    desc: "Cada produto é fabricado exatamente para sua janela.",
+    title: "Sob medida exata",
+    desc: "Cada produto é cortado ao centímetro para a sua janela.",
   },
   {
     icon: CreditCard,
@@ -13,13 +13,13 @@ const ITEMS = [
   },
   {
     icon: Package,
-    title: "Envio para todo o Brasil",
-    desc: "Embalagem reforçada e rastreio até a sua porta.",
+    title: "Produção própria",
+    desc: "Fábrica e showroom técnico — sem atravessadores.",
   },
   {
-    icon: ShieldCheck,
-    title: "Garantia 5 anos",
-    desc: "Pós-venda dedicado e troca facilitada de peças.",
+    icon: Wrench,
+    title: "Instalação simples",
+    desc: "Vídeo passo a passo no app — fácil de montar em casa.",
   },
 ];
 
