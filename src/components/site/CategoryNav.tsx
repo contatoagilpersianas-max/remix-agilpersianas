@@ -1,5 +1,6 @@
 // Mega Menu dinâmico — usa categorias do banco com show_in_menu=true.
 // Suporta hover (desktop) E clique (mobile/touch) para abrir submenus.
+// Usa delay no fechamento para evitar flicker ao mover o mouse para o submenu.
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
@@ -22,12 +23,12 @@ export function CategoryNav() {
     queryFn: async () => {
       const { data } = await supabase
         .from("categories")
-        .select("id,name,slug,parent_id,icon,show_in_menu,position")
+        .select("id,name,slug,parent_id,icon,show_in_menu,position,active")
         .eq("active", true)
         .order("position");
       return (data ?? []) as Cat[];
     },
-    staleTime: 0,
+    staleTime: 30_000,
     refetchOnMount: "always",
   });
 
@@ -37,8 +38,24 @@ export function CategoryNav() {
 
   const [openId, setOpenId] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Fecha ao clicar fora
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setOpenId(null), 180);
+  };
+  const openNow = (id: string) => {
+    cancelClose();
+    setOpenId(id);
+  };
+
+  // Fecha ao clicar fora / ESC
   useEffect(() => {
     if (!openId) return;
     function onDoc(e: MouseEvent) {
@@ -55,6 +72,8 @@ export function CategoryNav() {
     };
   }, [openId]);
 
+  useEffect(() => () => cancelClose(), []);
+
   if (roots.length === 0) return null;
 
   return (
@@ -68,14 +87,14 @@ export function CategoryNav() {
             return (
               <li
                 key={cat.id}
-                className="group relative shrink-0"
-                onMouseEnter={() => hasSubs && setOpenId(cat.id)}
-                onMouseLeave={() => setOpenId((cur) => (cur === cat.id ? null : cur))}
+                className="relative shrink-0"
+                onMouseEnter={() => hasSubs && openNow(cat.id)}
+                onMouseLeave={() => hasSubs && scheduleClose()}
               >
                 {hasSubs ? (
                   <button
                     type="button"
-                    onClick={() => setOpenId(isOpen ? null : cat.id)}
+                    onClick={() => (isOpen ? setOpenId(null) : openNow(cat.id))}
                     aria-expanded={isOpen}
                     aria-haspopup="true"
                     className="inline-flex h-14 items-center gap-1.5 px-3 text-[12px] font-semibold uppercase tracking-[0.18em] transition hover:text-primary"
@@ -97,40 +116,60 @@ export function CategoryNav() {
                   </Link>
                 )}
 
-                {hasSubs && (
+                {hasSubs && isOpen && (
                   <div
-                    className={`absolute left-1/2 top-full z-50 -translate-x-1/2 pt-0 transition-all duration-200 ease-premium ${
-                      isOpen ? "visible opacity-100" : "invisible opacity-0"
-                    }`}
+                    className="absolute left-0 top-full z-50"
+                    onMouseEnter={cancelClose}
+                    onMouseLeave={scheduleClose}
                   >
+                    {/* Bridge invisível para evitar gap entre botão e painel */}
+                    <div className="h-2 w-full" aria-hidden />
                     <div
-                      className="overflow-hidden rounded-xl border border-border bg-popover shadow-2xl"
-                      style={{ minWidth: 260 }}
+                      className="overflow-hidden rounded-xl border border-border bg-popover shadow-2xl animate-in fade-in slide-in-from-top-1"
+                      style={{ minWidth: 280 }}
                     >
-                      <div className="p-4">
-                        {/* Categoria pai destacada */}
+                      <div className="p-3">
                         <Link
                           to="/catalogo"
                           search={{ categoria: cat.slug }}
                           onClick={() => setOpenId(null)}
-                          className="block rounded-md px-3 py-2 mb-2 bg-primary/10 text-primary font-bold text-[13px] uppercase tracking-wider hover:bg-primary/15 transition"
+                          className="block rounded-md px-3 py-2 mb-2 bg-primary/10 text-primary font-bold text-[12px] uppercase tracking-wider hover:bg-primary/15 transition"
                         >
-                          Ver tudo de {cat.name}
+                          Ver tudo de {cat.name} →
                         </Link>
-                        <ul className="space-y-0.5">
-                          {subs.map((sub) => (
-                            <li key={sub.id}>
-                              <Link
-                                to="/catalogo"
-                                search={{ categoria: sub.slug }}
-                                onClick={() => setOpenId(null)}
-                                className="block rounded-md px-3 py-1.5 text-sm text-foreground/85 transition hover:bg-secondary hover:text-foreground"
-                              >
-                                {sub.icon && <span className="mr-2">{sub.icon}</span>}
-                                {sub.name}
-                              </Link>
-                            </li>
-                          ))}
+                        <ul className="space-y-0.5 max-h-[60vh] overflow-y-auto">
+                          {subs.map((sub) => {
+                            const grand = childrenOf(sub.id);
+                            return (
+                              <li key={sub.id}>
+                                <Link
+                                  to="/catalogo"
+                                  search={{ categoria: sub.slug }}
+                                  onClick={() => setOpenId(null)}
+                                  className="block rounded-md px-3 py-1.5 text-sm text-foreground/85 transition hover:bg-secondary hover:text-foreground"
+                                >
+                                  {sub.icon && <span className="mr-2">{sub.icon}</span>}
+                                  {sub.name}
+                                </Link>
+                                {grand.length > 0 && (
+                                  <ul className="ml-3 border-l border-border/60 pl-2">
+                                    {grand.map((g) => (
+                                      <li key={g.id}>
+                                        <Link
+                                          to="/catalogo"
+                                          search={{ categoria: g.slug }}
+                                          onClick={() => setOpenId(null)}
+                                          className="block rounded-md px-3 py-1 text-xs text-foreground/70 transition hover:bg-secondary hover:text-foreground"
+                                        >
+                                          {g.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     </div>

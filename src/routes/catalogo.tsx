@@ -51,24 +51,40 @@ function CatalogoPage() {
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["catalogo", filterSlug, search.q],
     queryFn: async () => {
-      let categoryId: string | null = null;
+      // Resolve a categoria + descendentes (subcategorias) para filtrar amplamente
+      let categoryIds: string[] = [];
       if (filterSlug) {
-        const { data: c } = await supabase
+        const { data: allCats } = await supabase
           .from("categories")
-          .select("id")
-          .eq("slug", filterSlug)
-          .maybeSingle();
-        categoryId = c?.id ?? null;
+          .select("id,slug,parent_id")
+          .eq("active", true);
+        const list = allCats ?? [];
+        const root = list.find((c) => c.slug === filterSlug);
+        if (root) {
+          const ids = new Set<string>([root.id]);
+          let added = true;
+          while (added) {
+            added = false;
+            for (const c of list) {
+              if (c.parent_id && ids.has(c.parent_id) && !ids.has(c.id)) {
+                ids.add(c.id);
+                added = true;
+              }
+            }
+          }
+          categoryIds = Array.from(ids);
+        }
       }
+
       let q = supabase
         .from("products")
         .select(
           "id,name,slug,price,sale_price,price_per_sqm,product_type,rating,reviews_count,cover_image,badge,category_id",
         )
         .eq("active", true);
-      if (categoryId) q = q.eq("category_id", categoryId);
+      if (categoryIds.length > 0) q = q.in("category_id", categoryIds);
       if (search.q) q = q.ilike("name", `%${search.q}%`);
-      const { data, error } = await q.order("featured", { ascending: false }).limit(60);
+      const { data, error } = await q.order("featured", { ascending: false }).limit(120);
       if (error) throw error;
       return (data ?? []) as ProductRow[];
     },
