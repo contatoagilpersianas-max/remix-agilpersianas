@@ -89,10 +89,14 @@ export function Header() {
             <ShoppingBag className="h-4 w-4" />
             <span className="hidden sm:inline">Carrinho</span>
             <span
-              className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold"
+              className={`ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold transition-opacity ${
+                hydrated ? "opacity-100" : "opacity-60 animate-pulse"
+              }`}
               style={{ backgroundColor: "#F57C00", color: "#fff" }}
+              aria-live="polite"
+              title={hydrated ? `${count} item(s) no carrinho` : "Carregando carrinho…"}
             >
-              {count}
+              {hydrated ? count : "·"}
             </span>
           </button>
           <button
