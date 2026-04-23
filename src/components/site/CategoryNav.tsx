@@ -6,6 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  DEFAULT_CATALOG_SETTINGS,
+  getCatalogOrderColumns,
+  normalizeCatalogSettings,
+} from "@/lib/catalog";
 
 type Cat = {
   id: string;
@@ -15,31 +20,45 @@ type Cat = {
   icon: string | null;
   show_in_menu: boolean | null;
   position: number;
+  bestseller: boolean;
 };
 
 export function CategoryNav() {
-  const { data: cats = [] } = useQuery({
+  const { data } = useQuery({
     queryKey: ["nav-cats"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("categories")
-        .select("id,name,slug,parent_id,icon,show_in_menu,position,active")
-        .eq("active", true)
-        .order("position");
-      return (data ?? []) as Cat[];
+      const [{ data: categoryRows }, { data: catalogSettingsRow }] = await Promise.all([
+        supabase
+          .from("categories")
+          .select("id,name,slug,parent_id,icon,show_in_menu,position,active,bestseller")
+          .eq("active", true)
+          .order("position"),
+        supabase.from("site_settings").select("value").eq("key", "catalog_settings").maybeSingle(),
+      ]);
+
+      return {
+        cats: (categoryRows ?? []) as Cat[],
+        catalogSettings: normalizeCatalogSettings(catalogSettingsRow?.value),
+      };
     },
     staleTime: 30_000,
     refetchOnMount: "always",
   });
+
+  const cats = data?.cats ?? [];
+  const catalogSettings = data?.catalogSettings ?? DEFAULT_CATALOG_SETTINGS;
 
   const visibleCats = useMemo(() => cats.filter((c) => c.show_in_menu !== false), [cats]);
   const roots = useMemo(() => visibleCats.filter((c) => !c.parent_id), [visibleCats]);
   const childrenOf = (id: string) => visibleCats.filter((c) => c.parent_id === id);
 
   const [openId, setOpenId] = useState<string | null>(null);
+  const [mobileOpenId, setMobileOpenId] = useState<string | null>(null);
   const [expandedSubId, setExpandedSubId] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pointerType = useRef<"mouse" | "touch">("mouse");
 
   const cancelClose = () => {
     if (closeTimer.current) {
@@ -49,11 +68,20 @@ export function CategoryNav() {
   };
   const scheduleClose = () => {
     cancelClose();
-    closeTimer.current = setTimeout(() => setOpenId(null), 180);
+    closeTimer.current = setTimeout(() => {
+      setOpenId(null);
+      setExpandedSubId(null);
+    }, 220);
   };
   const openNow = (id: string) => {
     cancelClose();
     setOpenId(id);
+  };
+  const closeAll = () => {
+    cancelClose();
+    setOpenId(null);
+    setMobileOpenId(null);
+    setExpandedSubId(null);
   };
 
   const openCat = useMemo(() => roots.find((cat) => cat.id === openId) ?? null, [roots, openId]);
@@ -76,18 +104,20 @@ export function CategoryNav() {
   useEffect(() => {
     if (!openId) return;
     function onDoc(e: MouseEvent) {
-      if (!navRef.current?.contains(e.target as Node)) setOpenId(null);
+      if (!navRef.current?.contains(e.target as Node)) closeAll();
     }
     function onEsc(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpenId(null);
+      if (e.key === "Escape") closeAll();
     }
     document.addEventListener("mousedown", onDoc);
+    document.addEventListener("touchstart", onDoc);
     document.addEventListener("keydown", onEsc);
     return () => {
       document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("touchstart", onDoc);
       document.removeEventListener("keydown", onEsc);
     };
-  }, [openId]);
+  }, [openId, mobileOpenId]);
 
   useEffect(() => () => cancelClose(), []);
 
@@ -97,8 +127,11 @@ export function CategoryNav() {
     <nav
       ref={navRef}
       className="hidden border-t border-border/60 bg-background lg:block"
+      onPointerDown={(e) => {
+        pointerType.current = e.pointerType === "touch" ? "touch" : "mouse";
+      }}
       onMouseEnter={cancelClose}
-      onMouseLeave={() => openId && scheduleClose()}
+      onMouseLeave={() => pointerType.current === "mouse" && openId && scheduleClose()}
     >
       <div className="container-premium">
         <ul className="flex min-h-14 items-center gap-1 overflow-x-auto no-scrollbar">
@@ -110,13 +143,20 @@ export function CategoryNav() {
               <li
                 key={cat.id}
                 className="relative shrink-0"
-                onMouseEnter={() => hasSubs && openNow(cat.id)}
-                onMouseLeave={() => hasSubs && scheduleClose()}
+                onMouseEnter={() => hasSubs && pointerType.current === "mouse" && openNow(cat.id)}
+                onMouseLeave={() => hasSubs && pointerType.current === "mouse" && scheduleClose()}
               >
                 {hasSubs ? (
                   <button
                     type="button"
-                    onClick={() => (isOpen ? setOpenId(null) : openNow(cat.id))}
+                    onClick={() => {
+                      if (isOpen) {
+                        closeAll();
+                        return;
+                      }
+                      openNow(cat.id);
+                      setMobileOpenId(cat.id);
+                    }}
                     aria-expanded={isOpen}
                     aria-haspopup="true"
                     className={`inline-flex h-14 items-center gap-1.5 rounded-t-md px-4 text-[12px] font-semibold uppercase tracking-[0.12em] transition hover:text-primary ${
@@ -133,6 +173,7 @@ export function CategoryNav() {
                   <Link
                     to="/catalogo"
                     search={{ categoria: cat.slug }}
+                    onClick={closeAll}
                     className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-semibold uppercase tracking-[0.12em] transition hover:text-primary"
                   >
                     {cat.icon && <span className="text-base">{cat.icon}</span>}
@@ -146,7 +187,7 @@ export function CategoryNav() {
           <li className="ml-auto">
             <Link
               to="/catalogo"
-              search={{ q: "" }}
+              search={{ q: "", bestseller: "1", ordem: JSON.stringify(getCatalogOrderColumns(catalogSettings)) }}
               className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-bold uppercase tracking-[0.12em] text-primary"
             >
               Mais vendidos
@@ -156,7 +197,12 @@ export function CategoryNav() {
       </div>
 
       {openCat && (
-        <div className="border-t border-border/60 bg-secondary/25">
+        <div
+          ref={panelRef}
+          className="border-t border-border/60 bg-secondary/25"
+          onMouseEnter={cancelClose}
+          onMouseLeave={() => pointerType.current === "mouse" && scheduleClose()}
+        >
           <div className="container-premium py-4">
             <div className="max-w-2xl space-y-2 animate-in fade-in slide-in-from-top-1">
               {openSubs.map((sub) => {
@@ -168,8 +214,8 @@ export function CategoryNav() {
                     <div className="flex items-center gap-3">
                       <Link
                         to="/catalogo"
-                        search={{ categoria: sub.slug }}
-                        onClick={() => setOpenId(null)}
+                          search={{ categoria: sub.slug }}
+                          onClick={closeAll}
                         className="min-w-0 flex-1 rounded-lg px-4 py-3 text-left text-[15px] font-medium text-foreground transition hover:bg-secondary hover:text-primary"
                       >
                         {sub.icon && <span className="mr-2">{sub.icon}</span>}
@@ -179,7 +225,8 @@ export function CategoryNav() {
                       {grand.length > 0 ? (
                         <button
                           type="button"
-                          onClick={() => setExpandedSubId((prev) => (prev === sub.id ? null : sub.id))}
+                            onClick={() => setExpandedSubId((prev) => (prev === sub.id ? null : sub.id))}
+                            onMouseEnter={() => pointerType.current === "mouse" && setExpandedSubId(sub.id)}
                           aria-expanded={isExpanded}
                           aria-label={`Abrir submenu de ${sub.name}`}
                           className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary transition hover:bg-primary/10"
@@ -190,7 +237,7 @@ export function CategoryNav() {
                         <Link
                           to="/catalogo"
                           search={{ categoria: sub.slug }}
-                          onClick={() => setOpenId(null)}
+                          onClick={closeAll}
                           aria-label={`Ver ${sub.name}`}
                           className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary transition hover:bg-primary/10"
                         >
@@ -207,7 +254,7 @@ export function CategoryNav() {
                               <Link
                                 to="/catalogo"
                                 search={{ categoria: g.slug }}
-                                onClick={() => setOpenId(null)}
+                                onClick={closeAll}
                                 className="block rounded-lg px-3 py-2 text-sm text-foreground/80 transition hover:bg-secondary hover:text-foreground"
                               >
                                 {g.name}
@@ -224,7 +271,7 @@ export function CategoryNav() {
               <Link
                 to="/catalogo"
                 search={{ categoria: openCat.slug }}
-                onClick={() => setOpenId(null)}
+                onClick={closeAll}
                 className="inline-flex rounded-lg px-2 py-1 text-sm font-semibold text-primary transition hover:underline"
               >
                 Ver tudo de {openCat.name}
