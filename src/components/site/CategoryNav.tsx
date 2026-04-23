@@ -15,7 +15,6 @@ type Cat = {
   icon: string | null;
   show_in_menu: boolean | null;
   position: number;
-  bestseller?: boolean | null;
 };
 
 export function CategoryNav() {
@@ -24,7 +23,7 @@ export function CategoryNav() {
     queryFn: async () => {
       const { data } = await supabase
         .from("categories")
-        .select("id,name,slug,parent_id,icon,show_in_menu,position,active,bestseller")
+        .select("id,name,slug,parent_id,icon,show_in_menu,position,active")
         .eq("active", true)
         .order("position");
       return (data ?? []) as Cat[];
@@ -38,6 +37,7 @@ export function CategoryNav() {
   const childrenOf = (id: string) => visibleCats.filter((c) => c.parent_id === id);
 
   const [openId, setOpenId] = useState<string | null>(null);
+  const [expandedSubId, setExpandedSubId] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -55,6 +55,22 @@ export function CategoryNav() {
     cancelClose();
     setOpenId(id);
   };
+
+  const openCat = useMemo(() => roots.find((cat) => cat.id === openId) ?? null, [roots, openId]);
+  const openSubs = openCat ? childrenOf(openCat.id) : [];
+
+  useEffect(() => {
+    if (!openCat) {
+      setExpandedSubId(null);
+      return;
+    }
+
+    const withChildren = openSubs.find((sub) => childrenOf(sub.id).length > 0);
+    setExpandedSubId((prev) => {
+      if (prev && openSubs.some((sub) => sub.id === prev)) return prev;
+      return withChildren?.id ?? null;
+    });
+  }, [openCat, openSubs]);
 
   // Fecha ao clicar fora / ESC
   useEffect(() => {
@@ -78,7 +94,12 @@ export function CategoryNav() {
   if (roots.length === 0) return null;
 
   return (
-    <nav ref={navRef} className="hidden border-t border-border/60 bg-background lg:block">
+    <nav
+      ref={navRef}
+      className="hidden border-t border-border/60 bg-background lg:block"
+      onMouseEnter={cancelClose}
+      onMouseLeave={() => openId && scheduleClose()}
+    >
       <div className="container-premium">
         <ul className="flex min-h-14 items-center gap-1 overflow-x-auto no-scrollbar">
           {roots.map((cat) => {
@@ -119,81 +140,13 @@ export function CategoryNav() {
                   </Link>
                 )}
 
-                {hasSubs && isOpen && (
-                  <div
-                    className="absolute left-0 top-full z-50 w-[360px]"
-                    onMouseEnter={cancelClose}
-                    onMouseLeave={scheduleClose}
-                  >
-                    <div
-                      className="overflow-hidden rounded-b-xl rounded-tr-xl border border-border bg-popover shadow-2xl animate-in fade-in slide-in-from-top-1"
-                    >
-                      <div className="p-3">
-                        <ul className="space-y-2 max-h-[60vh] overflow-y-auto">
-                          {subs.map((sub) => {
-                            const grand = childrenOf(sub.id);
-                            return (
-                              <li key={sub.id} className="rounded-lg bg-secondary/45 px-3 py-3">
-                                <div className="flex items-center justify-between gap-3">
-                                  <Link
-                                    to="/catalogo"
-                                    search={{ categoria: sub.slug }}
-                                    onClick={() => setOpenId(null)}
-                                    className="min-w-0 text-base font-medium text-foreground transition hover:text-primary"
-                                  >
-                                    {sub.icon && <span className="mr-2">{sub.icon}</span>}
-                                    {sub.name}
-                                  </Link>
-                                  <button
-                                    type="button"
-                                    onClick={() => setOpenId(isOpen ? null : cat.id)}
-                                    aria-label={`Abrir ${sub.name}`}
-                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-background text-primary shadow-sm"
-                                  >
-                                    <ChevronDown className="h-4 w-4" />
-                                  </button>
-                                </div>
-                                {grand.length > 0 && (
-                                  <ul className="mt-3 space-y-1 border-l border-border/60 pl-3">
-                                    {grand.map((g) => (
-                                      <li key={g.id}>
-                                        <Link
-                                          to="/catalogo"
-                                          search={{ categoria: g.slug }}
-                                          onClick={() => setOpenId(null)}
-                                          className="block rounded-md px-2 py-1.5 text-sm text-foreground/80 transition hover:bg-background hover:text-foreground"
-                                        >
-                                          {g.name}
-                                        </Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </li>
-                            );
-                          })}
-                          <li>
-                            <Link
-                              to="/catalogo"
-                              search={{ categoria: cat.slug }}
-                              onClick={() => setOpenId(null)}
-                              className="block rounded-lg border border-dashed border-primary/30 px-3 py-3 text-sm font-semibold text-primary transition hover:bg-primary/10"
-                            >
-                              Ver todos de {cat.name}
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </li>
             );
           })}
           <li className="ml-auto">
             <Link
               to="/catalogo"
-              search={{ destaque: "mais-vendidos" }}
+              search={{ q: "" }}
               className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-bold uppercase tracking-[0.12em] text-primary"
             >
               Mais vendidos
@@ -201,6 +154,85 @@ export function CategoryNav() {
           </li>
         </ul>
       </div>
+
+      {openCat && (
+        <div className="border-t border-border/60 bg-secondary/25">
+          <div className="container-premium py-4">
+            <div className="max-w-2xl space-y-2 animate-in fade-in slide-in-from-top-1">
+              {openSubs.map((sub) => {
+                const grand = childrenOf(sub.id);
+                const isExpanded = expandedSubId === sub.id;
+
+                return (
+                  <div key={sub.id} className="rounded-xl bg-background p-2 shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <Link
+                        to="/catalogo"
+                        search={{ categoria: sub.slug }}
+                        onClick={() => setOpenId(null)}
+                        className="min-w-0 flex-1 rounded-lg px-4 py-3 text-left text-[15px] font-medium text-foreground transition hover:bg-secondary hover:text-primary"
+                      >
+                        {sub.icon && <span className="mr-2">{sub.icon}</span>}
+                        {sub.name}
+                      </Link>
+
+                      {grand.length > 0 ? (
+                        <button
+                          type="button"
+                          onClick={() => setExpandedSubId((prev) => (prev === sub.id ? null : sub.id))}
+                          aria-expanded={isExpanded}
+                          aria-label={`Abrir submenu de ${sub.name}`}
+                          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary transition hover:bg-primary/10"
+                        >
+                          <ChevronDown className={`h-4 w-4 transition ${isExpanded ? "rotate-180" : ""}`} />
+                        </button>
+                      ) : (
+                        <Link
+                          to="/catalogo"
+                          search={{ categoria: sub.slug }}
+                          onClick={() => setOpenId(null)}
+                          aria-label={`Ver ${sub.name}`}
+                          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary transition hover:bg-primary/10"
+                        >
+                          <ChevronDown className="h-4 w-4 -rotate-90" />
+                        </Link>
+                      )}
+                    </div>
+
+                    {grand.length > 0 && isExpanded && (
+                      <div className="border-t border-border/60 px-2 pb-2 pt-3">
+                        <ul className="space-y-1">
+                          {grand.map((g) => (
+                            <li key={g.id}>
+                              <Link
+                                to="/catalogo"
+                                search={{ categoria: g.slug }}
+                                onClick={() => setOpenId(null)}
+                                className="block rounded-lg px-3 py-2 text-sm text-foreground/80 transition hover:bg-secondary hover:text-foreground"
+                              >
+                                {g.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              <Link
+                to="/catalogo"
+                search={{ categoria: openCat.slug }}
+                onClick={() => setOpenId(null)}
+                className="inline-flex rounded-lg px-2 py-1 text-sm font-semibold text-primary transition hover:underline"
+              >
+                Ver tudo de {openCat.name}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
