@@ -1,5 +1,5 @@
 import { QuoteForm } from "./QuoteForm";
-import { Clock, Wrench, Truck, Factory, Headphones, BadgePercent, Ruler } from "lucide-react";
+import { Clock, Wrench, Truck, Factory, BadgePercent, Ruler } from "lucide-react";
 
 const HIGHLIGHTS = [
   {
