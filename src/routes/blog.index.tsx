@@ -1,7 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { TopBar } from "@/components/site/TopBar";
-import { Header } from "@/components/site/Header";
-import { CategoryNav } from "@/components/site/CategoryNav";
+import { SiteHeader } from "@/components/site/SiteHeader";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
 import { Newsletter } from "@/components/site/Newsletter";
@@ -32,9 +30,7 @@ function BlogIndex() {
 
   return (
     <div className="min-h-screen bg-background">
-      <TopBar />
-      <Header />
-      <CategoryNav />
+      <SiteHeader />
 
       <main className="container-premium py-16 md:py-24">
         <header className="mb-12 max-w-2xl">

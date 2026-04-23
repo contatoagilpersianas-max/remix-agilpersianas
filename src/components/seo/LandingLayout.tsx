@@ -1,8 +1,6 @@
 import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { TopBar } from "@/components/site/TopBar";
-import { Header } from "@/components/site/Header";
-import { CategoryNav } from "@/components/site/CategoryNav";
+import { SiteHeader } from "@/components/site/SiteHeader";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
 import { TrustBar } from "@/components/site/TrustBar";
@@ -54,9 +52,7 @@ export function LandingLayout({
 
   return (
     <div className="min-h-screen bg-background">
-      <TopBar />
-      <Header />
-      <CategoryNav />
+      <SiteHeader />
 
       <main>
         {/* HERO */}
