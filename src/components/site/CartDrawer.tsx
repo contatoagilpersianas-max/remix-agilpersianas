@@ -186,7 +186,7 @@ export function CartDrawer() {
         </div>
 
         {/* Footer fixo com totais e CTAs */}
-        {items.length > 0 && (
+        {hydrated && items.length > 0 && (
           <footer className="border-t bg-background px-5 py-4 space-y-3">
             <div className="flex items-baseline justify-between">
               <div>
