@@ -61,6 +61,7 @@ function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [breadcrumb, setBreadcrumb] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeColor, setActiveColor] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
