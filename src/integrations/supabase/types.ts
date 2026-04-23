@@ -17,6 +17,7 @@ export type Database = {
       categories: {
         Row: {
           active: boolean
+          bestseller: boolean
           created_at: string
           icon: string | null
           id: string
@@ -29,6 +30,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          bestseller?: boolean
           created_at?: string
           icon?: string | null
           id?: string
@@ -41,6 +43,7 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          bestseller?: boolean
           created_at?: string
           icon?: string | null
           id?: string
