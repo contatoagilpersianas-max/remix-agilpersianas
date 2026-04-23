@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Star, ShieldCheck, Truck, Ruler, MessageCircle, ChevronRight, Info } from "lucide-react";
+import { Star, Truck, Ruler, MessageCircle, ChevronRight, Info, Wrench } from "lucide-react";
 import type { Product } from "@/routes/produto.$slug";
 import { toast } from "sonner";
 import { CheckoutDialog } from "./CheckoutDialog";
