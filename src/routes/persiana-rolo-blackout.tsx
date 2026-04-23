@@ -85,7 +85,7 @@ function PersianaRoloBlackoutPage() {
         "Tecido tripla camada antichamas",
         "Acionamento manual, RF ou Wi-Fi",
         "Garantia de 5 anos",
-        "Parcelamento em até 12× no cartão",
+        "Parcelamento em até 6× sem juros",
       ]}
       features={[
         {

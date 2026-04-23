@@ -54,7 +54,7 @@ function PersianaBHPage() {
         "Motorização inteligente",
         "Visita técnica em projetos grandes",
         "Garantia de 5 anos",
-        "Parcelamento em até 12×",
+        "Parcelamento em até 6× sem juros",
       ]}
       features={[
         { title: "Logística rápida", description: "Saída direta da fábrica de Juiz de Fora — entrega em poucos dias." },

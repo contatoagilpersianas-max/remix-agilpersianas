@@ -226,7 +226,7 @@ export function CheckoutDialog({
                     [
                       { v: "PIX", l: "PIX", sub: "5% off" },
                       { v: "BOLETO", l: "Boleto", sub: "3 dias" },
-                      { v: "CREDIT_CARD", l: "Cartão", sub: "12×" },
+                      { v: "CREDIT_CARD", l: "Cartão", sub: "até 6× s/juros" },
                     ] as const
                   ).map((o) => (
                     <button

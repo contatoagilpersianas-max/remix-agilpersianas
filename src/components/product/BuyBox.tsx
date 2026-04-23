@@ -133,7 +133,8 @@ export function BuyBox({
         `🔧 Acionamento: ${motor === "manual" ? "Manual" : motor === "rf" ? "Motor RF" : "Motor Wi-Fi"}\n` +
         `🎨 Cor: ${color}\n` +
         `${bando ? "✨ Com bandô\n" : ""}` +
-        `💰 Total estimado: ${BRL(total)}`,
+        `💰 Total estimado: ${BRL(total)}\n` +
+        `💳 Em até 6× de ${BRL(installment)} sem juros (ou ${BRL(pix)} no PIX – 5% off)`,
     );
     window.open(`https://wa.me/5500000000000?text=${msg}`, "_blank");
   }
