@@ -187,8 +187,9 @@ export function CategoryNav() {
           <li className="ml-auto">
             <Link
               to="/catalogo"
-              search={{ q: "", bestseller: "1", ordem: JSON.stringify(getCatalogOrderColumns(catalogSettings)) }}
+              search={{ q: "", bestseller: "1" }}
               className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-bold uppercase tracking-[0.12em] text-primary"
+              title={`Ordenação: ${getCatalogOrderColumns(catalogSettings).join(" → ")}`}
             >
               Mais vendidos
             </Link>
