@@ -8,13 +8,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Star } from "lucide-react";
 import { formatBRL } from "@/lib/cart";
 
-type Search = { categoria?: string; ambiente?: string; q?: string };
+type Search = { categoria?: string; ambiente?: string; q?: string; bestseller?: string };
 
 export const Route = createFileRoute("/catalogo")({
   validateSearch: (s: Record<string, unknown>): Search => ({
     categoria: typeof s.categoria === "string" ? s.categoria : undefined,
     ambiente: typeof s.ambiente === "string" ? s.ambiente : undefined,
     q: typeof s.q === "string" ? s.q : undefined,
+    bestseller: typeof s.bestseller === "string" ? s.bestseller : undefined,
   }),
   head: () => ({
     meta: [
@@ -47,9 +48,10 @@ type ProductRow = {
 function CatalogoPage() {
   const search = useSearch({ from: "/catalogo" });
   const filterSlug = search.categoria || search.ambiente;
+  const onlyBestsellers = search.bestseller === "1";
 
   const { data: products = [], isLoading } = useQuery({
-    queryKey: ["catalogo", filterSlug, search.q],
+    queryKey: ["catalogo", filterSlug, search.q, onlyBestsellers],
     queryFn: async () => {
       // Resolve a categoria + descendentes (subcategorias) para filtrar amplamente
       let categoryIds: string[] = [];
@@ -79,12 +81,13 @@ function CatalogoPage() {
       let q = supabase
         .from("products")
         .select(
-          "id,name,slug,price,sale_price,price_per_sqm,product_type,rating,reviews_count,cover_image,badge,category_id",
+          "id,name,slug,price,sale_price,price_per_sqm,product_type,rating,reviews_count,cover_image,badge,category_id,bestseller",
         )
         .eq("active", true);
       if (categoryIds.length > 0) q = q.in("category_id", categoryIds);
       if (search.q) q = q.ilike("name", `%${search.q}%`);
-      const { data, error } = await q.order("featured", { ascending: false }).limit(120);
+      if (onlyBestsellers) q = q.eq("bestseller", true);
+      const { data, error } = await q.order("bestseller", { ascending: false }).order("featured", { ascending: false }).limit(120);
       if (error) throw error;
       return (data ?? []) as ProductRow[];
     },
@@ -105,7 +108,7 @@ function CatalogoPage() {
     },
   });
 
-  const title = catName ? `${catName}` : "Todos os produtos";
+  const title = onlyBestsellers ? "Mais vendidos" : catName ? `${catName}` : "Todos os produtos";
 
   return (
     <div className="min-h-screen bg-background">

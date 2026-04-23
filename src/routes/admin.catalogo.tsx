@@ -64,6 +64,7 @@ type Product = {
   faq: FAQItem[];
   active: boolean;
   featured: boolean;
+  bestseller: boolean;
 };
 
 const slugify = (s: string) =>
@@ -106,6 +107,7 @@ const NEW_PRODUCT: Partial<Product> = {
   seo_description: "",
   active: true,
   featured: false,
+  bestseller: false,
   features: [],
   faq: [],
   colors: [
@@ -639,6 +641,13 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
                   <div className="text-[11px] text-muted-foreground">Aparece em "Mais vendidos / Destaques".</div>
                 </div>
                 <Switch checked={!!e.featured} onCheckedChange={(v) => set({ featured: v })} />
+              </label>
+              <label className="flex items-center justify-between gap-3 text-sm">
+                <div>
+                  <div className="font-medium">Marcar como mais vendido</div>
+                  <div className="text-[11px] text-muted-foreground">Exibe o produto no atalho “Mais vendidos”.</div>
+                </div>
+                <Switch checked={!!e.bestseller} onCheckedChange={(v) => set({ bestseller: v })} />
               </label>
             </div>
           </TabsContent>

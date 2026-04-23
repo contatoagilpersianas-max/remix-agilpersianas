@@ -4,7 +4,7 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 type Cat = {
@@ -32,11 +32,12 @@ export function CategoryNav() {
     refetchOnMount: "always",
   });
 
-  const roots = cats.filter((c) => !c.parent_id && c.show_in_menu !== false);
-  const childrenOf = (id: string) =>
-    cats.filter((c) => c.parent_id === id && c.show_in_menu !== false);
+  const visibleCats = useMemo(() => cats.filter((c) => c.show_in_menu !== false), [cats]);
+  const roots = useMemo(() => visibleCats.filter((c) => !c.parent_id), [visibleCats]);
+  const childrenOf = (id: string) => visibleCats.filter((c) => c.parent_id === id);
 
   const [openId, setOpenId] = useState<string | null>(null);
+  const [expandedSubId, setExpandedSubId] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -54,6 +55,22 @@ export function CategoryNav() {
     cancelClose();
     setOpenId(id);
   };
+
+  const openCat = useMemo(() => roots.find((cat) => cat.id === openId) ?? null, [roots, openId]);
+  const openSubs = openCat ? childrenOf(openCat.id) : [];
+
+  useEffect(() => {
+    if (!openCat) {
+      setExpandedSubId(null);
+      return;
+    }
+
+    const withChildren = openSubs.find((sub) => childrenOf(sub.id).length > 0);
+    setExpandedSubId((prev) => {
+      if (prev && openSubs.some((sub) => sub.id === prev)) return prev;
+      return withChildren?.id ?? null;
+    });
+  }, [openCat, openSubs]);
 
   // Fecha ao clicar fora / ESC
   useEffect(() => {
@@ -77,9 +94,14 @@ export function CategoryNav() {
   if (roots.length === 0) return null;
 
   return (
-    <nav ref={navRef} className="hidden border-t border-border/60 bg-background lg:block">
+    <nav
+      ref={navRef}
+      className="hidden border-t border-border/60 bg-background lg:block"
+      onMouseEnter={cancelClose}
+      onMouseLeave={() => openId && scheduleClose()}
+    >
       <div className="container-premium">
-        <ul className="flex h-14 items-center gap-1 overflow-x-auto">
+        <ul className="flex min-h-14 items-center gap-1 overflow-x-auto no-scrollbar">
           {roots.map((cat) => {
             const subs = childrenOf(cat.id);
             const isOpen = openId === cat.id;
@@ -97,7 +119,9 @@ export function CategoryNav() {
                     onClick={() => (isOpen ? setOpenId(null) : openNow(cat.id))}
                     aria-expanded={isOpen}
                     aria-haspopup="true"
-                    className="inline-flex h-14 items-center gap-1.5 px-3 text-[12px] font-semibold uppercase tracking-[0.18em] transition hover:text-primary"
+                    className={`inline-flex h-14 items-center gap-1.5 rounded-t-md px-4 text-[12px] font-semibold uppercase tracking-[0.12em] transition hover:text-primary ${
+                      isOpen ? "bg-secondary text-primary" : "text-foreground"
+                    }`}
                   >
                     {cat.icon && <span className="text-base">{cat.icon}</span>}
                     {cat.name}
@@ -109,86 +133,106 @@ export function CategoryNav() {
                   <Link
                     to="/catalogo"
                     search={{ categoria: cat.slug }}
-                    className="inline-flex h-14 items-center gap-1.5 px-3 text-[12px] font-semibold uppercase tracking-[0.18em] transition hover:text-primary"
+                    className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-semibold uppercase tracking-[0.12em] transition hover:text-primary"
                   >
                     {cat.icon && <span className="text-base">{cat.icon}</span>}
                     {cat.name}
                   </Link>
                 )}
 
-                {hasSubs && isOpen && (
-                  <div
-                    className="absolute left-0 top-full z-50"
-                    onMouseEnter={cancelClose}
-                    onMouseLeave={scheduleClose}
-                  >
-                    {/* Bridge invisível para evitar gap entre botão e painel */}
-                    <div className="h-2 w-full" aria-hidden />
-                    <div
-                      className="overflow-hidden rounded-xl border border-border bg-popover shadow-2xl animate-in fade-in slide-in-from-top-1"
-                      style={{ minWidth: 280 }}
-                    >
-                      <div className="p-3">
-                        <Link
-                          to="/catalogo"
-                          search={{ categoria: cat.slug }}
-                          onClick={() => setOpenId(null)}
-                          className="block rounded-md px-3 py-2 mb-2 bg-primary/10 text-primary font-bold text-[12px] uppercase tracking-wider hover:bg-primary/15 transition"
-                        >
-                          Ver tudo de {cat.name} →
-                        </Link>
-                        <ul className="space-y-0.5 max-h-[60vh] overflow-y-auto">
-                          {subs.map((sub) => {
-                            const grand = childrenOf(sub.id);
-                            return (
-                              <li key={sub.id}>
-                                <Link
-                                  to="/catalogo"
-                                  search={{ categoria: sub.slug }}
-                                  onClick={() => setOpenId(null)}
-                                  className="block rounded-md px-3 py-1.5 text-sm text-foreground/85 transition hover:bg-secondary hover:text-foreground"
-                                >
-                                  {sub.icon && <span className="mr-2">{sub.icon}</span>}
-                                  {sub.name}
-                                </Link>
-                                {grand.length > 0 && (
-                                  <ul className="ml-3 border-l border-border/60 pl-2">
-                                    {grand.map((g) => (
-                                      <li key={g.id}>
-                                        <Link
-                                          to="/catalogo"
-                                          search={{ categoria: g.slug }}
-                                          onClick={() => setOpenId(null)}
-                                          className="block rounded-md px-3 py-1 text-xs text-foreground/70 transition hover:bg-secondary hover:text-foreground"
-                                        >
-                                          {g.name}
-                                        </Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </li>
             );
           })}
           <li className="ml-auto">
             <Link
               to="/catalogo"
-              className="inline-flex h-14 items-center gap-1.5 px-3 text-[12px] font-bold uppercase tracking-[0.18em]"
-              style={{ color: "#B8541C" }}
+              search={{ q: "" }}
+              className="inline-flex h-14 items-center gap-1.5 px-4 text-[12px] font-bold uppercase tracking-[0.12em] text-primary"
             >
-              Ofertas
+              Mais vendidos
             </Link>
           </li>
         </ul>
       </div>
+
+      {openCat && (
+        <div className="border-t border-border/60 bg-secondary/25">
+          <div className="container-premium py-4">
+            <div className="max-w-2xl space-y-2 animate-in fade-in slide-in-from-top-1">
+              {openSubs.map((sub) => {
+                const grand = childrenOf(sub.id);
+                const isExpanded = expandedSubId === sub.id;
+
+                return (
+                  <div key={sub.id} className="rounded-xl bg-background p-2 shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <Link
+                        to="/catalogo"
+                        search={{ categoria: sub.slug }}
+                        onClick={() => setOpenId(null)}
+                        className="min-w-0 flex-1 rounded-lg px-4 py-3 text-left text-[15px] font-medium text-foreground transition hover:bg-secondary hover:text-primary"
+                      >
+                        {sub.icon && <span className="mr-2">{sub.icon}</span>}
+                        {sub.name}
+                      </Link>
+
+                      {grand.length > 0 ? (
+                        <button
+                          type="button"
+                          onClick={() => setExpandedSubId((prev) => (prev === sub.id ? null : sub.id))}
+                          aria-expanded={isExpanded}
+                          aria-label={`Abrir submenu de ${sub.name}`}
+                          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary transition hover:bg-primary/10"
+                        >
+                          <ChevronDown className={`h-4 w-4 transition ${isExpanded ? "rotate-180" : ""}`} />
+                        </button>
+                      ) : (
+                        <Link
+                          to="/catalogo"
+                          search={{ categoria: sub.slug }}
+                          onClick={() => setOpenId(null)}
+                          aria-label={`Ver ${sub.name}`}
+                          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary transition hover:bg-primary/10"
+                        >
+                          <ChevronDown className="h-4 w-4 -rotate-90" />
+                        </Link>
+                      )}
+                    </div>
+
+                    {grand.length > 0 && isExpanded && (
+                      <div className="border-t border-border/60 px-2 pb-2 pt-3">
+                        <ul className="space-y-1">
+                          {grand.map((g) => (
+                            <li key={g.id}>
+                              <Link
+                                to="/catalogo"
+                                search={{ categoria: g.slug }}
+                                onClick={() => setOpenId(null)}
+                                className="block rounded-lg px-3 py-2 text-sm text-foreground/80 transition hover:bg-secondary hover:text-foreground"
+                              >
+                                {g.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              <Link
+                to="/catalogo"
+                search={{ categoria: openCat.slug }}
+                onClick={() => setOpenId(null)}
+                className="inline-flex rounded-lg px-2 py-1 text-sm font-semibold text-primary transition hover:underline"
+              >
+                Ver tudo de {openCat.name}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
