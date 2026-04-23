@@ -1,14 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { TopBar } from "@/components/site/TopBar";
-import { Header } from "@/components/site/Header";
-import { CategoryNav } from "@/components/site/CategoryNav";
+import { SiteHeader } from "@/components/site/SiteHeader";
 import { Hero } from "@/components/site/Hero";
 import { PromoStrip } from "@/components/site/PromoStrip";
-import { TrustBar } from "@/components/site/TrustBar";
-// BenefitsRow removido — informação já está no TrustBar do topo
+// TrustBar e Categories removidos a pedido do cliente
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 import { CategoryBanners } from "@/components/site/CategoryBanners";
-import { Categories } from "@/components/site/Categories";
 import { DiscountsGrid } from "@/components/site/DiscountsGrid";
 import { MeasureCTA } from "@/components/site/MeasureCTA";
 import { Testimonials } from "@/components/site/Testimonials";
@@ -44,17 +40,11 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="min-h-screen bg-background">
-      <TopBar />
-      <Header />
-      <CategoryNav />
+      <SiteHeader />
       <main>
         <Hero />
         {/* Marquee laranja com benefícios — mantido conforme preferência */}
         <PromoStrip />
-        {/* Selos de confiança imediatamente após o hero */}
-        <TrustBar />
-        {/* Categorias visuais — grid editorial 9 itens */}
-        <Categories />
         {/* Mais vendidos */}
         <FeaturedProducts />
         {/* Inspiração por ambiente */}
