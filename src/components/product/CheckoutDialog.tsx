@@ -136,10 +136,14 @@ export function CheckoutDialog({
             },
           ],
           subtotal: baseSubtotal,
+          discount: couponDiscount,
           total: finalTotal,
-          notes: shipping
-            ? `Frete: ${shipping.carrier} (${shipping.serviceDescription}) - ${shipping.deliveryDays}d - R$ ${shipping.price.toFixed(2)} | CEP ${cep || "-"}`
-            : null,
+          notes: [
+            shipping
+              ? `Frete: ${shipping.carrier} (${shipping.serviceDescription}) - ${shipping.deliveryDays}d - R$ ${shipping.price.toFixed(2)} | CEP ${cep || "-"}`
+              : null,
+            couponDiscount > 0 ? `Cupom ${WELCOME_COUPON.code}: -${BRL(couponDiscount)}` : null,
+          ].filter(Boolean).join(" | "),
         })
         .select("id")
         .single();
@@ -176,6 +180,9 @@ export function CheckoutDialog({
         pixPayload: charge.pixPayload,
         billingType,
       });
+      if (couponDiscount > 0 && email) {
+        registerCouponUsage(email, order.id).catch(() => {});
+      }
       setStep("success");
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Erro inesperado";
