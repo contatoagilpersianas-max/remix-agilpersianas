@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Persianas, cortinas e toldos sob medida com tecidos premium. Envio para todo o Brasil, parcelamento em até 12× e garantia de 5 anos.",
+          "Persianas, cortinas e toldos sob medida com tecidos premium. Envio para todo o Brasil, parcelamento em até 6× sem juros e garantia de 5 anos.",
       },
       { property: "og:title", content: "Ágil Persianas — Luz, Forma e Função" },
       {

@@ -3,7 +3,7 @@ const ITEMS = [
   "Produção própria",
   "Instalação simples",
   "Envio para todo o Brasil",
-  "Parcele em até 12×",
+  "Parcele em até 6× sem juros",
   "5% de desconto no PIX",
   "Catálogo com mais de 200 modelos",
   "Atendimento via WhatsApp",
