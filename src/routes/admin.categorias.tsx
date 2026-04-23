@@ -34,6 +34,7 @@ type Cat = {
   position: number;
   active: boolean;
   parent_id: string | null;
+  show_in_menu: boolean;
 };
 
 const slugify = (s: string) =>
@@ -509,6 +510,13 @@ function Categories() {
                     onCheckedChange={(v) => setEditing({ ...editing, active: v })}
                   />
                   Ativa (visível no site)
+                </label>
+                <label className="flex items-center gap-2 text-sm py-1">
+                  <Switch
+                    checked={editing.show_in_menu ?? true}
+                    onCheckedChange={(v) => setEditing({ ...editing, show_in_menu: v })}
+                  />
+                  Mostrar na barra de categorias
                 </label>
               </div>
 
