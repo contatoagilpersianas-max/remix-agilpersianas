@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -19,13 +19,12 @@ import type { ShippingQuote } from "@/lib/frenet.functions";
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-// Gera lista de opções em cm, com label "0.30 m (300 mm)"
+// Gera lista de opções em cm, com label "0,30 (30 cm)"
 function buildMeasureOptions(minCm: number, maxCm: number) {
   const opts: { cm: number; label: string }[] = [];
   for (let cm = minCm; cm <= maxCm; cm++) {
-    const meters = (cm / 100).toFixed(2);
-    const mm = cm * 10;
-    opts.push({ cm, label: `${meters} m (${mm} mm)` });
+    const meters = (cm / 100).toFixed(2).replace(".", ",");
+    opts.push({ cm, label: `${meters} (${cm} cm)` });
   }
   return opts;
 }
@@ -34,7 +33,13 @@ type Motor = "manual" | "rf" | "wifi";
 type Mount = "inside" | "outside";
 type Side = "left" | "right";
 
-export function BuyBox({ product }: { product: Product }) {
+export function BuyBox({
+  product,
+  onColorChange,
+}: {
+  product: Product;
+  onColorChange?: (color: string) => void;
+}) {
   // Inicia com a medida mínima do produto
   const [width, setWidth] = useState(product.min_width_cm);
   const [height, setHeight] = useState(product.min_height_cm);
@@ -57,6 +62,11 @@ export function BuyBox({ product }: { product: Product }) {
     ];
   }, [product.colors]);
   const [color, setColor] = useState(productColors[0]?.name ?? "Branco");
+
+  // Notifica o pai (página do produto) para sincronizar a galeria.
+  useEffect(() => {
+    onColorChange?.(color);
+  }, [color, onColorChange]);
 
   const widthOptions = useMemo(
     () => buildMeasureOptions(product.min_width_cm, product.max_width_cm),

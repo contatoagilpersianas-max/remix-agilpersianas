@@ -61,6 +61,7 @@ function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [breadcrumb, setBreadcrumb] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeColor, setActiveColor] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -172,8 +173,13 @@ function ProductPage() {
       {/* HERO */}
       <section className="container-premium py-8 lg:py-12">
         <div className="grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-14">
-          <ProductGallery images={images} alt={product.name} badge={product.badge} />
-          <BuyBox product={product} />
+          <ProductGallery
+            images={images}
+            alt={product.name}
+            badge={product.badge}
+            activeColor={activeColor}
+          />
+          <BuyBox product={product} onColorChange={setActiveColor} />
         </div>
       </section>
 
