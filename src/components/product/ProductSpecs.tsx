@@ -27,7 +27,7 @@ export function ProductSpecs({ product }: { product: Product }) {
     },
     {
       icon: CreditCard,
-      title: "Até 12× sem juros",
+      title: "Até 6× sem juros",
       desc: "Aceitamos todos os cartões. 5% de desconto no PIX à vista.",
     },
     {

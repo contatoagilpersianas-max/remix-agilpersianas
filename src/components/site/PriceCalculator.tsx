@@ -49,7 +49,7 @@ export function PriceCalculator({ defaultProductId, className, compact }: Props)
     const total = motorized ? base + 690 : base;
     const min = Math.round(total * 0.92);
     const max = Math.round(total * 1.12);
-    const installment = Math.round(total / 12);
+    const installment = Math.round(total / 6);
     return { m2: m2.toFixed(2), min, max, installment };
   }, [width, height, product, motorized]);
 
@@ -143,7 +143,7 @@ export function PriceCalculator({ defaultProductId, className, compact }: Props)
           </span>
         </div>
         <div className="text-xs text-muted-foreground mt-1">
-          ou 12× de {fmt.format(result.installment)} sem juros
+          ou em até 6× de {fmt.format(result.installment)} sem juros
         </div>
       </div>
 

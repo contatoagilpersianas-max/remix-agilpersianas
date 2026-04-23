@@ -80,7 +80,7 @@ export function DiscountsGrid() {
                   {fmt(p.price_per_sqm)}
                 </div>
                 <div className="text-[11px] text-muted-foreground">
-                  12× de {fmt(p.price_per_sqm / 12)}
+                  6× de {fmt(p.price_per_sqm / 6)} sem juros
                 </div>
               </div>
             </Link>

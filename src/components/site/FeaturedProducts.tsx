@@ -107,7 +107,7 @@ function ProductCard({ product }: { product: Product }) {
       ? product.price
       : null;
   const pixPrice = finalPrice * 0.95;
-  const installment = finalPrice / 12;
+  const installment = finalPrice / 6;
 
   function quickAdd(e: React.MouseEvent) {
     e.preventDefault();
@@ -186,7 +186,7 @@ function ProductCard({ product }: { product: Product }) {
             ou {formatBRL(pixPrice)} no PIX (-5%)
           </span>
           <span className="mt-0.5 text-[11px] text-muted-foreground">
-            em até 12× de {formatBRL(installment)}
+            em até 6× de {formatBRL(installment)} sem juros
           </span>
         </div>
       </div>

@@ -211,7 +211,7 @@ function CatalogCard({ p }: { p: ProductRow }) {
             {isM2 ? `a partir de ${formatBRL(finalPrice)}/m²` : formatBRL(finalPrice)}
           </span>
           <span className="text-[11px] text-muted-foreground mt-0.5">
-            ou em até 12× sem juros
+            ou em até 6× sem juros
           </span>
         </div>
       </div>

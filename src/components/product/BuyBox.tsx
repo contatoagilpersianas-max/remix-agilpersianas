@@ -115,7 +115,7 @@ export function BuyBox({
   const shippingCost = shipping?.price ?? 0;
   const total = subtotal + shippingCost;
   const pix = total * 0.95;
-  const installment = total / 12;
+  const installment = total / 6;
   const suggestMotor = width >= 220 && motor === "manual";
 
   function handleBuy() {
@@ -174,7 +174,7 @@ export function BuyBox({
         </div>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <span className="text-muted-foreground">
-            ou em até <strong className="text-foreground">12× de {BRL(installment)}</strong>
+            ou em até <strong className="text-foreground">6× de {BRL(installment)} sem juros</strong>
           </span>
           <span className="inline-flex items-center gap-1.5 text-success font-medium">
             <span className="h-2 w-2 rounded-full bg-success" />
