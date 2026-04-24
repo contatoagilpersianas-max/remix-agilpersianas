@@ -79,7 +79,7 @@ export function CategoriesPremium() {
               Coleção 2026
             </span>
             <h2 className="font-display mt-2 text-3xl leading-tight tracking-tight md:text-5xl">
-              Encontre a persiana ideal para o seu ambiente
+              Produtos em destaque
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
               Tecidos premium, sob medida exata e instalação profissional. Escolha
