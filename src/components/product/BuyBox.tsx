@@ -408,11 +408,13 @@ export function BuyBox({
 }
 
 function OptionGroup({
+  step,
   label,
   value,
   onChange,
   options,
 }: {
+  step?: number;
   label: string;
   value: string;
   onChange: (v: string) => void;
@@ -420,7 +422,16 @@ function OptionGroup({
 }) {
   return (
     <div>
-      <Label className="text-xs uppercase tracking-wide text-muted-foreground mb-2 block">{label}</Label>
+      {step ? (
+        <div className="flex items-center gap-2.5 mb-3">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
+            {step}
+          </span>
+          <h3 className="font-display text-lg">{label}</h3>
+        </div>
+      ) : (
+        <Label className="text-xs uppercase tracking-wide text-muted-foreground mb-2 block">{label}</Label>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {options.map((o) => (
           <button
