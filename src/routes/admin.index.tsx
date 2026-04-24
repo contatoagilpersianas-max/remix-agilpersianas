@@ -107,9 +107,9 @@ function Dashboard() {
       // Produto campeão (mais vendido nos últimos 30 dias)
       const productCounter: Record<string, number> = {};
       (ordersItems.data ?? []).forEach((row) => {
-        const items = Array.isArray(row.items) ? row.items : [];
-        items.forEach((it: { name?: string; productName?: string }) => {
-          const name = it?.name ?? it?.productName;
+        const items = Array.isArray(row.items) ? (row.items as unknown as Array<Record<string, unknown>>) : [];
+        items.forEach((it) => {
+          const name = (it?.name as string | undefined) ?? (it?.productName as string | undefined);
           if (name) productCounter[name] = (productCounter[name] ?? 0) + 1;
         });
       });
