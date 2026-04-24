@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Search, User, ShoppingBag, Menu, X, Heart } from "lucide-react";
+import { Search, User, ShoppingBag, Menu, X, Heart, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import logoAgil from "@/assets/agil-logo.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -68,6 +68,26 @@ export function Header() {
 
         {/* Ações */}
         <div className="flex items-center gap-1 md:gap-2">
+          {/* WhatsApp visível desktop */}
+          <a
+            href={whatsappLink("Olá! Quero um orçamento de persianas sob medida.")}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Falar no WhatsApp"
+            className="hidden lg:inline-flex h-10 items-center gap-2 rounded-full px-4 text-[12px] font-bold uppercase tracking-[0.12em] text-white shadow-sm transition hover:opacity-90"
+            style={{ backgroundColor: "#22C55E" }}
+          >
+            <MessageCircle className="h-4 w-4" />
+            WhatsApp
+          </a>
+          {/* CTA Orçamento grátis */}
+          <a
+            href="#calculadora"
+            className="hidden xl:inline-flex h-10 items-center rounded-full border-2 px-4 text-[11px] font-bold uppercase tracking-[0.14em] transition hover:bg-primary hover:text-white"
+            style={{ borderColor: "#F57C00", color: "#F57C00" }}
+          >
+            Orçamento grátis
+          </a>
           <button
             aria-label="Favoritos"
             className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full text-foreground/70 hover:text-primary transition"

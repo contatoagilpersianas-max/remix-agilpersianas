@@ -8,18 +8,18 @@ const SLIDES = [
   {
     img: heroLiving,
     badge: "✦ Coleção 2026 — Sob medida",
-    titleTop: "A luz certa.",
-    titleBottom: "Para cada ambiente.",
+    titleTop: "Persianas Sob Medida",
+    titleBottom: "com Instalação Profissional.",
     subtitle:
-      "Persianas, cortinas e toldos sob medida com acabamento premium e entrega para todo o Brasil.",
+      "Elegância, conforto e tecnologia para transformar seu ambiente. Tecidos premium, produção própria e entrega para todo o Brasil.",
   },
   {
     img: heroBedroom,
     badge: "✦ Linha Premium — Conforto e privacidade",
-    titleTop: "Privacidade.",
-    titleBottom: "Conforto. Design.",
+    titleTop: "Privacidade total.",
+    titleBottom: "Design que conforta.",
     subtitle:
-      "Persianas blackout sob medida com instalação simples e acabamento premium.",
+      "Blackout sob medida ao centímetro, acabamento impecável e instalação especializada.",
   },
 ];
 
@@ -136,21 +136,23 @@ export function Hero() {
           {/* CTAs */}
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href="#categorias"
+              href="#calculadora"
               className="inline-flex h-13 items-center justify-center gap-2 rounded-full px-8 py-4 text-[12px] font-bold uppercase tracking-[0.16em] transition hover:opacity-90 shadow-2xl"
               style={{ backgroundColor: "#F57C00", color: "#fff" }}
             >
-              Ver coleção 2026 <ArrowRight className="h-4 w-4" />
+              Calcular preço <ArrowRight className="h-4 w-4" />
             </a>
             <a
-              href="#calculadora"
+              href="https://wa.me/5532351202810?text=Ol%C3%A1!%20Quero%20um%20or%C3%A7amento%20de%20persianas%20sob%20medida."
+              target="_blank"
+              rel="noreferrer"
               className="inline-flex h-13 items-center justify-center rounded-full border-2 px-7 py-4 text-[12px] font-bold uppercase tracking-[0.16em] transition hover:bg-white/10"
               style={{
                 borderColor: "rgba(251,246,236,0.55)",
                 color: "#fbf6ec",
               }}
             >
-              Calcular minha medida
+              Falar no WhatsApp
             </a>
           </div>
 

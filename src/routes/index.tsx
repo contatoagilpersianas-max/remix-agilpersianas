@@ -4,6 +4,8 @@ import { Hero } from "@/components/site/Hero";
 import { PromoStrip } from "@/components/site/PromoStrip";
 // TrustBar e Categories removidos a pedido do cliente
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
+import { CategoriesPremium } from "@/components/site/CategoriesPremium";
+import { BenefitsRow } from "@/components/site/BenefitsRow";
 import { CategoryBanners } from "@/components/site/CategoryBanners";
 import { DiscountsGrid } from "@/components/site/DiscountsGrid";
 import { MeasureCTA } from "@/components/site/MeasureCTA";
@@ -45,6 +47,10 @@ function Index() {
         <Hero />
         {/* Marquee laranja com benefícios — mantido conforme preferência */}
         <PromoStrip />
+        {/* NOVO: Categorias premium estilo Blinds.com */}
+        <CategoriesPremium />
+        {/* Selos de confiança / benefícios premium */}
+        <BenefitsRow />
         {/* Mais vendidos */}
         <FeaturedProducts />
         {/* Inspiração por ambiente */}
