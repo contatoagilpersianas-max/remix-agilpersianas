@@ -133,6 +133,68 @@ export type Database = {
         }
         Relationships: []
       }
+      lumi_conversations: {
+        Row: {
+          context: Json
+          created_at: string
+          id: string
+          last_user_message: string | null
+          lead_id: string | null
+          lead_name: string | null
+          lead_phone: string | null
+          lead_status: string
+          message_count: number
+          messages: Json
+          page_url: string | null
+          product_interest: string | null
+          updated_at: string
+          user_agent: string | null
+          visitor_id: string
+        }
+        Insert: {
+          context?: Json
+          created_at?: string
+          id?: string
+          last_user_message?: string | null
+          lead_id?: string | null
+          lead_name?: string | null
+          lead_phone?: string | null
+          lead_status?: string
+          message_count?: number
+          messages?: Json
+          page_url?: string | null
+          product_interest?: string | null
+          updated_at?: string
+          user_agent?: string | null
+          visitor_id: string
+        }
+        Update: {
+          context?: Json
+          created_at?: string
+          id?: string
+          last_user_message?: string | null
+          lead_id?: string | null
+          lead_name?: string | null
+          lead_phone?: string | null
+          lead_status?: string
+          message_count?: number
+          messages?: Json
+          page_url?: string | null
+          product_interest?: string | null
+          updated_at?: string
+          user_agent?: string | null
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lumi_conversations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           asaas_invoice_url: string | null
