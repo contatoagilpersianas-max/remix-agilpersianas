@@ -27,13 +27,13 @@ export const Route = createFileRoute("/persiana-rolo-blackout")({
       {
         name: "description",
         content:
-          "Persiana rolô blackout 100% sob medida. Bloqueia totalmente a luz, isolamento térmico e acabamento premium. Frete para todo Brasil, garantia de 5 anos.",
+          "Persiana rolô blackout 100% sob medida. Bloqueia totalmente a luz, isolamento térmico e acabamento premium. Frete para todo Brasil.",
       },
       { name: "keywords", content: "persiana blackout, persiana rolô blackout, persiana quarto, blackout sob medida" },
       { property: "og:title", content: "Persiana Rolô Blackout sob Medida" },
       {
         property: "og:description",
-        content: "Bloqueio total de luz, sono perfeito. Sob medida com garantia de 5 anos.",
+        content: "Bloqueio total de luz, sono perfeito. Sob medida.",
       },
       { property: "og:image", content: "https://agil2.lovable.app/og/lp-blackout.jpg" },
       { name: "twitter:image", content: "https://agil2.lovable.app/og/lp-blackout.jpg" },
@@ -84,7 +84,6 @@ function PersianaRoloBlackoutPage() {
         "Isolamento térmico e acústico parcial",
         "Tecido tripla camada antichamas",
         "Acionamento manual, RF ou Wi-Fi",
-        "Garantia de 5 anos",
         "Parcelamento em até 6× sem juros",
       ]}
       features={[
@@ -109,7 +108,6 @@ function PersianaRoloBlackoutPage() {
           description: "Acompanha kit completo de instalação e tutorial em vídeo passo a passo.",
         },
         {
-          title: "Garantia de 5 anos",
           description: "Cobre defeitos de fabricação no tecido, mecanismo e acabamentos metálicos.",
         },
       ]}

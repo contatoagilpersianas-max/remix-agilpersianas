@@ -77,7 +77,6 @@ function HorizontalPage() {
         "Sobem totalmente quando recolhidas",
         "Cordão duplo (subir e girar)",
         "Acabamentos envernizados",
-        "Garantia de 5 anos",
       ]}
       features={[
         { title: "Madeira de Paulownia", description: "Leve, estável e tratada — não empena com a umidade." },

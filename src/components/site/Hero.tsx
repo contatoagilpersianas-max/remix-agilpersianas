@@ -19,7 +19,7 @@ const SLIDES = [
     titleTop: "Privacidade.",
     titleBottom: "Conforto. Design.",
     subtitle:
-      "Persianas blackout sob medida com instalação simples e garantia real de 5 anos.",
+      "Persianas blackout sob medida com instalação simples e acabamento premium.",
   },
 ];
 

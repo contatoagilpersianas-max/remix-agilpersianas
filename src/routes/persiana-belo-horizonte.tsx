@@ -9,7 +9,7 @@ export const Route = createFileRoute("/persiana-belo-horizonte")({
       {
         name: "description",
         content:
-          "Persianas e cortinas sob medida em Belo Horizonte. Frete rápido a partir da nossa fábrica em Juiz de Fora MG, garantia de 5 anos.",
+          "Persianas e cortinas sob medida em Belo Horizonte. Frete rápido a partir da nossa fábrica em Juiz de Fora MG.",
       },
       { property: "og:title", content: "Persianas em Belo Horizonte" },
       {
@@ -53,7 +53,6 @@ function PersianaBHPage() {
         "Tecidos antichamas e antifungo",
         "Motorização inteligente",
         "Visita técnica em projetos grandes",
-        "Garantia de 5 anos",
         "Parcelamento em até 6× sem juros",
       ]}
       features={[

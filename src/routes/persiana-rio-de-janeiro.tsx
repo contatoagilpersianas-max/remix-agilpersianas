@@ -55,7 +55,6 @@ function PersianaRJPage() {
         "Tecidos resistentes à umidade",
         "Motorização Wi-Fi e Alexa",
         "Frete calculado e rápido",
-        "Garantia de 5 anos",
         "Suporte por WhatsApp",
       ]}
       features={[

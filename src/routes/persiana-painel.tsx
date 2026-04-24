@@ -78,7 +78,6 @@ function PainelPage() {
         "Mistura de tecidos em painéis",
         "Manual ou motorizado",
         "Anti-mofo e fácil limpeza",
-        "Garantia de 5 anos",
       ]}
       features={[
         { title: "Lâminas largas", description: "Painéis de até 100 cm de largura cada — visual amplo e moderno." },
