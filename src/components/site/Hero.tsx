@@ -8,18 +8,18 @@ const SLIDES = [
   {
     img: heroLiving,
     badge: "✦ Coleção 2026 — Sob medida",
-    titleTop: "A luz certa.",
-    titleBottom: "Para cada ambiente.",
+    titleTop: "Persianas Sob Medida",
+    titleBottom: "com Instalação Profissional.",
     subtitle:
-      "Persianas, cortinas e toldos sob medida com acabamento premium e entrega para todo o Brasil.",
+      "Elegância, conforto e tecnologia para transformar seu ambiente. Tecidos premium, produção própria e entrega para todo o Brasil.",
   },
   {
     img: heroBedroom,
     badge: "✦ Linha Premium — Conforto e privacidade",
-    titleTop: "Privacidade.",
-    titleBottom: "Conforto. Design.",
+    titleTop: "Privacidade total.",
+    titleBottom: "Design que conforta.",
     subtitle:
-      "Persianas blackout sob medida com instalação simples e acabamento premium.",
+      "Blackout sob medida ao centímetro, acabamento impecável e instalação especializada.",
   },
 ];
 
