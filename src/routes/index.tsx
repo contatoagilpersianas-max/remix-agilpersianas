@@ -6,6 +6,7 @@ import { PromoStrip } from "@/components/site/PromoStrip";
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
 import { CategoriesPremium } from "@/components/site/CategoriesPremium";
 import { BenefitsRow } from "@/components/site/BenefitsRow";
+import { BeforeAfter } from "@/components/site/BeforeAfter";
 import { CategoryBanners } from "@/components/site/CategoryBanners";
 import { DiscountsGrid } from "@/components/site/DiscountsGrid";
 import { MeasureCTA } from "@/components/site/MeasureCTA";
@@ -55,6 +56,8 @@ function Index() {
         <FeaturedProducts />
         {/* Banners promo dupla */}
         <CategoryBanners />
+        {/* Antes & Depois — prova social visual */}
+        <BeforeAfter />
         {/* Tela mosquiteira */}
         <MosquitoSection />
         {/* Automação residencial */}
