@@ -131,13 +131,13 @@ export function CategoryNav() {
   return (
     <nav
       ref={navRef}
-      className="relative border-t border-border/60 bg-background"
+      className="relative bg-background"
       onMouseLeave={() => openId && !isMobile && scheduleClose()}
       onMouseEnter={cancelClose}
       aria-label="Categorias"
     >
       <div className="container-premium">
-        <ul className="flex min-h-12 items-center gap-0.5 overflow-x-auto no-scrollbar">
+        <ul className="flex min-h-12 items-center justify-between gap-1 overflow-x-auto no-scrollbar">
           {roots.map((cat, idx) => {
             const subs = childrenOf(cat.id);
             const isOpen = openId === cat.id;
@@ -160,145 +160,104 @@ export function CategoryNav() {
                     aria-expanded={isOpen}
                     aria-haspopup="true"
                     aria-controls={isOpen ? `megamenu-${cat.id}` : undefined}
-                    className={`relative inline-flex h-12 items-center gap-1.5 px-3.5 text-[12px] font-semibold uppercase tracking-[0.1em] transition hover:text-primary focus-visible:text-primary focus-visible:outline-none ${
-                      isOpen ? "text-primary" : "text-foreground"
+                    className={`relative inline-flex h-12 items-center gap-1.5 px-4 text-[12px] font-semibold uppercase tracking-[0.14em] transition focus-visible:outline-none ${
+                      isOpen ? "text-primary" : "text-foreground/85 hover:text-primary"
                     }`}
                   >
-                    {cat.icon && <span className="text-base" aria-hidden>{cat.icon}</span>}
                     {cat.name}
                     <ChevronDown
-                      className={`h-3 w-3 opacity-60 transition ${isOpen ? "rotate-180" : ""}`}
+                      className={`h-3 w-3 opacity-50 transition ${isOpen ? "rotate-180 opacity-100" : ""}`}
                       aria-hidden
                     />
                     {isOpen && (
-                      <span className="absolute inset-x-2 -bottom-px h-0.5 bg-primary" aria-hidden />
+                      <span className="absolute inset-x-3 -bottom-px h-[2px] bg-primary" aria-hidden />
                     )}
                   </button>
                 ) : (
                   <Link
                     to="/catalogo"
                     search={{ categoria: cat.slug }}
-                    className="inline-flex h-12 items-center gap-1.5 px-3.5 text-[12px] font-semibold uppercase tracking-[0.1em] transition hover:text-primary focus-visible:text-primary focus-visible:outline-none"
+                    className="inline-flex h-12 items-center gap-1.5 px-4 text-[12px] font-semibold uppercase tracking-[0.14em] text-foreground/85 transition hover:text-primary focus-visible:text-primary focus-visible:outline-none"
                   >
-                    {cat.icon && <span className="text-base" aria-hidden>{cat.icon}</span>}
                     {cat.name}
                   </Link>
                 )}
               </li>
             );
           })}
-          <li className="ml-auto">
-            <Link
-              to="/catalogo"
-              search={{ q: "" }}
-              className="inline-flex h-12 items-center gap-1.5 px-3.5 text-[12px] font-bold uppercase tracking-[0.1em] text-primary"
-            >
-              Mais vendidos
-            </Link>
-          </li>
         </ul>
       </div>
 
-      {/* Mega menu flutuante — não empurra a página, com altura controlada */}
+      {/* Mega menu clean — painel branco simples, sem backdrop pesado */}
       {openCat && openSubs.length > 0 && (
-        <>
-          {/* backdrop sutil para destacar do conteúdo */}
-          <div
-            className="fixed inset-x-0 bottom-0 top-[calc(var(--header-h,140px))] z-40 bg-foreground/10 backdrop-blur-[2px] animate-in fade-in duration-150"
-            aria-hidden
-            onClick={closeAll}
-          />
-          <div
-            id={`megamenu-${openCat.id}`}
-            role="region"
-            aria-label={`Submenu ${openCat.name}`}
-            className="absolute left-0 right-0 top-full z-50 border-t border-border/60 bg-background shadow-2xl animate-in fade-in slide-in-from-top-1 duration-150"
-            onMouseEnter={cancelClose}
-            onMouseLeave={() => !isMobile && scheduleClose()}
-          >
-            <div className="container-premium">
-              <div
-                className={`grid gap-8 py-6 ${
-                  grand.length > 0 ? "md:grid-cols-[260px_1fr]" : "grid-cols-1"
-                } max-h-[min(70vh,560px)] overflow-y-auto`}
-              >
-                {/* Coluna 1 — subcategorias */}
-                <div>
-                  <div className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-                    {openCat.name}
-                  </div>
-                  <ul className="space-y-0.5" role="menu">
-                    {openSubs.map((sub) => {
-                      const subGrand = childrenOf(sub.id);
-                      const isActive = activeSub?.id === sub.id;
-                      return (
-                        <li key={sub.id} role="none">
+        <div
+          id={`megamenu-${openCat.id}`}
+          role="region"
+          aria-label={`Submenu ${openCat.name}`}
+          className="absolute left-0 right-0 top-full z-50 border-t border-border/60 bg-background shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] animate-in fade-in slide-in-from-top-1 duration-150"
+          onMouseEnter={cancelClose}
+          onMouseLeave={() => !isMobile && scheduleClose()}
+        >
+          <div className="container-premium">
+            <div className="grid gap-x-10 gap-y-6 py-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-h-[min(70vh,520px)] overflow-y-auto">
+              {openSubs.map((sub) => {
+                const subGrand = childrenOf(sub.id);
+                return (
+                  <div key={sub.id} className="min-w-0">
+                    {/* Header laranja em maiúsculas — estilo imagem de referência */}
+                    <Link
+                      data-mega-link
+                      to="/catalogo"
+                      search={{ categoria: sub.slug }}
+                      onClick={closeAll}
+                      className="block text-[11px] font-bold uppercase tracking-[0.16em] text-primary hover:underline focus-visible:underline focus-visible:outline-none"
+                    >
+                      {sub.name}
+                    </Link>
+                    <ul className="mt-3 space-y-1.5">
+                      {subGrand.length > 0 ? (
+                        subGrand.map((g) => (
+                          <li key={g.id}>
+                            <Link
+                              to="/catalogo"
+                              search={{ categoria: g.slug }}
+                              onClick={closeAll}
+                              className="block truncate text-[14px] text-foreground/85 transition hover:text-primary focus-visible:text-primary focus-visible:outline-none"
+                            >
+                              {g.name}
+                            </Link>
+                          </li>
+                        ))
+                      ) : (
+                        <li>
                           <Link
-                            data-mega-link
                             to="/catalogo"
                             search={{ categoria: sub.slug }}
                             onClick={closeAll}
-                            onMouseEnter={() => !isMobile && subGrand.length > 0 && setHoverSubId(sub.id)}
-                            onFocus={() => subGrand.length > 0 && setHoverSubId(sub.id)}
-                            role="menuitem"
-                            className={`group flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
-                              isActive
-                                ? "bg-secondary text-primary"
-                                : "text-foreground hover:bg-secondary hover:text-primary"
-                            }`}
+                            className="block truncate text-[14px] text-foreground/85 transition hover:text-primary"
                           >
-                            <span className="flex min-w-0 items-center gap-1.5 truncate">
-                              {sub.icon && <span aria-hidden>{sub.icon}</span>}
-                              <span className="truncate">{sub.name}</span>
-                            </span>
-                            {subGrand.length > 0 && (
-                              <ChevronRight
-                                className="h-3.5 w-3.5 shrink-0 opacity-50 group-hover:opacity-100"
-                                aria-hidden
-                              />
-                            )}
+                            {sub.name}
                           </Link>
                         </li>
-                      );
-                    })}
-                  </ul>
-                  <Link
-                    to="/catalogo"
-                    search={{ categoria: openCat.slug }}
-                    onClick={closeAll}
-                    className="mt-3 inline-flex items-center gap-1 px-3 text-xs font-semibold text-primary hover:underline focus-visible:underline focus-visible:outline-none"
-                  >
-                    Ver tudo de {openCat.name}
-                    <ChevronRight className="h-3 w-3" aria-hidden />
-                  </Link>
-                </div>
-
-                {/* Coluna 2 — modelos do submenu ativo */}
-                {grand.length > 0 && activeSub && (
-                  <div className="md:border-l md:border-border/60 md:pl-8">
-                    <div className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-                      {activeSub.name}
-                    </div>
-                    <ul className="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
-                      {grand.map((g) => (
-                        <li key={g.id}>
-                          <Link
-                            to="/catalogo"
-                            search={{ categoria: g.slug }}
-                            onClick={closeAll}
-                            className="block truncate rounded-md px-2 py-1.5 text-sm text-foreground/80 transition hover:bg-secondary hover:text-primary focus-visible:bg-secondary focus-visible:text-primary focus-visible:outline-none"
-                          >
-                            {g.name}
-                          </Link>
-                        </li>
-                      ))}
+                      )}
                     </ul>
                   </div>
-                )}
-              </div>
+                );
+              })}
+            </div>
+            <div className="border-t border-border/60 py-3 text-right">
+              <Link
+                to="/catalogo"
+                search={{ categoria: openCat.slug }}
+                onClick={closeAll}
+                className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary hover:underline"
+              >
+                Ver tudo de {openCat.name}
+                <ChevronRight className="h-3 w-3" aria-hidden />
+              </Link>
             </div>
           </div>
-        </>
+        </div>
       )}
     </nav>
   );

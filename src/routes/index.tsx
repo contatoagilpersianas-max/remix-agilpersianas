@@ -13,7 +13,7 @@ import { Testimonials } from "@/components/site/Testimonials";
 import { Newsletter } from "@/components/site/Newsletter";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
-import { RoomsSection } from "@/components/site/RoomsSection";
+
 import { AutomationSection } from "@/components/site/AutomationSection";
 import { MosquitoSection } from "@/components/site/MosquitoSection";
 // B2BSection removido a pedido do cliente (anexo 2)
@@ -45,19 +45,17 @@ function Index() {
       <SiteHeader />
       <main>
         <Hero />
-        {/* Marquee laranja com benefícios — mantido conforme preferência */}
+        {/* Marquee laranja com benefícios */}
         <PromoStrip />
-        {/* NOVO: Categorias premium estilo Blinds.com */}
+        {/* Produtos em destaque (categorias premium) — logo abaixo do banner */}
         <CategoriesPremium />
         {/* Selos de confiança / benefícios premium */}
         <BenefitsRow />
         {/* Mais vendidos */}
         <FeaturedProducts />
-        {/* Inspiração por ambiente */}
-        <RoomsSection />
         {/* Banners promo dupla */}
         <CategoryBanners />
-        {/* Tela mosquiteira — priorizada antes da automação */}
+        {/* Tela mosquiteira */}
         <MosquitoSection />
         {/* Automação residencial */}
         <AutomationSection />
