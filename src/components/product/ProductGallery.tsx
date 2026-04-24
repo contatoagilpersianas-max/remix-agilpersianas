@@ -40,54 +40,89 @@ export function ProductGallery({
 
   return (
     <div>
-      <div className="relative group rounded-2xl overflow-hidden bg-sand shadow-card">
-        {badge && (
-          <Badge className="absolute top-4 left-4 z-10 bg-primary text-primary-foreground uppercase text-[10px] tracking-widest px-3 py-1.5">
-            {badge}
-          </Badge>
-        )}
-        <button
-          type="button"
-          onClick={() => setZoomed(true)}
-          className="absolute top-4 right-4 z-10 h-9 w-9 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition"
-          aria-label="Ampliar"
-        >
-          <ZoomIn className="h-4 w-4" />
-        </button>
-        <div className="aspect-[4/5] sm:aspect-square w-full overflow-hidden">
-          <img
-            src={current.url}
-            alt={current.caption || alt}
-            className="w-full h-full object-cover transition-transform duration-700 ease-premium group-hover:scale-[1.04]"
-          />
-        </div>
-        {current.caption && (
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white text-sm px-5 py-3">
-            {current.caption}
+      {/* Layout estilo Blinds.com — thumbs verticais à esquerda + imagem grande */}
+      <div className="flex gap-4">
+        {/* Thumbs verticais (desktop apenas) */}
+        {safe.length > 1 && (
+          <div className="hidden lg:flex flex-col gap-3 w-20 flex-shrink-0">
+            {safe.slice(0, 6).map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                className={`aspect-square w-full rounded-xl overflow-hidden border-2 transition ${
+                  i === active
+                    ? "border-primary shadow-md"
+                    : "border-border/60 opacity-70 hover:opacity-100 hover:border-foreground/30"
+                }`}
+                title={img.caption}
+                aria-label={`Imagem ${i + 1}`}
+              >
+                <img
+                  src={img.url}
+                  alt={img.caption || ""}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
+            {safe.length > 6 && (
+              <div className="text-[10px] text-muted-foreground text-center font-medium">
+                +{safe.length - 6}
+              </div>
+            )}
           </div>
         )}
-        {safe.length > 1 && (
-          <>
-            <button
-              onClick={() => setActive((a) => (a - 1 + safe.length) % safe.length)}
-              className="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/95 shadow flex items-center justify-center hover:scale-105 transition"
-              aria-label="Anterior"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              onClick={() => setActive((a) => (a + 1) % safe.length)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/95 shadow flex items-center justify-center hover:scale-105 transition"
-              aria-label="Próxima"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </>
-        )}
+
+        {/* Imagem principal */}
+        <div className="relative group rounded-2xl overflow-hidden bg-sand shadow-card flex-1">
+          {badge && (
+            <Badge className="absolute top-4 left-4 z-10 bg-primary text-primary-foreground uppercase text-[10px] tracking-widest px-3 py-1.5">
+              {badge}
+            </Badge>
+          )}
+          <button
+            type="button"
+            onClick={() => setZoomed(true)}
+            className="absolute top-4 right-4 z-10 h-10 w-10 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
+            aria-label="Ampliar"
+          >
+            <ZoomIn className="h-4 w-4" />
+          </button>
+          <div className="aspect-[4/5] sm:aspect-square w-full overflow-hidden">
+            <img
+              src={current.url}
+              alt={current.caption || alt}
+              className="w-full h-full object-cover transition-transform duration-700 ease-premium group-hover:scale-[1.04]"
+            />
+          </div>
+          {current.caption && (
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white text-sm px-5 py-3">
+              {current.caption}
+            </div>
+          )}
+          {safe.length > 1 && (
+            <>
+              <button
+                onClick={() => setActive((a) => (a - 1 + safe.length) % safe.length)}
+                className="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/95 shadow flex items-center justify-center hover:scale-105 transition"
+                aria-label="Anterior"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => setActive((a) => (a + 1) % safe.length)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/95 shadow flex items-center justify-center hover:scale-105 transition"
+                aria-label="Próxima"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
+      {/* Thumbs horizontais (mobile/tablet) */}
       {safe.length > 1 && (
-        <div className="mt-4 grid grid-cols-5 gap-3">
+        <div className="mt-4 grid grid-cols-5 gap-3 lg:hidden">
           {safe.map((img, i) => (
             <button
               key={i}
