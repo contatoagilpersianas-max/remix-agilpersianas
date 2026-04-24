@@ -14,6 +14,7 @@ import { Testimonials } from "@/components/site/Testimonials";
 import { Newsletter } from "@/components/site/Newsletter";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
+import { LumiWidget } from "@/components/site/LumiWidget";
 
 import { AutomationSection } from "@/components/site/AutomationSection";
 import { MosquitoSection } from "@/components/site/MosquitoSection";
@@ -75,6 +76,7 @@ function Index() {
       </main>
       <Footer />
       <WhatsAppFAB />
+      <LumiWidget />
     </div>
   );
 }
