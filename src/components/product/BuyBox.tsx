@@ -9,13 +9,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Star, Truck, Ruler, MessageCircle, ChevronRight, Info, Wrench } from "lucide-react";
+import { Star, Truck, Ruler, MessageCircle, ChevronRight, Info, Wrench, Sparkles } from "lucide-react";
 import type { Product } from "@/routes/produto.$slug";
 import { toast } from "sonner";
 import { CheckoutDialog } from "./CheckoutDialog";
 import { ShippingCalculator } from "./ShippingCalculator";
 import type { ShippingQuote } from "@/lib/frenet.functions";
 import { loadSelection, saveSelection } from "@/lib/product-selection";
+import { openLumiWith } from "@/components/site/LumiWidget";
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -367,6 +368,25 @@ export function BuyBox({
           className="w-full h-12 border-whatsapp text-whatsapp hover:bg-whatsapp hover:text-whatsapp-foreground"
         >
           <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
+        </Button>
+        <Button
+          size="lg"
+          variant="ghost"
+          onClick={() =>
+            openLumiWith({
+              productName: product.name,
+              productSlug: product.slug,
+              widthCm: width,
+              heightCm: height,
+              motor,
+              color,
+              bando,
+              estimatedTotal: total,
+            })
+          }
+          className="w-full h-12 bg-foreground/[0.03] hover:bg-foreground/[0.06] text-foreground"
+        >
+          <Sparkles className="h-4 w-4 text-primary" /> Perguntar à Lumi
         </Button>
       </div>
 

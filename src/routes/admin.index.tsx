@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import {
@@ -16,13 +16,29 @@ import {
   ExternalLink,
   Trophy,
   Receipt,
+  Sparkles,
+  Eye,
+  MessagesSquare,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   component: Dashboard,
 });
 
-const fmt = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+const fmt = (n: number) =>
+  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+type Period = "today" | "7d" | "30d" | "90d";
+
+function startOfPeriod(p: Period): Date {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  if (p === "today") return d;
+  if (p === "7d") d.setDate(d.getDate() - 6);
+  else if (p === "30d") d.setDate(d.getDate() - 29);
+  else if (p === "90d") d.setDate(d.getDate() - 89);
+  return d;
+}
 
 type Counters = {
   products: number;
@@ -36,6 +52,15 @@ type Counters = {
   avgTicket: number;
   topProduct: string | null;
   topProductCount: number;
+};
+
+type OrionInsights = {
+  visits: number;
+  conversations: number;
+  capturedLeads: number;
+  newLeads: number;
+  avgTicket: number;
+  conversionRate: number;
 };
 
 function Dashboard() {
@@ -59,6 +84,18 @@ function Dashboard() {
     Array<{ id: string; product_name: string; stage: string; due_date: string | null }>
   >([]);
   const [series, setSeries] = useState<Array<{ d: string; leads: number; orders: number }>>([]);
+
+  // ORION
+  const [period, setPeriod] = useState<Period>("7d");
+  const [orion, setOrion] = useState<OrionInsights>({
+    visits: 0,
+    conversations: 0,
+    capturedLeads: 0,
+    newLeads: 0,
+    avgTicket: 0,
+    conversionRate: 0,
+  });
+  const [orionLoading, setOrionLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -104,7 +141,6 @@ function Dashboard() {
       const ordersMonthCount = ordersMonth.data?.length ?? 0;
       const avgTicket = ordersMonthCount > 0 ? sumMonth / ordersMonthCount : 0;
 
-      // Produto campeão (mais vendido nos últimos 30 dias)
       const productCounter: Record<string, number> = {};
       (ordersItems.data ?? []).forEach((row) => {
         const items = Array.isArray(row.items) ? (row.items as unknown as Array<Record<string, unknown>>) : [];
@@ -117,7 +153,6 @@ function Dashboard() {
       const topProduct = topEntry?.[0] ?? null;
       const topProductCount = topEntry?.[1] ?? 0;
 
-      // build daily series for last 30 days
       const days: Record<string, { leads: number; orders: number }> = {};
       for (let i = 0; i < 30; i++) {
         const d = new Date(start30);
@@ -152,6 +187,45 @@ function Dashboard() {
     })();
   }, []);
 
+  // ORION — recalcula quando período muda
+  useEffect(() => {
+    (async () => {
+      setOrionLoading(true);
+      const start = startOfPeriod(period);
+      const startIso = start.toISOString();
+
+      const [convos, leadsInPeriod, ordersInPeriod] = await Promise.all([
+        supabase
+          .from("lumi_conversations")
+          .select("id,visitor_id,lead_status,created_at")
+          .gte("created_at", startIso),
+        supabase
+          .from("leads")
+          .select("id,source,created_at")
+          .gte("created_at", startIso),
+        supabase.from("orders").select("total").gte("created_at", startIso),
+      ]);
+
+      const convoRows = convos.data ?? [];
+      const visitorSet = new Set(convoRows.map((c) => c.visitor_id));
+      const captured = convoRows.filter((c) => c.lead_status === "captured").length;
+      const newLeads = (leadsInPeriod.data ?? []).length;
+      const orderTotals = (ordersInPeriod.data ?? []).map((o) => Number(o.total ?? 0));
+      const ticket = orderTotals.length ? orderTotals.reduce((a, b) => a + b, 0) / orderTotals.length : 0;
+      const conversion = visitorSet.size > 0 ? (captured / visitorSet.size) * 100 : 0;
+
+      setOrion({
+        visits: visitorSet.size,
+        conversations: convoRows.length,
+        capturedLeads: captured,
+        newLeads,
+        avgTicket: ticket,
+        conversionRate: conversion,
+      });
+      setOrionLoading(false);
+    })();
+  }, [period]);
+
   const cards = [
     { label: "Vendas hoje", value: fmt(c.revenueToday), trend: `${c.ordersMonth} pedidos no mês`, icon: TrendingUp },
     { label: "Receita no mês", value: fmt(c.revenueMonth), trend: "Últimos 30 dias", icon: ShoppingBag },
@@ -161,9 +235,20 @@ function Dashboard() {
     { label: "Produto campeão", value: c.topProduct ?? "—", trend: c.topProductCount > 0 ? `${c.topProductCount} vendas (30d)` : "Sem vendas ainda", icon: Trophy },
   ];
 
-  // chart bounds
   const maxLeads = Math.max(1, ...series.map((s) => s.leads));
   const maxOrders = Math.max(1, ...series.map((s) => s.orders));
+
+  const orionMetrics = useMemo(
+    () => [
+      { label: "Visitantes únicos (Lumi)", value: orion.visits.toString(), icon: Eye },
+      { label: "Conversas", value: orion.conversations.toString(), icon: MessagesSquare },
+      { label: "Leads novos", value: orion.newLeads.toString(), icon: Users },
+      { label: "Leads captados pela Lumi", value: orion.capturedLeads.toString(), icon: Sparkles },
+      { label: "Ticket médio", value: fmt(orion.avgTicket), icon: Receipt },
+      { label: "Conversão Lumi", value: `${orion.conversionRate.toFixed(1)}%`, icon: TrendingUp },
+    ],
+    [orion],
+  );
 
   return (
     <div className="space-y-8 max-w-[1400px]">
@@ -179,6 +264,61 @@ function Dashboard() {
           </Link>
         </div>
       </div>
+
+      {/* ORION — IA executiva */}
+      <Card className="p-6 border-primary/20 bg-gradient-to-br from-primary/[0.03] via-transparent to-transparent">
+        <div className="flex items-start justify-between flex-wrap gap-4 mb-5">
+          <div className="flex items-start gap-3">
+            <div className="h-11 w-11 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shadow-md">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="text-[10px] uppercase tracking-widest text-primary font-semibold">ORION · IA executiva</div>
+              <h2 className="font-display text-xl">Insights diários</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Comportamento dos visitantes e desempenho da Lumi no período selecionado.
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-1 rounded-full bg-muted p-1">
+            {(["today", "7d", "30d", "90d"] as const).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                className={`px-3 h-8 text-xs rounded-full transition ${
+                  period === p ? "bg-background shadow-sm font-medium" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {p === "today" ? "Hoje" : p === "7d" ? "7 dias" : p === "30d" ? "30 dias" : "90 dias"}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {orionMetrics.map((m) => (
+            <div key={m.label} className="rounded-xl border bg-background p-4">
+              <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                <m.icon className="h-3.5 w-3.5" />
+                <span className="line-clamp-1">{m.label}</span>
+              </div>
+              <div className="font-display text-2xl mt-2 truncate" title={m.value}>
+                {orionLoading ? "…" : m.value}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
+          <div className="inline-flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
+            ORION monitorando · atualização ao trocar período
+          </div>
+          <Link to="/admin/lumi" className="text-primary inline-flex items-center gap-1 hover:underline">
+            Ver conversas da Lumi <ArrowUpRight className="h-3 w-3" />
+          </Link>
+        </div>
+      </Card>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {cards.map((card) => (

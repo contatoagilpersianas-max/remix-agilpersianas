@@ -36,6 +36,7 @@ import { Route as AdminProducaoRouteImport } from './routes/admin.producao'
 import { Route as AdminPedidosRouteImport } from './routes/admin.pedidos'
 import { Route as AdminOrcamentosRouteImport } from './routes/admin.orcamentos'
 import { Route as AdminMarketingRouteImport } from './routes/admin.marketing'
+import { Route as AdminLumiRouteImport } from './routes/admin.lumi'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminFinanceiroRouteImport } from './routes/admin.financeiro'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
@@ -178,6 +179,11 @@ const AdminMarketingRoute = AdminMarketingRouteImport.update({
   path: '/marketing',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLumiRoute = AdminLumiRouteImport.update({
+  id: '/lumi',
+  path: '/lumi',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLeadsRoute = AdminLeadsRouteImport.update({
   id: '/leads',
   path: '/leads',
@@ -231,6 +237,7 @@ export interface FileRoutesByFullPath {
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/lumi': typeof AdminLumiRoute
   '/admin/marketing': typeof AdminMarketingRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -265,6 +272,7 @@ export interface FileRoutesByTo {
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/lumi': typeof AdminLumiRoute
   '/admin/marketing': typeof AdminMarketingRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -301,6 +309,7 @@ export interface FileRoutesById {
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/lumi': typeof AdminLumiRoute
   '/admin/marketing': typeof AdminMarketingRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -338,6 +347,7 @@ export interface FileRouteTypes {
     | '/admin/configuracoes'
     | '/admin/financeiro'
     | '/admin/leads'
+    | '/admin/lumi'
     | '/admin/marketing'
     | '/admin/orcamentos'
     | '/admin/pedidos'
@@ -372,6 +382,7 @@ export interface FileRouteTypes {
     | '/admin/configuracoes'
     | '/admin/financeiro'
     | '/admin/leads'
+    | '/admin/lumi'
     | '/admin/marketing'
     | '/admin/orcamentos'
     | '/admin/pedidos'
@@ -407,6 +418,7 @@ export interface FileRouteTypes {
     | '/admin/configuracoes'
     | '/admin/financeiro'
     | '/admin/leads'
+    | '/admin/lumi'
     | '/admin/marketing'
     | '/admin/orcamentos'
     | '/admin/pedidos'
@@ -635,6 +647,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMarketingRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/lumi': {
+      id: '/admin/lumi'
+      path: '/lumi'
+      fullPath: '/admin/lumi'
+      preLoaderRoute: typeof AdminLumiRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/leads': {
       id: '/admin/leads'
       path: '/leads'
@@ -686,6 +705,7 @@ interface AdminRouteChildren {
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminFinanceiroRoute: typeof AdminFinanceiroRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
+  AdminLumiRoute: typeof AdminLumiRoute
   AdminMarketingRoute: typeof AdminMarketingRoute
   AdminOrcamentosRoute: typeof AdminOrcamentosRoute
   AdminPedidosRoute: typeof AdminPedidosRoute
@@ -702,6 +722,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminFinanceiroRoute: AdminFinanceiroRoute,
   AdminLeadsRoute: AdminLeadsRoute,
+  AdminLumiRoute: AdminLumiRoute,
   AdminMarketingRoute: AdminMarketingRoute,
   AdminOrcamentosRoute: AdminOrcamentosRoute,
   AdminPedidosRoute: AdminPedidosRoute,
