@@ -71,7 +71,7 @@ function Dashboard() {
       start30.setDate(start30.getDate() - 29);
       start30.setHours(0, 0, 0, 0);
 
-      const [prods, cats, leadsAll, leadsNew, ordersMonth, ordersToday, jobs, leadsRecent, jobsRecent, leadsSeries, ordersSeries] =
+      const [prods, cats, leadsAll, leadsNew, ordersMonth, ordersToday, jobs, leadsRecent, jobsRecent, leadsSeries, ordersSeries, ordersItems] =
         await Promise.all([
           supabase.from("products").select("*", { count: "exact", head: true }),
           supabase.from("categories").select("*", { count: "exact", head: true }),
@@ -96,10 +96,26 @@ function Dashboard() {
             .limit(5),
           supabase.from("leads").select("created_at").gte("created_at", start30.toISOString()),
           supabase.from("orders").select("created_at,total").gte("created_at", start30.toISOString()),
+          supabase.from("orders").select("items").gte("created_at", start30.toISOString()),
         ]);
 
       const sumMonth = (ordersMonth.data ?? []).reduce((a, o) => a + Number(o.total ?? 0), 0);
       const sumToday = (ordersToday.data ?? []).reduce((a, o) => a + Number(o.total ?? 0), 0);
+      const ordersMonthCount = ordersMonth.data?.length ?? 0;
+      const avgTicket = ordersMonthCount > 0 ? sumMonth / ordersMonthCount : 0;
+
+      // Produto campeão (mais vendido nos últimos 30 dias)
+      const productCounter: Record<string, number> = {};
+      (ordersItems.data ?? []).forEach((row) => {
+        const items = Array.isArray(row.items) ? row.items : [];
+        items.forEach((it: { name?: string; productName?: string }) => {
+          const name = it?.name ?? it?.productName;
+          if (name) productCounter[name] = (productCounter[name] ?? 0) + 1;
+        });
+      });
+      const topEntry = Object.entries(productCounter).sort((a, b) => b[1] - a[1])[0];
+      const topProduct = topEntry?.[0] ?? null;
+      const topProductCount = topEntry?.[1] ?? 0;
 
       // build daily series for last 30 days
       const days: Record<string, { leads: number; orders: number }> = {};
@@ -122,10 +138,13 @@ function Dashboard() {
         categories: cats.count ?? 0,
         leadsTotal: leadsAll.count ?? 0,
         leadsNew: leadsNew.count ?? 0,
-        ordersMonth: ordersMonth.data?.length ?? 0,
+        ordersMonth: ordersMonthCount,
         revenueMonth: sumMonth,
         revenueToday: sumToday,
         jobsActive: jobs.count ?? 0,
+        avgTicket,
+        topProduct,
+        topProductCount,
       });
       setRecentLeads(leadsRecent.data ?? []);
       setRecentJobs(jobsRecent.data ?? []);
@@ -136,8 +155,10 @@ function Dashboard() {
   const cards = [
     { label: "Vendas hoje", value: fmt(c.revenueToday), trend: `${c.ordersMonth} pedidos no mês`, icon: TrendingUp },
     { label: "Receita no mês", value: fmt(c.revenueMonth), trend: "Últimos 30 dias", icon: ShoppingBag },
+    { label: "Ticket médio", value: fmt(c.avgTicket), trend: `${c.ordersMonth} pedidos`, icon: Receipt },
     { label: "Leads novos", value: c.leadsNew.toString(), trend: `${c.leadsTotal} total`, icon: Users },
     { label: "Em produção", value: c.jobsActive.toString(), trend: `${c.products} produtos · ${c.categories} cat.`, icon: Factory },
+    { label: "Produto campeão", value: c.topProduct ?? "—", trend: c.topProductCount > 0 ? `${c.topProductCount} vendas (30d)` : "Sem vendas ainda", icon: Trophy },
   ];
 
   // chart bounds
