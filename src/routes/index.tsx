@@ -13,7 +13,7 @@ import { Testimonials } from "@/components/site/Testimonials";
 import { Newsletter } from "@/components/site/Newsletter";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
-import { RoomsSection } from "@/components/site/RoomsSection";
+
 import { AutomationSection } from "@/components/site/AutomationSection";
 import { MosquitoSection } from "@/components/site/MosquitoSection";
 // B2BSection removido a pedido do cliente (anexo 2)
