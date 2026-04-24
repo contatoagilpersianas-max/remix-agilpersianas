@@ -187,11 +187,16 @@ export function BuyBox({
         </div>
       </div>
 
-      {/* Configurador */}
-      <div className="space-y-5">
+      {/* Configurador estilo Blinds.com — etapas numeradas */}
+      <div className="space-y-6">
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-display text-lg">Personalize sua persiana</h3>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
+                1
+              </span>
+              <h3 className="font-display text-lg">Medidas</h3>
+            </div>
             <a href="#como-medir" className="text-xs text-primary inline-flex items-center gap-1 hover:underline">
               <Info className="h-3.5 w-3.5" /> Como medir
             </a>
@@ -249,6 +254,7 @@ export function BuyBox({
         </div>
 
         <OptionGroup
+          step={2}
           label="Tipo de instalação"
           value={mount}
           onChange={(v) => setMount(v as Mount)}
@@ -259,6 +265,7 @@ export function BuyBox({
         />
 
         <OptionGroup
+          step={3}
           label="Lado do comando"
           value={side}
           onChange={(v) => setSide(v as Side)}
@@ -269,6 +276,7 @@ export function BuyBox({
         />
 
         <OptionGroup
+          step={4}
           label="Acionamento"
           value={motor}
           onChange={(v) => setMotor(v as Motor)}
@@ -280,7 +288,38 @@ export function BuyBox({
         />
 
         <div>
-          <Label className="text-xs uppercase tracking-wide text-muted-foreground mb-2 block">Acabamento</Label>
+          <div className="flex items-center gap-2.5 mb-3">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
+              5
+            </span>
+            <h3 className="font-display text-lg">
+              Cor: <span className="text-muted-foreground text-base font-normal">{color}</span>
+            </h3>
+          </div>
+          <div className="flex gap-2.5 flex-wrap">
+            {productColors.map((c) => (
+              <button
+                key={c.name}
+                type="button"
+                onClick={() => setColor(c.name)}
+                className={`h-11 w-11 rounded-full border-2 transition ${
+                  color === c.name ? "border-primary scale-110 shadow-md" : "border-border hover:border-foreground/40"
+                }`}
+                style={{ backgroundColor: c.hex }}
+                title={c.name}
+                aria-label={c.name}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2.5 mb-3">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
+              6
+            </span>
+            <h3 className="font-display text-lg">Acabamento</h3>
+          </div>
           <button
             type="button"
             onClick={() => setBando(!bando)}
@@ -294,27 +333,6 @@ export function BuyBox({
             </div>
             <p className="text-xs text-muted-foreground mt-1">Acabamento elegante que esconde o mecanismo.</p>
           </button>
-        </div>
-
-        <div>
-          <Label className="text-xs uppercase tracking-wide text-muted-foreground mb-2 block">
-            Cor: <span className="text-foreground font-medium">{color}</span>
-          </Label>
-          <div className="flex gap-2 flex-wrap">
-            {productColors.map((c) => (
-              <button
-                key={c.name}
-                type="button"
-                onClick={() => setColor(c.name)}
-                className={`h-10 w-10 rounded-full border-2 transition ${
-                  color === c.name ? "border-primary scale-110 shadow-md" : "border-border"
-                }`}
-                style={{ backgroundColor: c.hex }}
-                title={c.name}
-                aria-label={c.name}
-              />
-            ))}
-          </div>
         </div>
       </div>
 
@@ -390,11 +408,13 @@ export function BuyBox({
 }
 
 function OptionGroup({
+  step,
   label,
   value,
   onChange,
   options,
 }: {
+  step?: number;
   label: string;
   value: string;
   onChange: (v: string) => void;
@@ -402,7 +422,16 @@ function OptionGroup({
 }) {
   return (
     <div>
-      <Label className="text-xs uppercase tracking-wide text-muted-foreground mb-2 block">{label}</Label>
+      {step ? (
+        <div className="flex items-center gap-2.5 mb-3">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
+            {step}
+          </span>
+          <h3 className="font-display text-lg">{label}</h3>
+        </div>
+      ) : (
+        <Label className="text-xs uppercase tracking-wide text-muted-foreground mb-2 block">{label}</Label>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {options.map((o) => (
           <button

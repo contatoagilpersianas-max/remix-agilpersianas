@@ -1,204 +1,141 @@
-// Hero cinematográfico premium 2026 — fade entre cenas com texto rotativo
+// Hero estilo Blinds.com — split clean: texto + CTAs à esquerda, visual à direita
 import { useEffect, useState } from "react";
 import heroLiving from "@/assets/hero-2026-living.jpg";
 import heroBedroom from "@/assets/hero-2026-bedroom.jpg";
-import { ArrowRight, Shield, Ruler, Star } from "lucide-react";
+import { ArrowRight, MessageCircle, Star, Ruler, Truck } from "lucide-react";
 
-const SLIDES = [
-  {
-    img: heroLiving,
-    badge: "✦ Coleção 2026 — Sob medida",
-    titleTop: "Persianas Sob Medida",
-    titleBottom: "com Instalação Profissional.",
-    subtitle:
-      "Elegância, conforto e tecnologia para transformar seu ambiente. Tecidos premium, produção própria e entrega para todo o Brasil.",
-  },
-  {
-    img: heroBedroom,
-    badge: "✦ Linha Premium — Conforto e privacidade",
-    titleTop: "Privacidade total.",
-    titleBottom: "Design que conforta.",
-    subtitle:
-      "Blackout sob medida ao centímetro, acabamento impecável e instalação especializada.",
-  },
-];
+const SCENES = [heroLiving, heroBedroom];
 
 export function Hero() {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setActive((i) => (i + 1) % SLIDES.length), 7000);
+    const id = setInterval(() => setActive((i) => (i + 1) % SCENES.length), 8000);
     return () => clearInterval(id);
   }, []);
 
   return (
-    <section className="relative overflow-hidden">
-      {/* Slides — fade cinematográfico com leve zoom */}
-      <div className="absolute inset-0">
-        {SLIDES.map((s, i) => (
-          <img
-            key={i}
-            src={s.img}
-            alt={s.titleTop}
-            loading={i === 0 ? "eager" : "lazy"}
-            decoding="async"
-            // @ts-expect-error fetchpriority is valid HTML
-            fetchpriority={i === 0 ? "high" : "low"}
-            width={1920}
-            height={1080}
-            className={`absolute inset-0 h-full w-full object-cover transition-all duration-[1400ms] ease-out ${
-              i === active ? "opacity-100 scale-100" : "opacity-0 scale-105"
-            }`}
-          />
-        ))}
-        {/* Overlay cinematográfico */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(95deg, rgba(15,10,5,0.82) 0%, rgba(15,10,5,0.55) 42%, rgba(15,10,5,0.18) 100%)",
-          }}
-        />
-        {/* Vinheta inferior para texto */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-1/3"
-          style={{
-            background:
-              "linear-gradient(to top, rgba(15,10,5,0.55), transparent)",
-          }}
-        />
-      </div>
-
-      {/* Conteúdo */}
-      <div className="relative container-premium py-20 md:py-28 lg:py-32">
-        <div className="max-w-2xl">
-          {SLIDES.map((s, i) => (
-            <div
-              key={i}
-              className={`transition-opacity duration-700 ${
-                i === active ? "opacity-100" : "pointer-events-none absolute inset-0 opacity-0"
-              }`}
-              aria-hidden={i !== active}
-            >
-              <div
-                className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em]"
-                style={{
-                  borderColor: "rgba(245,124,0,0.6)",
-                  color: "#FFB877",
-                  backgroundColor: "rgba(15,10,5,0.55)",
-                }}
-              >
-                {s.badge}
-              </div>
-
-              <h1
-                className="font-display mt-7 leading-[1.0] tracking-tight"
-                style={{
-                  fontWeight: 500,
-                  fontSize: "clamp(44px, 6.5vw, 76px)",
-                  color: "#fbf6ec",
-                  textShadow: "0 4px 40px rgba(0,0,0,0.5)",
-                }}
-              >
-                {s.titleTop}
-                <br />
-                <span style={{ color: "#F57C00" }}>{s.titleBottom}</span>
-              </h1>
-
-              <p
-                className="mt-6 max-w-xl text-base md:text-[17px] leading-relaxed"
-                style={{ color: "rgba(251,246,236,0.92)" }}
-              >
-                {s.subtitle}
-              </p>
+    <section className="relative bg-background border-b border-border/60">
+      <div className="container-premium py-12 lg:py-20">
+        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-16 items-center">
+          {/* Coluna esquerda — texto premium */}
+          <div className="max-w-xl">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+              ✦ Coleção 2026
             </div>
-          ))}
 
-          {/* Selos rápidos */}
-          <div
-            className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-[12.5px] font-medium"
-            style={{ color: "rgba(251,246,236,0.85)" }}
-          >
-            <span className="inline-flex items-center gap-1.5">
-              <Ruler className="h-3.5 w-3.5" style={{ color: "#FFB877" }} />
-              Sob medida exata
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Shield className="h-3.5 w-3.5" style={{ color: "#FFB877" }} />
-              Produção própria · Instalação simples
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Star className="h-3.5 w-3.5 fill-current" style={{ color: "#FFB877" }} />
-              4.9 (2.300+ avaliações)
-            </span>
+            <h1
+              className="font-display mt-5 leading-[1.02] tracking-tight text-foreground"
+              style={{ fontWeight: 500, fontSize: "clamp(40px, 5.5vw, 64px)" }}
+            >
+              Persianas Sob Medida
+              <br />
+              <span className="text-primary">com Instalação Profissional.</span>
+            </h1>
+
+            <p className="mt-5 text-base md:text-lg leading-relaxed text-muted-foreground">
+              Elegância, conforto e tecnologia para transformar seu ambiente.
+              Tecidos premium, produção própria e entrega para todo o Brasil.
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#orcamento"
+                className="inline-flex h-13 items-center justify-center gap-2 rounded-full bg-primary px-7 py-4 text-[12px] font-bold uppercase tracking-[0.16em] text-primary-foreground shadow-glow transition hover:opacity-90"
+              >
+                Calcular Valor <ArrowRight className="h-4 w-4" />
+              </a>
+              <a
+                href="https://wa.me/5532351202810?text=Ol%C3%A1!%20Quero%20um%20or%C3%A7amento%20de%20persianas%20sob%20medida."
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-13 items-center justify-center gap-2 rounded-full border-2 border-foreground/15 px-7 py-4 text-[12px] font-bold uppercase tracking-[0.16em] text-foreground transition hover:bg-foreground/5"
+              >
+                <MessageCircle className="h-4 w-4 text-whatsapp" />
+                Falar no WhatsApp
+              </a>
+            </div>
+
+            {/* Selos rápidos */}
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-[13px] font-medium text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5">
+                <Ruler className="h-4 w-4 text-primary" />
+                Sob medida exata
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Truck className="h-4 w-4 text-primary" />
+                Entrega Brasil
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Star className="h-4 w-4 fill-primary text-primary" />
+                4.9 · 2.300+ avaliações
+              </span>
+            </div>
+
+            {/* Métricas */}
+            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border/60 pt-6 max-w-md">
+              {[
+                { v: "+20 mil", l: "Clientes" },
+                { v: "Sob medida", l: "Feito p/ você" },
+                { v: "6×", l: "Sem juros" },
+              ].map((m) => (
+                <div key={m.l}>
+                  <div className="font-display text-xl md:text-2xl text-foreground" style={{ fontWeight: 500 }}>
+                    {m.v}
+                  </div>
+                  <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                    {m.l}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* CTAs */}
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="#orcamento"
-              className="inline-flex h-13 items-center justify-center gap-2 rounded-full px-8 py-4 text-[12px] font-bold uppercase tracking-[0.16em] transition hover:opacity-90 shadow-2xl"
-              style={{ backgroundColor: "#F57C00", color: "#fff" }}
-            >
-              Orçamento grátis <ArrowRight className="h-4 w-4" />
-            </a>
-            <a
-              href="https://wa.me/5532351202810?text=Ol%C3%A1!%20Quero%20um%20or%C3%A7amento%20de%20persianas%20sob%20medida."
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex h-13 items-center justify-center rounded-full border-2 px-7 py-4 text-[12px] font-bold uppercase tracking-[0.16em] transition hover:bg-white/10"
-              style={{
-                borderColor: "rgba(251,246,236,0.55)",
-                color: "#fbf6ec",
-              }}
-            >
-              Falar no WhatsApp
-            </a>
-          </div>
+          {/* Coluna direita — visual premium com fade */}
+          <div className="relative">
+            <div className="relative aspect-[4/5] lg:aspect-[5/6] rounded-3xl overflow-hidden shadow-2xl bg-sand">
+              {SCENES.map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  alt="Ambiente com persianas sob medida"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  // @ts-expect-error fetchpriority valid HTML
+                  fetchpriority={i === 0 ? "high" : "low"}
+                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-out ${
+                    i === active ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              ))}
+            </div>
 
-          {/* Métricas */}
-          <div
-            className="mt-10 border-t pt-6 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl"
-            style={{ borderColor: "rgba(251,246,236,0.2)" }}
-          >
-            {[
-              { v: "+20 mil", l: "Clientes" },
-              { v: "4.9 ★", l: "Avaliação" },
-              { v: "Sob medida", l: "100% feito p/ você" },
-              { v: "6×", l: "Sem juros" },
-            ].map((m) => (
-              <div key={m.l}>
-                <div
-                  className="font-display text-2xl md:text-3xl"
-                  style={{ color: "#fbf6ec", fontWeight: 500 }}
-                >
-                  {m.v}
-                </div>
-                <div
-                  className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em]"
-                  style={{ color: "rgba(251,246,236,0.85)" }}
-                >
-                  {m.l}
-                </div>
+            {/* Card flutuante — preço */}
+            <div className="hidden md:block absolute -left-6 bottom-8 bg-white rounded-2xl shadow-2xl border border-border/60 p-5 max-w-[240px]">
+              <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                A partir de
               </div>
-            ))}
-          </div>
+              <div className="font-display text-3xl text-foreground mt-1" style={{ fontWeight: 500 }}>
+                R$ 199<span className="text-base text-muted-foreground">/m²</span>
+              </div>
+              <div className="mt-2 text-xs text-muted-foreground">
+                Em até <strong className="text-foreground">6× sem juros</strong>
+              </div>
+            </div>
 
-          {/* Indicadores */}
-          <div className="mt-8 flex items-center gap-2">
-            {SLIDES.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActive(i)}
-                aria-label={`Slide ${i + 1}`}
-                className="h-1.5 rounded-full transition-all"
-                style={{
-                  width: i === active ? 36 : 14,
-                  backgroundColor:
-                    i === active ? "#F57C00" : "rgba(251,246,236,0.4)",
-                }}
-              />
-            ))}
+            {/* Indicadores */}
+            <div className="absolute right-5 bottom-5 flex items-center gap-1.5">
+              {SCENES.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActive(i)}
+                  aria-label={`Cena ${i + 1}`}
+                  className="h-1.5 rounded-full bg-white/80 transition-all"
+                  style={{ width: i === active ? 28 : 10 }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
