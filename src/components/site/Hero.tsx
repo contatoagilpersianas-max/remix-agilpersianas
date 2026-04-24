@@ -73,23 +73,6 @@ export function Hero() {
               </span>
             </div>
 
-            {/* Métricas */}
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border/60 pt-6 max-w-md">
-              {[
-                { v: "+20 mil", l: "Clientes" },
-                { v: "Sob medida", l: "Feito p/ você" },
-                { v: "6×", l: "Sem juros" },
-              ].map((m) => (
-                <div key={m.l}>
-                  <div className="font-display text-xl md:text-2xl text-foreground" style={{ fontWeight: 500 }}>
-                    {m.v}
-                  </div>
-                  <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                    {m.l}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Coluna direita — visual premium com fade */}

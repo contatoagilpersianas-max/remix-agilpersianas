@@ -76,7 +76,9 @@ export function CheckoutDialog({
 
   const baseSubtotal = subtotal ?? total;
   const shippingCost = shipping?.price ?? 0;
-  const finalTotal = Math.max(0, baseSubtotal + shippingCost - couponDiscount);
+  const pixDiscount = billingType === "PIX" ? Math.round(baseSubtotal * 0.05 * 100) / 100 : 0;
+  const finalTotal = Math.max(0, baseSubtotal + shippingCost - couponDiscount - pixDiscount);
+  const installmentValue = billingType === "CREDIT_CARD" ? finalTotal / 6 : 0;
 
   async function handleApplyCoupon() {
     if (!email) {
@@ -351,19 +353,31 @@ export function CheckoutDialog({
                     <span>-{BRL(couponDiscount)}</span>
                   </div>
                 )}
+                {pixDiscount > 0 && (
+                  <div className="flex justify-between text-success">
+                    <span>Desconto PIX (5%)</span>
+                    <span>-{BRL(pixDiscount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between font-display text-base pt-1 border-t">
                   <span>Total</span>
                   <span>{BRL(finalTotal)}</span>
                 </div>
+                {installmentValue > 0 && (
+                  <div className="text-[11px] text-right text-muted-foreground">
+                    ou 6× de <strong className="text-foreground">{BRL(installmentValue)}</strong> sem juros
+                  </div>
+                )}
               </div>
 
               <Button type="submit" size="lg" className="w-full h-12" disabled={!shipping}>
-                Gerar cobrança · {BRL(finalTotal)}
+                {billingType === "PIX" ? "Pagar com PIX" : billingType === "BOLETO" ? "Gerar boleto" : "Pagar com cartão"} · {BRL(finalTotal)}
               </Button>
-              <p className="text-[11px] text-center text-muted-foreground">
-                Pagamento processado com segurança via Asaas. Seus dados não são
-                armazenados em cartão.
-              </p>
+              <div className="flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1">🔒 Pagamento seguro</span>
+                <span>·</span>
+                <span>Confirmação por WhatsApp</span>
+              </div>
             </form>
           </>
         )}

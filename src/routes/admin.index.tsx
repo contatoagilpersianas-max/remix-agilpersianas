@@ -14,6 +14,8 @@ import {
   Factory,
   MessageCircle,
   ExternalLink,
+  Trophy,
+  Receipt,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
@@ -31,6 +33,9 @@ type Counters = {
   revenueMonth: number;
   revenueToday: number;
   jobsActive: number;
+  avgTicket: number;
+  topProduct: string | null;
+  topProductCount: number;
 };
 
 function Dashboard() {
@@ -43,6 +48,9 @@ function Dashboard() {
     revenueMonth: 0,
     revenueToday: 0,
     jobsActive: 0,
+    avgTicket: 0,
+    topProduct: null,
+    topProductCount: 0,
   });
   const [recentLeads, setRecentLeads] = useState<
     Array<{ id: string; name: string; product_interest: string | null; phone: string | null; created_at: string; status: string }>
@@ -63,7 +71,7 @@ function Dashboard() {
       start30.setDate(start30.getDate() - 29);
       start30.setHours(0, 0, 0, 0);
 
-      const [prods, cats, leadsAll, leadsNew, ordersMonth, ordersToday, jobs, leadsRecent, jobsRecent, leadsSeries, ordersSeries] =
+      const [prods, cats, leadsAll, leadsNew, ordersMonth, ordersToday, jobs, leadsRecent, jobsRecent, leadsSeries, ordersSeries, ordersItems] =
         await Promise.all([
           supabase.from("products").select("*", { count: "exact", head: true }),
           supabase.from("categories").select("*", { count: "exact", head: true }),
@@ -88,10 +96,26 @@ function Dashboard() {
             .limit(5),
           supabase.from("leads").select("created_at").gte("created_at", start30.toISOString()),
           supabase.from("orders").select("created_at,total").gte("created_at", start30.toISOString()),
+          supabase.from("orders").select("items").gte("created_at", start30.toISOString()),
         ]);
 
       const sumMonth = (ordersMonth.data ?? []).reduce((a, o) => a + Number(o.total ?? 0), 0);
       const sumToday = (ordersToday.data ?? []).reduce((a, o) => a + Number(o.total ?? 0), 0);
+      const ordersMonthCount = ordersMonth.data?.length ?? 0;
+      const avgTicket = ordersMonthCount > 0 ? sumMonth / ordersMonthCount : 0;
+
+      // Produto campeão (mais vendido nos últimos 30 dias)
+      const productCounter: Record<string, number> = {};
+      (ordersItems.data ?? []).forEach((row) => {
+        const items = Array.isArray(row.items) ? (row.items as unknown as Array<Record<string, unknown>>) : [];
+        items.forEach((it) => {
+          const name = (it?.name as string | undefined) ?? (it?.productName as string | undefined);
+          if (name) productCounter[name] = (productCounter[name] ?? 0) + 1;
+        });
+      });
+      const topEntry = Object.entries(productCounter).sort((a, b) => b[1] - a[1])[0];
+      const topProduct = topEntry?.[0] ?? null;
+      const topProductCount = topEntry?.[1] ?? 0;
 
       // build daily series for last 30 days
       const days: Record<string, { leads: number; orders: number }> = {};
@@ -114,10 +138,13 @@ function Dashboard() {
         categories: cats.count ?? 0,
         leadsTotal: leadsAll.count ?? 0,
         leadsNew: leadsNew.count ?? 0,
-        ordersMonth: ordersMonth.data?.length ?? 0,
+        ordersMonth: ordersMonthCount,
         revenueMonth: sumMonth,
         revenueToday: sumToday,
         jobsActive: jobs.count ?? 0,
+        avgTicket,
+        topProduct,
+        topProductCount,
       });
       setRecentLeads(leadsRecent.data ?? []);
       setRecentJobs(jobsRecent.data ?? []);
@@ -128,8 +155,10 @@ function Dashboard() {
   const cards = [
     { label: "Vendas hoje", value: fmt(c.revenueToday), trend: `${c.ordersMonth} pedidos no mês`, icon: TrendingUp },
     { label: "Receita no mês", value: fmt(c.revenueMonth), trend: "Últimos 30 dias", icon: ShoppingBag },
+    { label: "Ticket médio", value: fmt(c.avgTicket), trend: `${c.ordersMonth} pedidos`, icon: Receipt },
     { label: "Leads novos", value: c.leadsNew.toString(), trend: `${c.leadsTotal} total`, icon: Users },
     { label: "Em produção", value: c.jobsActive.toString(), trend: `${c.products} produtos · ${c.categories} cat.`, icon: Factory },
+    { label: "Produto campeão", value: c.topProduct ?? "—", trend: c.topProductCount > 0 ? `${c.topProductCount} vendas (30d)` : "Sem vendas ainda", icon: Trophy },
   ];
 
   // chart bounds
@@ -151,7 +180,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {cards.map((card) => (
           <Card key={card.label} className="p-5 hover:shadow-lg transition">
             <div className="flex items-start justify-between">
@@ -163,7 +192,7 @@ function Dashboard() {
                 {card.trend}
               </span>
             </div>
-            <div className="mt-4 text-2xl font-display">{card.value}</div>
+            <div className="mt-4 text-2xl font-display truncate" title={card.value}>{card.value}</div>
             <div className="text-xs text-muted-foreground mt-1">{card.label}</div>
           </Card>
         ))}
