@@ -162,7 +162,7 @@ export function Hero() {
             {[
               { v: "+20 mil", l: "Clientes" },
               { v: "4.9 ★", l: "Avaliação" },
-              { v: "5 anos", l: "Garantia" },
+              { v: "Sob medida", l: "100% feito p/ você" },
               { v: "6×", l: "Sem juros" },
             ].map((m) => (
               <div key={m.l}>

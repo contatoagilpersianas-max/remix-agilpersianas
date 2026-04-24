@@ -61,7 +61,7 @@ function PersianaBHPage() {
         { title: "Atendimento técnico", description: "Suporte por WhatsApp para tirar dúvidas de medição e instalação." },
         { title: "Telas mosquiteiras", description: "Magnéticas, painéis ou retráteis — proteção contra insetos." },
         { title: "Projetos B2B", description: "Hotéis, edifícios corporativos e empreendimentos imobiliários." },
-        { title: "Pós-venda", description: "Garantia oficial de 5 anos com cobertura em toda a cidade." },
+        { title: "Pós-venda dedicado", description: "Suporte por WhatsApp e e-mail para tirar todas as dúvidas." },
       ]}
       faq={[
         { q: "Vocês entregam em BH?", a: "Sim. Somos da Zona da Mata Mineira, com frete rápido para toda a Grande BH." },

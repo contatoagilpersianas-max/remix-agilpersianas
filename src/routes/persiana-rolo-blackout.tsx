@@ -107,9 +107,6 @@ function PersianaRoloBlackoutPage() {
           title: "Instalação descomplicada",
           description: "Acompanha kit completo de instalação e tutorial em vídeo passo a passo.",
         },
-        {
-          description: "Cobre defeitos de fabricação no tecido, mecanismo e acabamentos metálicos.",
-        },
       ]}
       faq={[
         {
