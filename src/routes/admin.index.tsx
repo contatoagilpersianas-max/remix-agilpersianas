@@ -192,7 +192,7 @@ function Dashboard() {
                 {card.trend}
               </span>
             </div>
-            <div className="mt-4 text-2xl font-display">{card.value}</div>
+            <div className="mt-4 text-2xl font-display truncate" title={card.value}>{card.value}</div>
             <div className="text-xs text-muted-foreground mt-1">{card.label}</div>
           </Card>
         ))}
