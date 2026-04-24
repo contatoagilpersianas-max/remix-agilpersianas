@@ -73,7 +73,6 @@ function DoubleVisionPage() {
         "Disponível com forro blackout",
         "Motorização Wi-Fi e RF",
         "Tecidos com proteção antimofo",
-        "Garantia de 5 anos",
       ]}
       features={[
         { title: "Faixas duplas", description: "Tecido translúcido + opaco que se sobrepõem para regular a luz." },

@@ -9,7 +9,7 @@ export const Route = createFileRoute("/persiana-belo-horizonte")({
       {
         name: "description",
         content:
-          "Persianas e cortinas sob medida em Belo Horizonte. Frete rápido a partir da nossa fábrica em Juiz de Fora MG, garantia de 5 anos.",
+          "Persianas e cortinas sob medida em Belo Horizonte. Frete rápido a partir da nossa fábrica em Juiz de Fora MG.",
       },
       { property: "og:title", content: "Persianas em Belo Horizonte" },
       {
@@ -53,7 +53,6 @@ function PersianaBHPage() {
         "Tecidos antichamas e antifungo",
         "Motorização inteligente",
         "Visita técnica em projetos grandes",
-        "Garantia de 5 anos",
         "Parcelamento em até 6× sem juros",
       ]}
       features={[
@@ -62,7 +61,7 @@ function PersianaBHPage() {
         { title: "Atendimento técnico", description: "Suporte por WhatsApp para tirar dúvidas de medição e instalação." },
         { title: "Telas mosquiteiras", description: "Magnéticas, painéis ou retráteis — proteção contra insetos." },
         { title: "Projetos B2B", description: "Hotéis, edifícios corporativos e empreendimentos imobiliários." },
-        { title: "Pós-venda", description: "Garantia oficial de 5 anos com cobertura em toda a cidade." },
+        { title: "Pós-venda dedicado", description: "Suporte por WhatsApp e e-mail para tirar todas as dúvidas." },
       ]}
       faq={[
         { q: "Vocês entregam em BH?", a: "Sim. Somos da Zona da Mata Mineira, com frete rápido para toda a Grande BH." },

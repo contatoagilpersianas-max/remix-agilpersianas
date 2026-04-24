@@ -34,7 +34,7 @@ export const Route = createFileRoute("/persiana-solar-screen")({
       {
         property: "og:description",
         content:
-          "Filtra UV, reduz calor e preserva a vista. Sob medida com tecidos premium, garantia de 5 anos.",
+          "Filtra UV, reduz calor e preserva a vista. Sob medida com tecidos premium.",
       },
       { property: "og:image", content: "https://agil2.lovable.app/og/lp-solar.jpg" },
       { name: "twitter:image", content: "https://agil2.lovable.app/og/lp-solar.jpg" },

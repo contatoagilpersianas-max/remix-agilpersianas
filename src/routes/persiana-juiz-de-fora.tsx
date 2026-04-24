@@ -78,7 +78,6 @@ function PersianaJFPage() {
         "Visita técnica gratuita na cidade",
         "Instalação por equipe local",
         "Prazo médio de 5 dias úteis",
-        "Garantia de 5 anos",
         "Atendimento pós-venda presencial",
       ]}
       features={[

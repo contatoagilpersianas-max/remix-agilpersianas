@@ -77,7 +77,6 @@ function VerticalPage() {
         "Ideal para escritórios e salas",
         "Manual silenciosa ou motorizada",
         "Lavável e durável",
-        "Garantia de 5 anos",
       ]}
       features={[
         { title: "Lâminas de 89 mm ou 127 mm", description: "Duas larguras padrão — escolha conforme o tamanho do vão." },

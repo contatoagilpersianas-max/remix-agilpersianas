@@ -55,7 +55,6 @@ function PersianaRJPage() {
         "Tecidos resistentes à umidade",
         "Motorização Wi-Fi e Alexa",
         "Frete calculado e rápido",
-        "Garantia de 5 anos",
         "Suporte por WhatsApp",
       ]}
       features={[
@@ -64,7 +63,7 @@ function PersianaRJPage() {
         { title: "Blackout para suítes", description: "Sono perfeito mesmo com a iluminação urbana intensa." },
         { title: "Motorização", description: "Persianas inteligentes integradas à sua casa conectada." },
         { title: "Logística RJ", description: "Envio expresso para Zona Sul, Norte, Oeste e Niterói." },
-        { title: "Garantia 5 anos", description: "Cobertura nacional, com suporte por WhatsApp e e-mail." },
+        { title: "Pós-venda nacional", description: "Suporte completo por WhatsApp e e-mail." },
       ]}
       faq={[
         { q: "Vocês instalam no Rio?", a: "Trabalhamos com parceiros instaladores certificados em todas as zonas da cidade." },

@@ -155,7 +155,7 @@ export function PriceCalculator({ defaultProductId, className, compact }: Props)
         <div className="grid grid-cols-2 gap-3 mt-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-primary" />
-            Garantia 5 anos
+            Compra segura
           </div>
           <div className="flex items-center gap-2">
             <Truck className="h-4 w-4 text-primary" />

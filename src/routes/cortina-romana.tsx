@@ -80,7 +80,6 @@ function CortinaRomanaPage() {
         "Costura reforçada e varetas inox",
         "Manual silenciosa ou motorizada",
         "Acabamento artesanal",
-        "Garantia de 5 anos",
       ]}
       features={[
         { title: "Costura artesanal", description: "Cada cortina é confeccionada e revisada manualmente." },
