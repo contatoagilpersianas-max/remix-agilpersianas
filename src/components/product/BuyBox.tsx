@@ -187,11 +187,16 @@ export function BuyBox({
         </div>
       </div>
 
-      {/* Configurador */}
-      <div className="space-y-5">
+      {/* Configurador estilo Blinds.com — etapas numeradas */}
+      <div className="space-y-6">
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-display text-lg">Personalize sua persiana</h3>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
+                1
+              </span>
+              <h3 className="font-display text-lg">Medidas</h3>
+            </div>
             <a href="#como-medir" className="text-xs text-primary inline-flex items-center gap-1 hover:underline">
               <Info className="h-3.5 w-3.5" /> Como medir
             </a>
