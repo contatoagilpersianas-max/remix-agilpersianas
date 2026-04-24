@@ -136,21 +136,23 @@ export function Hero() {
           {/* CTAs */}
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href="#categorias"
+              href="#calculadora"
               className="inline-flex h-13 items-center justify-center gap-2 rounded-full px-8 py-4 text-[12px] font-bold uppercase tracking-[0.16em] transition hover:opacity-90 shadow-2xl"
               style={{ backgroundColor: "#F57C00", color: "#fff" }}
             >
-              Ver coleção 2026 <ArrowRight className="h-4 w-4" />
+              Calcular preço <ArrowRight className="h-4 w-4" />
             </a>
             <a
-              href="#calculadora"
+              href="https://wa.me/5532351202810?text=Ol%C3%A1!%20Quero%20um%20or%C3%A7amento%20de%20persianas%20sob%20medida."
+              target="_blank"
+              rel="noreferrer"
               className="inline-flex h-13 items-center justify-center rounded-full border-2 px-7 py-4 text-[12px] font-bold uppercase tracking-[0.16em] transition hover:bg-white/10"
               style={{
                 borderColor: "rgba(251,246,236,0.55)",
                 color: "#fbf6ec",
               }}
             >
-              Calcular minha medida
+              Falar no WhatsApp
             </a>
           </div>
 
