@@ -14,6 +14,8 @@ import {
   Factory,
   MessageCircle,
   ExternalLink,
+  Trophy,
+  Receipt,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
@@ -31,6 +33,9 @@ type Counters = {
   revenueMonth: number;
   revenueToday: number;
   jobsActive: number;
+  avgTicket: number;
+  topProduct: string | null;
+  topProductCount: number;
 };
 
 function Dashboard() {
@@ -43,6 +48,9 @@ function Dashboard() {
     revenueMonth: 0,
     revenueToday: 0,
     jobsActive: 0,
+    avgTicket: 0,
+    topProduct: null,
+    topProductCount: 0,
   });
   const [recentLeads, setRecentLeads] = useState<
     Array<{ id: string; name: string; product_interest: string | null; phone: string | null; created_at: string; status: string }>
