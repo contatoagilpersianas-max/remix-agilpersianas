@@ -28,6 +28,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
+import { Route as PedidoNumeroRouteImport } from './routes/pedido.$numero'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminSiteRouteImport } from './routes/admin.site'
@@ -36,6 +37,7 @@ import { Route as AdminProducaoRouteImport } from './routes/admin.producao'
 import { Route as AdminPedidosRouteImport } from './routes/admin.pedidos'
 import { Route as AdminOrcamentosRouteImport } from './routes/admin.orcamentos'
 import { Route as AdminMarketingRouteImport } from './routes/admin.marketing'
+import { Route as AdminLumiConfigRouteImport } from './routes/admin.lumi-config'
 import { Route as AdminLumiRouteImport } from './routes/admin.lumi'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminFinanceiroRouteImport } from './routes/admin.financeiro'
@@ -139,6 +141,11 @@ const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
   path: '/produto/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PedidoNumeroRoute = PedidoNumeroRouteImport.update({
+  id: '/pedido/$numero',
+  path: '/pedido/$numero',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
@@ -177,6 +184,11 @@ const AdminOrcamentosRoute = AdminOrcamentosRouteImport.update({
 const AdminMarketingRoute = AdminMarketingRouteImport.update({
   id: '/marketing',
   path: '/marketing',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLumiConfigRoute = AdminLumiConfigRouteImport.update({
+  id: '/lumi-config',
+  path: '/lumi-config',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminLumiRoute = AdminLumiRouteImport.update({
@@ -238,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lumi': typeof AdminLumiRoute
+  '/admin/lumi-config': typeof AdminLumiConfigRoute
   '/admin/marketing': typeof AdminMarketingRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -246,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/admin/site': typeof AdminSiteRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/pedido/$numero': typeof PedidoNumeroRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -273,6 +287,7 @@ export interface FileRoutesByTo {
   '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lumi': typeof AdminLumiRoute
+  '/admin/lumi-config': typeof AdminLumiConfigRoute
   '/admin/marketing': typeof AdminMarketingRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -281,6 +296,7 @@ export interface FileRoutesByTo {
   '/admin/site': typeof AdminSiteRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/pedido/$numero': typeof PedidoNumeroRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
@@ -310,6 +326,7 @@ export interface FileRoutesById {
   '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lumi': typeof AdminLumiRoute
+  '/admin/lumi-config': typeof AdminLumiConfigRoute
   '/admin/marketing': typeof AdminMarketingRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -318,6 +335,7 @@ export interface FileRoutesById {
   '/admin/site': typeof AdminSiteRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/pedido/$numero': typeof PedidoNumeroRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -348,6 +366,7 @@ export interface FileRouteTypes {
     | '/admin/financeiro'
     | '/admin/leads'
     | '/admin/lumi'
+    | '/admin/lumi-config'
     | '/admin/marketing'
     | '/admin/orcamentos'
     | '/admin/pedidos'
@@ -356,6 +375,7 @@ export interface FileRouteTypes {
     | '/admin/site'
     | '/admin/usuarios'
     | '/blog/$slug'
+    | '/pedido/$numero'
     | '/produto/$slug'
     | '/admin/'
     | '/blog/'
@@ -383,6 +403,7 @@ export interface FileRouteTypes {
     | '/admin/financeiro'
     | '/admin/leads'
     | '/admin/lumi'
+    | '/admin/lumi-config'
     | '/admin/marketing'
     | '/admin/orcamentos'
     | '/admin/pedidos'
@@ -391,6 +412,7 @@ export interface FileRouteTypes {
     | '/admin/site'
     | '/admin/usuarios'
     | '/blog/$slug'
+    | '/pedido/$numero'
     | '/produto/$slug'
     | '/admin'
     | '/blog'
@@ -419,6 +441,7 @@ export interface FileRouteTypes {
     | '/admin/financeiro'
     | '/admin/leads'
     | '/admin/lumi'
+    | '/admin/lumi-config'
     | '/admin/marketing'
     | '/admin/orcamentos'
     | '/admin/pedidos'
@@ -427,6 +450,7 @@ export interface FileRouteTypes {
     | '/admin/site'
     | '/admin/usuarios'
     | '/blog/$slug'
+    | '/pedido/$numero'
     | '/produto/$slug'
     | '/admin/'
     | '/blog/'
@@ -451,6 +475,7 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  PedidoNumeroRoute: typeof PedidoNumeroRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ApiPublicAsaasWebhookRoute: typeof ApiPublicAsaasWebhookRoute
@@ -591,6 +616,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProdutoSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pedido/$numero': {
+      id: '/pedido/$numero'
+      path: '/pedido/$numero'
+      fullPath: '/pedido/$numero'
+      preLoaderRoute: typeof PedidoNumeroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/blog/$slug'
@@ -645,6 +677,13 @@ declare module '@tanstack/react-router' {
       path: '/marketing'
       fullPath: '/admin/marketing'
       preLoaderRoute: typeof AdminMarketingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/lumi-config': {
+      id: '/admin/lumi-config'
+      path: '/lumi-config'
+      fullPath: '/admin/lumi-config'
+      preLoaderRoute: typeof AdminLumiConfigRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/lumi': {
@@ -706,6 +745,7 @@ interface AdminRouteChildren {
   AdminFinanceiroRoute: typeof AdminFinanceiroRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminLumiRoute: typeof AdminLumiRoute
+  AdminLumiConfigRoute: typeof AdminLumiConfigRoute
   AdminMarketingRoute: typeof AdminMarketingRoute
   AdminOrcamentosRoute: typeof AdminOrcamentosRoute
   AdminPedidosRoute: typeof AdminPedidosRoute
@@ -723,6 +763,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFinanceiroRoute: AdminFinanceiroRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminLumiRoute: AdminLumiRoute,
+  AdminLumiConfigRoute: AdminLumiConfigRoute,
   AdminMarketingRoute: AdminMarketingRoute,
   AdminOrcamentosRoute: AdminOrcamentosRoute,
   AdminPedidosRoute: AdminPedidosRoute,
@@ -753,6 +794,7 @@ const rootRouteChildren: RootRouteChildren = {
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   BlogSlugRoute: BlogSlugRoute,
+  PedidoNumeroRoute: PedidoNumeroRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   ApiPublicAsaasWebhookRoute: ApiPublicAsaasWebhookRoute,

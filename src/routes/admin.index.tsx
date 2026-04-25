@@ -80,6 +80,9 @@ function Dashboard() {
   const [recentLeads, setRecentLeads] = useState<
     Array<{ id: string; name: string; product_interest: string | null; phone: string | null; created_at: string; status: string }>
   >([]);
+  const [staleLeads, setStaleLeads] = useState<
+    Array<{ id: string; name: string; phone: string | null; product_interest: string | null; created_at: string; assigned_to: string | null }>
+  >([]);
   const [recentJobs, setRecentJobs] = useState<
     Array<{ id: string; product_name: string; stage: string; due_date: string | null }>
   >([]);
@@ -184,6 +187,17 @@ function Dashboard() {
       setRecentLeads(leadsRecent.data ?? []);
       setRecentJobs(jobsRecent.data ?? []);
       setSeries(Object.entries(days).map(([d, v]) => ({ d, ...v })));
+
+      // Leads parados há 2h+ sem follow-up (status = novo)
+      const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+      const { data: stale } = await supabase
+        .from("leads")
+        .select("id,name,phone,product_interest,created_at,assigned_to")
+        .eq("status", "novo")
+        .lte("created_at", twoHoursAgo)
+        .order("created_at", { ascending: true })
+        .limit(8);
+      setStaleLeads(stale ?? []);
     })();
   }, []);
 
@@ -404,6 +418,58 @@ function Dashboard() {
           </ul>
         </Card>
       </div>
+
+      {/* ORION — Alertas de follow-up de leads parados (2h+) */}
+      {staleLeads.length > 0 && (
+        <Card className="p-6 border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-transparent">
+          <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-xl bg-amber-500/15 text-amber-700 flex items-center justify-center">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-widest text-amber-700 font-semibold">ORION · Follow-up urgente</div>
+                <h3 className="font-display text-lg">{staleLeads.length} lead(s) sem resposta há 2h+</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Sugestão: enviar mensagem agora pelo WhatsApp.</p>
+              </div>
+            </div>
+            <Link to="/admin/leads" className="text-xs text-primary hover:underline">Ver todos →</Link>
+          </div>
+          <ul className="divide-y">
+            {staleLeads.map((l) => {
+              const hours = Math.floor((Date.now() - new Date(l.created_at).getTime()) / 3_600_000);
+              const suggested = `Olá ${l.name.split(" ")[0]}, aqui é da Ágil Persianas. Recebemos seu interesse em ${l.product_interest ?? "persianas sob medida"} e queremos te ajudar a escolher a melhor opção. Posso te enviar um orçamento personalizado?`;
+              const wa = l.phone ? `https://wa.me/55${l.phone.replace(/\D/g, "")}?text=${encodeURIComponent(suggested)}` : null;
+              return (
+                <li key={l.id} className="py-3 flex items-center gap-3">
+                  <div className="h-9 w-9 rounded-full bg-amber-500/15 text-amber-700 flex items-center justify-center text-xs font-semibold uppercase">
+                    {l.name[0]}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium truncate">{l.name}</div>
+                    <div className="text-xs text-muted-foreground truncate">
+                      {l.product_interest ?? "Sem interesse declarado"} · há {hours}h
+                      {l.assigned_to ? ` · resp. ${l.assigned_to.slice(0, 8)}` : " · sem responsável"}
+                    </div>
+                  </div>
+                  {wa ? (
+                    <a
+                      href={wa}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[11px] font-bold uppercase tracking-wider rounded-full bg-amber-500 text-white px-3 h-8 inline-flex items-center hover:bg-amber-600 transition"
+                    >
+                      Enviar WhatsApp
+                    </a>
+                  ) : (
+                    <span className="text-[11px] text-muted-foreground">sem telefone</span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </Card>
+      )}
 
       <div className="grid lg:grid-cols-2 gap-4">
         <Card className="p-6">

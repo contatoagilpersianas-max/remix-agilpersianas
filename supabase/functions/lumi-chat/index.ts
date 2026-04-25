@@ -50,13 +50,13 @@ CONHECIMENTO:
 - A partir de R$ 199/m².
 - Até 6× sem juros. PIX com 5% de desconto.
 - Entrega para todo o Brasil.
-- Instalação profissional disponível.
 - Motorização opcional (manual, RF, Wi-Fi).
 
 NUNCA:
 - Invente preços exatos. Sempre diga "a partir de" ou "estimativa".
 - Prometa prazo de entrega específico.
 - Use linguagem informal demais ou gírias.
+- Mencione marcas concorrentes ou nomes de outras lojas — você é da Ágil Persianas.
 
 Quando o usuário fornecer nome E telefone/WhatsApp válidos, sua resposta DEVE conter exatamente o marcador [LEAD_CAPTURED:nome|telefone|interesse] no início (interesse pode ser o produto/ambiente discutido). Depois do marcador, escreva normalmente sua resposta de agradecimento.`;
 
@@ -168,7 +168,29 @@ Deno.serve(async (req) => {
         .eq("id", convoId);
     }
 
-    const systemWithContext = SYSTEM_PROMPT + buildContextHint(context);
+    // Carrega knowledge base ativa (limit 40 itens recentes)
+    let kbHint = "";
+    try {
+      const { data: kb } = await admin
+        .from("lumi_knowledge")
+        .select("title,kind,content,url,tags")
+        .eq("active", true)
+        .order("position", { ascending: true })
+        .limit(40);
+      if (kb && kb.length) {
+        const lines = kb.map((k) => {
+          const tag = k.tags?.length ? ` [${k.tags.join(", ")}]` : "";
+          if (k.kind === "link") return `• ${k.title}${tag}: ${k.url ?? ""}`;
+          if (k.kind === "faq") return `• FAQ — ${k.title}${tag}: ${k.content ?? ""}`;
+          return `• ${k.title}${tag}: ${(k.content ?? "").slice(0, 600)}`;
+        });
+        kbHint = `\n\nBASE DE CONHECIMENTO INTERNA (use como referência, nunca cite "fonte"):\n${lines.join("\n")}`;
+      }
+    } catch (e) {
+      console.error("[lumi-chat] kb load error:", e);
+    }
+
+    const systemWithContext = SYSTEM_PROMPT + buildContextHint(context) + kbHint;
 
     const response = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",

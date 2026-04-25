@@ -195,6 +195,48 @@ export type Database = {
           },
         ]
       }
+      lumi_knowledge: {
+        Row: {
+          active: boolean
+          content: string | null
+          created_at: string
+          file_path: string | null
+          id: string
+          kind: string
+          position: number
+          tags: string[]
+          title: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          active?: boolean
+          content?: string | null
+          created_at?: string
+          file_path?: string | null
+          id?: string
+          kind?: string
+          position?: number
+          tags?: string[]
+          title: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          active?: boolean
+          content?: string | null
+          created_at?: string
+          file_path?: string | null
+          id?: string
+          kind?: string
+          position?: number
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           asaas_invoice_url: string | null
