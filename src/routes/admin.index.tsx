@@ -187,6 +187,17 @@ function Dashboard() {
       setRecentLeads(leadsRecent.data ?? []);
       setRecentJobs(jobsRecent.data ?? []);
       setSeries(Object.entries(days).map(([d, v]) => ({ d, ...v })));
+
+      // Leads parados há 2h+ sem follow-up (status = novo)
+      const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+      const { data: stale } = await supabase
+        .from("leads")
+        .select("id,name,phone,product_interest,created_at,assigned_to")
+        .eq("status", "novo")
+        .lte("created_at", twoHoursAgo)
+        .order("created_at", { ascending: true })
+        .limit(8);
+      setStaleLeads(stale ?? []);
     })();
   }, []);
 
