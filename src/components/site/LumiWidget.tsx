@@ -217,25 +217,15 @@ export function LumiWidget() {
     }
   };
 
+  // Suprime aviso de variável não usada — pulse é setado mas controla apenas
+  // a animação inicial do antigo botão. Mantemos para compatibilidade.
+  void pulse;
+
   return (
     <>
-      {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Abrir chat com a Lumi"
-          className="fixed bottom-6 left-6 z-40 group inline-flex h-14 items-center gap-2.5 rounded-full bg-foreground px-5 text-sm font-semibold text-background shadow-2xl transition hover:scale-105"
-        >
-          <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-primary">
-            {pulse && <span className="absolute inset-0 rounded-full bg-primary/60 animate-ping" />}
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
-          </span>
-          <span className="hidden sm:inline">Falar com a Lumi</span>
-        </button>
-      )}
-
       {open && (
         <div
-          className="fixed inset-x-0 bottom-0 z-50 sm:inset-auto sm:bottom-6 sm:left-6 sm:w-[380px]"
+          className="fixed inset-x-0 bottom-0 z-50 sm:inset-auto sm:bottom-24 sm:right-6 sm:w-[380px]"
           role="dialog"
           aria-label="Chat com a Lumi"
         >
