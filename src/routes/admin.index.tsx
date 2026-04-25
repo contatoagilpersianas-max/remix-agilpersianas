@@ -80,6 +80,9 @@ function Dashboard() {
   const [recentLeads, setRecentLeads] = useState<
     Array<{ id: string; name: string; product_interest: string | null; phone: string | null; created_at: string; status: string }>
   >([]);
+  const [staleLeads, setStaleLeads] = useState<
+    Array<{ id: string; name: string; phone: string | null; product_interest: string | null; created_at: string; assigned_to: string | null }>
+  >([]);
   const [recentJobs, setRecentJobs] = useState<
     Array<{ id: string; product_name: string; stage: string; due_date: string | null }>
   >([]);
