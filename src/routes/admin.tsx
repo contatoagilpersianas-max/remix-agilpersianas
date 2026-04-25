@@ -35,6 +35,7 @@ const NAV: NavItem[] = [
   { to: "/admin/orcamentos", label: "Orçamentos", icon: FileText },
   { to: "/admin/leads", label: "Leads CRM", icon: Users },
   { to: "/admin/lumi", label: "Conversas Lumi", icon: Sparkles },
+  { to: "/admin/lumi-config", label: "Cérebro da Lumi", icon: Sparkles },
   { to: "/admin/catalogo", label: "Catálogo", icon: Package },
   { to: "/admin/categorias", label: "Categorias", icon: Tag },
   { to: "/admin/site", label: "Site / Conteúdo", icon: Globe },
