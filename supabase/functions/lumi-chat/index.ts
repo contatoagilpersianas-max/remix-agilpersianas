@@ -238,7 +238,8 @@ Deno.serve(async (req) => {
       console.error("[lumi-chat] kb load error:", e);
     }
 
-    const systemWithContext = SYSTEM_PROMPT + buildContextHint(context) + kbHint;
+    const catalogHint = await loadCatalog(admin);
+    const systemWithContext = SYSTEM_PROMPT + catalogHint + buildContextHint(context) + kbHint;
 
     const response = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",
