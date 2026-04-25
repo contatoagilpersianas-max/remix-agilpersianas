@@ -86,7 +86,7 @@ CONHECIMENTO BASE:
 QUANDO O USUÁRIO FORNECER NOME + TELEFONE/WHATSAPP VÁLIDOS:
 Sua resposta DEVE conter exatamente o marcador [LEAD_CAPTURED:nome|telefone|interesse] no INÍCIO da mensagem (interesse = produto/ambiente discutido). Depois do marcador, escreva normalmente sua resposta de agradecimento e próximos passos.`;
 
-async function loadCatalog(admin: ReturnType<typeof createClient>): Promise<string> {
+async function loadCatalog(admin: ReturnType<typeof createClient<any>>): Promise<string> {
   try {
     const { data } = await admin
       .from("products")
