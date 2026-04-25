@@ -1,5 +1,5 @@
 // Seção "Antes & Depois" — comparador interativo (slider)
-import { useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import beforeImg from "@/assets/ambiente-sala.jpg";
 import afterImg from "@/assets/hero-2026-living.jpg";
 import beforeImg2 from "@/assets/ambiente-quarto.jpg";
@@ -26,59 +26,87 @@ const PAIRS: Pair[] = [
 function CompareSlider({ pair }: { pair: Pair }) {
   const [pos, setPos] = useState(50);
   const ref = useRef<HTMLDivElement>(null);
-  const dragging = useRef(false);
+  const draggingRef = useRef(false);
 
   const move = useCallback((clientX: number) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
     const p = ((clientX - rect.left) / rect.width) * 100;
     setPos(Math.max(0, Math.min(100, p)));
   }, []);
+
+  // Listeners globais para arraste fluido (continua mesmo se cursor sair do figure)
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      if (!draggingRef.current) return;
+      e.preventDefault();
+      move(e.clientX);
+    };
+    const onUp = () => {
+      draggingRef.current = false;
+      document.body.style.userSelect = "";
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!draggingRef.current) return;
+      move(e.touches[0].clientX);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onUp);
+    };
+  }, [move]);
+
+  const startDrag = (clientX: number) => {
+    draggingRef.current = true;
+    document.body.style.userSelect = "none";
+    move(clientX);
+  };
 
   return (
     <figure
       ref={ref}
       className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-card cursor-ew-resize select-none group"
       onMouseDown={(e) => {
-        dragging.current = true;
-        move(e.clientX);
+        e.preventDefault();
+        startDrag(e.clientX);
       }}
-      onMouseMove={(e) => dragging.current && move(e.clientX)}
-      onMouseUp={() => (dragging.current = false)}
-      onMouseLeave={() => (dragging.current = false)}
-      onTouchStart={(e) => {
-        dragging.current = true;
-        move(e.touches[0].clientX);
-      }}
-      onTouchMove={(e) => dragging.current && move(e.touches[0].clientX)}
-      onTouchEnd={() => (dragging.current = false)}
+      onTouchStart={(e) => startDrag(e.touches[0].clientX)}
     >
       {/* Depois (fundo) */}
       <img
         src={pair.after}
         alt={`${pair.title} — depois`}
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover"
+        draggable={false}
+        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
       />
       {/* Antes (clipado) */}
       <div
-        className="absolute inset-0 overflow-hidden"
+        className="absolute inset-0 overflow-hidden pointer-events-none"
         style={{ width: `${pos}%` }}
       >
         <img
           src={pair.before}
           alt={`${pair.title} — antes`}
           loading="lazy"
+          draggable={false}
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ width: `${(100 / pos) * 100}%`, maxWidth: "none" }}
+          style={{ width: `${(100 / Math.max(pos, 0.001)) * 100}%`, maxWidth: "none" }}
         />
       </div>
 
       {/* Labels */}
-      <span className="absolute left-4 top-4 rounded-full bg-foreground/80 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-background">
+      <span className="absolute left-4 top-4 rounded-full bg-foreground/80 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-background pointer-events-none">
         Antes
       </span>
-      <span className="absolute right-4 top-4 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground">
+      <span className="absolute right-4 top-4 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground pointer-events-none">
         Depois
       </span>
 
