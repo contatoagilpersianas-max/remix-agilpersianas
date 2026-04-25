@@ -26,21 +26,34 @@ export function Hero() {
             </div>
 
             <h1
-              className="font-display mt-5 leading-[1.02] tracking-tight text-foreground"
-              style={{ fontWeight: 500, fontSize: "clamp(40px, 5.5vw, 64px)" }}
+              className="mt-5 leading-[1.05] tracking-tight text-foreground font-semibold"
+              style={{ fontSize: "clamp(36px, 4.8vw, 56px)", letterSpacing: "-0.02em" }}
             >
-              Persianas Sob Medida
+              Persianas sob medida
               <br />
-              <span className="text-primary">com Tecnologia e Design.</span>
+              <span className="text-primary">com tecnologia e design.</span>
             </h1>
 
-            <p className="mt-5 text-base md:text-lg leading-relaxed text-muted-foreground">
+            <p className="mt-5 text-base md:text-lg leading-relaxed text-muted-foreground max-w-lg">
               Elegância, conforto e tecnologia para transformar seu ambiente.
               Tecidos premium, produção própria e entrega para todo o Brasil.
             </p>
 
-            {/* CTAs */}
-            <div className="mt-8 flex flex-wrap gap-3">
+            {/* Diferencial: compra assistida pela Lumi */}
+            <div className="mt-6 inline-flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3">
+              <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary">
+                <Sparkles className="h-4 w-4 text-primary-foreground" />
+                <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
+              </span>
+              <p className="text-sm leading-snug text-foreground">
+                <span className="font-semibold">Novo:</span> compre com auxílio da{" "}
+                <span className="font-semibold text-primary">Lumi</span>, nossa consultora IA.
+                Ela escolhe o modelo ideal, calcula o valor e fecha pelo WhatsApp.
+              </p>
+            </div>
+
+            {/* CTA único — Lumi */}
+            <div className="mt-6 flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={() =>
@@ -54,12 +67,6 @@ export function Hero() {
                 Falar com a Lumi
                 <ArrowRight className="h-4 w-4" />
               </button>
-              <a
-                href="#orcamento"
-                className="inline-flex h-13 items-center justify-center gap-2 rounded-full border-2 border-foreground/15 px-7 py-4 text-[12px] font-bold uppercase tracking-[0.16em] text-foreground transition hover:bg-foreground/5"
-              >
-                Pedir Orçamento
-              </a>
             </div>
 
             {/* Selos rápidos */}
