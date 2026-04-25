@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import heroLiving from "@/assets/hero-2026-living.jpg";
 import heroBedroom from "@/assets/hero-2026-bedroom.jpg";
-import { ArrowRight, MessageCircle, Star, Ruler, Truck } from "lucide-react";
+import { ArrowRight, Sparkles, Star, Ruler, Truck } from "lucide-react";
+import { openLumiWith } from "@/components/site/LumiWidget";
 
 const SCENES = [heroLiving, heroBedroom];
 
@@ -30,7 +31,7 @@ export function Hero() {
             >
               Persianas Sob Medida
               <br />
-              <span className="text-primary">com Instalação Profissional.</span>
+              <span className="text-primary">com Tecnologia e Design.</span>
             </h1>
 
             <p className="mt-5 text-base md:text-lg leading-relaxed text-muted-foreground">
@@ -40,20 +41,24 @@ export function Hero() {
 
             {/* CTAs */}
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#orcamento"
+              <button
+                type="button"
+                onClick={() =>
+                  openLumiWith({
+                    pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
+                  })
+                }
                 className="inline-flex h-13 items-center justify-center gap-2 rounded-full bg-primary px-7 py-4 text-[12px] font-bold uppercase tracking-[0.16em] text-primary-foreground shadow-glow transition hover:opacity-90"
               >
-                Calcular Valor <ArrowRight className="h-4 w-4" />
-              </a>
+                <Sparkles className="h-4 w-4" />
+                Falar com a Lumi
+                <ArrowRight className="h-4 w-4" />
+              </button>
               <a
-                href="https://wa.me/5532351202810?text=Ol%C3%A1!%20Quero%20um%20or%C3%A7amento%20de%20persianas%20sob%20medida."
-                target="_blank"
-                rel="noreferrer"
+                href="#orcamento"
                 className="inline-flex h-13 items-center justify-center gap-2 rounded-full border-2 border-foreground/15 px-7 py-4 text-[12px] font-bold uppercase tracking-[0.16em] text-foreground transition hover:bg-foreground/5"
               >
-                <MessageCircle className="h-4 w-4 text-whatsapp" />
-                Falar no WhatsApp
+                Pedir Orçamento
               </a>
             </div>
 
@@ -92,19 +97,6 @@ export function Hero() {
                   }`}
                 />
               ))}
-            </div>
-
-            {/* Card flutuante — preço */}
-            <div className="hidden md:block absolute -left-6 bottom-8 bg-white rounded-2xl shadow-2xl border border-border/60 p-5 max-w-[240px]">
-              <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                A partir de
-              </div>
-              <div className="font-display text-3xl text-foreground mt-1" style={{ fontWeight: 500 }}>
-                R$ 199<span className="text-base text-muted-foreground">/m²</span>
-              </div>
-              <div className="mt-2 text-xs text-muted-foreground">
-                Em até <strong className="text-foreground">6× sem juros</strong>
-              </div>
             </div>
 
             {/* Indicadores */}
