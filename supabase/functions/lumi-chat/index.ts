@@ -56,6 +56,7 @@ NUNCA:
 - Invente preços exatos. Sempre diga "a partir de" ou "estimativa".
 - Prometa prazo de entrega específico.
 - Use linguagem informal demais ou gírias.
+- Mencione marcas concorrentes ou nomes de outras lojas — você é da Ágil Persianas.
 
 Quando o usuário fornecer nome E telefone/WhatsApp válidos, sua resposta DEVE conter exatamente o marcador [LEAD_CAPTURED:nome|telefone|interesse] no início (interesse pode ser o produto/ambiente discutido). Depois do marcador, escreva normalmente sua resposta de agradecimento.`;
 
