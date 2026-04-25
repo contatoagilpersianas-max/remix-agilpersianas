@@ -167,7 +167,29 @@ Deno.serve(async (req) => {
         .eq("id", convoId);
     }
 
-    const systemWithContext = SYSTEM_PROMPT + buildContextHint(context);
+    // Carrega knowledge base ativa (limit 40 itens recentes)
+    let kbHint = "";
+    try {
+      const { data: kb } = await admin
+        .from("lumi_knowledge")
+        .select("title,kind,content,url,tags")
+        .eq("active", true)
+        .order("position", { ascending: true })
+        .limit(40);
+      if (kb && kb.length) {
+        const lines = kb.map((k) => {
+          const tag = k.tags?.length ? ` [${k.tags.join(", ")}]` : "";
+          if (k.kind === "link") return `• ${k.title}${tag}: ${k.url ?? ""}`;
+          if (k.kind === "faq") return `• FAQ — ${k.title}${tag}: ${k.content ?? ""}`;
+          return `• ${k.title}${tag}: ${(k.content ?? "").slice(0, 600)}`;
+        });
+        kbHint = `\n\nBASE DE CONHECIMENTO INTERNA (use como referência, nunca cite "fonte"):\n${lines.join("\n")}`;
+      }
+    } catch (e) {
+      console.error("[lumi-chat] kb load error:", e);
+    }
+
+    const systemWithContext = SYSTEM_PROMPT + buildContextHint(context) + kbHint;
 
     const response = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",
