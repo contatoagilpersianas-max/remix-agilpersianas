@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Search, User, ShoppingBag, Menu, X, Heart, MessageCircle } from "lucide-react";
+import { Search, User, ShoppingCart, Menu, X, Heart } from "lucide-react";
 import { useState } from "react";
 import logoAgil from "@/assets/agil-logo.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -67,27 +67,7 @@ export function Header() {
         </form>
 
         {/* Ações */}
-        <div className="flex items-center gap-1 md:gap-2">
-          {/* WhatsApp visível desktop */}
-          <a
-            href={whatsappLink("Olá! Quero um orçamento de persianas sob medida.")}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Falar no WhatsApp"
-            className="hidden lg:inline-flex h-10 items-center gap-2 rounded-full px-4 text-[12px] font-bold uppercase tracking-[0.12em] text-white shadow-sm transition hover:opacity-90"
-            style={{ backgroundColor: "#22C55E" }}
-          >
-            <MessageCircle className="h-4 w-4" />
-            WhatsApp
-          </a>
-          {/* CTA Orçamento grátis */}
-          <a
-            href="#calculadora"
-            className="hidden xl:inline-flex h-10 items-center rounded-full border-2 px-4 text-[11px] font-bold uppercase tracking-[0.14em] transition hover:bg-primary hover:text-white"
-            style={{ borderColor: "#F57C00", color: "#F57C00" }}
-          >
-            Orçamento grátis
-          </a>
+        <div className="flex items-center gap-1 md:gap-3">
           <button
             aria-label="Favoritos"
             className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full text-foreground/70 hover:text-primary transition"
@@ -101,24 +81,31 @@ export function Header() {
           >
             <User className="h-5 w-5" />
           </Link>
+
+          {/* Carrinho — estilo "Ver Carrinho" com badge vermelha */}
           <button
             onClick={() => setCartOpen(true)}
-            aria-label="Carrinho"
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-foreground px-4 md:px-5 text-[12px] font-bold uppercase tracking-[0.14em] text-background transition hover:bg-primary"
+            aria-label="Ver carrinho"
+            className="group inline-flex items-center gap-2.5 rounded-full px-2 py-1.5 transition hover:bg-secondary/60"
           >
-            <ShoppingBag className="h-4 w-4" />
-            <span className="hidden sm:inline">Carrinho</span>
-            <span
-              className={`ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold transition-opacity ${
-                hydrated ? "opacity-100" : "opacity-60 animate-pulse"
-              }`}
-              style={{ backgroundColor: "#F57C00", color: "#fff" }}
-              aria-live="polite"
-              title={hydrated ? `${count} item(s) no carrinho` : "Carregando carrinho…"}
-            >
-              {hydrated ? count : "·"}
+            <span className="relative inline-flex">
+              <ShoppingCart className="h-7 w-7 text-foreground" strokeWidth={1.75} />
+              <span
+                className={`absolute -top-1.5 -right-1.5 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#E11D2E] px-1 text-[10px] font-bold leading-none text-white ring-2 ring-background transition-opacity ${
+                  hydrated ? "opacity-100" : "opacity-60 animate-pulse"
+                }`}
+                aria-live="polite"
+                title={hydrated ? `${count} item(s) no carrinho` : "Carregando carrinho…"}
+              >
+                {hydrated ? count : "·"}
+              </span>
+            </span>
+            <span className="hidden sm:flex flex-col items-start leading-[1.05] text-foreground">
+              <span className="text-[10px] font-bold uppercase tracking-[0.14em]">Ver</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.14em]">Carrinho</span>
             </span>
           </button>
+
           <button
             className="ml-1 flex h-10 w-10 items-center justify-center rounded-full text-foreground lg:hidden"
             onClick={() => setOpen((s) => !s)}
