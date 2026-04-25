@@ -50,7 +50,6 @@ CONHECIMENTO:
 - A partir de R$ 199/m².
 - Até 6× sem juros. PIX com 5% de desconto.
 - Entrega para todo o Brasil.
-- Instalação profissional disponível.
 - Motorização opcional (manual, RF, Wi-Fi).
 
 NUNCA:
