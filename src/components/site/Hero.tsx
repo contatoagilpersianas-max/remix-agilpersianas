@@ -26,7 +26,7 @@ export function Hero() {
       <div className="container-premium py-10 md:py-14 lg:py-24">
         <div className="grid lg:grid-cols-[1.02fr_1fr] gap-8 md:gap-10 lg:gap-16 items-center">
           {/* Coluna esquerda — texto premium */}
-          <div className="max-w-[34rem]" data-reveal>
+          <div className="is-visible max-w-[34rem]" data-reveal>
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" />
               Coleção 2026
@@ -100,7 +100,7 @@ export function Hero() {
           </div>
 
           {/* Coluna direita — visual premium com fade */}
-          <div className="relative" data-reveal>
+          <div className="is-visible relative" data-reveal>
             <div className="relative aspect-[10/12] sm:aspect-[4/5] lg:aspect-[4/5] max-h-[520px] sm:max-h-[620px] lg:max-h-[640px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
               {SCENES.map((src, i) => (
                 <img
