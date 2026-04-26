@@ -71,9 +71,14 @@ export function HeroBanner() {
 
   return (
     <section className="relative bg-background overflow-hidden">
-      <div className="container-premium pt-4 pb-2 md:pt-6 md:pb-3">
+      {/*
+        Mobile: banner sem container/padding e sem cantos arredondados (full-bleed),
+        proporção ~4:5 (igual ao Fácil Persianas) — mais baixo e enquadrado.
+        Desktop: mantém container, cantos arredondados e altura maior.
+      */}
+      <div className="px-0 pt-0 pb-0 sm:container-premium sm:pt-6 sm:pb-3">
         <div className="is-visible relative" data-reveal>
-          <div className="relative min-h-[520px] sm:min-h-[460px] lg:min-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-foreground ring-1 ring-black/5">
+          <div className="relative aspect-[4/5] sm:aspect-auto sm:min-h-[460px] lg:min-h-[560px] rounded-none sm:rounded-[28px] overflow-hidden shadow-none sm:shadow-2xl bg-foreground sm:ring-1 sm:ring-black/5">
             {/* Camada 1 — Imagens de fundo */}
             <div className="absolute inset-0 z-0">
               {scenes.map((scene, i) => (
@@ -85,7 +90,7 @@ export function HeroBanner() {
                   decoding="async"
                   // @ts-expect-error fetchpriority valid HTML
                   fetchpriority={i === 0 ? "high" : "low"}
-                  className={`absolute inset-0 h-full w-full object-cover object-[center_center] sm:object-[center_40%] lg:object-center transition-all duration-[1400ms] ease-premium ${
+                  className={`absolute inset-0 h-full w-full object-cover object-[center_30%] sm:object-[center_40%] lg:object-center transition-all duration-[1400ms] ease-premium ${
                     i === active ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
                   }`}
                 />
@@ -96,7 +101,7 @@ export function HeroBanner() {
             <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/45 via-black/30 to-black/75 sm:from-black/35 sm:via-black/20 sm:to-black/65" />
 
             {/* Camada 3 — Conteúdo: título + subtítulo + CTAs, centralizado vertical e horizontalmente */}
-            <div className="relative z-10 flex min-h-[520px] sm:min-h-[460px] lg:min-h-[560px] flex-col items-center justify-between gap-6 px-5 pt-12 pb-8 text-center sm:justify-center sm:gap-8 sm:px-10 sm:py-12">
+            <div className="relative z-10 flex h-full min-h-full sm:min-h-[460px] lg:min-h-[560px] flex-col items-center justify-between gap-6 px-5 pt-10 pb-7 text-center sm:justify-center sm:gap-8 sm:px-10 sm:py-12">
               <div className="mx-auto w-full max-w-2xl px-2 sm:max-w-3xl sm:flex-none flex-1 flex flex-col justify-center">
                 <h2
                   className="text-display text-white text-balance leading-[1.1] break-words"
