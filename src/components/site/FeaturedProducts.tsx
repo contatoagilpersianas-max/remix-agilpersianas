@@ -40,19 +40,19 @@ export function FeaturedProducts() {
   });
 
   return (
-    <section id="catalogo" className="bg-background py-16 md:py-20">
+    <section id="catalogo" className="bg-background py-20 md:py-28">
       <div className="container-premium">
-        <div className="mb-10 flex flex-col items-center text-center md:mb-12">
+        <div className="mb-12 flex flex-col items-center text-center md:mb-16" data-reveal>
           <span
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em]"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em]"
             style={{ backgroundColor: "rgba(184,84,28,0.10)", color: "#B8541C" }}
           >
             <Flame className="h-3.5 w-3.5" /> Mais vendidos
           </span>
-          <h2 className="mt-4 font-display text-3xl font-medium md:text-5xl">
+          <h2 className="mt-5 text-display text-4xl md:text-6xl">
             Os mais vendidos da semana
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground md:text-base">
+          <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
             Persianas e cortinas sob medida ao centímetro com envio para todo o Brasil.
           </p>
         </div>
@@ -74,19 +74,22 @@ export function FeaturedProducts() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 md:gap-x-5 md:gap-y-10 lg:grid-cols-4">
-            {products.map((p) => (
-              <ProductCard key={p.id} product={p} />
+          <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-x-6 md:gap-y-12 lg:grid-cols-4">
+            {products.map((p, i) => (
+              <div key={p.id} data-reveal style={{ transitionDelay: `${(i % 4) * 80}ms` }}>
+                <ProductCard product={p} />
+              </div>
             ))}
           </div>
         )}
 
-        <div className="mt-12 text-center">
+        <div className="mt-14 text-center" data-reveal>
           <Link
             to="/catalogo"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-foreground px-7 text-[12px] font-bold uppercase tracking-[0.14em] text-background transition hover:bg-primary"
+            className="group inline-flex h-13 items-center justify-center gap-2.5 rounded-full bg-foreground px-8 py-4 text-[12px] font-bold uppercase tracking-[0.18em] text-background transition-all duration-300 ease-premium hover:bg-primary hover:-translate-y-0.5 hover:shadow-glow"
           >
             Ver todos os produtos
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
       </div>
@@ -130,56 +133,58 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <Link to="/produto/$slug" params={{ slug: product.slug }} className="group flex flex-col">
-      <div className="relative aspect-[3/4] overflow-hidden rounded-md bg-secondary">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-secondary ring-1 ring-border transition-all duration-500 ease-premium group-hover:ring-primary/30 group-hover:shadow-card">
         {product.cover_image && (
           <img
             src={product.cover_image}
             alt={product.name}
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-700 ease-premium group-hover:scale-[1.04]"
+            className="h-full w-full object-cover transition-transform duration-[900ms] ease-premium group-hover:scale-[1.06]"
           />
         )}
+        {/* Overlay gradiente sutil ao hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         {product.badge && (
           <span
-            className="absolute left-3 top-3 inline-flex items-center justify-center rounded-md px-2.5 py-1 text-[11px] font-bold text-white"
+            className="absolute left-3 top-3 inline-flex items-center justify-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md"
             style={{ backgroundColor: "#E2763A" }}
           >
             {product.badge}
           </span>
         )}
         {product.bestseller && (
-          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-md bg-foreground px-2 py-1 text-[10px] font-bold uppercase text-background">
+          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-background shadow-md">
             <Flame className="h-3 w-3" /> Top
           </span>
         )}
         {/* Quick add */}
         <button
           onClick={quickAdd}
-          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-primary-foreground shadow-lg opacity-0 group-hover:opacity-100 transition"
+          className="absolute bottom-3 right-3 inline-flex translate-y-2 items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-[11px] font-bold uppercase tracking-wider text-primary-foreground shadow-lg opacity-0 transition-all duration-300 ease-premium group-hover:translate-y-0 group-hover:opacity-100"
         >
           <ShoppingCart className="h-3.5 w-3.5" />
           {isM2 ? "Configurar" : "Adicionar"}
         </button>
       </div>
 
-      <div className="mt-4 flex flex-col text-left">
-        <h3 className="line-clamp-2 text-[13px] font-medium text-foreground transition group-hover:text-primary">
+      <div className="mt-5 flex flex-col text-left">
+        <h3 className="line-clamp-2 text-sm font-semibold text-foreground transition-colors duration-300 group-hover:text-primary">
           {product.name}
         </h3>
 
-        <div className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
+        <div className="mt-1.5 flex items-center gap-1 text-[11px] text-muted-foreground">
           <Star className="h-3 w-3 fill-primary text-primary" />
           <span className="font-medium text-foreground/80">{product.rating.toFixed(1)}</span>
           <span>({product.reviews_count})</span>
         </div>
 
-        <div className="mt-2 flex flex-col">
+        <div className="mt-2.5 flex flex-col">
           {fullPrice && (
             <span className="text-[11px] text-muted-foreground line-through">
               de {formatBRL(fullPrice)}
             </span>
           )}
-          <span className="font-display text-xl font-bold text-foreground">
+          <span className="text-display text-xl text-foreground">
             {isM2 ? `a partir de ${formatBRL(finalPrice)}/m²` : formatBRL(finalPrice)}
           </span>
           <span className="text-[11px] font-semibold" style={{ color: "#B8541C" }}>
