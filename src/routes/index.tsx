@@ -56,10 +56,10 @@ function Index() {
         <PromoStrip />
         {/* 4) Bloco editorial "Seu ambiente merece..." + Lumi */}
         <HeroIntro />
+        {/* 5) Mais vendidos — logo após o bloco da IA */}
+        <FeaturedProducts />
         {/* Selos de confiança / benefícios premium */}
         <BenefitsRow />
-        {/* Mais vendidos */}
-        <FeaturedProducts />
         {/* Banners promo dupla */}
         <CategoryBanners />
         {/* Antes & Depois — prova social visual */}
