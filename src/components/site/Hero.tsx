@@ -169,24 +169,24 @@ export function HeroBanner() {
 export function HeroIntro() {
   return (
     <section
-      className="relative border-b border-white/5 overflow-hidden text-white"
+      className="relative border-b border-white/10 overflow-hidden text-white"
       style={{ background: "#1E1C18" }}
     >
       {/* Halo sutil de fundo (aurora) — laranja sobre fundo escuro */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 -right-32 h-[560px] w-[560px] rounded-full opacity-60 blur-3xl"
-        style={{ background: "radial-gradient(closest-side, rgba(245,124,0,0.45), transparent)" }}
+        className="pointer-events-none absolute -top-40 -right-32 h-[560px] w-[560px] rounded-full opacity-50 blur-3xl"
+        style={{ background: "radial-gradient(closest-side, rgba(245,124,0,0.40), transparent)" }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full opacity-40 blur-3xl"
-        style={{ background: "radial-gradient(closest-side, rgba(245,124,0,0.30), transparent)" }}
+        className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full opacity-35 blur-3xl"
+        style={{ background: "radial-gradient(closest-side, rgba(245,124,0,0.25), transparent)" }}
       />
       <div className="container-premium py-8 sm:py-12 md:py-16 lg:py-20">
-        <div className="mx-auto max-w-4xl rounded-[24px] sm:rounded-[28px] border border-white/10 bg-white/[0.03] px-4 py-7 text-center shadow-2xl backdrop-blur-sm sm:px-8 sm:py-10 md:px-10 md:py-12">
+        <div className="mx-auto max-w-4xl rounded-[24px] sm:rounded-[28px] border border-white/15 bg-white/[0.05] px-4 py-7 text-center shadow-2xl backdrop-blur-sm sm:px-8 sm:py-10 md:px-10 md:py-12">
           {/* Badge — Compra assistida por IA (estilo da referência) */}
-          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary sm:tracking-[0.22em]">
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary/50 bg-primary/20 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary-glow sm:tracking-[0.22em]">
             <Sparkles className="h-3 w-3" />
             Compra assistida por IA
           </div>
@@ -201,7 +201,7 @@ export function HeroIntro() {
             </span>
           </h1>
 
-          <p className="mt-4 mx-auto max-w-2xl text-[13.5px] leading-[1.65] text-white/75 sm:mt-5 sm:text-[15px] sm:leading-7 md:text-base md:leading-8">
+          <p className="mt-4 mx-auto max-w-2xl text-[13.5px] leading-[1.65] text-white/85 sm:mt-5 sm:text-[15px] sm:leading-7 md:text-base md:leading-8">
             Cortinas, persianas, toldos e telas mosquiteiras com design
             inteligente, conforto térmico e acabamento premium. Unimos
             sofisticação e tecnologia de ponta para entregar a solução ideal
@@ -210,7 +210,7 @@ export function HeroIntro() {
 
           {/* Card Lumi — destaque com glow laranja #f57c00 sobre dark */}
           <div
-            className="relative mt-6 mx-auto max-w-xl overflow-hidden rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent p-3.5 sm:p-5 backdrop-blur-sm text-left"
+            className="relative mt-6 mx-auto max-w-xl overflow-hidden rounded-2xl border border-primary/50 bg-gradient-to-br from-primary/25 via-primary/10 to-white/[0.03] p-3.5 sm:p-5 backdrop-blur-sm text-left"
             style={{
               boxShadow:
                 "0 0 0 1px rgba(245,124,0,0.25), 0 18px 50px -18px rgba(245,124,0,0.65), 0 0 60px -12px rgba(245,124,0,0.45)",
@@ -226,9 +226,9 @@ export function HeroIntro() {
                 <Sparkles className="h-4 w-4 text-primary-foreground" />
                 <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
               </span>
-              <div className="min-w-0 text-[12.5px] sm:text-[13px] leading-snug text-white/90">
-                <div className="mb-1 inline-flex items-center gap-1.5 text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-primary">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              <div className="min-w-0 text-[12.5px] sm:text-[13px] leading-snug text-white/95">
+                <div className="mb-1 inline-flex items-center gap-1.5 text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-primary-glow">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary-glow" />
                   Lumi · Consultora IA
                 </div>
                 <p>
@@ -239,8 +239,8 @@ export function HeroIntro() {
             </div>
           </div>
 
-          {/* CTA único — Lumi */}
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+          {/* CTAs — falar com a Lumi + experimentar demo ao vivo */}
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
             <button
               type="button"
               onClick={() =>
@@ -248,34 +248,47 @@ export function HeroIntro() {
                   pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
                 })
               }
-              className="group inline-flex h-12 md:h-13 max-w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-5 sm:px-7 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5"
+              className="group inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-5 sm:w-auto sm:px-7 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5"
             >
               <Sparkles className="h-4 w-4" />
               Falar com a Lumi
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
+            <button
+              type="button"
+              onClick={() =>
+                openLumiWith({
+                  pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
+                  productName: "Demonstração ao vivo",
+                })
+              }
+              className="group inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 sm:w-auto sm:px-7 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-white backdrop-blur-md transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:bg-white/20 hover:border-white/50"
+            >
+              <PlayCircle className="h-4 w-4 text-primary-glow" />
+              Ver demo ao vivo
+            </button>
           </div>
 
-          <p className="mt-3 text-[11.5px] text-white/50">
+          <p className="mt-3 text-[11.5px] text-white/65">
             Atendimento em segundos · sem compromisso · 100% online.
           </p>
 
           {/* Selos rápidos */}
-          <div className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-[11.5px] sm:text-[12px] font-medium text-white/65 sm:mt-8 sm:gap-x-7">
+          <div className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-[11.5px] sm:text-[12px] font-medium text-white/80 sm:mt-8 sm:gap-x-7">
             <span className="inline-flex items-center gap-1.5">
-              <Ruler className="h-4 w-4 text-primary" />
+              <Ruler className="h-4 w-4 text-primary-glow" />
               Sob medida exata
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Truck className="h-4 w-4 text-primary" />
+              <Truck className="h-4 w-4 text-primary-glow" />
               Entrega Brasil
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-primary" />
+              <ShieldCheck className="h-4 w-4 text-primary-glow" />
               Compra protegida
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Star className="h-4 w-4 fill-primary text-primary" />
+              <Star className="h-4 w-4 fill-primary-glow text-primary-glow" />
               4.9 · 2.300+ avaliações
             </span>
           </div>
