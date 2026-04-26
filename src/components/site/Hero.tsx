@@ -92,7 +92,7 @@ export function HeroIntro() {
         style={{ background: "radial-gradient(closest-side, oklch(0.78 0.17 55 / 0.35), transparent)" }}
       />
       <div className="container-premium py-10 md:py-16 lg:py-20">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-4xl rounded-[28px] border border-border/70 bg-card/70 px-5 py-8 text-center shadow-card backdrop-blur-sm sm:px-8 sm:py-10 md:px-10 md:py-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             Coleção 2026
