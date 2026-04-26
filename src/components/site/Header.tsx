@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Search, User, ShoppingCart, Menu, X, Heart } from "lucide-react";
+import { Search, User, ShoppingCart, Menu, X, Heart, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import logoAgil from "@/assets/agil-logo.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,15 +31,26 @@ export function Header() {
 
   return (
     <header className="bg-background/95 backdrop-blur-lg border-b border-border/60">
-      <div className="container-premium grid h-20 grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-8">
-        {/* Logo */}
-        <Link to="/" className="flex items-center shrink-0" aria-label="Ágil Persianas">
-          <img
-            src={logoAgil}
-            alt="Ágil Persianas"
-            className="h-9 md:h-11 w-auto select-none"
-            draggable={false}
-          />
+      <div className="container-premium grid h-[72px] md:h-[84px] grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-8">
+        {/* Logo premium com tagline */}
+        <Link to="/" className="group flex items-center gap-3 shrink-0" aria-label="Ágil Persianas — Persianas sob medida">
+          <span className="relative flex items-center">
+            <span
+              aria-hidden
+              className="absolute -inset-2 rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+              style={{ background: "radial-gradient(closest-side, oklch(0.78 0.17 55 / 0.18), transparent)" }}
+            />
+            <img
+              src={logoAgil}
+              alt="Ágil Persianas"
+              className="relative h-10 md:h-12 w-auto select-none transition-transform duration-300 group-hover:scale-[1.03]"
+              draggable={false}
+            />
+          </span>
+          <span className="hidden xl:flex flex-col leading-[1.05]">
+            <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-primary">Desde 1998</span>
+            <span className="text-[10px] font-medium text-muted-foreground">Persianas sob medida</span>
+          </span>
         </Link>
 
         {/* Busca central */}
@@ -49,35 +60,44 @@ export function Header() {
             const q = (e.currentTarget.querySelector('input[type="search"]') as HTMLInputElement)?.value;
             if (q) window.location.assign(`/catalogo?q=${encodeURIComponent(q)}`);
           }}
-          className="hidden md:flex items-center h-12 w-full max-w-2xl mx-auto rounded-full border border-border bg-secondary/40 px-5 transition focus-within:border-primary focus-within:bg-background"
+          className="hidden md:flex items-center h-12 w-full max-w-2xl mx-auto rounded-full border border-border bg-secondary/30 pl-5 pr-1.5 transition-all duration-300 focus-within:border-primary focus-within:bg-background focus-within:shadow-[0_0_0_4px_oklch(0.68_0.19_45/0.08)]"
         >
           <Search className="h-4 w-4 text-muted-foreground shrink-0" />
           <input
             type="search"
             placeholder="O que você procura? Ex: persiana rolô blackout"
-            className="flex-1 bg-transparent px-3 text-sm outline-none placeholder:text-muted-foreground"
+            className="flex-1 bg-transparent px-3 text-[13.5px] outline-none placeholder:text-muted-foreground"
           />
           <button
             type="submit"
-            className="hidden md:inline-flex h-9 items-center rounded-full px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-white"
-            style={{ backgroundColor: "#F57C00" }}
+            className="hidden md:inline-flex h-9 items-center rounded-full bg-gradient-to-r from-primary to-primary-glow px-5 text-[11px] font-bold uppercase tracking-[0.14em] text-primary-foreground shadow-glow transition hover:-translate-y-px"
           >
             Buscar
           </button>
         </form>
 
         {/* Ações */}
-        <div className="flex items-center gap-1 md:gap-3">
+        <div className="flex items-center gap-1 md:gap-2">
+          {/* CTA WhatsApp pequeno (lg+) */}
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noreferrer"
+            className="hidden lg:inline-flex h-10 items-center gap-1.5 rounded-full border border-whatsapp/30 bg-whatsapp/5 px-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-whatsapp transition hover:bg-whatsapp hover:text-whatsapp-foreground"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Orçamento
+          </a>
           <button
             aria-label="Favoritos"
-            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full text-foreground/70 hover:text-primary transition"
+            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full text-foreground/70 transition hover:bg-secondary/60 hover:text-primary"
           >
             <Heart className="h-5 w-5" />
           </button>
           <Link
             to="/auth"
             aria-label="Minha conta"
-            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full text-foreground/70 hover:text-primary transition"
+            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full text-foreground/70 transition hover:bg-secondary/60 hover:text-primary"
           >
             <User className="h-5 w-5" />
           </Link>
