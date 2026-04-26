@@ -28,7 +28,7 @@ export function HeroBanner() {
               <img
                 key={i}
                 src={src}
-                alt="Ambiente com persianas sob medida"
+                alt="Ambiente com cortinas e persianas sob medida"
                 loading={i === 0 ? "eager" : "lazy"}
                 decoding="async"
                 // @ts-expect-error fetchpriority valid HTML
@@ -68,7 +68,7 @@ export function HeroBanner() {
               </div>
               <div className="text-[11px] leading-tight">
                 <p className="font-semibold text-foreground">+12.000 lares atendidos</p>
-                <p className="text-muted-foreground">Persianas sob medida</p>
+                <p className="text-muted-foreground">Cortinas e persianas sob medida</p>
               </div>
             </div>
           </div>
@@ -91,16 +91,16 @@ export function HeroIntro() {
         className="pointer-events-none absolute -top-40 -right-32 h-[520px] w-[520px] rounded-full opacity-40 blur-3xl"
         style={{ background: "radial-gradient(closest-side, oklch(0.78 0.17 55 / 0.35), transparent)" }}
       />
-      <div className="container-premium py-10 md:py-16 lg:py-20">
-        <div className="mx-auto max-w-4xl rounded-[28px] border border-border/70 bg-card/70 px-5 py-8 text-center shadow-card backdrop-blur-sm sm:px-8 sm:py-10 md:px-10 md:py-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
+      <div className="container-premium py-8 sm:py-12 md:py-16 lg:py-20">
+        <div className="mx-auto max-w-4xl rounded-[24px] sm:rounded-[28px] border border-border/70 bg-card/70 px-4 py-7 text-center shadow-card backdrop-blur-sm sm:px-8 sm:py-10 md:px-10 md:py-12">
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-primary sm:px-3.5 sm:tracking-[0.22em]">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             Coleção 2026
           </div>
 
           <h1
-            className="mt-4 text-display text-foreground text-pretty leading-[1.06] sm:mt-5 sm:leading-[1.04]"
-            style={{ fontSize: "clamp(1.6rem, 4.6vw, 3.2rem)" }}
+            className="mt-4 text-display text-foreground text-pretty leading-[1.08] sm:mt-5 sm:leading-[1.04]"
+            style={{ fontSize: "clamp(1.45rem, 5.4vw, 3.2rem)" }}
           >
             <span className="block">Seu ambiente merece a</span>
             <span className="mt-1 block bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
@@ -108,7 +108,7 @@ export function HeroIntro() {
             </span>
           </h1>
 
-          <p className="mt-4 mx-auto max-w-2xl text-[14px] leading-7 text-muted-foreground sm:mt-5 sm:text-[15px] md:text-base md:leading-8">
+          <p className="mt-4 mx-auto max-w-2xl text-[13.5px] leading-[1.65] text-muted-foreground sm:mt-5 sm:text-[15px] sm:leading-7 md:text-base md:leading-8">
             Cortinas, persianas, toldos e telas mosquiteiras com design
             inteligente, conforto térmico e acabamento premium. Unimos
             sofisticação e tecnologia de ponta para entregar a solução ideal
@@ -117,7 +117,7 @@ export function HeroIntro() {
 
           {/* Card Lumi — destaque com glow laranja #f57c00 */}
           <div
-            className="relative mt-6 mx-auto max-w-xl overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-4 sm:p-5 backdrop-blur-sm text-left"
+            className="relative mt-6 mx-auto max-w-xl overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-3.5 sm:p-5 backdrop-blur-sm text-left"
             style={{
               boxShadow:
                 "0 0 0 1px rgba(245,124,0,0.15), 0 18px 50px -18px rgba(245,124,0,0.55), 0 0 60px -12px rgba(245,124,0,0.35)",
@@ -128,13 +128,13 @@ export function HeroIntro() {
               className="pointer-events-none absolute -top-12 -right-10 h-36 w-36 rounded-full blur-3xl"
               style={{ background: "radial-gradient(closest-side, rgba(245,124,0,0.55), transparent)" }}
             />
-            <div className="relative flex items-start gap-3">
-              <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-glow shadow-glow">
+            <div className="relative flex items-start gap-2.5 sm:gap-3">
+              <span className="relative flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-glow shadow-glow">
                 <Sparkles className="h-4 w-4 text-primary-foreground" />
                 <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
               </span>
-              <div className="text-[13px] leading-snug text-foreground">
-                <div className="mb-1 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+              <div className="min-w-0 text-[12.5px] sm:text-[13px] leading-snug text-foreground">
+                <div className="mb-1 inline-flex items-center gap-1.5 text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-primary">
                   <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                   Lumi · Consultora IA
                 </div>
@@ -155,7 +155,7 @@ export function HeroIntro() {
                   pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
                 })
               }
-              className="group inline-flex h-12 md:h-13 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-primary to-primary-glow px-7 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.18em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5"
+              className="group inline-flex h-12 md:h-13 max-w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-5 sm:px-7 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5"
             >
               <Sparkles className="h-4 w-4" />
               Falar com a Lumi
@@ -164,7 +164,7 @@ export function HeroIntro() {
           </div>
 
           {/* Selos rápidos */}
-          <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-[12px] font-medium text-muted-foreground sm:mt-8 sm:gap-x-7">
+          <div className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-[11.5px] sm:text-[12px] font-medium text-muted-foreground sm:mt-8 sm:gap-x-7">
             <span className="inline-flex items-center gap-1.5">
               <Ruler className="h-4 w-4 text-primary" />
               Sob medida exata
