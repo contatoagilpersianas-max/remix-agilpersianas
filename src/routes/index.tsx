@@ -50,12 +50,12 @@ function Index() {
       <main>
         {/* 1) Categorias premium — primeira coisa após o header */}
         <CategoriesPremium />
-        {/* 2) Banner visual (imagens em fade) — primeiro impacto visual */}
+        {/* 2) Banner visual (imagens em fade) — vem antes dos produtos */}
         <HeroBanner />
-        {/* 3) Bloco editorial "Seu ambiente merece..." */}
-        <HeroIntro />
-        {/* Marquee laranja com benefícios */}
+        {/* 3) Faixa laranja com benefícios — logo abaixo do banner */}
         <PromoStrip />
+        {/* 4) Bloco editorial "Seu ambiente merece..." + Lumi */}
+        <HeroIntro />
         {/* Selos de confiança / benefícios premium */}
         <BenefitsRow />
         {/* Mais vendidos */}
