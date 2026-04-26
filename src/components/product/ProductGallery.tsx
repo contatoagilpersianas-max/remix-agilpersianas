@@ -26,6 +26,7 @@ export function ProductGallery({
   const [zoomed, setZoomed] = useState(false);
   const list = normalize(images);
   const safe = list.length ? list : [{ url: "/placeholder.svg" }];
+  const current = safe[active];
 
   useEffect(() => {
     if (!activeColor) return;
@@ -36,31 +37,35 @@ export function ProductGallery({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeColor]);
 
-  const current = safe[active];
-
   return (
-    <div>
+    <div className="space-y-4">
       {/* Layout estilo Blinds.com — thumbs verticais à esquerda + imagem grande */}
-      <div className="flex gap-4">
+      <div className="flex gap-3 md:gap-4">
         {/* Thumbs verticais (desktop apenas) */}
         {safe.length > 1 && (
-          <div className="hidden lg:flex flex-col gap-3 w-[88px] flex-shrink-0">
+          <div className="hidden lg:flex flex-col gap-3 w-[92px] flex-shrink-0">
             {safe.slice(0, 6).map((img, i) => (
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className={`aspect-square w-full rounded-2xl overflow-hidden border-2 transition ${
+                className={`group relative aspect-square w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-premium ${
                   i === active
-                    ? "border-primary shadow-md"
-                    : "border-border/60 opacity-70 hover:opacity-100 hover:border-foreground/30"
+                    ? "border-primary shadow-glow ring-2 ring-primary/10"
+                    : "border-border/70 opacity-80 hover:opacity-100 hover:-translate-y-0.5 hover:border-foreground/20"
                 }`}
                 title={img.caption}
                 aria-label={`Imagem ${i + 1}`}
+                aria-pressed={i === active}
               >
                 <img
                   src={img.url}
                   alt={img.caption || ""}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover transition-transform duration-500 ease-premium group-hover:scale-[1.06]"
+                />
+                <span
+                  className={`pointer-events-none absolute inset-x-2 bottom-2 h-0.5 rounded-full transition-all duration-300 ${
+                    i === active ? "bg-primary opacity-100" : "bg-card/80 opacity-0 group-hover:opacity-100"
+                  }`}
                 />
               </button>
             ))}
@@ -73,7 +78,7 @@ export function ProductGallery({
         )}
 
         {/* Imagem principal */}
-        <div className="relative group rounded-[28px] overflow-hidden bg-sand shadow-card flex-1 ring-1 ring-black/5">
+        <div className="relative flex-1 overflow-hidden rounded-[24px] md:rounded-[28px] bg-sand shadow-card ring-1 ring-black/5">
           {badge && (
             <Badge className="absolute top-4 left-4 z-10 bg-primary text-primary-foreground uppercase text-[10px] tracking-widest px-3 py-1.5">
               {badge}
@@ -82,17 +87,18 @@ export function ProductGallery({
           <button
             type="button"
             onClick={() => setZoomed(true)}
-            className="absolute top-4 right-4 z-10 h-10 w-10 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
+            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-card/95 backdrop-blur shadow-md transition-transform duration-300 ease-premium hover:scale-105"
             aria-label="Ampliar"
           >
             <ZoomIn className="h-4 w-4" />
           </button>
-          <div className="aspect-[4/5] sm:aspect-[5/6] lg:aspect-[4/5] w-full overflow-hidden">
+          <div className="group aspect-[10/12] sm:aspect-[5/6] lg:aspect-[4/5] w-full overflow-hidden">
             <img
               src={current.url}
               alt={current.caption || alt}
-              className="w-full h-full object-cover transition-transform duration-700 ease-premium group-hover:scale-[1.04]"
+              className="h-full w-full object-cover object-center transition-transform duration-700 ease-premium group-hover:scale-[1.05]"
             />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-90" />
           </div>
           {current.caption && (
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white text-sm px-5 py-3">
@@ -103,14 +109,14 @@ export function ProductGallery({
             <>
               <button
                 onClick={() => setActive((a) => (a - 1 + safe.length) % safe.length)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/95 shadow flex items-center justify-center hover:scale-105 transition"
+                className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-card/95 shadow transition-transform duration-300 ease-premium hover:scale-105"
                 aria-label="Anterior"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={() => setActive((a) => (a + 1) % safe.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/95 shadow flex items-center justify-center hover:scale-105 transition"
+                className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-card/95 shadow transition-transform duration-300 ease-premium hover:scale-105"
                 aria-label="Próxima"
               >
                 <ChevronRight className="h-5 w-5" />
@@ -122,17 +128,30 @@ export function ProductGallery({
 
       {/* Thumbs horizontais (mobile/tablet) */}
       {safe.length > 1 && (
-        <div className="mt-4 grid grid-cols-5 gap-3 lg:hidden">
+        <div className="no-scrollbar flex gap-3 overflow-x-auto pb-1 lg:hidden">
           {safe.map((img, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}
-              className={`aspect-square rounded-xl overflow-hidden border-2 transition ${
-                i === active ? "border-primary shadow-md" : "border-transparent opacity-70 hover:opacity-100"
+              className={`group relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border transition-all duration-300 ease-premium ${
+                i === active
+                  ? "border-primary shadow-glow ring-2 ring-primary/10"
+                  : "border-border/70 opacity-80 hover:-translate-y-0.5 hover:opacity-100"
               }`}
               title={img.caption}
+              aria-label={`Miniatura ${i + 1}`}
+              aria-pressed={i === active}
             >
-              <img src={img.url} alt={img.caption || ""} className="w-full h-full object-cover" />
+              <img
+                src={img.url}
+                alt={img.caption || ""}
+                className="h-full w-full object-cover transition-transform duration-500 ease-premium group-hover:scale-[1.06]"
+              />
+              <span
+                className={`pointer-events-none absolute inset-x-3 bottom-2 h-0.5 rounded-full transition-all duration-300 ${
+                  i === active ? "bg-primary opacity-100" : "bg-card/80 opacity-0 group-hover:opacity-100"
+                }`}
+              />
             </button>
           ))}
         </div>
