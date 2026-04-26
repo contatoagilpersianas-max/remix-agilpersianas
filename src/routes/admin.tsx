@@ -20,6 +20,7 @@ import {
   LogOut,
   ChevronRight,
   Sparkles,
+  Plug,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -44,6 +45,7 @@ const NAV: NavItem[] = [
   { to: "/admin/financeiro", label: "Financeiro", icon: Wallet },
   { to: "/admin/relatorios", label: "Relatórios", icon: BarChart3 },
   { to: "/admin/usuarios", label: "Usuários", icon: UserCog },
+  { to: "/admin/integracoes", label: "Integrações", icon: Plug },
   { to: "/admin/configuracoes", label: "Configurações", icon: Settings },
 ] as const;
 
