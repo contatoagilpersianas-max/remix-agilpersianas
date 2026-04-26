@@ -17,8 +17,8 @@ type Scene = {
 const DEFAULT_SCENES: Scene[] = [
   {
     src: heroLiving,
-    title: "A arte da transparência",
-    subtitle: "Cortinas e persianas sob medida — design premium para o seu lar.",
+    title: "A arte de iluminar cada ambiente.",
+    subtitle: "Persianas e cortinas sob medida com design premium e acabamento impecável.",
   },
   {
     src: heroBedroom,
@@ -27,8 +27,8 @@ const DEFAULT_SCENES: Scene[] = [
   },
   {
     src: heroLivingLumi,
-    title: "Seu ambiente merece a perfeição do sob medida.",
-    subtitle: "Conforto, estilo e tecnologia — tudo conduzido pela Lumi, sua consultora IA.",
+    title: "Viva ao ar livre, com sofisticação.",
+    subtitle: "Toldos modernos sob medida — conforto térmico e lifestyle premium para sua casa.",
   },
 ];
 
