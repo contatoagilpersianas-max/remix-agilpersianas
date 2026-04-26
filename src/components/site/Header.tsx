@@ -54,10 +54,6 @@ export function Header() {
               draggable={false}
             />
           </span>
-          <span className="hidden xl:flex flex-col leading-[1.05]">
-            <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-primary">Desde 1998</span>
-            <span className="text-[10px] font-medium text-muted-foreground">Persianas sob medida</span>
-          </span>
         </Link>
 
         {/* Busca central */}
