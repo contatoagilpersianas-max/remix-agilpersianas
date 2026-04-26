@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Search, User, ShoppingCart, Menu, X, Heart, MessageCircle } from "lucide-react";
+import { Search, User, ShoppingCart, Menu, X, Heart, MessageCircle, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import logoAgil from "@/assets/agil-logo.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,6 +11,7 @@ type Cat = { id: string; name: string; slug: string; parent_id: string | null; s
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const { count, setOpen: setCartOpen, hydrated } = useCart();
 
   const { data: cats = [] } = useQuery({
@@ -27,7 +28,13 @@ export function Header() {
     refetchOnMount: "always",
   });
 
-  const mobileLinks = cats.filter((c) => c.show_in_menu !== false);
+  const visibleCats = cats.filter((c) => c.show_in_menu !== false);
+  const parents = visibleCats.filter((c) => !c.parent_id);
+  const childrenOf = (parentId: string) =>
+    visibleCats.filter((c) => c.parent_id === parentId);
+
+  const toggle = (id: string) =>
+    setExpanded((s) => ({ ...s, [id]: !s[id] }));
 
   return (
     <header className="bg-background/95 backdrop-blur-lg border-b border-border/60">
@@ -155,30 +162,70 @@ export function Header() {
         </form>
       </div>
 
-      {/* Menu mobile */}
+      {/* Menu mobile — accordion hierárquico (estilo Fácil Persianas) */}
       {open && (
         <div className="lg:hidden border-t border-border bg-background">
-          <div className="container-premium space-y-1 py-3 max-h-[70vh] overflow-y-auto">
-            {mobileLinks.map((item) => (
-              <Link
-                key={item.id}
-                to="/catalogo"
-                search={{ categoria: item.slug }}
-                className={`block rounded-md px-3 py-2.5 text-sm hover:bg-secondary ${
-                  !item.parent_id
-                    ? "font-bold text-primary uppercase tracking-wider"
-                    : "font-medium text-foreground/85 pl-6"
-                }`}
-                onClick={() => setOpen(false)}
-              >
-                {!item.parent_id ? item.name : `↳ ${item.name}`}
-              </Link>
-            ))}
+          <div className="container-premium py-3 max-h-[75vh] overflow-y-auto">
+            <ul className="space-y-2">
+              {parents.map((parent) => {
+                const kids = childrenOf(parent.id);
+                const hasKids = kids.length > 0;
+                const isOpen = !!expanded[parent.id];
+                return (
+                  <li
+                    key={parent.id}
+                    className="rounded-xl border border-border/60 bg-card overflow-hidden"
+                  >
+                    {hasKids ? (
+                      <button
+                        type="button"
+                        onClick={() => toggle(parent.id)}
+                        aria-expanded={isOpen}
+                        className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left text-[15px] font-semibold text-foreground transition hover:bg-secondary/50"
+                      >
+                        <span>{parent.name}</span>
+                        <ChevronDown
+                          className={`h-4 w-4 text-muted-foreground transition-transform duration-300 ${
+                            isOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    ) : (
+                      <Link
+                        to="/catalogo"
+                        search={{ categoria: parent.slug }}
+                        onClick={() => setOpen(false)}
+                        className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left text-[15px] font-semibold text-foreground transition hover:bg-secondary/50"
+                      >
+                        <span>{parent.name}</span>
+                      </Link>
+                    )}
+
+                    {hasKids && isOpen && (
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border/50 bg-secondary/20 px-4 py-3">
+                        {kids.map((child) => (
+                          <Link
+                            key={child.id}
+                            to="/catalogo"
+                            search={{ categoria: child.slug }}
+                            onClick={() => setOpen(false)}
+                            className="text-[13.5px] leading-snug text-foreground/85 transition hover:text-primary"
+                          >
+                            {child.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+
             <a
               href={whatsappLink()}
               target="_blank"
               rel="noreferrer"
-              className="mt-2 flex h-11 items-center justify-center rounded-full px-6 text-[12px] font-bold uppercase tracking-[0.14em] text-white shadow-lg"
+              className="mt-4 flex h-11 items-center justify-center rounded-full px-6 text-[12px] font-bold uppercase tracking-[0.14em] text-white shadow-lg"
               style={{ backgroundColor: "#F57C00" }}
             >
               Solicitar orçamento
