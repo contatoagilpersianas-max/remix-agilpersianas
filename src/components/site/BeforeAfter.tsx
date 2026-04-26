@@ -1,8 +1,8 @@
 // Seção "Antes & Depois" — comparador interativo (slider)
 import { useEffect, useRef, useState, useCallback } from "react";
-import beforeImg from "@/assets/ambiente-sala.jpg";
+import beforeImg from "@/assets/before-sala.jpg";
 import afterImg from "@/assets/hero-2026-living.jpg";
-import beforeImg2 from "@/assets/ambiente-quarto.jpg";
+import beforeImg2 from "@/assets/before-quarto.jpg";
 import afterImg2 from "@/assets/hero-2026-bedroom.jpg";
 import { Sparkles } from "lucide-react";
 
@@ -13,13 +13,13 @@ const PAIRS: Pair[] = [
     before: beforeImg,
     after: afterImg,
     title: "Sala de estar",
-    desc: "Cortina romana em linho premium — luz suave e elegante.",
+    desc: "Antes: janela nua e luz forte. Depois: cortina romana em linho premium, luz suave e elegante.",
   },
   {
     before: beforeImg2,
     after: afterImg2,
     title: "Quarto principal",
-    desc: "Persiana rolô blackout — escurecimento total e conforto térmico.",
+    desc: "Antes: claridade desconfortável ao acordar. Depois: persiana rolô blackout, escurecimento total e conforto térmico.",
   },
 ];
 
