@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import heroLiving from "@/assets/hero-2026-living.jpg";
 import heroBedroom from "@/assets/hero-2026-bedroom.jpg";
+import heroLivingLumi from "@/assets/hero-2026-living-lumi.jpg";
 import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, CalendarCheck, BookOpen } from "lucide-react";
 import { openLumiWith } from "@/components/site/LumiWidget";
 
-const SCENES = [heroLiving, heroBedroom];
+const SCENES = [heroLiving, heroBedroom, heroLivingLumi];
 
 /**
  * HeroBanner — apenas o banner visual (imagens em fade) com indicadores e prova social flutuante.
