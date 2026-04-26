@@ -9,7 +9,6 @@ import { BenefitsRow } from "@/components/site/BenefitsRow";
 import { BeforeAfter } from "@/components/site/BeforeAfter";
 import { CategoryBanners } from "@/components/site/CategoryBanners";
 import { DiscountsGrid } from "@/components/site/DiscountsGrid";
-import { MeasureCTA } from "@/components/site/MeasureCTA";
 import { Testimonials } from "@/components/site/Testimonials";
 import { Newsletter } from "@/components/site/Newsletter";
 import { Footer } from "@/components/site/Footer";
@@ -68,8 +67,6 @@ function Index() {
         <MosquitoSection />
         {/* Automação residencial */}
         <AutomationSection />
-        {/* CTA medida */}
-        <MeasureCTA />
         {/* Captura de leads — formulário público alimenta CRM */}
         <QuoteSection />
         {/* Descontos */}
