@@ -1,8 +1,9 @@
 // Hero premium — inspiração Apple/Shopify: respiração, tipografia display, microinterações sutis
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import heroLiving from "@/assets/hero-2026-living.jpg";
 import heroBedroom from "@/assets/hero-2026-bedroom.jpg";
-import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck } from "lucide-react";
+import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, CalendarCheck, BookOpen } from "lucide-react";
 import { openLumiWith } from "@/components/site/LumiWidget";
 
 const SCENES = [heroLiving, heroBedroom];
@@ -23,45 +24,75 @@ export function HeroBanner() {
     <section className="relative bg-background overflow-hidden">
       <div className="container-premium pt-4 pb-6 md:pt-6 md:pb-10">
         <div className="is-visible relative" data-reveal>
-          <div className="relative aspect-[4/5] sm:aspect-[21/9] lg:aspect-[24/9] max-h-[640px] sm:max-h-[460px] lg:max-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
-            {SCENES.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt="Ambiente com cortinas e persianas sob medida"
-                loading={i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                // @ts-expect-error fetchpriority valid HTML
-                fetchpriority={i === 0 ? "high" : "low"}
-                className={`absolute inset-0 h-full w-full object-cover object-[60%_40%] sm:object-[center_40%] lg:object-center transition-all duration-[1400ms] ease-premium ${
-                  i === active ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
-                }`}
-              />
-            ))}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/30 sm:from-black/55 sm:via-black/10 sm:to-black/20" />
+          <div className="relative min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-neutral-900 ring-1 ring-black/5">
+            {/* Camada 1 — Imagens de fundo */}
+            <div className="absolute inset-0 z-0">
+              {SCENES.map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  alt="Ambiente com cortinas e persianas sob medida"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  // @ts-expect-error fetchpriority valid HTML
+                  fetchpriority={i === 0 ? "high" : "low"}
+                  className={`absolute inset-0 h-full w-full object-cover object-[60%_40%] sm:object-[center_40%] lg:object-center transition-all duration-[1400ms] ease-premium ${
+                    i === active ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
+                  }`}
+                />
+              ))}
+            </div>
 
-            {/* Texto sobreposto — título grande e legível em qualquer tela */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center text-white sm:px-10">
+            {/* Camada 2 — Overlay escuro para legibilidade */}
+            <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/55 via-black/35 to-black/65" />
+
+            {/* Camada 3 — Conteúdo em fluxo flex coluna (sem absolute interno) */}
+            <div className="relative z-10 flex min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] flex-col items-center justify-center gap-5 sm:gap-6 px-5 py-12 text-center text-white sm:px-10 sm:py-16">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] backdrop-blur-md sm:text-[11px] sm:tracking-[0.22em]">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                 Coleção 2026
               </span>
+
               <h1
-                className="mt-3 font-serif font-semibold leading-[1.02] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,0.55)] sm:mt-4"
-                style={{ fontSize: "clamp(2rem, 8vw, 4.75rem)" }}
+                className="font-serif font-semibold text-white drop-shadow-[0_3px_18px_rgba(0,0,0,0.55)]"
+                style={{ fontSize: "clamp(2rem, 7.5vw, 4.5rem)", lineHeight: 1.1 }}
               >
                 Luz, Forma e Função
               </h1>
+
               <p
-                className="mx-auto mt-3 max-w-[28ch] text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-4 sm:max-w-2xl"
-                style={{ fontSize: "clamp(0.95rem, 2.4vw, 1.15rem)", lineHeight: 1.5 }}
+                className="mx-auto max-w-[32ch] text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:max-w-2xl"
+                style={{ fontSize: "clamp(0.95rem, 2.2vw, 1.15rem)", lineHeight: 1.55 }}
               >
                 Cortinas, persianas, toldos e telas mosquiteiras sob medida com tecidos premium.
               </p>
+
+              {/* Botões lado a lado */}
+              <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+                <button
+                  type="button"
+                  onClick={() =>
+                    openLumiWith({
+                      pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
+                    })
+                  }
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-6 text-[12px] font-bold uppercase tracking-[0.16em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:shadow-2xl sm:w-auto sm:px-7"
+                >
+                  <CalendarCheck className="h-4 w-4" />
+                  Agendar consultoria
+                </button>
+                <Link
+                  to="/catalogo"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 text-[12px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:bg-white/20 sm:w-auto sm:px-7"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  Ver catálogo
+                </Link>
+              </div>
             </div>
 
-            {/* Indicadores */}
-            <div className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6 flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-2 backdrop-blur-md">
+            {/* Indicadores — canto inferior direito, sem cobrir o texto central */}
+            <div className="absolute right-4 bottom-4 z-20 sm:right-6 sm:bottom-6 flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-2 backdrop-blur-md">
               {SCENES.map((_, i) => (
                 <button
                   key={i}
@@ -71,25 +102,6 @@ export function HeroBanner() {
                   style={{ width: i === active ? 28 : 8, opacity: i === active ? 1 : 0.55 }}
                 />
               ))}
-            </div>
-
-            {/* Prova social flutuante — visível em todas as telas */}
-            <div className="absolute left-3 bottom-3 sm:left-6 sm:bottom-6 flex items-center gap-2.5 sm:gap-3 rounded-2xl border border-border bg-card/95 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-card">
-              <div className="flex -space-x-2">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="h-6 w-6 sm:h-7 sm:w-7 rounded-full ring-2 ring-card"
-                    style={{
-                      background: `linear-gradient(135deg, oklch(0.78 0.13 ${30 + i * 30}), oklch(0.62 0.18 ${20 + i * 30}))`,
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="text-[11px] sm:text-[12px] leading-tight">
-                <p className="font-semibold text-foreground">+12.000 lares atendidos</p>
-                <p className="text-muted-foreground hidden sm:block">Cortinas e persianas sob medida</p>
-              </div>
             </div>
           </div>
         </div>
