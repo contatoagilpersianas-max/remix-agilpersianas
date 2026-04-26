@@ -7,10 +7,8 @@
 //   permite abrir/fechar o menu sob demanda.
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
 import { TopBar } from "./TopBar";
 import { Header } from "./Header";
-import { Button } from "@/components/ui/button";
 
 export function SiteHeader() {
   const [hidden, setHidden] = useState(false);
@@ -18,12 +16,6 @@ export function SiteHeader() {
   const lastY = useRef(0);
   const location = useLocation();
   const isProductPage = location.pathname.startsWith("/produto/");
-  const [showNav, setShowNav] = useState(!isProductPage);
-
-  // Reset ao trocar de rota
-  useEffect(() => {
-    setShowNav(!isProductPage);
-  }, [isProductPage]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -55,22 +47,6 @@ export function SiteHeader() {
       {/* Header com toggle de categorias em páginas de produto */}
       <div className="relative">
         <Header />
-        {isProductPage && (
-          <div className="container-premium absolute inset-y-0 right-2 hidden items-center md:flex pointer-events-none">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowNav((v) => !v)}
-              aria-expanded={showNav}
-              aria-controls="produto-categorynav"
-              className="pointer-events-auto gap-1.5 text-xs font-semibold uppercase tracking-wider"
-            >
-              {showNav ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-              Categorias
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
