@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ToldosRouteImport } from './routes/toldos'
+import { Route as TelaMosquiteiraRouteImport } from './routes/tela-mosquiteira'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as PersianaVerticalRouteImport } from './routes/persiana-vertical'
@@ -47,6 +49,16 @@ import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminCatalogoRouteImport } from './routes/admin.catalogo'
 import { Route as ApiPublicAsaasWebhookRouteImport } from './routes/api.public.asaas-webhook'
 
+const ToldosRoute = ToldosRouteImport.update({
+  id: '/toldos',
+  path: '/toldos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TelaMosquiteiraRoute = TelaMosquiteiraRouteImport.update({
+  id: '/tela-mosquiteira',
+  path: '/tela-mosquiteira',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -250,6 +262,8 @@ export interface FileRoutesByFullPath {
   '/persiana-vertical': typeof PersianaVerticalRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tela-mosquiteira': typeof TelaMosquiteiraRoute
+  '/toldos': typeof ToldosRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -288,6 +302,8 @@ export interface FileRoutesByTo {
   '/persiana-vertical': typeof PersianaVerticalRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tela-mosquiteira': typeof TelaMosquiteiraRoute
+  '/toldos': typeof ToldosRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -328,6 +344,8 @@ export interface FileRoutesById {
   '/persiana-vertical': typeof PersianaVerticalRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tela-mosquiteira': typeof TelaMosquiteiraRoute
+  '/toldos': typeof ToldosRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -369,6 +387,8 @@ export interface FileRouteTypes {
     | '/persiana-vertical'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/tela-mosquiteira'
+    | '/toldos'
     | '/admin/catalogo'
     | '/admin/categorias'
     | '/admin/configuracoes'
@@ -407,6 +427,8 @@ export interface FileRouteTypes {
     | '/persiana-vertical'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/tela-mosquiteira'
+    | '/toldos'
     | '/admin/catalogo'
     | '/admin/categorias'
     | '/admin/configuracoes'
@@ -446,6 +468,8 @@ export interface FileRouteTypes {
     | '/persiana-vertical'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/tela-mosquiteira'
+    | '/toldos'
     | '/admin/catalogo'
     | '/admin/categorias'
     | '/admin/configuracoes'
@@ -486,6 +510,8 @@ export interface RootRouteChildren {
   PersianaVerticalRoute: typeof PersianaVerticalRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TelaMosquiteiraRoute: typeof TelaMosquiteiraRoute
+  ToldosRoute: typeof ToldosRoute
   BlogSlugRoute: typeof BlogSlugRoute
   PedidoNumeroRoute: typeof PedidoNumeroRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
@@ -495,6 +521,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/toldos': {
+      id: '/toldos'
+      path: '/toldos'
+      fullPath: '/toldos'
+      preLoaderRoute: typeof ToldosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tela-mosquiteira': {
+      id: '/tela-mosquiteira'
+      path: '/tela-mosquiteira'
+      fullPath: '/tela-mosquiteira'
+      preLoaderRoute: typeof TelaMosquiteiraRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -814,6 +854,8 @@ const rootRouteChildren: RootRouteChildren = {
   PersianaVerticalRoute: PersianaVerticalRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TelaMosquiteiraRoute: TelaMosquiteiraRoute,
+  ToldosRoute: ToldosRoute,
   BlogSlugRoute: BlogSlugRoute,
   PedidoNumeroRoute: PedidoNumeroRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,

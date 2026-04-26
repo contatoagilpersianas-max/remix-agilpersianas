@@ -18,6 +18,8 @@ type Item = {
   img: string;
   slug: string;
   badge?: string;
+  /** Quando definido, sobrescreve o destino padrão (/catalogo?categoria=slug) */
+  to?: string;
 };
 
 const ITEMS: Item[] = [
@@ -70,12 +72,14 @@ const ITEMS: Item[] = [
     desc: "Proteção contra insetos sem perder ventilação.",
     img: imgTela,
     slug: "tela-mosquiteira",
+    to: "/tela-mosquiteira",
   },
   {
     title: "Toldos",
     desc: "Conforto térmico e sofisticação para áreas externas.",
     img: imgToldo,
     slug: "toldos",
+    to: "/toldos",
   },
 ];
 
@@ -109,11 +113,13 @@ export function CategoriesPremium() {
         {/* Grid uniforme — todas as caixas do mesmo tamanho para padronização visual */}
         <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
           {ITEMS.map((item, i) => {
+            const linkProps = item.to
+              ? { to: item.to as "/tela-mosquiteira" | "/toldos" }
+              : { to: "/catalogo" as const, search: { categoria: item.slug } };
             return (
               <Link
                 key={item.slug}
-                to="/catalogo"
-                search={{ categoria: item.slug }}
+                {...linkProps}
                 data-reveal
                 style={{ transitionDelay: `${(i % 4) * 80}ms` }}
                 className="group relative aspect-[4/5] overflow-hidden rounded-3xl bg-foreground shadow-sm ring-1 ring-border transition-all duration-500 ease-premium hover:shadow-2xl hover:ring-primary/30 hover:-translate-y-1"
