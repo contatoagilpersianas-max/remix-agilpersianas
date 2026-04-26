@@ -40,6 +40,7 @@ import { Route as AdminMarketingRouteImport } from './routes/admin.marketing'
 import { Route as AdminLumiConfigRouteImport } from './routes/admin.lumi-config'
 import { Route as AdminLumiRouteImport } from './routes/admin.lumi'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
+import { Route as AdminIntegracoesRouteImport } from './routes/admin.integracoes'
 import { Route as AdminFinanceiroRouteImport } from './routes/admin.financeiro'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
@@ -201,6 +202,11 @@ const AdminLeadsRoute = AdminLeadsRouteImport.update({
   path: '/leads',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminIntegracoesRoute = AdminIntegracoesRouteImport.update({
+  id: '/integracoes',
+  path: '/integracoes',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFinanceiroRoute = AdminFinanceiroRouteImport.update({
   id: '/financeiro',
   path: '/financeiro',
@@ -248,6 +254,7 @@ export interface FileRoutesByFullPath {
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/financeiro': typeof AdminFinanceiroRoute
+  '/admin/integracoes': typeof AdminIntegracoesRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lumi': typeof AdminLumiRoute
   '/admin/lumi-config': typeof AdminLumiConfigRoute
@@ -285,6 +292,7 @@ export interface FileRoutesByTo {
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/financeiro': typeof AdminFinanceiroRoute
+  '/admin/integracoes': typeof AdminIntegracoesRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lumi': typeof AdminLumiRoute
   '/admin/lumi-config': typeof AdminLumiConfigRoute
@@ -324,6 +332,7 @@ export interface FileRoutesById {
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/financeiro': typeof AdminFinanceiroRoute
+  '/admin/integracoes': typeof AdminIntegracoesRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lumi': typeof AdminLumiRoute
   '/admin/lumi-config': typeof AdminLumiConfigRoute
@@ -364,6 +373,7 @@ export interface FileRouteTypes {
     | '/admin/categorias'
     | '/admin/configuracoes'
     | '/admin/financeiro'
+    | '/admin/integracoes'
     | '/admin/leads'
     | '/admin/lumi'
     | '/admin/lumi-config'
@@ -401,6 +411,7 @@ export interface FileRouteTypes {
     | '/admin/categorias'
     | '/admin/configuracoes'
     | '/admin/financeiro'
+    | '/admin/integracoes'
     | '/admin/leads'
     | '/admin/lumi'
     | '/admin/lumi-config'
@@ -439,6 +450,7 @@ export interface FileRouteTypes {
     | '/admin/categorias'
     | '/admin/configuracoes'
     | '/admin/financeiro'
+    | '/admin/integracoes'
     | '/admin/leads'
     | '/admin/lumi'
     | '/admin/lumi-config'
@@ -700,6 +712,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLeadsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/integracoes': {
+      id: '/admin/integracoes'
+      path: '/integracoes'
+      fullPath: '/admin/integracoes'
+      preLoaderRoute: typeof AdminIntegracoesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/financeiro': {
       id: '/admin/financeiro'
       path: '/financeiro'
@@ -743,6 +762,7 @@ interface AdminRouteChildren {
   AdminCategoriasRoute: typeof AdminCategoriasRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminFinanceiroRoute: typeof AdminFinanceiroRoute
+  AdminIntegracoesRoute: typeof AdminIntegracoesRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminLumiRoute: typeof AdminLumiRoute
   AdminLumiConfigRoute: typeof AdminLumiConfigRoute
@@ -761,6 +781,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCategoriasRoute: AdminCategoriasRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminFinanceiroRoute: AdminFinanceiroRoute,
+  AdminIntegracoesRoute: AdminIntegracoesRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminLumiRoute: AdminLumiRoute,
   AdminLumiConfigRoute: AdminLumiConfigRoute,
