@@ -23,21 +23,21 @@ export function Hero() {
         className="pointer-events-none absolute -top-40 -right-32 h-[520px] w-[520px] rounded-full opacity-40 blur-3xl"
         style={{ background: "radial-gradient(closest-side, oklch(0.78 0.17 55 / 0.35), transparent)" }}
       />
-      <div className="container-premium py-12 md:py-16 lg:py-24">
-        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-16 items-center">
+      <div className="container-premium py-10 md:py-14 lg:py-24">
+        <div className="grid lg:grid-cols-[1.02fr_1fr] gap-8 md:gap-10 lg:gap-16 items-center">
           {/* Coluna esquerda — texto premium */}
-          <div className="max-w-xl" data-reveal>
+          <div className="is-visible max-w-[34rem]" data-reveal>
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" />
               Coleção 2026
             </div>
 
             <h1
-              className="mt-5 text-display text-foreground break-words hyphens-auto"
-              style={{ fontSize: "clamp(28px, 4.4vw, 52px)" }}
+              className="mt-5 text-display text-foreground break-words hyphens-auto leading-[1.02] sm:leading-[1.04]"
+              style={{ fontSize: "clamp(2rem, 6vw, 3.35rem)" }}
             >
               Persianas sob medida
-              <br />
+              <br className="hidden sm:block" />
               <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
                 com tecnologia e design.
               </span>
@@ -100,8 +100,8 @@ export function Hero() {
           </div>
 
           {/* Coluna direita — visual premium com fade */}
-          <div className="relative" data-reveal>
-            <div className="relative aspect-[4/5] lg:aspect-[4/5] max-h-[640px] rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
+          <div className="is-visible relative" data-reveal>
+            <div className="relative aspect-[10/12] sm:aspect-[4/5] lg:aspect-[4/5] max-h-[520px] sm:max-h-[620px] lg:max-h-[640px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
               {SCENES.map((src, i) => (
                 <img
                   key={i}
@@ -111,7 +111,7 @@ export function Hero() {
                   decoding="async"
                   // @ts-expect-error fetchpriority valid HTML
                   fetchpriority={i === 0 ? "high" : "low"}
-                  className={`absolute inset-0 h-full w-full object-cover object-center transition-all duration-[1400ms] ease-premium ${
+                  className={`absolute inset-0 h-full w-full object-cover object-[58%_center] sm:object-center transition-all duration-[1400ms] ease-premium ${
                     i === active ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
                   }`}
                 />
