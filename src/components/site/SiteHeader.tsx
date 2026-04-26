@@ -10,7 +10,6 @@ import { useLocation } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { TopBar } from "./TopBar";
 import { Header } from "./Header";
-import { CategoryNav } from "./CategoryNav";
 import { Button } from "@/components/ui/button";
 
 export function SiteHeader() {
@@ -73,13 +72,6 @@ export function SiteHeader() {
           </div>
         )}
       </div>
-
-      {/* CategoryNav: sempre fora do produto; condicional dentro do produto */}
-      {(!isProductPage || showNav) && (
-        <div id="produto-categorynav">
-          <CategoryNav />
-        </div>
-      )}
     </div>
   );
 }
