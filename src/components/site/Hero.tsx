@@ -23,7 +23,7 @@ export function HeroBanner() {
     <section className="relative bg-background overflow-hidden">
       <div className="container-premium pt-4 pb-6 md:pt-6 md:pb-10">
         <div className="is-visible relative" data-reveal>
-          <div className="relative aspect-[16/9] sm:aspect-[21/9] lg:aspect-[24/9] max-h-[260px] sm:max-h-[460px] lg:max-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
+          <div className="relative aspect-[4/5] sm:aspect-[21/9] lg:aspect-[24/9] max-h-[640px] sm:max-h-[460px] lg:max-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
             {SCENES.map((src, i) => (
               <img
                 key={i}
@@ -38,7 +38,27 @@ export function HeroBanner() {
                 }`}
               />
             ))}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/30 sm:from-black/55 sm:via-black/10 sm:to-black/20" />
+
+            {/* Texto sobreposto — título grande e legível em qualquer tela */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center text-white sm:px-10">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] backdrop-blur-md sm:text-[11px] sm:tracking-[0.22em]">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                Coleção 2026
+              </span>
+              <h1
+                className="mt-3 font-serif font-semibold leading-[1.02] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,0.55)] sm:mt-4"
+                style={{ fontSize: "clamp(2rem, 8vw, 4.75rem)" }}
+              >
+                Luz, Forma e Função
+              </h1>
+              <p
+                className="mx-auto mt-3 max-w-[28ch] text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-4 sm:max-w-2xl"
+                style={{ fontSize: "clamp(0.95rem, 2.4vw, 1.15rem)", lineHeight: 1.5 }}
+              >
+                Cortinas, persianas, toldos e telas mosquiteiras sob medida com tecidos premium.
+              </p>
+            </div>
 
             {/* Indicadores */}
             <div className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6 flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-2 backdrop-blur-md">
@@ -53,22 +73,22 @@ export function HeroBanner() {
               ))}
             </div>
 
-            {/* Prova social flutuante (desktop) */}
-            <div className="absolute left-6 bottom-6 hidden md:flex items-center gap-3 rounded-2xl border border-border bg-card/95 backdrop-blur-md px-4 py-3 shadow-card">
+            {/* Prova social flutuante — visível em todas as telas */}
+            <div className="absolute left-3 bottom-3 sm:left-6 sm:bottom-6 flex items-center gap-2.5 sm:gap-3 rounded-2xl border border-border bg-card/95 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-card">
               <div className="flex -space-x-2">
                 {[0, 1, 2].map((i) => (
                   <div
                     key={i}
-                    className="h-7 w-7 rounded-full ring-2 ring-card"
+                    className="h-6 w-6 sm:h-7 sm:w-7 rounded-full ring-2 ring-card"
                     style={{
                       background: `linear-gradient(135deg, oklch(0.78 0.13 ${30 + i * 30}), oklch(0.62 0.18 ${20 + i * 30}))`,
                     }}
                   />
                 ))}
               </div>
-              <div className="text-[11px] leading-tight">
+              <div className="text-[11px] sm:text-[12px] leading-tight">
                 <p className="font-semibold text-foreground">+12.000 lares atendidos</p>
-                <p className="text-muted-foreground">Cortinas e persianas sob medida</p>
+                <p className="text-muted-foreground hidden sm:block">Cortinas e persianas sob medida</p>
               </div>
             </div>
           </div>
