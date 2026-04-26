@@ -110,6 +110,21 @@ function CatalogoPage() {
 
   const title = onlyBestsellers ? "Mais vendidos" : catName ? `${catName}` : "Todos os produtos";
 
+  // Categorias raiz para os chips de filtro
+  const { data: rootCats = [] } = useQuery({
+    queryKey: ["catalogo-root-cats"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("categories")
+        .select("id,name,slug,parent_id,position")
+        .eq("active", true)
+        .is("parent_id", null)
+        .order("position", { ascending: true });
+      return (data ?? []) as { id: string; name: string; slug: string }[];
+    },
+    staleTime: 5 * 60_000,
+  });
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
@@ -124,6 +139,50 @@ function CatalogoPage() {
             {products.length} {products.length === 1 ? "produto" : "produtos"} encontrados
           </p>
         </header>
+
+        {/* Filtros — chips por categoria + atalho mais vendidos */}
+        <div className="mb-8 -mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
+          <div className="flex min-w-max items-center gap-2">
+            <Link
+              to="/catalogo"
+              className={`inline-flex h-9 items-center rounded-full border px-4 text-xs font-semibold transition ${
+                !filterSlug && !onlyBestsellers
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card hover:border-primary/40 hover:text-primary"
+              }`}
+            >
+              Todos
+            </Link>
+            <Link
+              to="/catalogo"
+              search={{ bestseller: "1" }}
+              className={`inline-flex h-9 items-center rounded-full border px-4 text-xs font-semibold transition ${
+                onlyBestsellers
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card hover:border-primary/40 hover:text-primary"
+              }`}
+            >
+              Mais vendidos
+            </Link>
+            {rootCats.map((c) => {
+              const active = filterSlug === c.slug;
+              return (
+                <Link
+                  key={c.id}
+                  to="/catalogo"
+                  search={{ categoria: c.slug }}
+                  className={`inline-flex h-9 items-center rounded-full border px-4 text-xs font-semibold whitespace-nowrap transition ${
+                    active
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card hover:border-primary/40 hover:text-primary"
+                  }`}
+                >
+                  {c.name}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
 
         {isLoading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
