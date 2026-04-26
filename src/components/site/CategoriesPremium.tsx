@@ -138,15 +138,27 @@ export function CategoriesPremium() {
                   </span>
                 )}
 
-                {/* Conteúdo */}
-                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 md:p-6 text-white transition-transform duration-500 ease-premium group-hover:-translate-y-1">
-                  <h3 className="text-display text-lg sm:text-xl md:text-2xl">
+                {/* Conteúdo — altura/tipografia padronizadas em todos os cards */}
+                <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 p-4 sm:p-5 md:p-6 text-white transition-transform duration-500 ease-premium group-hover:-translate-y-1">
+                  <h3
+                    className="text-display leading-tight"
+                    style={{ fontSize: "clamp(1.05rem, 1.55vw, 1.5rem)", minHeight: "2.4em" }}
+                  >
                     {item.title}
                   </h3>
-                  <p className="mt-1.5 hidden max-w-xs text-xs leading-relaxed text-white/85 sm:block md:text-sm">
+                  <p
+                    className="hidden text-[12.5px] leading-snug text-white/85 sm:block md:text-[13px]"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      minHeight: "2.6em",
+                    }}
+                  >
                     {item.desc}
                   </p>
-                  <span className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white transition-all duration-300 group-hover:gap-3 sm:mt-4 sm:text-[11px] sm:tracking-[0.22em]">
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white transition-all duration-300 group-hover:gap-3 sm:text-[11px] sm:tracking-[0.22em]">
                     Explorar
                     <ArrowRight className="h-3.5 w-3.5" />
                   </span>
