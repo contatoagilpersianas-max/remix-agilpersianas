@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
 import { TopBar } from "./TopBar";
 import { Header } from "./Header";
+import { CategoryNav } from "./CategoryNav";
 
 export function SiteHeader() {
   const [hidden, setHidden] = useState(false);
@@ -48,6 +49,13 @@ export function SiteHeader() {
       <div className="relative">
         <Header />
       </div>
+
+      {/* Barra de categorias — apenas desktop (lg+), fora de páginas de produto */}
+      {!isProductPage && (
+        <div className="hidden lg:block border-t border-border/60">
+          <CategoryNav />
+        </div>
+      )}
     </div>
   );
 }
