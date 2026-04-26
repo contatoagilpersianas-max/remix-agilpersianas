@@ -23,26 +23,26 @@ export function Hero() {
         className="pointer-events-none absolute -top-40 -right-32 h-[520px] w-[520px] rounded-full opacity-40 blur-3xl"
         style={{ background: "radial-gradient(closest-side, oklch(0.78 0.17 55 / 0.35), transparent)" }}
       />
-      <div className="container-premium py-10 md:py-14 lg:py-24">
+      <div className="container-premium pt-6 pb-8 md:py-12 lg:py-20">
         <div className="grid lg:grid-cols-[1.02fr_1fr] gap-8 md:gap-10 lg:gap-16 items-center">
           {/* Coluna esquerda — texto premium */}
-          <div className="is-visible max-w-[34rem]" data-reveal>
+          <div className="is-visible max-w-[20rem] sm:max-w-[32rem] lg:max-w-[34rem]" data-reveal>
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" />
               Coleção 2026
             </div>
 
             <h1
-              className="mt-5 text-display text-foreground break-words hyphens-auto leading-[1.05] sm:leading-[1.06]"
-              style={{ fontSize: "clamp(1.65rem, 4.6vw, 2.85rem)" }}
+              className="mt-4 text-display text-foreground break-words text-pretty leading-[1.08] sm:mt-5 sm:leading-[1.04]"
+              style={{ fontSize: "clamp(1.72rem, 6vw, 2.85rem)" }}
             >
-              Seu ambiente merece a{" "}
-              <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+              <span className="block">Seu ambiente merece a</span>
+              <span className="mt-1 block bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
                 perfeição feita sob medida.
               </span>
             </h1>
 
-            <p className="mt-5 text-sm md:text-base leading-relaxed text-muted-foreground max-w-lg">
+            <p className="mt-4 max-w-md text-[15px] leading-7 text-muted-foreground md:mt-5 md:text-base">
               Design inteligente, conforto térmico e acabamento premium. Unimos
               sofisticação e tecnologia de ponta para entregar a persiana ideal
               em qualquer lugar do Brasil.
@@ -50,7 +50,7 @@ export function Hero() {
 
             {/* Card Lumi — destaque com glow laranja #f57c00 */}
             <div
-              className="relative mt-6 overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-5 backdrop-blur-sm"
+              className="relative mt-5 overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-4 sm:mt-6 sm:p-5 backdrop-blur-sm"
               style={{
                 boxShadow:
                   "0 0 0 1px rgba(245,124,0,0.15), 0 18px 50px -18px rgba(245,124,0,0.55), 0 0 60px -12px rgba(245,124,0,0.35)",
@@ -81,7 +81,7 @@ export function Hero() {
             </div>
 
             {/* CTA único — Lumi */}
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-3 sm:mt-6">
               <button
                 type="button"
                 onClick={() =>
@@ -98,7 +98,7 @@ export function Hero() {
             </div>
 
             {/* Selos rápidos */}
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2.5 text-[12px] font-medium text-muted-foreground">
+            <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2.5 text-[12px] font-medium text-muted-foreground sm:mt-8 sm:gap-x-6">
               <span className="inline-flex items-center gap-1.5">
                 <Ruler className="h-4 w-4 text-primary" />
                 Sob medida exata
@@ -120,7 +120,7 @@ export function Hero() {
 
           {/* Coluna direita — visual premium com fade */}
           <div className="is-visible relative" data-reveal>
-            <div className="relative aspect-[10/12] sm:aspect-[4/5] lg:aspect-[4/5] max-h-[520px] sm:max-h-[620px] lg:max-h-[640px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
+            <div className="relative aspect-[5/4] sm:aspect-[4/5] lg:aspect-[4/5] max-h-[340px] sm:max-h-[620px] lg:max-h-[640px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
               {SCENES.map((src, i) => (
                 <img
                   key={i}
@@ -130,7 +130,7 @@ export function Hero() {
                   decoding="async"
                   // @ts-expect-error fetchpriority valid HTML
                   fetchpriority={i === 0 ? "high" : "low"}
-                  className={`absolute inset-0 h-full w-full object-cover object-[58%_center] sm:object-center transition-all duration-[1400ms] ease-premium ${
+                  className={`absolute inset-0 h-full w-full object-cover object-[60%_34%] sm:object-[56%_center] lg:object-center transition-all duration-[1400ms] ease-premium ${
                     i === active ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
                   }`}
                 />
