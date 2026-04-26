@@ -6,6 +6,7 @@ import heroBedroom from "@/assets/hero-2026-bedroom.jpg";
 import heroLivingLumi from "@/assets/hero-2026-living-lumi.jpg";
 import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, CalendarCheck, BookOpen } from "lucide-react";
 import { openLumiWith } from "@/components/site/LumiWidget";
+import { supabase } from "@/integrations/supabase/client";
 
 type Scene = {
   src: string;
@@ -13,7 +14,7 @@ type Scene = {
   subtitle: string;
 };
 
-const SCENES: Scene[] = [
+const DEFAULT_SCENES: Scene[] = [
   {
     src: heroLiving,
     title: "A arte da transparência",
@@ -37,11 +38,36 @@ const SCENES: Scene[] = [
  */
 export function HeroBanner() {
   const [active, setActive] = useState(0);
+  const [scenes, setScenes] = useState<Scene[]>(DEFAULT_SCENES);
 
   useEffect(() => {
-    const id = setInterval(() => setActive((i) => (i + 1) % SCENES.length), 8000);
-    return () => clearInterval(id);
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", "hero_banners")
+        .maybeSingle();
+      if (cancelled || !data?.value) return;
+      const incoming = data.value as Array<Partial<Scene>> | null;
+      if (!Array.isArray(incoming)) return;
+      // Mescla com defaults (mantém banner padrão se admin não definiu imagem)
+      const merged = DEFAULT_SCENES.map((def, i) => ({
+        src: incoming[i]?.src?.trim() ? incoming[i]!.src! : def.src,
+        title: incoming[i]?.title?.trim() ? incoming[i]!.title! : def.title,
+        subtitle: incoming[i]?.subtitle?.trim() ? incoming[i]!.subtitle! : def.subtitle,
+      }));
+      setScenes(merged);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  useEffect(() => {
+    const id = setInterval(() => setActive((i) => (i + 1) % scenes.length), 8000);
+    return () => clearInterval(id);
+  }, [scenes.length]);
 
   return (
     <section className="relative bg-background overflow-hidden">
@@ -50,7 +76,7 @@ export function HeroBanner() {
           <div className="relative min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-foreground ring-1 ring-black/5">
             {/* Camada 1 — Imagens de fundo */}
             <div className="absolute inset-0 z-0">
-              {SCENES.map((scene, i) => (
+              {scenes.map((scene, i) => (
                 <img
                   key={i}
                   src={scene.src}
@@ -71,21 +97,21 @@ export function HeroBanner() {
 
             {/* Camada 3 — Conteúdo: título + subtítulo + CTAs, centralizado vertical e horizontalmente */}
             <div className="relative z-10 flex min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] flex-col items-center justify-center gap-7 px-5 py-10 text-center sm:gap-8 sm:px-10 sm:py-12">
-              <div className="mx-auto max-w-3xl">
+              <div className="mx-auto w-full max-w-2xl px-2 sm:max-w-3xl">
                 <h2
-                  className="text-display text-white text-balance leading-[1.08]"
+                  className="text-display text-white text-balance leading-[1.1] break-words"
                   style={{
-                    fontSize: "clamp(1.75rem, 5.2vw, 3.4rem)",
+                    fontSize: "clamp(1.5rem, 4.6vw, 3rem)",
                     textShadow: "0 2px 18px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.5)",
                   }}
                 >
-                  {SCENES[active].title}
+                  {scenes[active].title}
                 </h2>
                 <p
-                  className="mx-auto mt-4 max-w-2xl text-[14px] leading-[1.6] text-white/95 sm:text-[16px] sm:leading-[1.6] md:text-[17px]"
+                  className="mx-auto mt-3 max-w-xl text-[13px] leading-[1.55] text-white/95 sm:mt-4 sm:max-w-2xl sm:text-[15px] sm:leading-[1.6] md:text-base"
                   style={{ textShadow: "0 1px 10px rgba(0,0,0,0.55)" }}
                 >
-                  {SCENES[active].subtitle}
+                  {scenes[active].subtitle}
                 </p>
               </div>
 
@@ -114,7 +140,7 @@ export function HeroBanner() {
 
             {/* Indicadores — canto inferior direito, sem cobrir o texto central */}
             <div className="absolute right-4 bottom-4 z-20 sm:right-6 sm:bottom-6 flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-2 backdrop-blur-md">
-              {SCENES.map((_, i) => (
+              {scenes.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
