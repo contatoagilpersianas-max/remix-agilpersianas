@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
-import { Hero } from "@/components/site/Hero";
+import { HeroBanner, HeroIntro } from "@/components/site/Hero";
 import { PromoStrip } from "@/components/site/PromoStrip";
 // TrustBar e Categories removidos a pedido do cliente
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
@@ -48,11 +48,14 @@ function Index() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main>
-        <Hero />
+        {/* 1) Categorias premium — primeira coisa após o header */}
+        <CategoriesPremium />
+        {/* 2) Banner visual (imagens em fade) — primeiro impacto visual */}
+        <HeroBanner />
+        {/* 3) Bloco editorial "Seu ambiente merece..." */}
+        <HeroIntro />
         {/* Marquee laranja com benefícios */}
         <PromoStrip />
-        {/* Produtos em destaque (categorias premium) — logo abaixo do banner */}
-        <CategoriesPremium />
         {/* Selos de confiança / benefícios premium */}
         <BenefitsRow />
         {/* Mais vendidos */}
