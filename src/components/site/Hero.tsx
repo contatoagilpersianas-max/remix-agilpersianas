@@ -239,8 +239,8 @@ export function HeroIntro() {
             </div>
           </div>
 
-          {/* CTAs — falar com a Lumi + experimentar demo ao vivo */}
-          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
+          {/* CTA principal — falar com a Lumi */}
+          <div className="mt-6 flex flex-col items-center justify-center gap-3">
             <button
               type="button"
               onClick={() =>
@@ -254,27 +254,61 @@ export function HeroIntro() {
               Falar com a Lumi
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
-            <button
-              type="button"
-              onClick={() =>
-                openLumiWith({
-                  pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
-                  productName: "Demonstração ao vivo",
-                })
-              }
-              className="group inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 sm:w-auto sm:px-7 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-white backdrop-blur-md transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:bg-white/20 hover:border-white/50"
-            >
-              <PlayCircle className="h-4 w-4 text-primary-glow" />
-              Ver demo ao vivo
-            </button>
+            <p className="text-[11.5px] text-white/75">
+              Atendimento em segundos · sem compromisso · 100% online.
+            </p>
           </div>
 
-          <p className="mt-3 text-[11.5px] text-white/65">
-            Atendimento em segundos · sem compromisso · 100% online.
-          </p>
+          {/* Mini-seção em destaque: Demo ao vivo da Lumi */}
+          <div
+            className="relative mt-7 mx-auto max-w-2xl overflow-hidden rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/15 via-white/[0.04] to-white/[0.02] p-4 sm:p-5 backdrop-blur-sm text-left"
+            style={{
+              boxShadow:
+                "0 0 0 1px rgba(245,124,0,0.18), 0 12px 36px -16px rgba(245,124,0,0.45)",
+            }}
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -top-10 -left-10 h-32 w-32 rounded-full blur-3xl"
+              style={{ background: "radial-gradient(closest-side, rgba(245,124,0,0.55), transparent)" }}
+            />
+            <div className="relative flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-5">
+              <div className="flex items-start gap-3 sm:flex-1">
+                <span className="relative mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-primary-glow/60">
+                  <PlayCircle className="h-5 w-5 text-primary-glow" />
+                </span>
+                <div className="min-w-0">
+                  <div className="inline-flex items-center gap-1.5 rounded-full border border-primary-glow/40 bg-primary/15 px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.18em] text-primary-glow">
+                    Experiência guiada · 30 s
+                  </div>
+                  <h3 className="mt-2 text-[15px] sm:text-base font-semibold text-white leading-snug">
+                    Veja a Lumi atendendo na prática
+                  </h3>
+                  <p className="mt-1 text-[12.5px] sm:text-[13px] text-white/80 leading-relaxed">
+                    Faça uma simulação real: a Lumi pergunta o ambiente, entende
+                    sua prioridade e mostra como ela recomenda o modelo ideal —
+                    tudo isso antes de você pedir um orçamento.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  openLumiWith({
+                    pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
+                    demoMode: true,
+                  })
+                }
+                className="group inline-flex h-11 w-full sm:w-auto shrink-0 items-center justify-center gap-2 rounded-full bg-white px-5 text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.16em] text-foreground shadow-lg transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:shadow-2xl hover:bg-primary-glow hover:text-primary-foreground"
+              >
+                <PlayCircle className="h-4 w-4" />
+                Ver demo ao vivo
+              </button>
+            </div>
+          </div>
 
           {/* Selos rápidos */}
-          <div className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-[11.5px] sm:text-[12px] font-medium text-white/80 sm:mt-8 sm:gap-x-7">
+          <div className="mt-7 flex flex-wrap justify-center gap-x-4 gap-y-2 text-[11.5px] sm:text-[12px] font-medium text-white/90 sm:mt-8 sm:gap-x-7">
             <span className="inline-flex items-center gap-1.5">
               <Ruler className="h-4 w-4 text-primary-glow" />
               Sob medida exata
