@@ -61,16 +61,18 @@ export function SocialProofToasts() {
         if (cancelled) return;
         toast(makeMessage(), {
           icon: <Sparkles className="h-4 w-4 text-primary" />,
-          duration: 5500,
+          duration: 4500,
+          position: "bottom-left",
+          className: "opacity-95",
         });
-        // próximo entre 22s e 45s
-        schedule(22000 + Math.random() * 23000);
+        // próximo entre 60s e 120s — bem mais discreto
+        schedule(60000 + Math.random() * 60000);
       }, delay);
       timers.push(t);
     }
 
-    // primeiro toast aparece após 12s
-    schedule(12000);
+    // primeiro toast aparece só após 25s, dando tempo do usuário ler a página
+    schedule(25000);
 
     return () => {
       cancelled = true;
