@@ -43,32 +43,12 @@ export function HeroBanner() {
               ))}
             </div>
 
-            {/* Camada 2 — Overlay escuro para legibilidade */}
-            <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/55 via-black/35 to-black/65" />
+            {/* Camada 2 — Overlay sutil apenas na base para destacar os CTAs */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-2/5 bg-gradient-to-t from-black/55 via-black/20 to-transparent" />
 
-            {/* Camada 3 — Conteúdo em fluxo flex coluna (sem absolute interno) */}
-            <div className="relative z-10 flex min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] flex-col items-center justify-center gap-5 sm:gap-6 px-5 py-12 text-center text-white sm:px-10 sm:py-16">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] backdrop-blur-md sm:text-[11px] sm:tracking-[0.22em]">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                Coleção 2026
-              </span>
-
-              <h1
-                className="font-serif font-semibold text-white drop-shadow-[0_3px_18px_rgba(0,0,0,0.55)]"
-                style={{ fontSize: "clamp(2rem, 7.5vw, 4.5rem)", lineHeight: 1.1 }}
-              >
-                Luz, Forma e Função
-              </h1>
-
-              <p
-                className="mx-auto max-w-[32ch] text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:max-w-2xl"
-                style={{ fontSize: "clamp(0.95rem, 2.2vw, 1.15rem)", lineHeight: 1.55 }}
-              >
-                Cortinas, persianas, toldos e telas mosquiteiras sob medida com tecidos premium.
-              </p>
-
-              {/* Botões lado a lado */}
-              <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+            {/* Camada 3 — Apenas CTAs, posicionados na base (o título já está na imagem) */}
+            <div className="relative z-10 flex min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] flex-col items-end justify-end gap-4 px-5 pb-10 sm:px-10 sm:pb-12">
+              <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row sm:self-center">
                 <button
                   type="button"
                   onClick={() =>
