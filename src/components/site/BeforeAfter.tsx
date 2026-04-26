@@ -131,10 +131,8 @@ function CompareSlider({ pair }: { pair: Pair }) {
         </div>
         <div className="mt-1 text-xs text-white/85 transition-opacity duration-300">
           {pos > 50
-            ? pair.desc.split("Depois:")[0].replace("Antes:", "").trim().replace(/\.$/, "")
-            : pair.desc.includes("Depois:")
-              ? "Depois: " + pair.desc.split("Depois:")[1].trim()
-              : pair.desc}
+            ? "Antes: " + (pair.desc.split("Depois:")[0].replace("Antes:", "").trim().replace(/\.$/, "") || "ambiente sem tratamento")
+            : "Depois: " + (pair.desc.split("Depois:")[1]?.trim() || "ambiente transformado")}
         </div>
       </figcaption>
     </figure>
