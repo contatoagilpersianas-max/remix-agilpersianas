@@ -169,10 +169,10 @@ export function BuyBox({
       </div>
 
       {/* Price block */}
-      <div className="rounded-2xl border bg-card p-5 shadow-card">
+      <div className="rounded-2xl border bg-gradient-to-br from-card via-card to-sand/40 p-5 shadow-card ring-1 ring-border/50">
         <div className="text-xs uppercase tracking-widest text-muted-foreground">Sua persiana por</div>
         <div className="flex items-baseline gap-3 mt-1">
-          <span className="font-display text-4xl lg:text-5xl text-foreground">{BRL(total)}</span>
+          <span className="font-display text-4xl lg:text-[44px] leading-none bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">{BRL(total)}</span>
         </div>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <span className="text-muted-foreground">
