@@ -102,11 +102,11 @@ function CompareSlider({ pair }: { pair: Pair }) {
         />
       </div>
 
-      {/* Labels */}
-      <span className="absolute left-4 top-4 rounded-full bg-foreground/80 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-background pointer-events-none">
+      {/* Labels — sempre visíveis, alto contraste */}
+      <span className="absolute left-4 top-4 z-10 rounded-full bg-black/75 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-lg pointer-events-none">
         Antes
       </span>
-      <span className="absolute right-4 top-4 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground pointer-events-none">
+      <span className="absolute right-4 top-4 z-10 rounded-full bg-primary px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-primary-foreground shadow-lg pointer-events-none">
         Depois
       </span>
 
@@ -124,11 +124,16 @@ function CompareSlider({ pair }: { pair: Pair }) {
         </svg>
       </div>
 
-      <figcaption className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent p-5 pointer-events-none">
-        <div className="font-display text-lg text-background" style={{ fontWeight: 500 }}>
+      {/* Caption flutuante — muda conforme o slider */}
+      <figcaption className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/85 via-black/55 to-transparent p-5 pointer-events-none">
+        <div className="font-display text-lg text-white" style={{ fontWeight: 500 }}>
           {pair.title}
         </div>
-        <div className="text-xs text-background/80">{pair.desc}</div>
+        <div className="mt-1 text-xs text-white/85 transition-opacity duration-300">
+          {pos > 50
+            ? "Antes: " + (pair.desc.split("Depois:")[0].replace("Antes:", "").trim().replace(/\.$/, "") || "ambiente sem tratamento")
+            : "Depois: " + (pair.desc.split("Depois:")[1]?.trim() || "ambiente transformado")}
+        </div>
       </figcaption>
     </figure>
   );
