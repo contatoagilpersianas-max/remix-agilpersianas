@@ -33,32 +33,51 @@ export function Hero() {
             </div>
 
             <h1
-              className="mt-5 text-display text-foreground break-words hyphens-auto leading-[1.02] sm:leading-[1.04]"
-              style={{ fontSize: "clamp(2rem, 6vw, 3.35rem)" }}
+              className="mt-5 text-display text-foreground break-words hyphens-auto leading-[1.05] sm:leading-[1.06]"
+              style={{ fontSize: "clamp(1.65rem, 4.6vw, 2.85rem)" }}
             >
-              Persianas sob medida
-              <br className="hidden sm:block" />
+              Seu ambiente merece a{" "}
               <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-                com tecnologia e design.
+                perfeição feita sob medida.
               </span>
             </h1>
 
             <p className="mt-5 text-sm md:text-base leading-relaxed text-muted-foreground max-w-lg">
-              Elegância, conforto e tecnologia para transformar seu ambiente.
-              Tecidos premium, produção própria e entrega para todo o Brasil.
+              Design inteligente, conforto térmico e acabamento premium. Unimos
+              sofisticação e tecnologia de ponta para entregar a persiana ideal
+              em qualquer lugar do Brasil.
             </p>
 
-            {/* Diferencial: compra assistida pela Lumi */}
-            <div className="mt-6 flex items-start gap-3 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.06] to-transparent p-4 backdrop-blur-sm">
-              <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-glow shadow-glow">
-                <Sparkles className="h-4 w-4 text-primary-foreground" />
-                <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
-              </span>
-              <p className="text-[13px] leading-snug text-foreground">
-                <span className="font-semibold text-primary">Novo:</span> compre com auxílio da{" "}
-                <span className="font-semibold">Lumi</span>, nossa consultora IA.
-                Ela escolhe o modelo ideal, calcula o valor e fecha pelo WhatsApp.
-              </p>
+            {/* Card Lumi — destaque com glow laranja #f57c00 */}
+            <div
+              className="relative mt-6 overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-5 backdrop-blur-sm"
+              style={{
+                boxShadow:
+                  "0 0 0 1px rgba(245,124,0,0.15), 0 18px 50px -18px rgba(245,124,0,0.55), 0 0 60px -12px rgba(245,124,0,0.35)",
+              }}
+            >
+              {/* Glow interno */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -top-12 -right-10 h-36 w-36 rounded-full blur-3xl"
+                style={{ background: "radial-gradient(closest-side, rgba(245,124,0,0.55), transparent)" }}
+              />
+              <div className="relative flex items-start gap-3">
+                <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-glow shadow-glow">
+                  <Sparkles className="h-4 w-4 text-primary-foreground" />
+                  <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
+                </span>
+                <div className="text-[13px] leading-snug text-foreground">
+                  <div className="mb-1 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    Lumi · Consultora IA
+                  </div>
+                  <p>
+                    Ela entende seu ambiente, indica o produto ideal, calcula
+                    seu projeto em minutos e conduz você à melhor escolha.
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* CTA único — Lumi */}
