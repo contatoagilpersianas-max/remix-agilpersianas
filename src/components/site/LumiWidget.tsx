@@ -65,6 +65,8 @@ export function LumiWidget() {
   const [pulse, setPulse] = useState(true);
   const [context, setContext] = useState<LumiContext>({});
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [thinkingHint, setThinkingHint] = useState<string | null>(null);
+  const thinkingCleanupRef = useRef<(() => void) | null>(null);
   const visitorIdRef = useRef<string>("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -129,6 +131,30 @@ export function LumiWidget() {
     setInput("");
     setLoading(true);
 
+    // Efeito de "consultoria pensando" — sequência de status enquanto a IA não responde
+    const thinkingPhrases = [
+      "Analisando seu ambiente…",
+      "Cruzando privacidade e luminosidade…",
+      "Selecionando o modelo ideal no nosso catálogo…",
+    ];
+    let thinkingIndex = 0;
+    const thinkingInterval = setInterval(() => {
+      thinkingIndex = (thinkingIndex + 1) % thinkingPhrases.length;
+    }, 1400);
+    // Primeira frase aparece imediatamente como bolha "fantasma"
+    const thinkingTimer = setTimeout(() => {
+      setThinkingHint(thinkingPhrases[0]);
+      const rotator = setInterval(() => {
+        setThinkingHint(thinkingPhrases[thinkingIndex]);
+      }, 1400);
+      // limpa quando o stream começar (assistantStarted) ou ao final
+      thinkingCleanupRef.current = () => {
+        clearInterval(rotator);
+        clearInterval(thinkingInterval);
+        setThinkingHint(null);
+      };
+    }, 350);
+
     try {
       const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/lumi-chat`;
       const resp = await fetch(url, {
@@ -191,6 +217,10 @@ export function LumiWidget() {
               const cleaned = assistantText.replace(/\[LEAD_CAPTURED:[^\]]*\]/, "").trim();
               if (!assistantStarted) {
                 assistantStarted = true;
+                // Limpa o "thinking" assim que o primeiro token chega
+                clearTimeout(thinkingTimer);
+                thinkingCleanupRef.current?.();
+                thinkingCleanupRef.current = null;
                 setMessages((prev) => [...prev, { role: "assistant", content: cleaned }]);
               } else {
                 setMessages((prev) =>
@@ -213,6 +243,9 @@ export function LumiWidget() {
       console.error("[LUMI] stream error", err);
       toast.error("Conexão instável. Tente novamente.");
     } finally {
+      clearTimeout(thinkingTimer);
+      thinkingCleanupRef.current?.();
+      thinkingCleanupRef.current = null;
       setLoading(false);
     }
   };
@@ -268,12 +301,17 @@ export function LumiWidget() {
               ))}
               {loading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex justify-start">
-                  <div className="bg-background border border-border/60 rounded-2xl rounded-bl-md px-4 py-3">
+                  <div className="bg-background border border-border/60 rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-2">
                     <span className="inline-flex gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "0ms" }} />
                       <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "150ms" }} />
                       <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "300ms" }} />
                     </span>
+                    {thinkingHint && (
+                      <span className="text-[12px] text-muted-foreground italic transition-opacity duration-300">
+                        {thinkingHint}
+                      </span>
+                    )}
                   </div>
                 </div>
               )}
