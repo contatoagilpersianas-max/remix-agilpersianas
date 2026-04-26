@@ -23,8 +23,8 @@ export function Hero() {
         className="pointer-events-none absolute -top-40 -right-32 h-[520px] w-[520px] rounded-full opacity-40 blur-3xl"
         style={{ background: "radial-gradient(closest-side, oklch(0.78 0.17 55 / 0.35), transparent)" }}
       />
-      <div className="container-premium py-16 lg:py-28">
-        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-12 lg:gap-20 items-center">
+      <div className="container-premium py-12 md:py-16 lg:py-24">
+        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-16 items-center">
           {/* Coluna esquerda — texto premium */}
           <div className="max-w-xl" data-reveal>
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
@@ -33,8 +33,8 @@ export function Hero() {
             </div>
 
             <h1
-              className="mt-6 text-display text-foreground"
-              style={{ fontSize: "clamp(40px, 5.6vw, 68px)" }}
+              className="mt-5 text-display text-foreground break-words hyphens-auto"
+              style={{ fontSize: "clamp(28px, 4.4vw, 52px)" }}
             >
               Persianas sob medida
               <br />
@@ -43,18 +43,18 @@ export function Hero() {
               </span>
             </h1>
 
-            <p className="mt-6 text-base md:text-lg leading-relaxed text-muted-foreground max-w-lg">
+            <p className="mt-5 text-sm md:text-base leading-relaxed text-muted-foreground max-w-lg">
               Elegância, conforto e tecnologia para transformar seu ambiente.
               Tecidos premium, produção própria e entrega para todo o Brasil.
             </p>
 
             {/* Diferencial: compra assistida pela Lumi */}
-            <div className="mt-7 flex items-start gap-3 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.06] to-transparent p-4 backdrop-blur-sm">
+            <div className="mt-6 flex items-start gap-3 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.06] to-transparent p-4 backdrop-blur-sm">
               <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-glow shadow-glow">
                 <Sparkles className="h-4 w-4 text-primary-foreground" />
                 <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
               </span>
-              <p className="text-sm leading-snug text-foreground">
+              <p className="text-[13px] leading-snug text-foreground">
                 <span className="font-semibold text-primary">Novo:</span> compre com auxílio da{" "}
                 <span className="font-semibold">Lumi</span>, nossa consultora IA.
                 Ela escolhe o modelo ideal, calcula o valor e fecha pelo WhatsApp.
@@ -62,7 +62,7 @@ export function Hero() {
             </div>
 
             {/* CTA único — Lumi */}
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={() =>
@@ -70,7 +70,7 @@ export function Hero() {
                     pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
                   })
                 }
-                className="group inline-flex h-14 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-primary to-primary-glow px-8 text-[12px] font-bold uppercase tracking-[0.18em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5"
+                className="group inline-flex h-12 md:h-13 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-primary to-primary-glow px-7 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.18em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5"
               >
                 <Sparkles className="h-4 w-4" />
                 Falar com a Lumi
@@ -79,7 +79,7 @@ export function Hero() {
             </div>
 
             {/* Selos rápidos */}
-            <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-[13px] font-medium text-muted-foreground">
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2.5 text-[12px] font-medium text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">
                 <Ruler className="h-4 w-4 text-primary" />
                 Sob medida exata
@@ -101,7 +101,7 @@ export function Hero() {
 
           {/* Coluna direita — visual premium com fade */}
           <div className="relative" data-reveal>
-            <div className="relative aspect-[4/5] lg:aspect-[5/6] rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
+            <div className="relative aspect-[4/5] lg:aspect-[4/5] max-h-[640px] rounded-[28px] overflow-hidden shadow-2xl bg-sand ring-1 ring-black/5">
               {SCENES.map((src, i) => (
                 <img
                   key={i}
@@ -111,8 +111,8 @@ export function Hero() {
                   decoding="async"
                   // @ts-expect-error fetchpriority valid HTML
                   fetchpriority={i === 0 ? "high" : "low"}
-                  className={`absolute inset-0 h-full w-full object-cover transition-all duration-[1400ms] ease-premium ${
-                    i === active ? "opacity-100 scale-100" : "opacity-0 scale-105"
+                  className={`absolute inset-0 h-full w-full object-cover object-center transition-all duration-[1400ms] ease-premium ${
+                    i === active ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
                   }`}
                 />
               ))}

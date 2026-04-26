@@ -19,6 +19,7 @@ import { ProductManual } from "@/components/product/ProductManual";
 import { ProductVideo } from "@/components/product/ProductVideo";
 import { QuoteSection } from "@/components/site/QuoteSection";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Star, ShieldCheck, Truck, Factory, Award } from "lucide-react";
 
 export const Route = createFileRoute("/produto/$slug")({
   component: ProductPage,
@@ -171,8 +172,34 @@ function ProductPage() {
       </div>
 
       {/* HERO */}
-      <section className="container-premium py-8 lg:py-12">
-        <div className="grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-14">
+      <section className="container-premium py-8 lg:py-14">
+        {/* Prova social acima do hero do produto — gatilhos de confiança */}
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/70 bg-gradient-to-r from-sand/60 via-background to-sand/60 px-4 py-3 shadow-sm">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[12px] font-medium text-foreground/80">
+            <span className="inline-flex items-center gap-1.5">
+              <Star className="h-4 w-4 fill-primary text-primary" />
+              <strong className="text-foreground">{product.rating.toFixed(1)}</strong>
+              <span className="text-muted-foreground">({product.reviews_count.toLocaleString("pt-BR")} avaliações)</span>
+            </span>
+            <span className="hidden sm:inline-flex items-center gap-1.5">
+              <Award className="h-4 w-4 text-primary" /> Bestseller
+            </span>
+            <span className="hidden md:inline-flex items-center gap-1.5">
+              <Factory className="h-4 w-4 text-primary" /> Produção própria
+            </span>
+            <span className="hidden md:inline-flex items-center gap-1.5">
+              <Truck className="h-4 w-4 text-primary" /> Entrega Brasil
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="h-4 w-4 text-primary" /> Compra protegida
+            </span>
+          </div>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+            +12 mil lares atendidos
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-[1.25fr_1fr] gap-10 lg:gap-16">
           <ProductGallery
             images={images}
             alt={product.name}

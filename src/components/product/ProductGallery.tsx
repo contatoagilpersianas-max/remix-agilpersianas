@@ -44,12 +44,12 @@ export function ProductGallery({
       <div className="flex gap-4">
         {/* Thumbs verticais (desktop apenas) */}
         {safe.length > 1 && (
-          <div className="hidden lg:flex flex-col gap-3 w-20 flex-shrink-0">
+          <div className="hidden lg:flex flex-col gap-3 w-[88px] flex-shrink-0">
             {safe.slice(0, 6).map((img, i) => (
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className={`aspect-square w-full rounded-xl overflow-hidden border-2 transition ${
+                className={`aspect-square w-full rounded-2xl overflow-hidden border-2 transition ${
                   i === active
                     ? "border-primary shadow-md"
                     : "border-border/60 opacity-70 hover:opacity-100 hover:border-foreground/30"
@@ -73,7 +73,7 @@ export function ProductGallery({
         )}
 
         {/* Imagem principal */}
-        <div className="relative group rounded-2xl overflow-hidden bg-sand shadow-card flex-1">
+        <div className="relative group rounded-[28px] overflow-hidden bg-sand shadow-card flex-1 ring-1 ring-black/5">
           {badge && (
             <Badge className="absolute top-4 left-4 z-10 bg-primary text-primary-foreground uppercase text-[10px] tracking-widest px-3 py-1.5">
               {badge}
@@ -87,7 +87,7 @@ export function ProductGallery({
           >
             <ZoomIn className="h-4 w-4" />
           </button>
-          <div className="aspect-[4/5] sm:aspect-square w-full overflow-hidden">
+          <div className="aspect-[4/5] sm:aspect-[5/6] lg:aspect-[4/5] w-full overflow-hidden">
             <img
               src={current.url}
               alt={current.caption || alt}
