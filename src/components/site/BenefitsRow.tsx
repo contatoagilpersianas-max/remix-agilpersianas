@@ -25,23 +25,25 @@ const ITEMS = [
 
 export function BenefitsRow() {
   return (
-    <section className="bg-background py-12 md:py-16">
-      <div className="container-premium grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {ITEMS.map(({ icon: Icon, title, desc }) => (
+    <section className="bg-background py-14 md:py-20">
+      <div className="container-premium grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {ITEMS.map(({ icon: Icon, title, desc }, i) => (
           <div
             key={title}
-            className="rounded-xl border border-border bg-card p-5 transition hover:border-primary/40 hover:shadow-card"
+            data-reveal
+            style={{ transitionDelay: `${i * 80}ms` }}
+            className="group rounded-2xl border border-border bg-card p-6 transition-all duration-500 ease-premium hover:border-primary/40 hover:shadow-card hover:-translate-y-1"
           >
             <div
-              className="flex h-11 w-11 items-center justify-center rounded-full"
+              className="flex h-12 w-12 items-center justify-center rounded-full transition-transform duration-500 ease-premium group-hover:scale-110"
               style={{ backgroundColor: "rgba(226,118,58,0.1)" }}
             >
               <Icon className="h-5 w-5" style={{ color: "#E2763A" }} />
             </div>
-            <h3 className="mt-4 text-sm font-bold leading-snug text-foreground">
+            <h3 className="mt-5 text-sm font-bold leading-snug text-foreground">
               {title}
             </h3>
-            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
               {desc}
             </p>
           </div>
