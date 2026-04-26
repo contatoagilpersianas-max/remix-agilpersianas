@@ -73,7 +73,7 @@ export function HeroBanner() {
     <section className="relative bg-background overflow-hidden">
       <div className="container-premium pt-4 pb-2 md:pt-6 md:pb-3">
         <div className="is-visible relative" data-reveal>
-          <div className="relative min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-foreground ring-1 ring-black/5">
+          <div className="relative min-h-[520px] sm:min-h-[460px] lg:min-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-foreground ring-1 ring-black/5">
             {/* Camada 1 — Imagens de fundo */}
             <div className="absolute inset-0 z-0">
               {scenes.map((scene, i) => (
@@ -85,19 +85,19 @@ export function HeroBanner() {
                   decoding="async"
                   // @ts-expect-error fetchpriority valid HTML
                   fetchpriority={i === 0 ? "high" : "low"}
-                  className={`absolute inset-0 h-full w-full object-cover object-[60%_40%] sm:object-[center_40%] lg:object-center transition-all duration-[1400ms] ease-premium ${
+                  className={`absolute inset-0 h-full w-full object-cover object-[center_center] sm:object-[center_40%] lg:object-center transition-all duration-[1400ms] ease-premium ${
                     i === active ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
                   }`}
                 />
               ))}
             </div>
 
-            {/* Camada 2 — Overlay padronizado: escurece base e dá leve vinheta para legibilidade do texto branco */}
-            <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/35 via-black/20 to-black/65" />
+            {/* Camada 2 — Overlay padronizado: mais forte no mobile (legibilidade) */}
+            <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/45 via-black/30 to-black/75 sm:from-black/35 sm:via-black/20 sm:to-black/65" />
 
             {/* Camada 3 — Conteúdo: título + subtítulo + CTAs, centralizado vertical e horizontalmente */}
-            <div className="relative z-10 flex min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] flex-col items-center justify-center gap-7 px-5 py-10 text-center sm:gap-8 sm:px-10 sm:py-12">
-              <div className="mx-auto w-full max-w-2xl px-2 sm:max-w-3xl">
+            <div className="relative z-10 flex min-h-[520px] sm:min-h-[460px] lg:min-h-[560px] flex-col items-center justify-between gap-6 px-5 pt-12 pb-8 text-center sm:justify-center sm:gap-8 sm:px-10 sm:py-12">
+              <div className="mx-auto w-full max-w-2xl px-2 sm:max-w-3xl sm:flex-none flex-1 flex flex-col justify-center">
                 <h2
                   className="text-display text-white text-balance leading-[1.1] break-words"
                   style={{
@@ -108,14 +108,14 @@ export function HeroBanner() {
                   {scenes[active].title}
                 </h2>
                 <p
-                  className="mx-auto mt-3 max-w-xl text-[13px] leading-[1.55] text-white/95 sm:mt-4 sm:max-w-2xl sm:text-[15px] sm:leading-[1.6] md:text-base"
+                  className="mx-auto mt-3 max-w-xl text-[15px] leading-[1.55] text-white sm:mt-4 sm:max-w-2xl sm:text-[15px] sm:leading-[1.6] md:text-base"
                   style={{ textShadow: "0 1px 10px rgba(0,0,0,0.55)" }}
                 >
                   {scenes[active].subtitle}
                 </p>
               </div>
 
-              <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+              <div className="flex w-full flex-col items-center justify-center gap-2.5 sm:w-auto sm:flex-row sm:gap-3">
                 <button
                   type="button"
                   onClick={() =>
@@ -123,16 +123,16 @@ export function HeroBanner() {
                       pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
                     })
                   }
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-6 text-[12px] font-bold uppercase tracking-[0.16em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:shadow-2xl sm:w-auto sm:px-7"
+                  className="inline-flex h-10 w-auto max-w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-5 text-[11px] font-bold uppercase tracking-[0.14em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:shadow-2xl sm:h-11 sm:px-6 sm:text-[12px] sm:tracking-[0.16em]"
                 >
-                  <CalendarCheck className="h-4 w-4" />
+                  <CalendarCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   Agendar consultoria
                 </button>
                 <Link
                   to="/catalogo"
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 text-[12px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:bg-white/20 sm:w-auto sm:px-7"
+                  className="inline-flex h-10 w-auto max-w-full items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 text-[11px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:bg-white/20 sm:h-11 sm:px-6 sm:text-[12px] sm:tracking-[0.16em]"
                 >
-                  <BookOpen className="h-4 w-4" />
+                  <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   Ver catálogo
                 </Link>
               </div>
