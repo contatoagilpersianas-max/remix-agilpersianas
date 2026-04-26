@@ -20,6 +20,7 @@ import { AutomationSection } from "@/components/site/AutomationSection";
 import { MosquitoSection } from "@/components/site/MosquitoSection";
 // B2BSection removido a pedido do cliente (anexo 2)
 import { QuoteSection } from "@/components/site/QuoteSection";
+import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -42,6 +43,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  useRevealOnScroll();
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
