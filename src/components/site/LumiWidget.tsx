@@ -65,6 +65,8 @@ export function LumiWidget() {
   const [pulse, setPulse] = useState(true);
   const [context, setContext] = useState<LumiContext>({});
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [thinkingHint, setThinkingHint] = useState<string | null>(null);
+  const thinkingCleanupRef = useRef<(() => void) | null>(null);
   const visitorIdRef = useRef<string>("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -299,12 +301,17 @@ export function LumiWidget() {
               ))}
               {loading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex justify-start">
-                  <div className="bg-background border border-border/60 rounded-2xl rounded-bl-md px-4 py-3">
+                  <div className="bg-background border border-border/60 rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-2">
                     <span className="inline-flex gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "0ms" }} />
                       <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "150ms" }} />
                       <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "300ms" }} />
                     </span>
+                    {thinkingHint && (
+                      <span className="text-[12px] text-muted-foreground italic transition-opacity duration-300">
+                        {thinkingHint}
+                      </span>
+                    )}
                   </div>
                 </div>
               )}
