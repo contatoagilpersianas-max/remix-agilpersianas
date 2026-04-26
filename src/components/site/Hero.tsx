@@ -109,8 +109,9 @@ export function HeroIntro() {
           </h1>
 
           <p className="mt-4 mx-auto max-w-2xl text-[14px] leading-7 text-muted-foreground sm:mt-5 sm:text-[15px] md:text-base md:leading-8">
-            Design inteligente, conforto térmico e acabamento premium. Unimos
-            sofisticação e tecnologia de ponta para entregar a persiana ideal
+            Cortinas, persianas, toldos e telas mosquiteiras com design
+            inteligente, conforto térmico e acabamento premium. Unimos
+            sofisticação e tecnologia de ponta para entregar a solução ideal
             em qualquer lugar do Brasil.
           </p>
 
