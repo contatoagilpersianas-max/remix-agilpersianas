@@ -48,15 +48,15 @@ function Index() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main>
-        {/* 1) Categorias premium — primeira coisa após o header */}
-        <CategoriesPremium />
-        {/* 2) Banner visual (imagens em fade) — vem antes dos produtos */}
+        {/* 1) Hero Banner — PRIMEIRA seção abaixo do header */}
         <HeroBanner />
-        {/* 3) Faixa laranja com benefícios — logo abaixo do banner */}
+        {/* 2) Faixa laranja com benefícios — logo abaixo do banner */}
         <PromoStrip />
+        {/* 3) Categorias premium */}
+        <CategoriesPremium />
         {/* 4) Bloco editorial "Seu ambiente merece..." + Lumi */}
         <HeroIntro />
-        {/* 5) Mais vendidos — logo após o bloco da IA */}
+        {/* 5) Produtos em destaque — DEPOIS do Hero Banner */}
         <FeaturedProducts />
         {/* Selos de confiança / benefícios premium */}
         <BenefitsRow />

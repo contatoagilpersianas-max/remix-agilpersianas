@@ -24,7 +24,7 @@ export function HeroBanner() {
     <section className="relative bg-background overflow-hidden">
       <div className="container-premium pt-4 pb-6 md:pt-6 md:pb-10">
         <div className="is-visible relative" data-reveal>
-          <div className="relative min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-neutral-900 ring-1 ring-black/5">
+          <div className="relative min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-foreground ring-1 ring-black/5">
             {/* Camada 1 — Imagens de fundo */}
             <div className="absolute inset-0 z-0">
               {SCENES.map((src, i) => (
