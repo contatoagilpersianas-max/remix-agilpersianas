@@ -9,6 +9,8 @@ import imgPainel from "@/assets/cat-painel.jpg";
 import imgHorizontal from "@/assets/cat-horizontal.jpg";
 import imgVertical from "@/assets/cat-vertical.jpg";
 import imgAutomacao from "@/assets/section-automacao.jpg";
+import imgTela from "@/assets/cat-tela.jpg";
+import imgToldo from "@/assets/cat-toldo.jpg";
 
 type Item = {
   title: string;
@@ -16,7 +18,6 @@ type Item = {
   img: string;
   slug: string;
   badge?: string;
-  large?: boolean;
 };
 
 const ITEMS: Item[] = [
@@ -26,7 +27,6 @@ const ITEMS: Item[] = [
     img: imgRolo,
     slug: "persiana-rolo",
     badge: "Mais vendida",
-    large: true,
   },
   {
     title: "Double Vision",
@@ -64,7 +64,18 @@ const ITEMS: Item[] = [
     img: imgAutomacao,
     slug: "motorizadas",
     badge: "Novidade",
-    large: true,
+  },
+  {
+    title: "Tela Mosquiteira",
+    desc: "Proteção contra insetos sem perder ventilação.",
+    img: imgTela,
+    slug: "tela-mosquiteira",
+  },
+  {
+    title: "Toldos",
+    desc: "Conforto térmico e sofisticação para áreas externas.",
+    img: imgToldo,
+    slug: "toldos",
   },
 ];
 
@@ -95,10 +106,9 @@ export function CategoriesPremium() {
         </div>
 
         {/* Grid Bento — 2 cards grandes (linha 1 e linha 4) + 4 cards normais */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+        {/* Grid uniforme — todas as caixas do mesmo tamanho para padronização visual */}
+        <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
           {ITEMS.map((item, i) => {
-            const span = item.large ? "lg:col-span-2" : "lg:col-span-1";
-            const aspect = item.large ? "aspect-[16/9]" : "aspect-[4/5]";
             return (
               <Link
                 key={item.slug}
@@ -106,7 +116,7 @@ export function CategoriesPremium() {
                 search={{ categoria: item.slug }}
                 data-reveal
                 style={{ transitionDelay: `${(i % 4) * 80}ms` }}
-                className={`group relative overflow-hidden rounded-3xl bg-foreground shadow-sm ring-1 ring-border transition-all duration-500 ease-premium hover:shadow-2xl hover:ring-primary/30 hover:-translate-y-1 ${span} ${aspect}`}
+                className="group relative aspect-[4/5] overflow-hidden rounded-3xl bg-foreground shadow-sm ring-1 ring-border transition-all duration-500 ease-premium hover:shadow-2xl hover:ring-primary/30 hover:-translate-y-1"
               >
                 <img
                   src={item.img}
@@ -121,7 +131,7 @@ export function CategoriesPremium() {
                 {/* Badge */}
                 {item.badge && (
                   <span
-                    className="absolute left-4 top-4 inline-flex items-center rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white shadow-lg backdrop-blur-sm"
+                    className="absolute left-3 top-3 inline-flex items-center rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-white shadow-lg backdrop-blur-sm sm:left-4 sm:top-4 sm:px-3 sm:py-1.5 sm:text-[10px] sm:tracking-[0.22em]"
                     style={{ backgroundColor: "#F57C00" }}
                   >
                     {item.badge}
@@ -129,14 +139,14 @@ export function CategoriesPremium() {
                 )}
 
                 {/* Conteúdo */}
-                <div className="absolute inset-x-0 bottom-0 p-6 md:p-7 text-white transition-transform duration-500 ease-premium group-hover:-translate-y-1">
-                  <h3 className="text-display text-2xl md:text-3xl">
+                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 md:p-6 text-white transition-transform duration-500 ease-premium group-hover:-translate-y-1">
+                  <h3 className="text-display text-lg sm:text-xl md:text-2xl">
                     {item.title}
                   </h3>
-                  <p className="mt-2 max-w-xs text-xs leading-relaxed text-white/85 md:text-sm">
+                  <p className="mt-1.5 hidden max-w-xs text-xs leading-relaxed text-white/85 sm:block md:text-sm">
                     {item.desc}
                   </p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-all duration-300 group-hover:gap-3">
+                  <span className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white transition-all duration-300 group-hover:gap-3 sm:mt-4 sm:text-[11px] sm:tracking-[0.22em]">
                     Explorar
                     <ArrowRight className="h-3.5 w-3.5" />
                   </span>
