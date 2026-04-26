@@ -7,7 +7,29 @@ import heroLivingLumi from "@/assets/hero-2026-living-lumi.jpg";
 import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, CalendarCheck, BookOpen } from "lucide-react";
 import { openLumiWith } from "@/components/site/LumiWidget";
 
-const SCENES = [heroLiving, heroBedroom, heroLivingLumi];
+type Scene = {
+  src: string;
+  title: string;
+  subtitle: string;
+};
+
+const SCENES: Scene[] = [
+  {
+    src: heroLiving,
+    title: "A arte da transparência",
+    subtitle: "Cortinas e persianas sob medida — design premium para o seu lar.",
+  },
+  {
+    src: heroBedroom,
+    title: "Noites perfeitas começam com a persiana certa.",
+    subtitle: "Blackout total, conforto térmico, sob medida — entregue na sua porta.",
+  },
+  {
+    src: heroLivingLumi,
+    title: "Seu ambiente merece a perfeição do sob medida.",
+    subtitle: "Conforto, estilo e tecnologia — tudo conduzido pela Lumi, sua consultora IA.",
+  },
+];
 
 /**
  * HeroBanner — apenas o banner visual (imagens em fade) com indicadores e prova social flutuante.
@@ -28,10 +50,10 @@ export function HeroBanner() {
           <div className="relative min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-foreground ring-1 ring-black/5">
             {/* Camada 1 — Imagens de fundo */}
             <div className="absolute inset-0 z-0">
-              {SCENES.map((src, i) => (
+              {SCENES.map((scene, i) => (
                 <img
                   key={i}
-                  src={src}
+                  src={scene.src}
                   alt="Ambiente com cortinas e persianas sob medida"
                   loading={i === 0 ? "eager" : "lazy"}
                   decoding="async"
@@ -44,12 +66,30 @@ export function HeroBanner() {
               ))}
             </div>
 
-            {/* Camada 2 — Overlay sutil apenas na base para destacar os CTAs */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-2/5 bg-gradient-to-t from-black/55 via-black/20 to-transparent" />
+            {/* Camada 2 — Overlay padronizado: escurece base e dá leve vinheta para legibilidade do texto branco */}
+            <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/35 via-black/20 to-black/65" />
 
-            {/* Camada 3 — Apenas CTAs, posicionados na base (o título já está na imagem) */}
-            <div className="relative z-10 flex min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] flex-col items-end justify-end gap-4 px-5 pb-10 sm:px-10 sm:pb-12">
-              <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row sm:self-center">
+            {/* Camada 3 — Conteúdo: título + subtítulo + CTAs, centralizado vertical e horizontalmente */}
+            <div className="relative z-10 flex min-h-[560px] sm:min-h-[460px] lg:min-h-[560px] flex-col items-center justify-center gap-7 px-5 py-10 text-center sm:gap-8 sm:px-10 sm:py-12">
+              <div className="mx-auto max-w-3xl">
+                <h2
+                  className="text-display text-white text-balance leading-[1.08]"
+                  style={{
+                    fontSize: "clamp(1.75rem, 5.2vw, 3.4rem)",
+                    textShadow: "0 2px 18px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.5)",
+                  }}
+                >
+                  {SCENES[active].title}
+                </h2>
+                <p
+                  className="mx-auto mt-4 max-w-2xl text-[14px] leading-[1.6] text-white/95 sm:text-[16px] sm:leading-[1.6] md:text-[17px]"
+                  style={{ textShadow: "0 1px 10px rgba(0,0,0,0.55)" }}
+                >
+                  {SCENES[active].subtitle}
+                </p>
+              </div>
+
+              <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
                 <button
                   type="button"
                   onClick={() =>
