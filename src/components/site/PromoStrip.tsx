@@ -16,11 +16,11 @@ export function PromoStrip() {
       className="overflow-hidden"
       style={{ backgroundColor: "#E2763A" }}
     >
-      <div className="flex whitespace-nowrap py-3.5 sm:py-4 animate-marquee will-change-transform">
+      <div className="flex whitespace-nowrap py-1.5 sm:py-2 animate-marquee will-change-transform">
         {loop.map((t, i) => (
           <span
             key={i}
-            className="mx-6 sm:mx-8 inline-flex items-center gap-3 text-[14px] sm:text-[15px] md:text-[16px] font-bold uppercase tracking-[0.18em] text-white"
+            className="mx-6 sm:mx-8 inline-flex items-center gap-3 text-[12px] sm:text-[13px] md:text-[14px] font-bold uppercase tracking-[0.18em] text-white"
           >
             {t}
             <span className="text-white/70 text-[18px] leading-none">•</span>
