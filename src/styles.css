@@ -185,6 +185,42 @@
     animation: fade-up 0.7s var(--ease-premium) both;
   }
 
+  /* Reveal on scroll — usado com IntersectionObserver via [data-reveal] */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s var(--ease-premium), transform 0.9s var(--ease-premium);
+    will-change: opacity, transform;
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* Hairline divider premium */
+  .hairline {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-border) 20%, var(--color-border) 80%, transparent);
+  }
+
+  /* Tipografia display premium */
+  .text-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    font-weight: 600;
+    line-height: 1.05;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+
   /* Hide scrollbar in horizontal scrollers */
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { scrollbar-width: none; }
