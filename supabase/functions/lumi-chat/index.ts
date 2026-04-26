@@ -131,6 +131,7 @@ function buildContextHint(context: Record<string, unknown> | null | undefined): 
   if (!context || typeof context !== "object") return "";
   const parts: string[] = [];
   const c = context as Record<string, unknown>;
+  const isDemo = Boolean(c.demoMode);
   if (c.productName) parts.push(`Produto em foco: ${String(c.productName)}`);
   if (c.widthCm && c.heightCm) {
     const w = Number(c.widthCm) / 100;
@@ -149,7 +150,18 @@ function buildContextHint(context: Record<string, unknown> | null | undefined): 
     parts.push(`Itens no carrinho: ${(c.cartItems as unknown[]).length}`);
   }
   if (c.pageUrl) parts.push(`Página: ${String(c.pageUrl)}`);
-  if (!parts.length) return "";
+  if (!parts.length && !isDemo) return "";
+  if (isDemo) {
+    return `\n\nMODO DEMONSTRAÇÃO AO VIVO ATIVO:
+- O visitante clicou em "Ver demo ao vivo" para experimentar como você atende.
+- Faça uma demonstração CURTA (3 a 4 trocas, no máximo).
+- Pergunta 1: ambiente (sala/quarto/escritório/cozinha/área externa).
+- Pergunta 2: prioridade (bloquear luz / privacidade / visual moderno / automação).
+- Recomendação: sugira 1 modelo do catálogo com mini-justificativa (1-2 linhas).
+- Encerramento OBRIGATÓRIO: termine com a frase pronta:
+  "Pronto! Essa é uma amostra do meu atendimento. Se quiser receber um orçamento real e personalizado para o seu ambiente, é só me dizer seu nome e WhatsApp que envio na hora — sem compromisso."
+- Não calcule preço nem peça medidas no modo demo. Foco em mostrar o fluxo.`;
+  }
   return `\n\nCONTEXTO ATUAL DO VISITANTE:\n- ${parts.join("\n- ")}\n\nUse esse contexto para responder. Se o visitante já configurou um produto, vá direto ao ponto: confirme medidas, simule preço aproximado e ofereça orçamento personalizado.`;
 }
 

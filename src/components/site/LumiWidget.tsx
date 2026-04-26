@@ -17,6 +17,8 @@ export type LumiContext = {
   estimatedTotal?: number;
   cartItems?: Array<{ name: string; qty: number }>;
   pageUrl?: string;
+  /** Quando true, dispara fluxo de demonstração guiada com perguntas pré-definidas */
+  demoMode?: boolean;
 };
 
 const STORAGE_KEY = "agil_lumi_chat_v2";
@@ -27,6 +29,13 @@ const INITIAL_GREETING: Msg = {
   role: "assistant",
   content:
     "Olá. Sou a Lumi, da Ágil Persianas. Posso ajudar você a escolher a persiana ideal. Para qual ambiente?",
+};
+
+// Mensagens do fluxo de demonstração ao vivo (modo demo)
+const DEMO_INTRO: Msg = {
+  role: "assistant",
+  content:
+    "👋 Bem-vindo à demonstração ao vivo da Lumi.\n\nVou te mostrar em 30 segundos como eu ajudo um cliente real a escolher a persiana ideal e receber uma estimativa personalizada — sem compromisso.\n\nVamos começar: para qual ambiente você gostaria de uma persiana?\n• Sala\n• Quarto\n• Escritório\n• Cozinha\n• Área externa",
 };
 
 function getOrCreateVisitorId() {
@@ -40,6 +49,8 @@ function getOrCreateVisitorId() {
 }
 
 function buildContextGreeting(ctx: LumiContext): Msg {
+  // Modo demonstração: substitui a mensagem contextual padrão
+  if (ctx.demoMode) return DEMO_INTRO;
   const parts: string[] = [];
   if (ctx.productName) parts.push(ctx.productName);
   if (ctx.widthCm && ctx.heightCm)
