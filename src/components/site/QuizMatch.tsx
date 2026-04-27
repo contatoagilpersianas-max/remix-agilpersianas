@@ -506,12 +506,6 @@ export function QuizMatch() {
                   >
                     Etapa {String(step + 1).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
                   </span>
-                  <span
-                    className="text-[10px] uppercase"
-                    style={{ color: dark.textMuted, letterSpacing: "0.22em" }}
-                  >
-                    {STEPS.length - step - 1 === 0 ? "Última" : `Faltam ${STEPS.length - step - 1}`}
-                  </span>
                 </div>
                 <div
                   className="flex items-center gap-2"
