@@ -19,6 +19,7 @@ import { AutomationSection } from "@/components/site/AutomationSection";
 import { MosquitoSection } from "@/components/site/MosquitoSection";
 // B2BSection removido a pedido do cliente (anexo 2)
 import { QuoteSection } from "@/components/site/QuoteSection";
+import { QuizMatch } from "@/components/site/QuizMatch";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 
 export const Route = createFileRoute("/")({
@@ -55,6 +56,8 @@ function Index() {
         <CategoriesPremium />
         {/* 4) Bloco editorial "Seu ambiente merece..." + Lumi */}
         <HeroIntro />
+        {/* Quiz "Persiana ideal em 60s" — entre Hero e vitrine */}
+        <QuizMatch />
         {/* 5) Produtos em destaque — DEPOIS do Hero Banner */}
         <FeaturedProducts />
         {/* Selos de confiança / benefícios premium */}
