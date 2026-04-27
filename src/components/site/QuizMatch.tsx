@@ -226,7 +226,7 @@ export function QuizMatch() {
     setTimeout(() => {
       setStep((s) => s + 1);
       setFeedback("");
-    }, 350);
+    }, 450);
   }
 
   function handleBack() {
@@ -245,33 +245,33 @@ export function QuizMatch() {
   return (
     <section
       id="quiz-persiana-ideal"
-      className="relative py-16 sm:py-20 bg-gradient-to-b from-background via-muted/30 to-background"
+      className="relative py-16 sm:py-20 bg-gradient-to-b from-sand via-background to-sand"
       aria-labelledby="quiz-title"
     >
       <div className="container max-w-5xl">
         <div className="text-center mb-8 sm:mb-10">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+          <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm">
             <Sparkles className="h-3.5 w-3.5" /> Assistente inteligente
           </span>
           <h2
             id="quiz-title"
-            className="mt-3 text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground"
+            className="mt-4 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-foreground font-display"
           >
             Descubra a Persiana Ideal para sua Casa em 60 Segundos
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+          <p className="mt-4 text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto">
             Nosso assistente analisa seu ambiente, estilo e segurança para recomendar a melhor opção.
           </p>
         </div>
 
-        <div className="rounded-3xl border border-border bg-card shadow-sm p-5 sm:p-8">
+        <div className="rounded-3xl border border-border bg-card shadow-card p-5 sm:p-8">
           {!isComplete ? (
             <>
               <div className="mb-5 flex items-center justify-between gap-3">
-                <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
+                <span className="text-xs font-semibold text-foreground whitespace-nowrap">
                   Etapa {step + 1} de {STEPS.length}
                 </span>
-                <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
+                <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
                   <div
                     className="h-full bg-primary transition-all duration-500"
                     style={{ width: `${progress}%` }}
@@ -281,12 +281,12 @@ export function QuizMatch() {
               </div>
 
               <div className="mb-6 text-center">
-                <h3 className="text-xl sm:text-2xl font-semibold text-foreground">
+                <h3 className="text-2xl sm:text-3xl font-semibold text-foreground font-display">
                   {current.title}
                 </h3>
                 <p
-                  className={`mt-2 text-sm transition-all duration-300 ${
-                    feedback ? "opacity-100 text-primary" : "opacity-60 text-muted-foreground"
+                  className={`mt-2 text-sm sm:text-base transition-all duration-300 font-medium ${
+                    feedback ? "text-primary" : "text-foreground/60"
                   }`}
                   aria-live="polite"
                 >
@@ -304,15 +304,23 @@ export function QuizMatch() {
                       key={opt.value}
                       type="button"
                       onClick={() => handleSelect(opt.value, opt.feedback)}
-                      className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl border bg-background p-4 sm:p-5 min-h-[120px] sm:min-h-[140px] transition-all hover:border-primary hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                        selected ? "border-primary ring-2 ring-primary" : "border-border"
+                      className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl bg-card p-4 sm:p-5 min-h-[128px] sm:min-h-[148px] transition-all hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                        selected
+                          ? "border-2 border-primary shadow-md"
+                          : "border border-border shadow-sm hover:border-primary/60 hover:shadow-md"
                       }`}
                       aria-pressed={selected}
                     >
-                      <span className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                        <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+                      <span
+                        className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-colors ${
+                          selected
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-primary/12 text-primary group-hover:bg-primary group-hover:text-primary-foreground"
+                        }`}
+                      >
+                        <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2.25} />
                       </span>
-                      <span className="text-xs sm:text-sm font-medium text-center text-foreground leading-tight">
+                      <span className="text-sm sm:text-[15px] font-semibold text-center text-foreground leading-tight">
                         {opt.label}
                       </span>
                     </button>
@@ -320,17 +328,33 @@ export function QuizMatch() {
                 })}
               </div>
 
-              {step > 0 && (
-                <div className="mt-6 flex justify-center">
+              <div className="mt-7 flex items-center justify-between gap-3">
+                {step > 0 ? (
                   <button
                     type="button"
                     onClick={handleBack}
-                    className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
                   >
                     <ArrowLeft className="h-4 w-4" /> Voltar
                   </button>
-                </div>
-              )}
+                ) : (
+                  <span />
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if ((answers as Record<string, string>)[current.key]) {
+                      setStep((s) => s + 1);
+                      setFeedback("");
+                    }
+                  }}
+                  disabled={!(answers as Record<string, string>)[current.key]}
+                  className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
+                >
+                  {step === STEPS.length - 1 ? "Ver recomendação" : "Próxima etapa"}
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
             </>
           ) : (
             recommendation && (
