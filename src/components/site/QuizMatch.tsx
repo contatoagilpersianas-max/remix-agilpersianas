@@ -85,7 +85,6 @@ type Convivencia = "criancas" | "pets" | "nenhum";
 type Answers = {
   ambiente?: Ambiente;
   luz?: Luz;
-  seguranca?: Seguranca;
   estilo?: Estilo;
   convivencia?: Convivencia;
   acionamento?: Acionamento;
@@ -204,7 +203,7 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Privacidade ajustável sem abrir mão da iluminação natural.");
   }
 
-  if ((a.seguranca === "pets" || a.convivencia === "pets") && a.ambiente !== "externa" && a.luz !== "solar" && a.luz !== "blackout") {
+  if (a.convivencia === "pets" && a.ambiente !== "externa" && a.luz !== "solar" && a.luz !== "blackout") {
     productName = "Persiana Solar Screen (Pet-Friendly)";
     productPath = "/persiana-solar-screen";
     calcProductId = "rolo-solar";
@@ -212,7 +211,7 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Tecido resistente que não desfia — perfeito para pets.");
   }
 
-  if (a.seguranca === "criancas" || a.convivencia === "criancas") {
+  if (a.convivencia === "criancas") {
     badge = "Motorização recomendada";
     reasons.push("Sem cordões soltos — segurança total para crianças em casa.");
   }
@@ -229,7 +228,7 @@ function recommend(a: Required<Answers>): Recommendation {
   if (a.luz === "solar" && (a.ambiente === "sala" || a.ambiente === "home")) score += 6;
   if (a.ambiente === "externa") score += 4;
   if (a.acionamento === "motorizado") score += 2;
-  if ((a.seguranca === "criancas" || a.convivencia === "criancas") && a.acionamento === "motorizado") score += 2;
+  if (a.convivencia === "criancas" && a.acionamento === "motorizado") score += 2;
   score = Math.min(99, score);
 
   const directPaths = new Set([
