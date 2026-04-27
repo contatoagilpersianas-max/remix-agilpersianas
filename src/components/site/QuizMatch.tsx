@@ -82,13 +82,13 @@ const dark = {
 
 // Fotos reais de ambiente para os cards (Unsplash, otimizadas)
 const ambienteImages: Record<string, string> = {
-  quarto: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80",
+  quarto: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&q=80",
   sala: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
-  home: "https://images.unsplash.com/photo-1593696954577-ab3d39317b97?w=600&q=80",
+  home: "https://images.unsplash.com/photo-1593784991095-a205069470b6?w=600&q=80",
   cozinha: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
   escritorio: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
-  lavanderia: "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=600&q=80",
-  infantil: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+  lavanderia: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80",
+  infantil: "https://images.unsplash.com/photo-1559554498-17f985b2c421?w=600&q=80",
   externa: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
 };
 
@@ -97,9 +97,9 @@ const optionImages: Record<string, Record<string, string>> = {
   ambiente: ambienteImages,
   luz: {
     blackout: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80",
-    privacidade: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
-    filtrar: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=400&q=80",
-    solar: "https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=400&q=80",
+    privacidade: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=400&q=80",
+    filtrar: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
+    solar: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=80",
   },
   estilo: {
     moderno: "https://images.unsplash.com/photo-1489171078254-c3365d6e359f?w=400&q=80",
@@ -683,6 +683,42 @@ export function QuizMatch() {
                         >
                           {caption}
                         </p>
+                        {current.key === "luz" && (() => {
+                          const positions: Record<string, number> = {
+                            blackout: 0.04,
+                            privacidade: 0.32,
+                            filtrar: 0.7,
+                            solar: 0.5,
+                          };
+                          const pos = positions[opt.value] ?? 0.5;
+                          return (
+                            <div
+                              className="relative mt-2"
+                              style={{
+                                width: 60,
+                                height: 3,
+                                borderRadius: 999,
+                                background: "linear-gradient(to right, #000, #fff)",
+                                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.15)",
+                              }}
+                              aria-hidden="true"
+                            >
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  top: "50%",
+                                  left: `${pos * 100}%`,
+                                  transform: "translate(-50%, -50%)",
+                                  width: 8,
+                                  height: 8,
+                                  borderRadius: "50%",
+                                  backgroundColor: dark.coral,
+                                  boxShadow: "0 0 0 2px rgba(0,0,0,0.6), 0 0 6px rgba(255,107,53,0.6)",
+                                }}
+                              />
+                            </div>
+                          );
+                        })()}
                       </div>
                     </button>
                   );
