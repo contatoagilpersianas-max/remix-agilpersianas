@@ -318,7 +318,7 @@ export function QuizMatch() {
                             : "bg-primary/12 text-primary group-hover:bg-primary group-hover:text-primary-foreground"
                         }`}
                       >
-                        <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2.25} />
+                        <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
                       </span>
                       <span className="text-sm sm:text-[15px] font-semibold text-center text-foreground leading-tight">
                         {opt.label}
