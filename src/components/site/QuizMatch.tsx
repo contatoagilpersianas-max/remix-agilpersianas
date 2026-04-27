@@ -345,21 +345,33 @@ export function QuizMatch() {
   return (
     <section
       id="quiz-persiana-ideal"
-      className="relative pt-6 pb-14 sm:pt-8 sm:pb-20 bg-gradient-to-b from-sand via-background to-sand font-sans"
+      className="relative pt-8 pb-16 sm:pt-12 sm:pb-24 font-sans"
+      style={{
+        background:
+          "linear-gradient(180deg, #FFF8F4 0%, #FFFFFF 55%, #FFF8F4 100%)",
+      }}
       aria-labelledby="quiz-title"
     >
       <div className="container mx-auto max-w-4xl flex flex-col items-center">
         <div className="text-center mb-5 sm:mb-6 w-full">
-          <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm">
+          <span
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm"
+            style={{ backgroundColor: "#FF6B35" }}
+          >
             <Sparkles className="h-3.5 w-3.5" /> Assistente inteligente
           </span>
           <h2
             id="quiz-title"
-            className="mt-4 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-foreground font-display"
+            className="mt-4 font-display font-semibold tracking-tight"
+            style={{
+              color: "#1A1A1A",
+              fontSize: "clamp(32px, 5vw, 56px)",
+              lineHeight: 1.05,
+            }}
           >
             Descubra a Persiana Ideal para sua Casa em 60 Segundos
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto">
+          <p className="mt-4 text-base sm:text-lg max-w-2xl mx-auto" style={{ color: "#4A4A4A" }}>
             Nosso assistente analisa seu ambiente, estilo e segurança para recomendar a melhor opção.
           </p>
           {!isComplete && (
@@ -376,21 +388,55 @@ export function QuizMatch() {
           )}
         </div>
 
-        <div className="w-full mx-auto rounded-3xl border border-border bg-card shadow-card p-5 sm:p-8">
+        <div
+          className="w-full mx-auto rounded-3xl border bg-white p-5 sm:p-8"
+          style={{
+            borderColor: "#E5E7EB",
+            boxShadow: "0 12px 40px -8px rgba(26,26,26,0.08), 0 2px 8px -2px rgba(26,26,26,0.06)",
+          }}
+        >
           {!isComplete ? (
             <>
-              {/* Barra de progresso visual — sem percentual numérico */}
+              {/* Steps numerados + barra de progresso */}
               <div className="mb-6">
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  {STEPS.map((_, i) => {
+                    const done = i < step;
+                    const active = i === step;
+                    return (
+                      <div key={i} className="flex flex-1 items-center">
+                        <span
+                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold transition-all"
+                          style={{
+                            backgroundColor: done || active ? "#FF6B35" : "#F1F2F4",
+                            color: done || active ? "#fff" : "#9CA3AF",
+                            boxShadow: active ? "0 0 0 4px rgba(255,107,53,0.18)" : "none",
+                          }}
+                          aria-current={active ? "step" : undefined}
+                        >
+                          {done ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
+                        </span>
+                        {i < STEPS.length - 1 && (
+                          <span
+                            className="mx-1.5 h-[2px] flex-1 rounded-full transition-colors"
+                            style={{ backgroundColor: i < step ? "#FF6B35" : "#E5E7EB" }}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
                 <div className="mb-2 flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-foreground/70">
+                  <span className="text-xs font-bold uppercase tracking-[0.14em]" style={{ color: "#1A1A1A" }}>
                     Etapa {step + 1} de {STEPS.length}
                   </span>
-                  <span className="text-xs font-medium text-foreground/60">
+                  <span className="text-xs font-medium" style={{ color: "#6B7280" }}>
                     {STEPS.length - step - 1 === 0 ? "Última pergunta!" : `Faltam ${STEPS.length - step - 1}`}
                   </span>
                 </div>
                 <div
-                  className="h-2.5 w-full rounded-full bg-muted overflow-hidden"
+                  className="h-1.5 w-full rounded-full overflow-hidden"
+                  style={{ backgroundColor: "#F1F2F4" }}
                   role="progressbar"
                   aria-valuenow={progress}
                   aria-valuemin={0}
@@ -398,35 +444,45 @@ export function QuizMatch() {
                   aria-label={`Progresso do quiz: etapa ${step + 1} de ${STEPS.length}`}
                 >
                   <div
-                    className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
-                    style={{ width: `${progress}%` }}
+                    className="h-full rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${progress}%`, backgroundColor: "#FF6B35" }}
                   />
                 </div>
               </div>
 
-              {/* Bot de feedback contextual */}
-              <div className="mb-6 flex items-start gap-3 rounded-2xl border border-border bg-secondary/40 p-3.5 sm:p-4">
+              {/* Bot de feedback contextual — card de dica premium */}
+              <div
+                className="mb-6 flex items-start gap-3 rounded-r-2xl rounded-l-md p-4 sm:p-5"
+                style={{
+                  backgroundColor: "#FFF0E8",
+                  borderLeft: "4px solid #FF6B35",
+                }}
+              >
                 <span
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
+                  style={{ backgroundColor: "#FF6B35" }}
                   aria-hidden="true"
                 >
                   <Bot className="h-5 w-5" />
                 </span>
                 <div className="flex-1 pt-0.5">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: "#FF6B35" }}>
                     Assistente Ágil
                   </p>
-                  <p className="mt-0.5 text-sm sm:text-[15px] font-medium text-foreground leading-snug">
+                  <p className="mt-1 text-sm sm:text-[15px] font-medium leading-snug" style={{ color: "#1A1A1A" }}>
                     {feedback || current.botMessage}
                   </p>
                 </div>
               </div>
 
               <div className="mb-6 text-center">
-                <h3 className="text-2xl sm:text-3xl font-semibold text-foreground font-display">
+                <h3
+                  className="font-display font-semibold"
+                  style={{ color: "#1A1A1A", fontSize: "clamp(22px, 3vw, 32px)" }}
+                >
                   {current.title}
                 </h3>
-                <p className="mt-2 text-sm sm:text-base text-foreground/60" aria-live="polite">
+                <p className="mt-2 text-sm sm:text-base" style={{ color: "#6B7280" }} aria-live="polite">
                   Toque na opção que mais combina com você.
                 </p>
               </div>
@@ -445,11 +501,22 @@ export function QuizMatch() {
                       key={opt.value}
                       type="button"
                       onClick={() => handleSelect(opt.value, opt.feedback)}
-                      className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl bg-card p-4 sm:p-5 min-h-[128px] sm:min-h-[148px] transition-all hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-                        selected
-                          ? "border-2 border-primary shadow-md"
-                          : "border border-border shadow-sm hover:border-primary/60 hover:shadow-md"
-                      } ${highlightSafe && !selected ? "ring-2 ring-primary/40" : ""}`}
+                      className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl p-4 sm:p-5 min-h-[140px] sm:min-h-[156px] transition-all hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+                        highlightSafe && !selected ? "ring-2" : ""
+                      }`}
+                      style={{
+                        backgroundColor: selected ? "#FF6B35" : "#FFFFFF",
+                        borderWidth: selected ? "2px" : "1px",
+                        borderStyle: "solid",
+                        borderColor: selected ? "#FF6B35" : "#E5E7EB",
+                        color: selected ? "#FFFFFF" : "#1A1A1A",
+                        boxShadow: selected
+                          ? "0 10px 28px -8px rgba(255,107,53,0.45)"
+                          : "0 1px 2px rgba(26,26,26,0.04)",
+                        ...(highlightSafe && !selected
+                          ? ({ ["--tw-ring-color" as never]: "rgba(255,107,53,0.45)" } as React.CSSProperties)
+                          : {}),
+                      }}
                       aria-pressed={selected}
                     >
                       {highlightSafe && (
@@ -461,15 +528,18 @@ export function QuizMatch() {
                         </span>
                       )}
                       <span
-                        className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-colors ${
-                          selected
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-primary/12 text-primary group-hover:bg-primary group-hover:text-primary-foreground"
-                        }`}
+                        className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full transition-colors"
+                        style={{
+                          backgroundColor: selected ? "rgba(255,255,255,0.18)" : "rgba(255,107,53,0.12)",
+                          color: selected ? "#FFFFFF" : "#FF6B35",
+                        }}
                       >
-                        <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+                        <Icon className="h-7 w-7 sm:h-8 sm:w-8" />
                       </span>
-                      <span className="text-sm sm:text-[15px] font-semibold text-center text-foreground leading-tight">
+                      <span
+                        className="text-sm sm:text-[15px] font-semibold text-center leading-tight"
+                        style={{ color: selected ? "#FFFFFF" : "#1A1A1A" }}
+                      >
                         {opt.label}
                       </span>
                     </button>
@@ -477,38 +547,43 @@ export function QuizMatch() {
                 })}
               </div>
 
-              <div className="mt-7 flex items-center justify-between gap-3">
-                {step > 0 ? (
+              <div className="mt-7 flex flex-col gap-3">
+                {(() => {
+                  const hasAnswer = !!(answers as Record<string, string>)[current.key];
+                  return (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (hasAnswer) {
+                          setStep((s) => s + 1);
+                          setFeedback("");
+                        }
+                      }}
+                      disabled={!hasAnswer}
+                      style={{
+                        backgroundColor: hasAnswer ? "#FF6B35" : "#E5E7EB",
+                        color: hasAnswer ? "#FFFFFF" : "#9CA3AF",
+                        height: "52px",
+                        borderRadius: "12px",
+                        boxShadow: hasAnswer ? "0 8px 20px -6px rgba(255,107,53,0.45)" : "none",
+                      }}
+                      className="inline-flex w-full items-center justify-center gap-2 px-6 text-[15px] font-bold tracking-wide transition-all hover:opacity-95 disabled:cursor-not-allowed"
+                    >
+                      {step === STEPS.length - 1 ? "Ver recomendação" : "Próxima etapa"}
+                      <ArrowRight className="h-5 w-5" />
+                    </button>
+                  );
+                })()}
+                {step > 0 && (
                   <button
                     type="button"
                     onClick={handleBack}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors hover:bg-[#F8F4F0]"
+                    style={{ color: "#6B7280" }}
                   >
-                    <ArrowLeft className="h-4 w-4" /> Voltar
+                    <ArrowLeft className="h-4 w-4" /> Voltar para etapa anterior
                   </button>
-                ) : (
-                  <span />
                 )}
-                <button
-                  type="button"
-                  onClick={() => {
-                    if ((answers as Record<string, string>)[current.key]) {
-                      setStep((s) => s + 1);
-                      setFeedback("");
-                    }
-                  }}
-                  disabled={!(answers as Record<string, string>)[current.key]}
-                  style={{
-                    backgroundColor: (answers as Record<string, string>)[current.key]
-                      ? "#FF6B35"
-                      : undefined,
-                    color: (answers as Record<string, string>)[current.key] ? "#fff" : undefined,
-                  }}
-                  className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold shadow-md hover:opacity-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:bg-muted disabled:text-foreground/40"
-                >
-                  {step === STEPS.length - 1 ? "Ver recomendação" : "Próxima etapa"}
-                  <ArrowRight className="h-4 w-4" />
-                </button>
               </div>
             </>
           ) : (
