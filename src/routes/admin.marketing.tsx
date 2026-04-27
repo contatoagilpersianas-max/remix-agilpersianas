@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { NumericInput } from "@/components/ui/numeric-input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Loader2, Megaphone, Tag, Bell } from "lucide-react";
@@ -61,7 +62,7 @@ function Marketing() {
         <div className="flex items-center gap-2 mb-4"><Tag className="h-5 w-5 text-primary" /><h2 className="font-semibold">Cupom em destaque</h2></div>
         <div className="grid sm:grid-cols-3 gap-3">
           <div><Label>Código</Label><Input value={coupon.code} onChange={(e) => setCoupon({ ...coupon, code: e.target.value.toUpperCase() })} /></div>
-          <div><Label>Desconto (%)</Label><Input type="number" value={coupon.discount_percent} onChange={(e) => setCoupon({ ...coupon, discount_percent: Number(e.target.value) })} /></div>
+          <div><Label>Desconto (%)</Label><NumericInput value={coupon.discount_percent} onValueChange={(value) => setCoupon({ ...coupon, discount_percent: value ?? 0 })} /></div>
           <div className="flex items-end"><label className="flex items-center gap-2 text-sm"><Switch checked={coupon.active} onCheckedChange={(v) => setCoupon({ ...coupon, active: v })} /> Ativo</label></div>
         </div>
         <div className="flex justify-end mt-4"><Button onClick={() => save("coupon_default", coupon)} disabled={saving === "coupon_default"}>{saving === "coupon_default" && <Loader2 className="h-4 w-4 animate-spin" />} Salvar</Button></div>

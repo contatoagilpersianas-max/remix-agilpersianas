@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { NumericInput } from "@/components/ui/numeric-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -148,8 +149,8 @@ function Orders() {
                 <div><Label>Endereço</Label><Input value={editing.customer_address ?? ""} onChange={(e) => setEditing({ ...editing, customer_address: e.target.value })} /></div>
               </div>
               <div className="grid sm:grid-cols-3 gap-3">
-                <div><Label>Subtotal</Label><Input type="number" step="0.01" value={editing.subtotal ?? 0} onChange={(e) => setEditing({ ...editing, subtotal: Number(e.target.value) })} /></div>
-                <div><Label>Desconto</Label><Input type="number" step="0.01" value={editing.discount ?? 0} onChange={(e) => setEditing({ ...editing, discount: Number(e.target.value) })} /></div>
+                <div><Label>Subtotal</Label><NumericInput decimal step="0.01" value={editing.subtotal} onValueChange={(value) => setEditing({ ...editing, subtotal: value ?? 0 })} /></div>
+                <div><Label>Desconto</Label><NumericInput decimal step="0.01" value={editing.discount} onValueChange={(value) => setEditing({ ...editing, discount: value ?? 0 })} /></div>
                 <div><Label>Pgto</Label><Input value={editing.payment_method ?? ""} onChange={(e) => setEditing({ ...editing, payment_method: e.target.value })} placeholder="PIX, Cartão..." /></div>
               </div>
               <div className="grid sm:grid-cols-2 gap-3">

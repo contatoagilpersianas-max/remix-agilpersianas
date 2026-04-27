@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { NumericInput } from "@/components/ui/numeric-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -190,8 +191,8 @@ function Production() {
             <div className="grid gap-3">
               <div><Label>Produto</Label><Input value={editing.product_name ?? ""} onChange={(e) => setEditing({ ...editing, product_name: e.target.value })} /></div>
               <div className="grid grid-cols-2 gap-3">
-                <div><Label>Largura (cm)</Label><Input type="number" value={editing.width_cm ?? ""} onChange={(e) => setEditing({ ...editing, width_cm: e.target.value ? Number(e.target.value) : null })} /></div>
-                <div><Label>Altura (cm)</Label><Input type="number" value={editing.height_cm ?? ""} onChange={(e) => setEditing({ ...editing, height_cm: e.target.value ? Number(e.target.value) : null })} /></div>
+                <div><Label>Largura (cm)</Label><NumericInput value={editing.width_cm} onValueChange={(value) => setEditing({ ...editing, width_cm: value })} /></div>
+                <div><Label>Altura (cm)</Label><NumericInput value={editing.height_cm} onValueChange={(value) => setEditing({ ...editing, height_cm: value })} /></div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div><Label>Etapa</Label>
