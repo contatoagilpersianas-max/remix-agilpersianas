@@ -444,6 +444,24 @@ function ResultCard({
   const waMessage = `Olá! O assistente me recomendou a ${rec.productName} para meu ${ambiente}. Gostaria de dar continuidade ao orçamento.`;
   const waLink = whatsappLink(waMessage);
 
+  // Resumo legível das escolhas
+  const summary: { label: string; value: string }[] = [
+    { label: "Ambiente", value: ambientes.find((x) => x.value === answers.ambiente)?.label ?? answers.ambiente },
+    { label: "Objetivo de luz", value: luzes.find((x) => x.value === answers.luz)?.label ?? answers.luz },
+    { label: "Quem usa", value: segurancas.find((x) => x.value === answers.seguranca)?.label ?? answers.seguranca },
+    { label: "Estilo", value: estilos.find((x) => x.value === answers.estilo)?.label ?? answers.estilo },
+    { label: "Acionamento", value: acionamentos.find((x) => x.value === answers.acionamento)?.label ?? answers.acionamento },
+  ];
+
+  // Link para a calculadora pré-preenchida com a recomendação
+  const calcParams = new URLSearchParams({
+    produto: rec.calcProductId ?? "rolo-blackout",
+    largura: "120",
+    altura: "140",
+    motor: answers.acionamento === "motorizado" ? "1" : "0",
+  });
+  const calcHref = `/#calculadora?${calcParams.toString()}`;
+
   return (
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
       <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden bg-muted">
@@ -483,6 +501,24 @@ function ResultCard({
           ))}
         </ul>
 
+        {/* Resumo das escolhas do cliente */}
+        <div className="mt-5 rounded-2xl border border-border bg-secondary/40 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/70">
+            Suas escolhas no quiz
+          </p>
+          <ul className="mt-2 flex flex-wrap gap-1.5">
+            {summary.map((s) => (
+              <li
+                key={s.label}
+                className="inline-flex items-center gap-1 rounded-full bg-card border border-border px-2.5 py-1 text-xs text-foreground"
+              >
+                <span className="text-foreground/60">{s.label}:</span>
+                <span className="font-semibold">{s.value}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="mt-6 flex flex-col gap-3">
           {rec.mode === "direct" && rec.productPath ? (
             <Link
@@ -505,6 +541,15 @@ function ResultCard({
               <ArrowRight className="h-4 w-4" />
             </a>
           )}
+
+          {/* CTA para a calculadora m² já preenchida */}
+          <a
+            href={calcHref}
+            className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary bg-card px-6 py-3 text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          >
+            <Calculator className="h-4 w-4" />
+            Calcular preço por m² com essa recomendação
+          </a>
 
           {rec.mode === "direct" && (
             <a
