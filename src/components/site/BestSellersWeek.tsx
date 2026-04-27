@@ -23,7 +23,8 @@ export function BestSellersWeek() {
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["bestseller-products-week"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // 1) tenta produtos marcados como bestseller
+      const { data: marked, error } = await supabase
         .from("products")
         .select(
           "id, name, slug, badge, price, sale_price, price_per_sqm, product_type, rating, reviews_count, cover_image, bestseller",
@@ -33,13 +34,26 @@ export function BestSellersWeek() {
         .order("reviews_count", { ascending: false })
         .limit(8);
       if (error) throw error;
-      return (data ?? []) as Product[];
+      if (marked && marked.length >= 4) return marked as Product[];
+
+      // 2) fallback: usa os produtos ativos com mais reviews
+      const { data: top, error: e2 } = await supabase
+        .from("products")
+        .select(
+          "id, name, slug, badge, price, sale_price, price_per_sqm, product_type, rating, reviews_count, cover_image, bestseller",
+        )
+        .eq("active", true)
+        .order("reviews_count", { ascending: false })
+        .order("rating", { ascending: false })
+        .limit(8);
+      if (e2) throw e2;
+      return (top ?? []) as Product[];
     },
     staleTime: 0,
     refetchOnMount: "always",
   });
 
-  if (!isLoading && products.length < 4) {
+  if (!isLoading && products.length === 0) {
     return null;
   }
 
