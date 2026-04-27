@@ -636,30 +636,49 @@ function ResultCard({
   const calcHref = `/?${calcParams.toString()}#calculadora`;
 
   return (
+    <div
+      className="-m-5 sm:-m-8 rounded-3xl p-6 sm:p-10"
+      style={{
+        background: "linear-gradient(135deg, #1C1C1C 0%, #2A1F18 100%)",
+        color: "#FFFFFF",
+      }}
+    >
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
-      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden bg-muted">
+      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#0F0F0F" }}>
         <img
           src={rec.image}
           alt={rec.productName}
           className="w-full h-full object-cover"
           loading="lazy"
         />
-        <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold text-foreground shadow">
-          <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+        <div
+          className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold shadow-lg"
+          style={{ backgroundColor: "#FF6B35", color: "#FFFFFF" }}
+        >
+          <CheckCircle2 className="h-3.5 w-3.5" />
           {rec.score}% de compatibilidade
         </div>
         {rec.badge && (
-          <div className="absolute bottom-3 left-3 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow">
+          <div
+            className="absolute bottom-3 left-3 rounded-full px-3 py-1.5 text-xs font-bold shadow"
+            style={{ backgroundColor: "#FFFFFF", color: "#1A1A1A" }}
+          >
             {rec.badge}
           </div>
         )}
       </div>
 
       <div>
-        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary">
+        <span
+          className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em]"
+          style={{ color: "#FF6B35" }}
+        >
           <Sparkles className="h-3.5 w-3.5" /> Recomendação personalizada
         </span>
-        <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-foreground">
+        <h3
+          className="mt-3 font-display font-semibold leading-[1.05]"
+          style={{ color: "#FFFFFF", fontSize: "clamp(28px, 4vw, 40px)" }}
+        >
           {rec.productName}
         </h3>
 
@@ -670,13 +689,19 @@ function ResultCard({
           answers.convivencia === "pets") && (
           <div className="mt-3 flex flex-wrap gap-2">
             {(answers.seguranca === "criancas" || answers.convivencia === "criancas") && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700">
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
+                style={{ backgroundColor: "rgba(16,185,129,0.18)", color: "#34D399", border: "1px solid rgba(16,185,129,0.4)" }}
+              >
                 <Shield className="h-3.5 w-3.5" />
                 Seguro para crianças
               </span>
             )}
             {(answers.seguranca === "pets" || answers.convivencia === "pets") && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700">
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
+                style={{ backgroundColor: "rgba(59,130,246,0.18)", color: "#60A5FA", border: "1px solid rgba(59,130,246,0.4)" }}
+              >
                 <PawPrint className="h-3.5 w-3.5" />
                 Resistente a pets
               </span>
@@ -684,30 +709,34 @@ function ResultCard({
           </div>
         )}
 
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-4 text-sm" style={{ color: "rgba(255,255,255,0.65)" }}>
           Por que escolhemos para você:
         </p>
-        <ul className="mt-4 space-y-2.5">
+        <ul className="mt-3 space-y-2.5">
           {rec.reasons.map((r, i) => (
-            <li key={i} className="flex items-start gap-2.5 text-sm text-foreground">
-              <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary shrink-0" />
+            <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#F5F5F5" }}>
+              <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "#FF6B35" }} />
               <span>{r}</span>
             </li>
           ))}
         </ul>
 
         {/* Resumo das escolhas do cliente */}
-        <div className="mt-5 rounded-2xl border border-border bg-secondary/40 p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/70">
+        <div
+          className="mt-5 rounded-2xl p-4"
+          style={{ backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+        >
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "rgba(255,255,255,0.6)" }}>
             Suas escolhas no quiz
           </p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
             {summary.map((s) => (
               <li
                 key={s.label}
-                className="inline-flex items-center gap-1 rounded-full bg-card border border-border px-2.5 py-1 text-xs text-foreground"
+                className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs"
+                style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "#F5F5F5", border: "1px solid rgba(255,255,255,0.12)" }}
               >
-                <span className="text-foreground/60">{s.label}:</span>
+                <span style={{ color: "rgba(255,255,255,0.55)" }}>{s.label}:</span>
                 <span className="font-semibold">{s.value}</span>
               </li>
             ))}
@@ -718,7 +747,13 @@ function ResultCard({
           {rec.mode === "direct" && rec.productPath ? (
             <Link
               to={rec.productPath}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-xl px-6 text-[15px] font-bold transition-all hover:opacity-95"
+              style={{
+                backgroundColor: "#FF6B35",
+                color: "#FFFFFF",
+                height: "52px",
+                boxShadow: "0 10px 24px -6px rgba(255,107,53,0.5)",
+              }}
             >
               <ShoppingBag className="h-4 w-4" />
               Comprar produto recomendado
@@ -729,7 +764,12 @@ function ResultCard({
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white shadow hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center gap-2 rounded-xl px-6 text-[15px] font-bold text-white transition-all hover:opacity-90"
+              style={{
+                backgroundColor: "#25D366",
+                height: "52px",
+                boxShadow: "0 10px 24px -6px rgba(37,211,102,0.5)",
+              }}
             >
               <MessageCircle className="h-4 w-4" />
               Finalizar orçamento no WhatsApp
@@ -740,7 +780,8 @@ function ResultCard({
           {/* CTA para a calculadora m² já preenchida */}
           <a
             href={calcHref}
-            className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary bg-card px-6 py-3 text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all hover:bg-[rgba(255,107,53,0.12)]"
+            style={{ border: "1.5px solid #FF6B35", color: "#FF6B35", backgroundColor: "transparent" }}
           >
             <Calculator className="h-4 w-4" />
             Calcular preço por m² com essa recomendação
@@ -751,26 +792,29 @@ function ResultCard({
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors hover:bg-[rgba(255,255,255,0.06)]"
+              style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.85)" }}
             >
               <MessageCircle className="h-4 w-4" />
               Falar com especialista
             </a>
           )}
 
-          <p className="text-xs text-muted-foreground text-center">
+          <p className="text-xs text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
             Compra online imediata ou atendimento especializado, conforme seu projeto.
           </p>
 
           <button
             type="button"
             onClick={onReset}
-            className="mt-1 inline-flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            className="mt-1 inline-flex items-center justify-center gap-1.5 text-xs transition-colors hover:text-white"
+            style={{ color: "rgba(255,255,255,0.55)" }}
           >
             <RotateCcw className="h-3.5 w-3.5" /> Refazer quiz
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }
