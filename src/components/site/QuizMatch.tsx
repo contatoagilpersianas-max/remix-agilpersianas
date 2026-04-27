@@ -65,9 +65,9 @@ const palette = {
 
 // Paleta dark editorial premium (override visual da seção)
 const dark = {
-  bg: "#0C0C0A",
-  surface: "#131310",
-  surface2: "#0F0F0F",
+  bg: "#1A1208",
+  surface: "#150F08",
+  surface2: "#1E1510",
   border: "#1E1E1A",
   borderSoft: "#262620",
   borderHard: "#333",
