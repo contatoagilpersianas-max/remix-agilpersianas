@@ -38,6 +38,8 @@ import {
 import { whatsappLink } from "@/lib/site-config";
 import { supabase } from "@/integrations/supabase/client";
 import { trackLead } from "@/lib/analytics";
+import quizManualImg from "@/assets/quiz-manual.jpg";
+import quizMotorizadoImg from "@/assets/quiz-motorizado.jpg";
 
 type OptionDef<T extends string> = {
   value: T;
