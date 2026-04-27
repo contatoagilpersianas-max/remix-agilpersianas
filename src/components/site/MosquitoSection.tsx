@@ -11,7 +11,7 @@ const TYPES = [
 
 export function MosquitoSection() {
   return (
-    <section className="bg-sand py-20 md:py-28">
+    <section className="bg-sand py-12 md:py-16">
       <div className="container-premium grid gap-12 md:grid-cols-2 md:items-center md:gap-16">
         <div>
           <span

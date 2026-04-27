@@ -2,7 +2,7 @@ import { Mail } from "lucide-react";
 
 export function Newsletter() {
   return (
-    <section className="py-20">
+    <section className="py-12 md:py-16">
       <div className="container-premium">
         <div className="overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-card md:p-14">
           <div className="grid items-center gap-8 md:grid-cols-2 md:gap-12">

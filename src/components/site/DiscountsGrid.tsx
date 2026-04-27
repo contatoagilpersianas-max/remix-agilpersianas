@@ -35,7 +35,7 @@ export function DiscountsGrid() {
   if (products.length === 0) return null;
 
   return (
-    <section className="bg-sand py-20 md:py-24">
+    <section className="bg-sand py-12 md:py-16">
       <div className="container-premium">
         <div className="mb-12 text-center">
           <h2 className="font-display text-4xl font-medium md:text-5xl">

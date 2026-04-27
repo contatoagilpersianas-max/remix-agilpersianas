@@ -20,7 +20,7 @@ const BANNERS = [
 
 export function CategoryBanners() {
   return (
-    <section className="bg-background py-16 md:py-20">
+    <section className="bg-background py-10 md:py-14">
       <div className="container-premium grid gap-6 md:grid-cols-2">
         {BANNERS.map((b) => (
           <a
