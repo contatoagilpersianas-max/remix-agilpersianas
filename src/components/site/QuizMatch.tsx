@@ -568,6 +568,28 @@ function ResultCard({
         <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-foreground">
           {rec.productName}
         </h3>
+
+        {/* Selos contextuais (verde: crianças, azul: pets) */}
+        {(answers.seguranca === "criancas" ||
+          answers.convivencia === "criancas" ||
+          answers.seguranca === "pets" ||
+          answers.convivencia === "pets") && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {(answers.seguranca === "criancas" || answers.convivencia === "criancas") && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700">
+                <Shield className="h-3.5 w-3.5" />
+                Seguro para crianças
+              </span>
+            )}
+            {(answers.seguranca === "pets" || answers.convivencia === "pets") && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700">
+                <PawPrint className="h-3.5 w-3.5" />
+                Resistente a pets
+              </span>
+            )}
+          </div>
+        )}
+
         <p className="mt-1 text-sm text-muted-foreground">
           Por que escolhemos para você:
         </p>
