@@ -148,7 +148,7 @@ type Answers = {
   ambiente?: Ambiente;
   luz?: Luz;
   estilo?: Estilo;
-  convivencia?: Convivencia;
+  convivencia?: Convivencia[];
   acionamento?: Acionamento;
 };
 
@@ -224,6 +224,10 @@ function recommend(a: Required<Answers>): Recommendation {
   let image =
     "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80";
 
+  const conv = a.convivencia ?? [];
+  const hasCriancas = conv.includes("criancas");
+  const hasPets = conv.includes("pets");
+
   // Área externa → toldos (sempre consultivo)
   if (a.ambiente === "externa") {
     productName = "Toldo Retrátil / Tela Externa";
@@ -265,7 +269,7 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Privacidade ajustável sem abrir mão da iluminação natural.");
   }
 
-  if (a.convivencia === "pets" && a.ambiente !== "externa" && a.luz !== "solar" && a.luz !== "blackout") {
+  if (hasPets && a.ambiente !== "externa" && a.luz !== "solar" && a.luz !== "blackout") {
     productName = "Persiana Solar Screen (Pet-Friendly)";
     productPath = "/persiana-solar-screen";
     calcProductId = "rolo-solar";
@@ -273,7 +277,7 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Tecido resistente que não desfia — perfeito para pets.");
   }
 
-  if (a.convivencia === "criancas") {
+  if (hasCriancas) {
     badge = "Motorização recomendada";
     reasons.push("Sem cordões soltos — segurança total para crianças em casa.");
   }
@@ -290,7 +294,7 @@ function recommend(a: Required<Answers>): Recommendation {
   if (a.luz === "solar" && (a.ambiente === "sala" || a.ambiente === "home")) score += 6;
   if (a.ambiente === "externa") score += 4;
   if (a.acionamento === "motorizado") score += 2;
-  if (a.convivencia === "criancas" && a.acionamento === "motorizado") score += 2;
+  if (hasCriancas && a.acionamento === "motorizado") score += 2;
   score = Math.min(99, score);
 
   const directPaths = new Set([
