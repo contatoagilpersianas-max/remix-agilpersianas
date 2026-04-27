@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import heroLiving from "@/assets/hero-2026-living.jpg";
 import heroBedroom from "@/assets/hero-2026-bedroom.jpg";
 import heroLivingLumi from "@/assets/hero-2026-living-lumi.jpg";
-import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, CalendarCheck, BookOpen } from "lucide-react";
+import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, BookOpen } from "lucide-react";
 import { openLumiWith } from "@/components/site/LumiWidget";
 import { supabase } from "@/integrations/supabase/client";
 
