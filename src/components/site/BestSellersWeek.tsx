@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { Star, Flame, ShoppingCart, ArrowRight } from "lucide-react";
+import { Star, Flame, ShoppingCart, ArrowRight, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart, formatBRL } from "@/lib/cart";
 
@@ -19,9 +19,9 @@ type Product = {
   bestseller: boolean;
 };
 
-export function FeaturedProducts() {
+export function BestSellersWeek() {
   const { data: products = [], isLoading } = useQuery({
-    queryKey: ["featured-products"],
+    queryKey: ["bestseller-products-week"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
@@ -29,8 +29,8 @@ export function FeaturedProducts() {
           "id, name, slug, badge, price, sale_price, price_per_sqm, product_type, rating, reviews_count, cover_image, bestseller",
         )
         .eq("active", true)
-        .eq("featured", true)
-        .order("bestseller", { ascending: false })
+        .eq("bestseller", true)
+        .order("reviews_count", { ascending: false })
         .limit(8);
       if (error) throw error;
       return (data ?? []) as Product[];
@@ -39,27 +39,25 @@ export function FeaturedProducts() {
     refetchOnMount: "always",
   });
 
-  // Oculta a seção inteira quando não há produtos suficientes para uma vitrine real
-  // (evita placeholder "Em breve..." e cards repetindo a mesma foto).
   if (!isLoading && products.length < 4) {
     return null;
   }
 
   return (
-    <section id="catalogo" className="bg-background py-12 md:py-16">
+    <section className="bg-sand py-12 md:py-16">
       <div className="container-premium">
         <div className="mb-12 flex flex-col items-center text-center md:mb-16" data-reveal>
           <span
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em]"
             style={{ backgroundColor: "rgba(184,84,28,0.10)", color: "#B8541C" }}
           >
-            <Flame className="h-3.5 w-3.5" /> Destaques
+            <TrendingUp className="h-3.5 w-3.5" /> Mais vendidos
           </span>
           <h2 className="mt-5 text-display text-4xl md:text-6xl">
-            Produtos em destaque
+            Mais vendidas essa semana
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
-            Persianas e cortinas sob medida ao centímetro com envio para todo o Brasil.
+            Os modelos preferidos dos nossos clientes nos últimos dias.
           </p>
         </div>
 
@@ -76,7 +74,7 @@ export function FeaturedProducts() {
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-x-6 md:gap-y-12 lg:grid-cols-4">
             {products.map((p, i) => (
               <div key={p.id} data-reveal style={{ transitionDelay: `${(i % 4) * 80}ms` }}>
-                <ProductCard product={p} />
+                <ProductCard product={p} rank={i + 1} />
               </div>
             ))}
           </div>
@@ -87,7 +85,7 @@ export function FeaturedProducts() {
             to="/catalogo"
             className="group inline-flex h-13 items-center justify-center gap-2.5 rounded-full bg-foreground px-8 py-4 text-[12px] font-bold uppercase tracking-[0.18em] text-background transition-all duration-300 ease-premium hover:bg-primary hover:-translate-y-0.5 hover:shadow-glow"
           >
-            Ver todos os produtos
+            Ver todos os mais vendidos
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
@@ -96,7 +94,7 @@ export function FeaturedProducts() {
   );
 }
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product, rank }: { product: Product; rank: number }) {
   const { addItem } = useCart();
   const isM2 = product.product_type === "metro_quadrado";
   const finalPrice = isM2
@@ -115,7 +113,6 @@ function ProductCard({ product }: { product: Product }) {
     e.preventDefault();
     e.stopPropagation();
     if (isM2) {
-      // Para sob medida, leva para a página do produto para configurar
       window.location.assign(`/produto/${product.slug}`);
       return;
     }
@@ -141,22 +138,16 @@ function ProductCard({ product }: { product: Product }) {
             className="h-full w-full object-cover transition-transform duration-[900ms] ease-premium group-hover:scale-[1.06]"
           />
         )}
-        {/* Overlay gradiente sutil ao hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        {product.badge && (
-          <span
-            className="absolute left-3 top-3 inline-flex items-center justify-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md"
-            style={{ backgroundColor: "#E2763A" }}
-          >
-            {product.badge}
-          </span>
-        )}
-        {product.bestseller && (
-          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-background shadow-md">
-            <Flame className="h-3 w-3" /> Top
-          </span>
-        )}
-        {/* Quick add */}
+        <span
+          className="absolute left-3 top-3 inline-flex h-7 min-w-7 items-center justify-center rounded-full px-2 text-[11px] font-bold uppercase tracking-wider text-white shadow-md"
+          style={{ backgroundColor: "#0F172A" }}
+        >
+          #{rank}
+        </span>
+        <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-background shadow-md">
+          <Flame className="h-3 w-3" /> Top
+        </span>
         <button
           onClick={quickAdd}
           className="absolute bottom-3 right-3 inline-flex translate-y-2 items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-[11px] font-bold uppercase tracking-wider text-primary-foreground shadow-lg opacity-0 transition-all duration-300 ease-premium group-hover:translate-y-0 group-hover:opacity-100"

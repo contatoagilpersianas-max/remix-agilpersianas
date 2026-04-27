@@ -4,6 +4,7 @@ import { HeroBanner } from "@/components/site/Hero";
 import { PromoStrip } from "@/components/site/PromoStrip";
 // TrustBar e Categories removidos a pedido do cliente
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
+import { BestSellersWeek } from "@/components/site/BestSellersWeek";
 import { CategoriesPremium } from "@/components/site/CategoriesPremium";
 import { BenefitsRow } from "@/components/site/BenefitsRow";
 import { BeforeAfter } from "@/components/site/BeforeAfter";
@@ -54,6 +55,8 @@ function Index() {
         <QuizMatch />
         {/* 5) Produtos em destaque */}
         <FeaturedProducts />
+        {/* 5b) Mais vendidas essa semana */}
+        <BestSellersWeek />
         {/* 6) Categorias premium */}
         <CategoriesPremium />
         {/* Selos de confiança / benefícios premium */}

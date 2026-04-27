@@ -649,6 +649,13 @@ export function QuizMatch() {
                     stepImages[opt.value] ??
                     ambienteImages.sala;
                   const caption = stepCaption[current.key] ?? "Opção";
+                  // Mantém o foco no detalhe do acionamento (corrente na direita / controle ao centro)
+                  const objectPosition =
+                    current.key === "acionamento"
+                      ? opt.value === "manual"
+                        ? "72% center"
+                        : "50% 55%"
+                      : "center";
                   const highlightSafe =
                     current.key === "acionamento" &&
                     opt.value === "motorizado" &&
@@ -673,6 +680,7 @@ export function QuizMatch() {
                         loading="lazy"
                         decoding="async"
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        style={{ objectPosition }}
                       />
                       <div
                         className="absolute inset-0"
