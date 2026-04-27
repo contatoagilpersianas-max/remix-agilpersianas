@@ -39,6 +39,12 @@ export function FeaturedProducts() {
     refetchOnMount: "always",
   });
 
+  // Oculta a seção inteira quando não há produtos suficientes para uma vitrine real
+  // (evita placeholder "Em breve..." e cards repetindo a mesma foto).
+  if (!isLoading && products.length < 4) {
+    return null;
+  }
+
   return (
     <section id="catalogo" className="bg-background py-20 md:py-28">
       <div className="container-premium">
@@ -66,9 +72,6 @@ export function FeaturedProducts() {
               />
             ))}
           </div>
-        ) : products.length === 0 ? null : products.length < 4 ? (
-          // Evita exibir vitrine inconsistente com poucos produtos repetidos
-          null
         ) : (
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-x-6 md:gap-y-12 lg:grid-cols-4">
             {products.map((p, i) => (
