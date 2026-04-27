@@ -30,6 +30,10 @@ import {
   ShoppingBag,
   Calculator,
   SkipForward,
+  Bot,
+  Shield,
+  Sailboat,
+  XCircle,
 } from "lucide-react";
 import { whatsappLink } from "@/lib/site-config";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,17 +53,20 @@ type Ambiente =
   | "cozinha"
   | "escritorio"
   | "lavanderia"
-  | "infantil";
+  | "infantil"
+  | "externa";
 type Luz = "blackout" | "filtrar" | "privacidade" | "solar";
 type Seguranca = "criancas" | "pets" | "adultos";
 type Estilo = "moderno" | "classico" | "rustico" | "industrial";
 type Acionamento = "manual" | "motorizado";
+type Convivencia = "criancas" | "pets" | "nenhum";
 
 type Answers = {
   ambiente?: Ambiente;
   luz?: Luz;
   seguranca?: Seguranca;
   estilo?: Estilo;
+  convivencia?: Convivencia;
   acionamento?: Acionamento;
 };
 
@@ -71,6 +78,7 @@ const ambientes: OptionDef<Ambiente>[] = [
   { value: "escritorio", label: "Escritório", icon: Briefcase, feedback: "Show! Vamos priorizar foco e zero ofuscação." },
   { value: "lavanderia", label: "Lavanderia", icon: WashingMachine, feedback: "Anotado! Resistência à umidade é essencial." },
   { value: "infantil", label: "Quarto Infantil", icon: Baby, feedback: "Importante! Vamos focar em segurança e blackout suave." },
+  { value: "externa", label: "Área Externa / Varanda", icon: Sailboat, feedback: "Toldos e telas resistentes ao tempo entram na lista." },
 ];
 
 const luzes: OptionDef<Luz>[] = [
@@ -96,6 +104,12 @@ const estilos: OptionDef<Estilo>[] = [
 const acionamentos: OptionDef<Acionamento>[] = [
   { value: "manual", label: "Manual", icon: Hand, feedback: "Prático e econômico." },
   { value: "motorizado", label: "Motorizado (Controle/Alexa)", icon: Cpu, feedback: "Conforto premium — abre e fecha por voz ou app." },
+];
+
+const convivencias: OptionDef<Convivencia>[] = [
+  { value: "criancas", label: "Sim, crianças", icon: Baby, feedback: "Vamos priorizar modelos sem cordão solto — segurança máxima." },
+  { value: "pets", label: "Sim, animais", icon: PawPrint, feedback: "Tecidos resistentes que não desfiam — ideais para pets." },
+  { value: "nenhum", label: "Não", icon: XCircle, feedback: "Perfeito! Liberdade total nas escolhas de tecido e acionamento." },
 ];
 
 /* ---------------- Lógica de recomendação ---------------- */
@@ -128,7 +142,15 @@ function recommend(a: Required<Answers>): Recommendation {
   let image =
     "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80";
 
-  if (a.luz === "blackout") {
+  // Área externa → toldos (sempre consultivo)
+  if (a.ambiente === "externa") {
+    productName = "Toldo Retrátil / Tela Externa";
+    productPath = "/toldos";
+    calcProductId = "rolo-solar";
+    image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80";
+    reasons.push("Resistente ao sol, chuva e vento — perfeito para área externa.");
+    mode = "consult";
+  } else if (a.luz === "blackout") {
     productName = "Persiana Rolô Blackout Premium";
     productPath = "/persiana-rolo-blackout";
     calcProductId = "rolo-blackout";
@@ -161,7 +183,7 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Privacidade ajustável sem abrir mão da iluminação natural.");
   }
 
-  if (a.seguranca === "pets" && a.luz !== "solar" && a.luz !== "blackout") {
+  if ((a.seguranca === "pets" || a.convivencia === "pets") && a.ambiente !== "externa" && a.luz !== "solar" && a.luz !== "blackout") {
     productName = "Persiana Solar Screen (Pet-Friendly)";
     productPath = "/persiana-solar-screen";
     calcProductId = "rolo-solar";
@@ -169,9 +191,9 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Tecido resistente que não desfia — perfeito para pets.");
   }
 
-  if (a.seguranca === "criancas") {
+  if (a.seguranca === "criancas" || a.convivencia === "criancas") {
     badge = "Motorização recomendada";
-    reasons.push("Sem cordões — segurança total para o quarto infantil.");
+    reasons.push("Sem cordões soltos — segurança total para crianças em casa.");
   }
 
   if (a.acionamento === "motorizado") {
@@ -184,8 +206,9 @@ function recommend(a: Required<Answers>): Recommendation {
   let score = 88;
   if (a.luz === "blackout" && (a.ambiente === "quarto" || a.ambiente === "infantil")) score += 6;
   if (a.luz === "solar" && (a.ambiente === "sala" || a.ambiente === "home")) score += 6;
+  if (a.ambiente === "externa") score += 4;
   if (a.acionamento === "motorizado") score += 2;
-  if (a.seguranca === "criancas" && a.acionamento === "motorizado") score += 2;
+  if ((a.seguranca === "criancas" || a.convivencia === "criancas") && a.acionamento === "motorizado") score += 2;
   score = Math.min(99, score);
 
   const directPaths = new Set([
@@ -212,11 +235,42 @@ function recommend(a: Required<Answers>): Recommendation {
 /* ---------------- Componente ---------------- */
 
 const STEPS = [
-  { key: "ambiente" as const, title: "Onde será instalada?", options: ambientes },
-  { key: "luz" as const, title: "Qual seu objetivo de luz?", options: luzes },
-  { key: "seguranca" as const, title: "Quem usa o ambiente?", options: segurancas },
-  { key: "estilo" as const, title: "Qual seu estilo de decoração?", options: estilos },
-  { key: "acionamento" as const, title: "Como prefere acionar?", options: acionamentos },
+  {
+    key: "ambiente" as const,
+    title: "Onde será instalada?",
+    options: ambientes,
+    botMessage: "Olá! Vou encontrar a solução perfeita para você. Comece pelo ambiente onde a persiana será instalada.",
+  },
+  {
+    key: "luz" as const,
+    title: "Qual seu objetivo de luz?",
+    options: luzes,
+    botMessage: "Ótimo! Agora me conte: você quer escurecer totalmente, filtrar a luz ou apenas ter privacidade?",
+  },
+  {
+    key: "seguranca" as const,
+    title: "Quem usa o ambiente?",
+    options: segurancas,
+    botMessage: "Isso me ajuda a sugerir o tecido e o acionamento mais adequados ao perfil de quem usa o espaço.",
+  },
+  {
+    key: "estilo" as const,
+    title: "Qual seu estilo de decoração?",
+    options: estilos,
+    botMessage: "Vou alinhar a recomendação com a estética da sua casa — texturas, cores e acabamentos.",
+  },
+  {
+    key: "convivencia" as const,
+    title: "Crianças ou pets em casa?",
+    options: convivencias,
+    botMessage: "A segurança vem primeiro! Para crianças, recomendarei modelos sem cordão solto. Para pets, tecidos que não desfiam.",
+  },
+  {
+    key: "acionamento" as const,
+    title: "Como prefere acionar?",
+    options: acionamentos,
+    botMessage: "Última pergunta! Manual é econômico; motorizado é conforto premium — abre e fecha por controle, app ou Alexa.",
+  },
 ];
 
 export function QuizMatch() {
@@ -243,7 +297,7 @@ export function QuizMatch() {
       `Quiz concluído — Recomendação: ${recommendation.productName} ` +
       `(${recommendation.score}% match)\n` +
       `Ambiente: ${a.ambiente} | Luz: ${a.luz} | Segurança: ${a.seguranca} | ` +
-      `Estilo: ${a.estilo} | Acionamento: ${a.acionamento}`;
+      `Estilo: ${a.estilo} | Convivência: ${a.convivencia} | Acionamento: ${a.acionamento}`;
     void supabase
       .from("leads")
       .insert({
@@ -286,7 +340,7 @@ export function QuizMatch() {
     savedRef.current = false;
   }
 
-  const progress = isComplete ? 100 : Math.round((step / STEPS.length) * 100);
+  const progress = isComplete ? 100 : Math.round(((step + 1) / STEPS.length) * 100);
 
   return (
     <section
@@ -325,30 +379,55 @@ export function QuizMatch() {
         <div className="w-full mx-auto rounded-3xl border border-border bg-card shadow-card p-5 sm:p-8">
           {!isComplete ? (
             <>
-              <div className="mb-5 flex items-center justify-between gap-3">
-                <span className="text-xs font-semibold text-foreground whitespace-nowrap">
-                  Etapa {step + 1} de {STEPS.length}
-                </span>
-                <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+              {/* Barra de progresso visual — sem percentual numérico */}
+              <div className="mb-6">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-foreground/70">
+                    Etapa {step + 1} de {STEPS.length}
+                  </span>
+                  <span className="text-xs font-medium text-foreground/60">
+                    {STEPS.length - step - 1 === 0 ? "Última pergunta!" : `Faltam ${STEPS.length - step - 1}`}
+                  </span>
+                </div>
+                <div
+                  className="h-2.5 w-full rounded-full bg-muted overflow-hidden"
+                  role="progressbar"
+                  aria-valuenow={progress}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label={`Progresso do quiz: etapa ${step + 1} de ${STEPS.length}`}
+                >
                   <div
-                    className="h-full bg-primary transition-all duration-500"
+                    className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
-                <span className="text-xs font-semibold text-primary">{progress}%</span>
+              </div>
+
+              {/* Bot de feedback contextual */}
+              <div className="mb-6 flex items-start gap-3 rounded-2xl border border-border bg-secondary/40 p-3.5 sm:p-4">
+                <span
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"
+                  aria-hidden="true"
+                >
+                  <Bot className="h-5 w-5" />
+                </span>
+                <div className="flex-1 pt-0.5">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
+                    Assistente Ágil
+                  </p>
+                  <p className="mt-0.5 text-sm sm:text-[15px] font-medium text-foreground leading-snug">
+                    {feedback || current.botMessage}
+                  </p>
+                </div>
               </div>
 
               <div className="mb-6 text-center">
                 <h3 className="text-2xl sm:text-3xl font-semibold text-foreground font-display">
                   {current.title}
                 </h3>
-                <p
-                  className={`mt-2 text-sm sm:text-base transition-all duration-300 font-medium ${
-                    feedback ? "text-primary" : "text-foreground/60"
-                  }`}
-                  aria-live="polite"
-                >
-                  {feedback || "Toque na opção que mais combina com você."}
+                <p className="mt-2 text-sm sm:text-base text-foreground/60" aria-live="polite">
+                  Toque na opção que mais combina com você.
                 </p>
               </div>
 
