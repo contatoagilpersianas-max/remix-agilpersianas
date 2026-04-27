@@ -88,7 +88,7 @@ const ambienteImages: Record<string, string> = {
   cozinha: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
   escritorio: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
   lavanderia: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80",
-  infantil: "https://images.unsplash.com/photo-1559554498-17f985b2c421?w=600&q=80",
+  infantil: "https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?w=600&q=80",
   externa: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
 };
 
@@ -113,8 +113,10 @@ const optionImages: Record<string, Record<string, string>> = {
     nenhum: "https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=400&q=80",
   },
   acionamento: {
-    manual: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
-    motorizado: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
+    // Mão acionando corrente/cordão de persiana rolô
+    manual: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&q=80",
+    // Persiana rolô moderna em janela ampla — sugestão de motorização premium
+    motorizado: "https://images.unsplash.com/photo-1558882224-dda166733046?w=600&q=80",
   },
 };
 
@@ -146,7 +148,7 @@ type Answers = {
   ambiente?: Ambiente;
   luz?: Luz;
   estilo?: Estilo;
-  convivencia?: Convivencia;
+  convivencia?: Convivencia[];
   acionamento?: Acionamento;
 };
 
@@ -222,6 +224,10 @@ function recommend(a: Required<Answers>): Recommendation {
   let image =
     "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80";
 
+  const conv = a.convivencia ?? [];
+  const hasCriancas = conv.includes("criancas");
+  const hasPets = conv.includes("pets");
+
   // Área externa → toldos (sempre consultivo)
   if (a.ambiente === "externa") {
     productName = "Toldo Retrátil / Tela Externa";
@@ -263,7 +269,7 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Privacidade ajustável sem abrir mão da iluminação natural.");
   }
 
-  if (a.convivencia === "pets" && a.ambiente !== "externa" && a.luz !== "solar" && a.luz !== "blackout") {
+  if (hasPets && a.ambiente !== "externa" && a.luz !== "solar" && a.luz !== "blackout") {
     productName = "Persiana Solar Screen (Pet-Friendly)";
     productPath = "/persiana-solar-screen";
     calcProductId = "rolo-solar";
@@ -271,7 +277,7 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Tecido resistente que não desfia — perfeito para pets.");
   }
 
-  if (a.convivencia === "criancas") {
+  if (hasCriancas) {
     badge = "Motorização recomendada";
     reasons.push("Sem cordões soltos — segurança total para crianças em casa.");
   }
@@ -288,7 +294,7 @@ function recommend(a: Required<Answers>): Recommendation {
   if (a.luz === "solar" && (a.ambiente === "sala" || a.ambiente === "home")) score += 6;
   if (a.ambiente === "externa") score += 4;
   if (a.acionamento === "motorizado") score += 2;
-  if (a.convivencia === "criancas" && a.acionamento === "motorizado") score += 2;
+  if (hasCriancas && a.acionamento === "motorizado") score += 2;
   score = Math.min(99, score);
 
   const directPaths = new Set([
@@ -373,7 +379,7 @@ export function QuizMatch() {
       `Quiz concluído — Recomendação: ${recommendation.productName} ` +
       `(${recommendation.score}% match)\n` +
       `Ambiente: ${a.ambiente} | Luz: ${a.luz} | ` +
-      `Estilo: ${a.estilo} | Convivência: ${a.convivencia} | Acionamento: ${a.acionamento}`;
+      `Estilo: ${a.estilo} | Convivência: ${(a.convivencia ?? []).join("+") || "—"} | Acionamento: ${a.acionamento}`;
     void supabase
       .from("leads")
       .insert({
@@ -396,8 +402,22 @@ export function QuizMatch() {
 
   function handleSelect(value: string, fb: string) {
     setFeedback(fb);
-    const next: Answers = { ...answers, [current.key]: value as never };
-    setAnswers(next);
+    if (current.key === "convivencia") {
+      // Multi-select: pode marcar crianças + pets juntos.
+      // "nenhum" é exclusivo (limpa as outras e vice-versa).
+      const prev = (answers.convivencia ?? []) as Convivencia[];
+      const v = value as Convivencia;
+      let next: Convivencia[];
+      if (v === "nenhum") {
+        next = prev.includes("nenhum") ? [] : ["nenhum"];
+      } else {
+        const without = prev.filter((x) => x !== "nenhum" && x !== v);
+        next = prev.includes(v) ? without : [...without, v];
+      }
+      setAnswers({ ...answers, convivencia: next });
+      return;
+    }
+    setAnswers({ ...answers, [current.key]: value as never });
   }
 
   function handleBack() {
@@ -600,6 +620,14 @@ export function QuizMatch() {
                 >
                   {current.title}
                 </h3>
+                {current.key === "convivencia" && (
+                  <p
+                    className="mt-2 text-[12px] uppercase font-medium"
+                    style={{ color: dark.coral, letterSpacing: "0.18em" }}
+                  >
+                    Selecione uma ou mais opções
+                  </p>
+                )}
               </div>
 
               {/* Opções — todos os steps usam cards com foto real (3:4) */}
@@ -610,7 +638,10 @@ export function QuizMatch() {
                 aria-label={current.title}
               >
                 {current.options.map((opt) => {
-                  const selected = (answers as Record<string, string>)[current.key] === opt.value;
+                  const selected =
+                    current.key === "convivencia"
+                      ? (answers.convivencia ?? []).includes(opt.value as Convivencia)
+                      : (answers as Record<string, string>)[current.key] === opt.value;
                   const stepImages = optionImages[current.key] ?? {};
                   const img =
                     stepImages[opt.value] ??
@@ -619,7 +650,7 @@ export function QuizMatch() {
                   const highlightSafe =
                     current.key === "acionamento" &&
                     opt.value === "motorizado" &&
-                    answers.convivencia === "criancas";
+                    (answers.convivencia ?? []).includes("criancas");
                   return (
                     <button
                       key={opt.value}
@@ -727,7 +758,10 @@ export function QuizMatch() {
 
               <div className="mt-10 flex flex-col gap-3">
                 {(() => {
-                  const hasAnswer = !!(answers as Record<string, string>)[current.key];
+                  const hasAnswer =
+                    current.key === "convivencia"
+                      ? (answers.convivencia ?? []).length > 0
+                      : !!(answers as Record<string, string>)[current.key];
                   return (
                     <button
                       type="button"
@@ -805,12 +839,22 @@ function ResultCard({
   const waMessage = `Olá! O assistente me recomendou a ${rec.productName} para meu ${ambiente}. Gostaria de dar continuidade ao orçamento.`;
   const waLink = whatsappLink(waMessage);
 
+  const convList = answers.convivencia ?? [];
+  const convLabel =
+    convList.length === 0
+      ? "—"
+      : convList
+          .map((v) => convivencias.find((x) => x.value === v)?.label ?? v)
+          .join(" + ");
+  const hasCriancas = convList.includes("criancas");
+  const hasPets = convList.includes("pets");
+
   // Resumo legível das escolhas
   const summary: { label: string; value: string }[] = [
     { label: "Ambiente", value: ambientes.find((x) => x.value === answers.ambiente)?.label ?? answers.ambiente },
     { label: "Objetivo de luz", value: luzes.find((x) => x.value === answers.luz)?.label ?? answers.luz },
     { label: "Estilo", value: estilos.find((x) => x.value === answers.estilo)?.label ?? answers.estilo },
-    { label: "Crianças/Pets", value: convivencias.find((x) => x.value === answers.convivencia)?.label ?? answers.convivencia },
+    { label: "Crianças/Pets", value: convLabel },
     { label: "Acionamento", value: acionamentos.find((x) => x.value === answers.acionamento)?.label ?? answers.acionamento },
   ];
 
@@ -868,10 +912,9 @@ function ResultCard({
         </h3>
 
         {/* Selos contextuais (verde: crianças, azul: pets) */}
-        {(answers.convivencia === "criancas" ||
-          answers.convivencia === "pets") && (
+        {(hasCriancas || hasPets) && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {answers.convivencia === "criancas" && (
+            {hasCriancas && (
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                 style={{ backgroundColor: "rgba(16,185,129,0.18)", color: "#34D399", border: "1px solid rgba(16,185,129,0.4)" }}
@@ -880,7 +923,7 @@ function ResultCard({
                 Seguro para crianças
               </span>
             )}
-            {answers.convivencia === "pets" && (
+            {hasPets && (
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                 style={{ backgroundColor: "rgba(59,130,246,0.18)", color: "#60A5FA", border: "1px solid rgba(59,130,246,0.4)" }}
