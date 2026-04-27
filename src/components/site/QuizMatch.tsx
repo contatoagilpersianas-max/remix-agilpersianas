@@ -63,9 +63,34 @@ const palette = {
   coralWash: "rgba(217,102,60,0.08)",
 };
 
-// Imagem de interior de luxo desfocada usada como pano de fundo "editorial".
-const editorialBg =
-  "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=70";
+// Paleta dark editorial premium (override visual da seção)
+const dark = {
+  bg: "#0C0C0A",
+  surface: "#131310",
+  surface2: "#0F0F0F",
+  border: "#1E1E1A",
+  borderSoft: "#262620",
+  borderHard: "#333",
+  text: "#F5F1E8",
+  textSoft: "#C8C4BC",
+  textMuted: "#888178",
+  textDim: "#444",
+  coral: "#FF6B35",
+  coralWash: "rgba(255,107,53,0.25)",
+  coralBorder: "rgba(255,107,53,0.4)",
+};
+
+// Fotos reais de ambiente para os cards (Unsplash, otimizadas)
+const ambienteImages: Record<string, string> = {
+  quarto: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80",
+  sala: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
+  home: "https://images.unsplash.com/photo-1593696954577-ab3d39317b97?w=600&q=80",
+  cozinha: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
+  escritorio: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
+  lavanderia: "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=600&q=80",
+  infantil: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+  externa: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
+};
 
 type Ambiente =
   | "quarto"
