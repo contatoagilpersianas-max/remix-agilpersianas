@@ -402,8 +402,22 @@ export function QuizMatch() {
 
   function handleSelect(value: string, fb: string) {
     setFeedback(fb);
-    const next: Answers = { ...answers, [current.key]: value as never };
-    setAnswers(next);
+    if (current.key === "convivencia") {
+      // Multi-select: pode marcar crianças + pets juntos.
+      // "nenhum" é exclusivo (limpa as outras e vice-versa).
+      const prev = (answers.convivencia ?? []) as Convivencia[];
+      const v = value as Convivencia;
+      let next: Convivencia[];
+      if (v === "nenhum") {
+        next = prev.includes("nenhum") ? [] : ["nenhum"];
+      } else {
+        const without = prev.filter((x) => x !== "nenhum" && x !== v);
+        next = prev.includes(v) ? without : [...without, v];
+      }
+      setAnswers({ ...answers, convivencia: next });
+      return;
+    }
+    setAnswers({ ...answers, [current.key]: value as never });
   }
 
   function handleBack() {
