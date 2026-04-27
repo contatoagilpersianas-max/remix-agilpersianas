@@ -92,6 +92,41 @@ const ambienteImages: Record<string, string> = {
   externa: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
 };
 
+// Fotos por etapa/opção — todos os cards usam imagens reais
+const optionImages: Record<string, Record<string, string>> = {
+  ambiente: ambienteImages,
+  luz: {
+    blackout: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80",
+    privacidade: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
+    filtrar: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=400&q=80",
+    solar: "https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=400&q=80",
+  },
+  estilo: {
+    moderno: "https://images.unsplash.com/photo-1489171078254-c3365d6e359f?w=400&q=80",
+    classico: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=400&q=80",
+    rustico: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=400&q=80",
+    industrial: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400&q=80",
+  },
+  convivencia: {
+    criancas: "https://images.unsplash.com/photo-1566004100631-35d015d6a491?w=400&q=80",
+    pets: "https://images.unsplash.com/photo-1583511655826-05700d52f4d9?w=400&q=80",
+    nenhum: "https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=400&q=80",
+  },
+  acionamento: {
+    manual: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
+    motorizado: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
+  },
+};
+
+// Subtítulo (caption laranja) por etapa
+const stepCaption: Record<string, string> = {
+  ambiente: "Ambiente",
+  luz: "Objetivo de luz",
+  estilo: "Estilo",
+  convivencia: "Convivência",
+  acionamento: "Acionamento",
+};
+
 type Ambiente =
   | "quarto"
   | "sala"
