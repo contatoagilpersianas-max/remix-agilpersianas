@@ -52,10 +52,10 @@ function Index() {
         <HeroBanner />
         {/* 2) Faixa laranja com benefícios — logo abaixo do banner */}
         <PromoStrip />
+        {/* 3) ⭐ QUIZ INTELIGENTE — logo abaixo da faixa laranja */}
+        <QuizMatch />
         {/* 3) Bloco editorial "Seu ambiente merece..." + Lumi (Hero principal completo) */}
         <HeroIntro />
-        {/* 4) ⭐ QUIZ INTELIGENTE — entre Hero principal e vitrine de produtos */}
-        <QuizMatch />
         {/* 5) Produtos em destaque */}
         <FeaturedProducts />
         {/* 6) Categorias premium */}
