@@ -1,53 +1,44 @@
-import { Ruler, CreditCard, Package, Wrench } from "lucide-react";
+import { Ruler, CreditCard, Truck, Wrench } from "lucide-react";
 
 const ITEMS = [
-  {
-    icon: Ruler,
-    title: "Sob medida exata",
-    desc: "Cada produto é cortado ao centímetro para a sua janela.",
-  },
-  {
-    icon: CreditCard,
-    title: "Parcele em até 6× sem juros ou 5% off no PIX",
-    desc: "Aceitamos todos os cartões ou desconto especial à vista.",
-  },
-  {
-    icon: Package,
-    title: "Produção própria",
-    desc: "Fábrica e showroom técnico — sem atravessadores.",
-  },
-  {
-    icon: Wrench,
-    title: "Instalação simples",
-    desc: "Vídeo passo a passo no app — fácil de montar em casa.",
-  },
+  { icon: Ruler, title: "Sob medida exata", desc: "Cortado ao centímetro" },
+  { icon: CreditCard, title: "Até 6× sem juros", desc: "ou 5% off no PIX" },
+  { icon: Truck, title: "Entrega Brasil", desc: "Frete para todo o país" },
+  { icon: Wrench, title: "Instalação simples", desc: "Vídeo passo a passo" },
 ];
 
 export function BenefitsRow() {
   return (
-    <section className="bg-background py-10 md:py-14">
-      <div className="container-premium grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {ITEMS.map(({ icon: Icon, title, desc }, i) => (
-          <div
-            key={title}
-            data-reveal
-            style={{ transitionDelay: `${i * 80}ms` }}
-            className="group rounded-2xl border border-border bg-card p-6 transition-all duration-500 ease-premium hover:border-primary/40 hover:shadow-card hover:-translate-y-1"
-          >
-            <div
-              className="flex h-12 w-12 items-center justify-center rounded-full transition-transform duration-500 ease-premium group-hover:scale-110"
-              style={{ backgroundColor: "rgba(226,118,58,0.1)" }}
-            >
-              <Icon className="h-5 w-5" style={{ color: "#E2763A" }} />
-            </div>
-            <h3 className="mt-5 text-sm font-bold leading-snug text-foreground">
-              {title}
-            </h3>
-            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              {desc}
-            </p>
-          </div>
-        ))}
+    <section className="bg-background py-6 md:py-8">
+      <div className="container-premium">
+        <div
+          className="rounded-2xl border border-border/60 bg-[#FAF7F2] shadow-[0_1px_2px_rgba(0,0,0,0.03),0_8px_24px_-12px_rgba(0,0,0,0.08)] overflow-hidden"
+          data-reveal
+        >
+          <ul className="grid grid-cols-2 lg:grid-cols-4 divide-y divide-border/50 lg:divide-y-0 lg:divide-x">
+            {ITEMS.map(({ icon: Icon, title, desc }) => (
+              <li
+                key={title}
+                className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-5 group"
+              >
+                <div
+                  className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-full transition-transform duration-500 ease-premium group-hover:scale-110"
+                  style={{ backgroundColor: "rgba(226,118,58,0.10)" }}
+                >
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: "#E2763A" }} />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-display text-[15px] sm:text-base leading-tight text-foreground tracking-tight">
+                    {title}
+                  </h3>
+                  <p className="mt-0.5 text-xs sm:text-[13px] leading-snug text-muted-foreground">
+                    {desc}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );
