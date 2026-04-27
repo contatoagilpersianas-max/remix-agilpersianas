@@ -557,10 +557,10 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
           <TabsContent value="medidas" className="space-y-4 pt-5">
             <p className="text-xs text-muted-foreground">Limites usados quando o produto é do tipo <strong>Metro Quadrado</strong>.</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div><Label className="text-xs">Largura mín (cm)</Label><NumericInput step="1" value={e.min_width_cm} onValueChange={(value) => set({ min_width_cm: value ?? 0 })} /></div>
-              <div><Label className="text-xs">Largura máx (cm)</Label><NumericInput step="1" value={e.max_width_cm} onValueChange={(value) => set({ max_width_cm: value ?? 0 })} /></div>
-              <div><Label className="text-xs">Altura mín (cm)</Label><NumericInput step="1" value={e.min_height_cm} onValueChange={(value) => set({ min_height_cm: value ?? 0 })} /></div>
-              <div><Label className="text-xs">Altura máx (cm)</Label><NumericInput step="1" value={e.max_height_cm} onValueChange={(value) => set({ max_height_cm: value ?? 0 })} /></div>
+              <div><Label className="text-xs">Largura mín (cm)</Label><NumericInput decimal step="0.01" value={e.min_width_cm} onValueChange={(value) => set({ min_width_cm: value ?? 0 })} /></div>
+              <div><Label className="text-xs">Largura máx (cm)</Label><NumericInput decimal step="0.01" value={e.max_width_cm} onValueChange={(value) => set({ max_width_cm: value ?? 0 })} /></div>
+              <div><Label className="text-xs">Altura mín (cm)</Label><NumericInput decimal step="0.01" value={e.min_height_cm} onValueChange={(value) => set({ min_height_cm: value ?? 0 })} /></div>
+              <div><Label className="text-xs">Altura máx (cm)</Label><NumericInput decimal step="0.01" value={e.max_height_cm} onValueChange={(value) => set({ max_height_cm: value ?? 0 })} /></div>
             </div>
 
             <div className="rounded-lg border p-4 bg-sand/30">
