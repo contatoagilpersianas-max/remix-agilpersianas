@@ -291,6 +291,8 @@ export function QuizMatch() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [feedback, setFeedback] = useState<string>("");
+  const [direction, setDirection] = useState<"forward" | "back">("forward");
+  const [bgLoaded, setBgLoaded] = useState(false);
   const savedRef = useRef(false);
 
   const isComplete = step >= STEPS.length;
@@ -339,11 +341,13 @@ export function QuizMatch() {
   }
 
   function handleBack() {
+    setDirection("back");
     setStep((s) => Math.max(0, s - 1));
     setFeedback("");
   }
 
   function handleReset() {
+    setDirection("forward");
     setStep(0);
     setAnswers({});
     setFeedback("");
