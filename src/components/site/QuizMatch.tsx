@@ -831,12 +831,22 @@ function ResultCard({
   const waMessage = `Olá! O assistente me recomendou a ${rec.productName} para meu ${ambiente}. Gostaria de dar continuidade ao orçamento.`;
   const waLink = whatsappLink(waMessage);
 
+  const convList = answers.convivencia ?? [];
+  const convLabel =
+    convList.length === 0
+      ? "—"
+      : convList
+          .map((v) => convivencias.find((x) => x.value === v)?.label ?? v)
+          .join(" + ");
+  const hasCriancas = convList.includes("criancas");
+  const hasPets = convList.includes("pets");
+
   // Resumo legível das escolhas
   const summary: { label: string; value: string }[] = [
     { label: "Ambiente", value: ambientes.find((x) => x.value === answers.ambiente)?.label ?? answers.ambiente },
     { label: "Objetivo de luz", value: luzes.find((x) => x.value === answers.luz)?.label ?? answers.luz },
     { label: "Estilo", value: estilos.find((x) => x.value === answers.estilo)?.label ?? answers.estilo },
-    { label: "Crianças/Pets", value: convivencias.find((x) => x.value === answers.convivencia)?.label ?? answers.convivencia },
+    { label: "Crianças/Pets", value: convLabel },
     { label: "Acionamento", value: acionamentos.find((x) => x.value === answers.acionamento)?.label ?? answers.acionamento },
   ];
 
@@ -894,10 +904,9 @@ function ResultCard({
         </h3>
 
         {/* Selos contextuais (verde: crianças, azul: pets) */}
-        {(answers.convivencia === "criancas" ||
-          answers.convivencia === "pets") && (
+        {(hasCriancas || hasPets) && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {answers.convivencia === "criancas" && (
+            {hasCriancas && (
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                 style={{ backgroundColor: "rgba(16,185,129,0.18)", color: "#34D399", border: "1px solid rgba(16,185,129,0.4)" }}
@@ -906,7 +915,7 @@ function ResultCard({
                 Seguro para crianças
               </span>
             )}
-            {answers.convivencia === "pets" && (
+            {hasPets && (
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                 style={{ backgroundColor: "rgba(59,130,246,0.18)", color: "#60A5FA", border: "1px solid rgba(59,130,246,0.4)" }}
