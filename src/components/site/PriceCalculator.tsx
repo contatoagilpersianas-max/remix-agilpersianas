@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NumericInput } from "@/components/ui/numeric-input";
 import { Calculator, ShieldCheck, Truck } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 
@@ -114,23 +115,11 @@ export function PriceCalculator({ defaultProductId, className, compact }: Props)
         </div>
         <div>
           <Label>Largura (cm)</Label>
-          <Input
-            type="number"
-            min={40}
-            max={600}
-            value={width}
-            onChange={(e) => setWidth(Number(e.target.value) || 0)}
-          />
+          <NumericInput min={40} max={600} value={width} onValueChange={(value) => setWidth(value ?? 0)} />
         </div>
         <div>
           <Label>Altura (cm)</Label>
-          <Input
-            type="number"
-            min={40}
-            max={400}
-            value={height}
-            onChange={(e) => setHeight(Number(e.target.value) || 0)}
-          />
+          <NumericInput min={40} max={400} value={height} onValueChange={(value) => setHeight(value ?? 0)} />
         </div>
         <label className="sm:col-span-2 flex items-center gap-2 text-sm cursor-pointer select-none">
           <input
