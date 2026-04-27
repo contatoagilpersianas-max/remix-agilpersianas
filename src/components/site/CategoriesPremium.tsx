@@ -24,7 +24,7 @@ type Item = {
 
 const ITEMS: Item[] = [
   {
-    title: "Persiana Rolô",
+    title: "Rolô",
     desc: "Versátil, moderna e perfeita para qualquer ambiente.",
     img: imgRolo,
     slug: "persiana-rolo",
