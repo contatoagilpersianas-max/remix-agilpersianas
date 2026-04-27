@@ -811,11 +811,8 @@ function ResultCard({
 
   return (
     <div
-      className="-m-5 sm:-m-8 rounded-3xl p-6 sm:p-10"
-      style={{
-        background: "linear-gradient(135deg, #1C1C1C 0%, #2A1F18 100%)",
-        color: "#FFFFFF",
-      }}
+      className="-m-6 sm:-m-10 rounded-[28px] sm:rounded-[32px] p-6 sm:p-10"
+      style={{ backgroundColor: "#0F0F0F", color: "#FFFFFF" }}
     >
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
       <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#0F0F0F" }}>
@@ -938,9 +935,9 @@ function ResultCard({
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl px-6 text-[15px] font-bold text-white transition-all hover:opacity-90"
               style={{
-                backgroundColor: "#25D366",
+                backgroundColor: "#1A7A4A",
                 height: "52px",
-                boxShadow: "0 10px 24px -6px rgba(37,211,102,0.5)",
+                boxShadow: "0 10px 24px -6px rgba(26,122,74,0.5)",
               }}
             >
               <MessageCircle className="h-4 w-4" />
