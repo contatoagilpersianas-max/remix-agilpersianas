@@ -434,7 +434,7 @@ export function QuizMatch() {
             className="mt-5 text-[15px] sm:text-base max-w-xl mx-auto leading-relaxed font-light"
             style={{ color: dark.textSoft }}
           >
-            Seis perguntas curtas. Uma recomendação feita sob medida para o seu
+            Cinco perguntas curtas. Uma recomendação feita sob medida para o seu
             ambiente, estilo e rotina.
           </p>
           {!isComplete && (
