@@ -498,7 +498,7 @@ export function QuizMatch() {
               {/* Pergunta — tipografia editorial */}
               <div
                 key={`q-${step}`}
-                className="mb-8 sm:mb-10 text-center animate-fade-up"
+                className={`mb-8 sm:mb-10 text-center ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
               >
                 <h3
                   className="font-display"
@@ -524,7 +524,9 @@ export function QuizMatch() {
               {/* Opções — cards minimalistas com glassmorphism + hover refinado */}
               <div
                 key={`opts-${step}`}
-                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 animate-fade-up"
+                className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
+                role="listbox"
+                aria-label={current.title}
               >
                 {current.options.map((opt) => {
                   const Icon = opt.icon;
