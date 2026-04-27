@@ -1,6 +1,6 @@
 // QuizMatch — Quiz interativo "Descubra a persiana ideal em 60s"
 // Componente isolado, não interfere na Lumi. Mobile-first, cards grandes.
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   BedDouble,
@@ -28,8 +28,12 @@ import {
   RotateCcw,
   MessageCircle,
   ShoppingBag,
+  Calculator,
+  SkipForward,
 } from "lucide-react";
 import { whatsappLink } from "@/lib/site-config";
+import { supabase } from "@/integrations/supabase/client";
+import { trackLead } from "@/lib/analytics";
 
 type OptionDef<T extends string> = {
   value: T;
@@ -104,6 +108,7 @@ type Recommendation = {
   mode: "direct" | "consult";
   productPath?: string;
   badge?: string;
+  calcProductId?: string;
 };
 
 function ambienteLabel(a: Ambiente) {
@@ -119,32 +124,38 @@ function recommend(a: Required<Answers>): Recommendation {
   let productPath = "/persiana-rolo-blackout";
   let mode: Recommendation["mode"] = "direct";
   let badge: string | undefined;
+  let calcProductId: string = "rolo-blackout";
   let image =
     "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80";
 
   if (a.luz === "blackout") {
     productName = "Persiana Rolô Blackout Premium";
     productPath = "/persiana-rolo-blackout";
+    calcProductId = "rolo-blackout";
     image = "https://images.unsplash.com/photo-1567016526105-22da7c13161a?auto=format&fit=crop&w=1200&q=80";
     reasons.push(`Bloqueio total de luz — ideal para ${ambienteLabel(a.ambiente)}.`);
   } else if (a.luz === "solar") {
     productName = "Persiana Solar Screen";
     productPath = "/persiana-solar-screen";
+    calcProductId = "rolo-solar";
     image = "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80";
     reasons.push("Você enxerga a paisagem, sem deixar ninguém ver dentro.");
   } else if (a.luz === "filtrar") {
     productName = "Persiana Double Vision";
     productPath = "/persiana-double-vision";
+    calcProductId = "double-vision";
     image = "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80";
     reasons.push("Filtra a luz com elegância, alternando entre privacidade e claridade.");
   } else {
     if (a.estilo === "classico") {
       productName = "Persiana Horizontal Premium";
       productPath = "/persiana-horizontal";
+      calcProductId = "horizontal-aluminio";
       image = "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=1200&q=80";
     } else {
       productName = "Persiana Vertical";
       productPath = "/persiana-vertical";
+      calcProductId = "horizontal-aluminio";
       image = "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&w=1200&q=80";
     }
     reasons.push("Privacidade ajustável sem abrir mão da iluminação natural.");
@@ -153,6 +164,7 @@ function recommend(a: Required<Answers>): Recommendation {
   if (a.seguranca === "pets" && a.luz !== "solar" && a.luz !== "blackout") {
     productName = "Persiana Solar Screen (Pet-Friendly)";
     productPath = "/persiana-solar-screen";
+    calcProductId = "rolo-solar";
     image = "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80";
     reasons.push("Tecido resistente que não desfia — perfeito para pets.");
   }
@@ -193,6 +205,7 @@ function recommend(a: Required<Answers>): Recommendation {
     mode,
     productPath,
     badge,
+    calcProductId,
   };
 }
 
@@ -210,6 +223,7 @@ export function QuizMatch() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [feedback, setFeedback] = useState<string>("");
+  const savedRef = useRef(false);
 
   const isComplete = step >= STEPS.length;
   const current = STEPS[Math.min(step, STEPS.length - 1)];
@@ -218,6 +232,37 @@ export function QuizMatch() {
     if (!isComplete) return null;
     return recommend(answers as Required<Answers>);
   }, [isComplete, answers]);
+
+  // Quando o quiz termina, registra um lead "anônimo" no painel administrativo
+  // (sem nome/telefone — apenas as escolhas, para o admin enxergar volume e perfil).
+  useEffect(() => {
+    if (!isComplete || !recommendation || savedRef.current) return;
+    savedRef.current = true;
+    const a = answers as Required<Answers>;
+    const message =
+      `Quiz concluído — Recomendação: ${recommendation.productName} ` +
+      `(${recommendation.score}% match)\n` +
+      `Ambiente: ${a.ambiente} | Luz: ${a.luz} | Segurança: ${a.seguranca} | ` +
+      `Estilo: ${a.estilo} | Acionamento: ${a.acionamento}`;
+    void supabase
+      .from("leads")
+      .insert({
+        name: "Visitante do Quiz",
+        source: "quiz_persiana_ideal",
+        product_interest: recommendation.productName,
+        message,
+        status: "novo",
+      })
+      .then(({ error }) => {
+        if (error) console.warn("Quiz lead insert error:", error.message);
+      });
+    trackLead({
+      content_name: recommendation.productName,
+      source: "quiz_persiana_ideal",
+      value: 1,
+      currency: "BRL",
+    });
+  }, [isComplete, recommendation, answers]);
 
   function handleSelect(value: string, fb: string) {
     setFeedback(fb);
@@ -238,6 +283,7 @@ export function QuizMatch() {
     setStep(0);
     setAnswers({});
     setFeedback("");
+    savedRef.current = false;
   }
 
   const progress = isComplete ? 100 : Math.round((step / STEPS.length) * 100);
@@ -245,11 +291,11 @@ export function QuizMatch() {
   return (
     <section
       id="quiz-persiana-ideal"
-      className="relative py-16 sm:py-20 bg-gradient-to-b from-sand via-background to-sand"
+      className="relative py-16 sm:py-20 bg-gradient-to-b from-sand via-background to-sand font-sans"
       aria-labelledby="quiz-title"
     >
-      <div className="container max-w-5xl">
-        <div className="text-center mb-8 sm:mb-10">
+      <div className="container mx-auto max-w-4xl flex flex-col items-center">
+        <div className="text-center mb-8 sm:mb-10 w-full">
           <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm">
             <Sparkles className="h-3.5 w-3.5" /> Assistente inteligente
           </span>
@@ -262,9 +308,21 @@ export function QuizMatch() {
           <p className="mt-4 text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto">
             Nosso assistente analisa seu ambiente, estilo e segurança para recomendar a melhor opção.
           </p>
+          {!isComplete && (
+            <div className="mt-5 flex justify-center">
+              <Link
+                to="/catalogo"
+                aria-label="Pular o quiz e ir direto para a vitrine de produtos"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground/70 underline-offset-4 hover:text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm px-1"
+              >
+                <SkipForward className="h-4 w-4" />
+                Pular quiz e ver todos os produtos
+              </Link>
+            </div>
+          )}
         </div>
 
-        <div className="rounded-3xl border border-border bg-card shadow-card p-5 sm:p-8">
+        <div className="w-full mx-auto rounded-3xl border border-border bg-card shadow-card p-5 sm:p-8">
           {!isComplete ? (
             <>
               <div className="mb-5 flex items-center justify-between gap-3">
@@ -386,6 +444,24 @@ function ResultCard({
   const waMessage = `Olá! O assistente me recomendou a ${rec.productName} para meu ${ambiente}. Gostaria de dar continuidade ao orçamento.`;
   const waLink = whatsappLink(waMessage);
 
+  // Resumo legível das escolhas
+  const summary: { label: string; value: string }[] = [
+    { label: "Ambiente", value: ambientes.find((x) => x.value === answers.ambiente)?.label ?? answers.ambiente },
+    { label: "Objetivo de luz", value: luzes.find((x) => x.value === answers.luz)?.label ?? answers.luz },
+    { label: "Quem usa", value: segurancas.find((x) => x.value === answers.seguranca)?.label ?? answers.seguranca },
+    { label: "Estilo", value: estilos.find((x) => x.value === answers.estilo)?.label ?? answers.estilo },
+    { label: "Acionamento", value: acionamentos.find((x) => x.value === answers.acionamento)?.label ?? answers.acionamento },
+  ];
+
+  // Link para a calculadora pré-preenchida com a recomendação
+  const calcParams = new URLSearchParams({
+    produto: rec.calcProductId ?? "rolo-blackout",
+    largura: "120",
+    altura: "140",
+    motor: answers.acionamento === "motorizado" ? "1" : "0",
+  });
+  const calcHref = `/?${calcParams.toString()}#calculadora`;
+
   return (
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
       <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden bg-muted">
@@ -425,6 +501,24 @@ function ResultCard({
           ))}
         </ul>
 
+        {/* Resumo das escolhas do cliente */}
+        <div className="mt-5 rounded-2xl border border-border bg-secondary/40 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/70">
+            Suas escolhas no quiz
+          </p>
+          <ul className="mt-2 flex flex-wrap gap-1.5">
+            {summary.map((s) => (
+              <li
+                key={s.label}
+                className="inline-flex items-center gap-1 rounded-full bg-card border border-border px-2.5 py-1 text-xs text-foreground"
+              >
+                <span className="text-foreground/60">{s.label}:</span>
+                <span className="font-semibold">{s.value}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="mt-6 flex flex-col gap-3">
           {rec.mode === "direct" && rec.productPath ? (
             <Link
@@ -447,6 +541,15 @@ function ResultCard({
               <ArrowRight className="h-4 w-4" />
             </a>
           )}
+
+          {/* CTA para a calculadora m² já preenchida */}
+          <a
+            href={calcHref}
+            className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary bg-card px-6 py-3 text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          >
+            <Calculator className="h-4 w-4" />
+            Calcular preço por m² com essa recomendação
+          </a>
 
           {rec.mode === "direct" && (
             <a
