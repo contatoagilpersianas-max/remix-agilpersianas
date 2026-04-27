@@ -620,11 +620,20 @@ export function QuizMatch() {
                       type="button"
                       onClick={() => {
                         if (hasAnswer) {
+                          setDirection("forward");
                           setStep((s) => s + 1);
                           setFeedback("");
                         }
                       }}
                       disabled={!hasAnswer}
+                      aria-disabled={!hasAnswer}
+                      aria-label={
+                        hasAnswer
+                          ? step === STEPS.length - 1
+                            ? "Ver minha recomendação personalizada"
+                            : `Avançar para a etapa ${step + 2} de ${STEPS.length}`
+                          : "Selecione uma opção para avançar"
+                      }
                       style={{
                         backgroundColor: hasAnswer ? palette.ink : "transparent",
                         color: hasAnswer ? palette.offwhite : palette.inkMuted,
