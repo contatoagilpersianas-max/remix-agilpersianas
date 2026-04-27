@@ -460,7 +460,7 @@ function ResultCard({
     altura: "140",
     motor: answers.acionamento === "motorizado" ? "1" : "0",
   });
-  const calcHref = `/#calculadora?${calcParams.toString()}`;
+  const calcHref = `/?${calcParams.toString()}#calculadora`;
 
   return (
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
