@@ -185,6 +185,24 @@
     animation: fade-up 0.7s var(--ease-premium) both;
   }
 
+  @keyframes quiz-slide-in-right {
+    from { opacity: 0; transform: translateX(28px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes quiz-slide-in-left {
+    from { opacity: 0; transform: translateX(-28px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .animate-quiz-forward {
+    animation: quiz-slide-in-right 0.45s var(--ease-premium) both;
+  }
+  .animate-quiz-back {
+    animation: quiz-slide-in-left 0.45s var(--ease-premium) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-quiz-forward, .animate-quiz-back { animation: none; }
+  }
+
   /* Reveal on scroll — usado com IntersectionObserver via [data-reveal] */
   [data-reveal] {
     opacity: 0;
