@@ -364,16 +364,19 @@ export function QuizMatch() {
       aria-labelledby="quiz-title"
     >
       {/* Fundo editorial: foto de interior de luxo desfocada + véu champagne */}
-      <div
+      <img
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
+        src={editorialBg}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        sizes="100vw"
+        onLoad={() => setBgLoaded(true)}
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover transition-opacity duration-700"
         style={{
-          backgroundImage: `url(${editorialBg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
           filter: "blur(28px) saturate(0.85)",
           transform: "scale(1.1)",
-          opacity: 0.35,
+          opacity: bgLoaded ? 0.35 : 0,
         }}
       />
       <div
