@@ -48,7 +48,7 @@ export function LandingLayout({
   faq,
   bottomCta,
 }: LandingPageProps) {
-  const waLink = `https://wa.me/5511999999999?text=${encodeURIComponent(ctaSecondaryWhatsapp)}`;
+  const waLink = `https://wa.me/5532351202810?text=${encodeURIComponent(ctaSecondaryWhatsapp)}`;
 
   return (
     <div className="min-h-screen bg-background">

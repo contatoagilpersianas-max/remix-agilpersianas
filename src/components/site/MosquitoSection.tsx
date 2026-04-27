@@ -50,7 +50,7 @@ export function MosquitoSection() {
           </ul>
 
           <a
-            href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20um%20orçamento%20de%20tela%20mosquiteira"
+            href="https://wa.me/5532351202810?text=Olá,%20gostaria%20de%20um%20orçamento%20de%20tela%20mosquiteira"
             target="_blank"
             rel="noreferrer"
             className="mt-8 inline-flex h-12 items-center gap-2 rounded-full px-7 text-[12px] font-bold uppercase tracking-[0.16em] transition hover:opacity-90 shadow-lg"

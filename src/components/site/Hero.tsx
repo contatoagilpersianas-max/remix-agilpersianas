@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import heroLiving from "@/assets/hero-2026-living.jpg";
 import heroBedroom from "@/assets/hero-2026-bedroom.jpg";
 import heroLivingLumi from "@/assets/hero-2026-living-lumi.jpg";
-import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, CalendarCheck, BookOpen, PlayCircle } from "lucide-react";
+import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, CalendarCheck, BookOpen } from "lucide-react";
 import { openLumiWith } from "@/components/site/LumiWidget";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -167,6 +167,12 @@ export function HeroBanner() {
  * Renderizado logo após o banner.
  */
 export function HeroIntro() {
+  const scrollToQuiz = () => {
+    if (typeof window === "undefined") return;
+    const el = document.getElementById("quiz-persiana-ideal");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section
       className="relative border-b border-white/10 overflow-hidden text-white"
@@ -202,45 +208,21 @@ export function HeroIntro() {
           </h1>
 
           <p className="mt-4 mx-auto max-w-2xl text-[13.5px] leading-[1.65] text-white/85 sm:mt-5 sm:text-[15px] sm:leading-7 md:text-base md:leading-8">
-            Cortinas, persianas, toldos e telas mosquiteiras com design
-            inteligente, conforto térmico e acabamento premium. Unimos
-            sofisticação e tecnologia de ponta para entregar a solução ideal
-            em qualquer lugar do Brasil.
+            Responda 6 perguntas e descubra qual persiana é ideal para o seu
+            espaço — em 60 segundos.
           </p>
 
-          {/* Card Lumi — destaque com glow laranja #f57c00 sobre dark */}
-          <div
-            className="relative mt-6 mx-auto max-w-xl overflow-hidden rounded-2xl border border-primary/50 bg-gradient-to-br from-primary/25 via-primary/10 to-white/[0.03] p-3.5 sm:p-5 backdrop-blur-sm text-left"
-            style={{
-              boxShadow:
-                "0 0 0 1px rgba(245,124,0,0.25), 0 18px 50px -18px rgba(245,124,0,0.65), 0 0 60px -12px rgba(245,124,0,0.45)",
-            }}
-          >
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -top-12 -right-10 h-36 w-36 rounded-full blur-3xl"
-              style={{ background: "radial-gradient(closest-side, rgba(245,124,0,0.65), transparent)" }}
-            />
-            <div className="relative flex items-start gap-2.5 sm:gap-3">
-              <span className="relative flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-glow shadow-glow">
-                <Sparkles className="h-4 w-4 text-primary-foreground" />
-                <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
-              </span>
-              <div className="min-w-0 text-[12.5px] sm:text-[13px] leading-snug text-white/95">
-                <div className="mb-1 inline-flex items-center gap-1.5 text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-primary-glow">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary-glow" />
-                  Lumi · Consultora IA
-                </div>
-                <p>
-                  Ela entende seu ambiente, indica o produto ideal, calcula
-                  seu projeto em minutos e conduz você à melhor escolha.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA principal — falar com a Lumi */}
-          <div className="mt-6 flex flex-col items-center justify-center gap-3">
+          {/* CTA principal — fazer o quiz */}
+          <div className="mt-7 flex flex-col items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={scrollToQuiz}
+              style={{ backgroundColor: "#FF6B35", color: "#fff" }}
+              className="group inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full px-6 sm:w-auto sm:px-8 text-[12px] md:text-[13px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5 hover:opacity-95"
+            >
+              Fazer o quiz agora
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </button>
             <button
               type="button"
               onClick={() =>
@@ -248,63 +230,10 @@ export function HeroIntro() {
                   pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
                 })
               }
-              className="group inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-5 sm:w-auto sm:px-7 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5"
+              className="text-[12.5px] text-white/55 underline underline-offset-4 hover:text-white/85 transition-colors"
             >
-              <Sparkles className="h-4 w-4" />
-              Falar com a Lumi
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              ou prefira falar com a Lumi
             </button>
-            <p className="text-[11.5px] text-white/75">
-              Atendimento em segundos · sem compromisso · 100% online.
-            </p>
-          </div>
-
-          {/* Mini-seção em destaque: Demo ao vivo da Lumi */}
-          <div
-            className="relative mt-7 mx-auto max-w-2xl overflow-hidden rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/15 via-white/[0.04] to-white/[0.02] p-4 sm:p-5 backdrop-blur-sm text-left"
-            style={{
-              boxShadow:
-                "0 0 0 1px rgba(245,124,0,0.18), 0 12px 36px -16px rgba(245,124,0,0.45)",
-            }}
-          >
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -top-10 -left-10 h-32 w-32 rounded-full blur-3xl"
-              style={{ background: "radial-gradient(closest-side, rgba(245,124,0,0.55), transparent)" }}
-            />
-            <div className="relative flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-5">
-              <div className="flex items-start gap-3 sm:flex-1">
-                <span className="relative mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-primary-glow/60">
-                  <PlayCircle className="h-5 w-5 text-primary-glow" />
-                </span>
-                <div className="min-w-0">
-                  <div className="inline-flex items-center gap-1.5 rounded-full border border-primary-glow/40 bg-primary/15 px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.18em] text-primary-glow">
-                    Experiência guiada · 30 s
-                  </div>
-                  <h3 className="mt-2 text-[15px] sm:text-base font-semibold text-white leading-snug">
-                    Veja a Lumi atendendo na prática
-                  </h3>
-                  <p className="mt-1 text-[12.5px] sm:text-[13px] text-white/80 leading-relaxed">
-                    Faça uma simulação real: a Lumi pergunta o ambiente, entende
-                    sua prioridade e mostra como ela recomenda o modelo ideal —
-                    tudo isso antes de você pedir um orçamento.
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() =>
-                  openLumiWith({
-                    pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
-                    demoMode: true,
-                  })
-                }
-                className="group inline-flex h-11 w-full sm:w-auto shrink-0 items-center justify-center gap-2 rounded-full bg-white px-5 text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.16em] text-foreground shadow-lg transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:shadow-2xl hover:bg-primary-glow hover:text-primary-foreground"
-              >
-                <PlayCircle className="h-4 w-4" />
-                Ver demo ao vivo
-              </button>
-            </div>
           </div>
 
           {/* Selos rápidos */}
