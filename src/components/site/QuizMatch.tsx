@@ -379,7 +379,7 @@ export function QuizMatch() {
       `Quiz concluído — Recomendação: ${recommendation.productName} ` +
       `(${recommendation.score}% match)\n` +
       `Ambiente: ${a.ambiente} | Luz: ${a.luz} | ` +
-      `Estilo: ${a.estilo} | Convivência: ${a.convivencia} | Acionamento: ${a.acionamento}`;
+      `Estilo: ${a.estilo} | Convivência: ${(a.convivencia ?? []).join("+") || "—"} | Acionamento: ${a.acionamento}`;
     void supabase
       .from("leads")
       .insert({
