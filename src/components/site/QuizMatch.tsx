@@ -63,9 +63,34 @@ const palette = {
   coralWash: "rgba(217,102,60,0.08)",
 };
 
-// Imagem de interior de luxo desfocada usada como pano de fundo "editorial".
-const editorialBg =
-  "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=70";
+// Paleta dark editorial premium (override visual da seção)
+const dark = {
+  bg: "#0C0C0A",
+  surface: "#131310",
+  surface2: "#0F0F0F",
+  border: "#1E1E1A",
+  borderSoft: "#262620",
+  borderHard: "#333",
+  text: "#F5F1E8",
+  textSoft: "#C8C4BC",
+  textMuted: "#888178",
+  textDim: "#444",
+  coral: "#FF6B35",
+  coralWash: "rgba(255,107,53,0.25)",
+  coralBorder: "rgba(255,107,53,0.4)",
+};
+
+// Fotos reais de ambiente para os cards (Unsplash, otimizadas)
+const ambienteImages: Record<string, string> = {
+  quarto: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80",
+  sala: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
+  home: "https://images.unsplash.com/photo-1593696954577-ab3d39317b97?w=600&q=80",
+  cozinha: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
+  escritorio: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
+  lavanderia: "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=600&q=80",
+  infantil: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+  externa: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
+};
 
 type Ambiente =
   | "quarto"
@@ -359,63 +384,55 @@ export function QuizMatch() {
   return (
     <section
       id="quiz-persiana-ideal"
-      className="relative isolate overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28 font-sans"
-      style={{ backgroundColor: palette.offwhite }}
+      className="relative isolate overflow-hidden pt-14 pb-20 sm:pt-24 sm:pb-28 font-sans"
+      style={{ backgroundColor: dark.bg, color: dark.text }}
       aria-labelledby="quiz-title"
     >
-      {/* Fundo editorial: foto de interior de luxo desfocada + véu champagne */}
-      <img
-        aria-hidden="true"
-        src={editorialBg}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        sizes="100vw"
-        onLoad={() => setBgLoaded(true)}
-        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover transition-opacity duration-700"
-        style={{
-          filter: "blur(28px) saturate(0.85)",
-          transform: "scale(1.1)",
-          opacity: bgLoaded ? 0.35 : 0,
-        }}
-      />
+      {/* Glow ambiente sutil — luz quente */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
-          background: `linear-gradient(180deg, ${palette.offwhite} 0%, rgba(250,247,242,0.86) 30%, rgba(239,230,216,0.65) 100%)`,
+          background:
+            "radial-gradient(900px 500px at 50% -10%, rgba(255,107,53,0.08), transparent 60%), radial-gradient(700px 400px at 50% 110%, rgba(255,107,53,0.05), transparent 60%)",
         }}
       />
+      {/* mantém referência do estado bg para evitar warning de unused */}
+      <span hidden aria-hidden="true">{bgLoaded ? "" : ""}</span>
 
       <div className="container mx-auto max-w-4xl flex flex-col items-center px-4 sm:px-6">
         <div className="text-center mb-8 sm:mb-12 w-full">
           <span
-            className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.32em]"
-            style={{ color: palette.coral }}
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-medium uppercase"
+            style={{
+              border: `1px solid ${dark.coralBorder}`,
+              color: dark.coral,
+              letterSpacing: "0.2em",
+              backgroundColor: "rgba(255,107,53,0.06)",
+            }}
           >
-            <span className="h-px w-6" style={{ backgroundColor: palette.coral }} />
-            Editorial · Quiz personalizado
-            <span className="h-px w-6" style={{ backgroundColor: palette.coral }} />
+            <Bot className="h-3.5 w-3.5" strokeWidth={1.6} />
+            Assistente Inteligente
           </span>
           <h2
             id="quiz-title"
             className="mt-6 font-display tracking-tight"
             style={{
-              color: palette.ink,
-              fontSize: "clamp(34px, 5.4vw, 60px)",
+              color: dark.text,
+              fontSize: "clamp(34px, 5.4vw, 58px)",
               lineHeight: 1.02,
               fontWeight: 500,
             }}
           >
-            A persiana certa para sua casa,
+            Descubra a persiana ideal
             <br className="hidden sm:block" />
-            <em className="not-italic" style={{ color: palette.coral, fontStyle: "italic" }}>
-              em apenas 60 segundos.
+            <em className="not-italic" style={{ color: dark.coral, fontStyle: "italic" }}>
+              para a sua casa.
             </em>
           </h2>
           <p
-            className="mt-5 text-[15px] sm:text-base max-w-xl mx-auto leading-relaxed"
-            style={{ color: palette.inkSoft }}
+            className="mt-5 text-[15px] sm:text-base max-w-xl mx-auto leading-relaxed font-light"
+            style={{ color: dark.textSoft }}
           >
             Seis perguntas curtas. Uma recomendação feita sob medida para o seu
             ambiente, estilo e rotina.
@@ -426,7 +443,7 @@ export function QuizMatch() {
                 to="/catalogo"
                 aria-label="Pular o quiz e ir direto para a vitrine de produtos"
                 className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.22em] font-medium underline-offset-[6px] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm px-1"
-                style={{ color: palette.inkMuted }}
+                style={{ color: dark.textMuted }}
               >
                 <SkipForward className="h-3.5 w-3.5" strokeWidth={1.2} />
                 Pular e ver a coleção
@@ -436,181 +453,263 @@ export function QuizMatch() {
         </div>
 
         <div
-          className="w-full mx-auto rounded-[28px] sm:rounded-[32px] p-6 sm:p-10 backdrop-blur-xl"
+          className="w-full mx-auto rounded-[28px] sm:rounded-[32px] p-6 sm:p-10"
           style={{
-            backgroundColor: "rgba(255, 253, 250, 0.78)",
-            border: `1px solid ${palette.hairline}`,
-            boxShadow:
-              "0 30px 80px -30px rgba(31,26,21,0.18), 0 8px 24px -12px rgba(31,26,21,0.08)",
+            backgroundColor: dark.surface2,
+            border: `1px solid ${dark.border}`,
+            boxShadow: "0 40px 100px -30px rgba(0,0,0,0.6)",
           }}
         >
           {!isComplete ? (
             <>
-              {/* Indicador de etapa — minimalista (numeral + linhas finas) */}
+              {/* Stepper de etapas — bolinhas conectadas */}
               <div className="mb-8 sm:mb-10">
-                <div className="mb-4 flex items-baseline justify-between">
-                  <p
-                    className="font-display"
-                    style={{
-                      color: palette.ink,
-                      fontSize: "13px",
-                      letterSpacing: "0.04em",
-                    }}
-                  >
-                    <span style={{ color: palette.coral }}>
-                      {String(step + 1).padStart(2, "0")}
-                    </span>
-                    <span style={{ color: palette.inkMuted }}>
-                      {" "}/ {String(STEPS.length).padStart(2, "0")}
-                    </span>
-                  </p>
+                <div className="mb-3 flex items-center justify-between">
                   <span
-                    className="text-[10px] uppercase tracking-[0.28em]"
-                    style={{ color: palette.inkMuted }}
+                    className="text-[10px] uppercase font-medium"
+                    style={{ color: dark.coral, letterSpacing: "0.22em" }}
                   >
-                    {STEPS.length - step - 1 === 0
-                      ? "Última pergunta"
-                      : `Faltam ${STEPS.length - step - 1}`}
+                    Etapa {String(step + 1).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
+                  </span>
+                  <span
+                    className="text-[10px] uppercase"
+                    style={{ color: dark.textMuted, letterSpacing: "0.22em" }}
+                  >
+                    {STEPS.length - step - 1 === 0 ? "Última" : `Faltam ${STEPS.length - step - 1}`}
                   </span>
                 </div>
                 <div
-                  className="flex items-center gap-1.5"
+                  className="flex items-center gap-2"
                   role="progressbar"
                   aria-valuenow={progress}
                   aria-valuemin={0}
                   aria-valuemax={100}
-                  aria-label={`Progresso do quiz: etapa ${step + 1} de ${STEPS.length}`}
+                  aria-label={`Progresso: etapa ${step + 1} de ${STEPS.length}`}
                 >
-                  {STEPS.map((_, i) => (
-                    <span
-                      key={i}
-                      className="h-px flex-1 transition-all duration-500"
-                      style={{
-                        backgroundColor:
-                          i <= step ? palette.coral : palette.hairline,
-                        height: i <= step ? "2px" : "1px",
-                      }}
-                    />
-                  ))}
+                  {STEPS.map((_, i) => {
+                    const done = i < step;
+                    const active = i === step;
+                    return (
+                      <div key={i} className="flex items-center flex-1 last:flex-none">
+                        <span
+                          className="flex items-center justify-center rounded-full transition-all duration-300"
+                          style={{
+                            width: 28,
+                            height: 28,
+                            backgroundColor: done || active ? dark.coral : dark.surface,
+                            border: `1px solid ${done || active ? dark.coral : dark.borderHard}`,
+                            color: done || active ? "#fff" : dark.textMuted,
+                            boxShadow: active ? `0 0 0 3px ${dark.coralWash}` : "none",
+                            fontSize: 11,
+                            fontWeight: 600,
+                          }}
+                        >
+                          {done ? <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> : i + 1}
+                        </span>
+                        {i < STEPS.length - 1 && (
+                          <span
+                            className="h-px flex-1 mx-1.5 transition-colors"
+                            style={{ backgroundColor: done ? dark.coral : dark.borderHard }}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Pergunta — tipografia editorial */}
+              {/* Bot de feedback — borda esquerda coral */}
+              <div
+                className="mb-8 flex items-start gap-3 rounded-xl p-4"
+                style={{
+                  backgroundColor: dark.surface,
+                  borderLeft: `3px solid ${dark.coral}`,
+                  border: `1px solid ${dark.border}`,
+                  borderLeftWidth: 3,
+                }}
+              >
+                <span
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+                  style={{
+                    background: "linear-gradient(135deg, #FF8A5C, #FF6B35)",
+                    boxShadow: "0 4px 12px rgba(255,107,53,0.4)",
+                  }}
+                >
+                  <Bot className="h-4 w-4 text-white" strokeWidth={1.8} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="text-[10px] font-medium uppercase mb-1"
+                    style={{ color: dark.coral, letterSpacing: "0.2em" }}
+                  >
+                    Assistente Ágil
+                  </p>
+                  <p
+                    className="text-[14px] leading-relaxed font-light"
+                    style={{ color: dark.textSoft }}
+                    aria-live="polite"
+                  >
+                    {feedback || current.botMessage}
+                  </p>
+                </div>
+              </div>
+
+              {/* Pergunta */}
               <div
                 key={`q-${step}`}
-                className={`mb-8 sm:mb-10 text-center ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
+                className={`mb-8 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
               >
                 <h3
                   className="font-display"
                   style={{
-                    color: palette.ink,
-                    fontSize: "clamp(26px, 3.6vw, 40px)",
-                    lineHeight: 1.1,
+                    color: dark.text,
+                    fontSize: "clamp(26px, 3.4vw, 36px)",
+                    lineHeight: 1.15,
                     fontWeight: 500,
                     letterSpacing: "-0.01em",
                   }}
                 >
                   {current.title}
                 </h3>
-                <p
-                  className="mt-4 text-[14px] sm:text-[15px] leading-relaxed max-w-lg mx-auto"
-                  style={{ color: palette.inkSoft }}
-                  aria-live="polite"
-                >
-                  {feedback || current.botMessage}
-                </p>
               </div>
 
-              {/* Opções — cards minimalistas com glassmorphism + hover refinado */}
-              <div
-                key={`opts-${step}`}
-                className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
-                role="listbox"
-                aria-label={current.title}
-              >
-                {current.options.map((opt) => {
-                  const Icon = opt.icon;
-                  const selected =
-                    (answers as Record<string, string>)[current.key] === opt.value;
-                  const highlightSafe =
-                    current.key === "acionamento" &&
-                    opt.value === "motorizado" &&
-                    answers.convivencia === "criancas";
-                  return (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      onClick={() => handleSelect(opt.value, opt.feedback)}
-                      className="group relative flex flex-col items-center justify-center gap-4 rounded-2xl p-5 sm:p-6 min-h-[150px] sm:min-h-[170px] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.015] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 backdrop-blur-md"
-                      style={{
-                        backgroundColor: selected
-                          ? "rgba(255, 253, 250, 0.95)"
-                          : "rgba(255, 253, 250, 0.55)",
-                        border: selected
-                          ? `1.5px solid ${palette.coral}`
-                          : `1px solid ${palette.hairline}`,
-                        boxShadow: selected
-                          ? `0 20px 50px -20px rgba(217,102,60,0.35), 0 0 0 4px ${palette.coralWash}`
-                          : "0 8px 30px -18px rgba(31,26,21,0.10)",
-                        ...(highlightSafe && !selected
-                          ? ({
-                              ["--tw-ring-color" as never]: "rgba(217,102,60,0.35)",
-                            } as React.CSSProperties)
-                          : {}),
-                      }}
-                      aria-pressed={selected}
-                    >
-                      {highlightSafe && (
-                        <span
-                          className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[9px] font-medium uppercase tracking-[0.18em]"
+              {/* Opções — para "ambiente": cards 3:4 com fotos reais. Demais: cards minimalistas dark. */}
+              {current.key === "ambiente" ? (
+                <div
+                  key={`opts-${step}`}
+                  className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
+                  role="listbox"
+                  aria-label={current.title}
+                >
+                  {current.options.map((opt) => {
+                    const selected = (answers as Record<string, string>)[current.key] === opt.value;
+                    const img = ambienteImages[opt.value] ?? ambienteImages.sala;
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => handleSelect(opt.value, opt.feedback)}
+                        aria-pressed={selected}
+                        className="group relative aspect-[3/4] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2"
+                        style={{
+                          border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
+                          boxShadow: selected
+                            ? "0 8px 32px rgba(255,107,53,0.35)"
+                            : "0 4px 16px rgba(0,0,0,0.4)",
+                        }}
+                      >
+                        <img
+                          src={img}
+                          alt={opt.label}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div
+                          className="absolute inset-0"
                           style={{
-                            backgroundColor: palette.ink,
-                            color: palette.offwhite,
+                            background:
+                              "linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.85) 100%)",
+                          }}
+                        />
+                        {!selected && (
+                          <div
+                            className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                            style={{ boxShadow: `inset 0 0 0 2px ${dark.coral}` }}
+                          />
+                        )}
+                        {selected && (
+                          <span
+                            className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full"
+                            style={{ backgroundColor: dark.coral, boxShadow: "0 4px 12px rgba(255,107,53,0.5)" }}
+                          >
+                            <CheckCircle2 className="h-4 w-4 text-white" strokeWidth={2} />
+                          </span>
+                        )}
+                        <div className="absolute bottom-0 left-0 right-0 p-4 text-left">
+                          <p
+                            className="font-display text-white"
+                            style={{ fontSize: "clamp(15px,1.5vw,18px)", fontWeight: 500, lineHeight: 1.1 }}
+                          >
+                            {opt.label}
+                          </p>
+                          <p
+                            className="mt-0.5 text-[11px] uppercase font-light"
+                            style={{ color: dark.coral, letterSpacing: "0.16em" }}
+                          >
+                            Ambiente
+                          </p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div
+                  key={`opts-${step}`}
+                  className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
+                  role="listbox"
+                  aria-label={current.title}
+                >
+                  {current.options.map((opt) => {
+                    const Icon = opt.icon;
+                    const selected = (answers as Record<string, string>)[current.key] === opt.value;
+                    const highlightSafe =
+                      current.key === "acionamento" &&
+                      opt.value === "motorizado" &&
+                      answers.convivencia === "criancas";
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => handleSelect(opt.value, opt.feedback)}
+                        aria-pressed={selected}
+                        className="group relative flex flex-col items-center justify-center gap-4 rounded-2xl p-5 sm:p-6 min-h-[150px] sm:min-h-[170px] transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2"
+                        style={{
+                          backgroundColor: selected ? "rgba(255,107,53,0.08)" : dark.surface,
+                          border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
+                          boxShadow: selected
+                            ? `0 8px 32px rgba(255,107,53,0.35)`
+                            : "0 4px 14px rgba(0,0,0,0.3)",
+                        }}
+                      >
+                        {highlightSafe && (
+                          <span
+                            className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[9px] font-medium uppercase tracking-[0.18em]"
+                            style={{ backgroundColor: dark.coral, color: "#fff" }}
+                          >
+                            Recomendado
+                          </span>
+                        )}
+                        <span
+                          className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full transition-all duration-300"
+                          style={{
+                            backgroundColor: selected ? "rgba(255,107,53,0.15)" : "rgba(255,255,255,0.04)",
+                            color: selected ? dark.coral : dark.text,
+                            border: `1px solid ${selected ? dark.coralBorder : dark.borderSoft}`,
                           }}
                         >
-                          Recomendado
+                          <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.2} />
                         </span>
-                      )}
-                      <span
-                        className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-105"
-                        style={{
-                          backgroundColor: selected
-                            ? palette.coralWash
-                            : "rgba(31,26,21,0.04)",
-                          color: selected ? palette.coral : palette.ink,
-                          border: `1px solid ${selected ? "rgba(217,102,60,0.25)" : palette.hairline}`,
-                        }}
-                      >
-                        <Icon
-                          className="h-6 w-6 sm:h-7 sm:w-7"
-                          strokeWidth={1.2}
-                        />
-                      </span>
-                      <span
-                        className="text-[13px] sm:text-sm font-medium text-center leading-tight"
-                        style={{
-                          color: palette.ink,
-                          letterSpacing: "0.005em",
-                        }}
-                      >
-                        {opt.label}
-                      </span>
-                      {selected && (
                         <span
-                          className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full"
-                          style={{ backgroundColor: palette.coral }}
+                          className="text-[13px] sm:text-sm font-medium text-center leading-tight"
+                          style={{ color: dark.text }}
                         >
-                          <CheckCircle2
-                            className="h-3.5 w-3.5"
-                            style={{ color: "#fff" }}
-                            strokeWidth={1.6}
-                          />
+                          {opt.label}
                         </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+                        {selected && (
+                          <span
+                            className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full"
+                            style={{ backgroundColor: dark.coral }}
+                          >
+                            <CheckCircle2 className="h-3.5 w-3.5 text-white" strokeWidth={2} />
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
 
               <div className="mt-10 flex flex-col gap-3">
                 {(() => {
@@ -635,22 +734,18 @@ export function QuizMatch() {
                           : "Selecione uma opção para avançar"
                       }
                       style={{
-                        backgroundColor: hasAnswer ? palette.ink : "transparent",
-                        color: hasAnswer ? palette.offwhite : palette.inkMuted,
-                        height: "56px",
-                        borderRadius: "999px",
-                        border: hasAnswer
-                          ? `1px solid ${palette.ink}`
-                          : `1px solid ${palette.hairline}`,
-                        letterSpacing: "0.08em",
-                        boxShadow: hasAnswer
-                          ? "0 20px 40px -16px rgba(31,26,21,0.35)"
-                          : "none",
+                        backgroundColor: hasAnswer ? dark.coral : dark.border,
+                        color: hasAnswer ? "#fff" : dark.textDim,
+                        height: "52px",
+                        borderRadius: "12px",
+                        border: "none",
+                        letterSpacing: "0.04em",
+                        boxShadow: hasAnswer ? "0 12px 28px -8px rgba(255,107,53,0.5)" : "none",
                       }}
-                      className="inline-flex w-full items-center justify-center gap-3 px-8 text-[12px] uppercase font-medium transition-all duration-300 hover:opacity-90 disabled:cursor-not-allowed"
+                      className="group inline-flex w-full items-center justify-center gap-2 px-8 text-[14px] font-medium transition-all duration-300 hover:opacity-95 disabled:cursor-not-allowed"
                     >
                       {step === STEPS.length - 1 ? "Ver minha recomendação" : "Próxima etapa"}
-                      <ArrowRight className="h-4 w-4" strokeWidth={1.4} />
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2} />
                     </button>
                   );
                 })()}
@@ -659,7 +754,7 @@ export function QuizMatch() {
                     type="button"
                     onClick={handleBack}
                     className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.22em] font-medium transition-colors hover:opacity-70"
-                    style={{ color: palette.inkMuted }}
+                    style={{ color: dark.textMuted }}
                   >
                     <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.4} /> Voltar
                   </button>
@@ -716,11 +811,8 @@ function ResultCard({
 
   return (
     <div
-      className="-m-5 sm:-m-8 rounded-3xl p-6 sm:p-10"
-      style={{
-        background: "linear-gradient(135deg, #1C1C1C 0%, #2A1F18 100%)",
-        color: "#FFFFFF",
-      }}
+      className="-m-6 sm:-m-10 rounded-[28px] sm:rounded-[32px] p-6 sm:p-10"
+      style={{ backgroundColor: "#0F0F0F", color: "#FFFFFF" }}
     >
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
       <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#0F0F0F" }}>
@@ -843,9 +935,9 @@ function ResultCard({
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl px-6 text-[15px] font-bold text-white transition-all hover:opacity-90"
               style={{
-                backgroundColor: "#25D366",
+                backgroundColor: "#1A7A4A",
                 height: "52px",
-                boxShadow: "0 10px 24px -6px rgba(37,211,102,0.5)",
+                boxShadow: "0 10px 24px -6px rgba(26,122,74,0.5)",
               }}
             >
               <MessageCircle className="h-4 w-4" />
