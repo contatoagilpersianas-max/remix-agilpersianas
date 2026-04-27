@@ -42,7 +42,7 @@ import { trackLead } from "@/lib/analytics";
 type OptionDef<T extends string> = {
   value: T;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number | string }>;
   feedback: string;
 };
 
