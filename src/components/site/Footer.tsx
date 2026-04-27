@@ -57,8 +57,8 @@ export function Footer() {
           </div>
 
           <p className="mt-5 max-w-sm text-sm text-white/70">
-            Há mais de 15 anos transformando ambientes com persianas, cortinas
-            e toldos sob medida — entrega para todo o Brasil.
+            Transformando ambientes com persianas, cortinas e toldos sob medida
+            — entrega para todo o Brasil.
           </p>
 
           <ul className="mt-6 space-y-3 text-sm">

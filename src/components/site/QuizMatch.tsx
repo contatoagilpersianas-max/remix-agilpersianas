@@ -436,6 +436,10 @@ export function QuizMatch() {
                   const Icon = opt.icon;
                   const selected =
                     (answers as Record<string, string>)[current.key] === opt.value;
+                  const highlightSafe =
+                    current.key === "acionamento" &&
+                    opt.value === "motorizado" &&
+                    answers.convivencia === "criancas";
                   return (
                     <button
                       key={opt.value}
@@ -445,9 +449,17 @@ export function QuizMatch() {
                         selected
                           ? "border-2 border-primary shadow-md"
                           : "border border-border shadow-sm hover:border-primary/60 hover:shadow-md"
-                      }`}
+                      } ${highlightSafe && !selected ? "ring-2 ring-primary/40" : ""}`}
                       aria-pressed={selected}
                     >
+                      {highlightSafe && (
+                        <span
+                          className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-md"
+                          style={{ backgroundColor: "#FF6B35", color: "#fff" }}
+                        >
+                          ⭐ Escolha segura
+                        </span>
+                      )}
                       <span
                         className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-colors ${
                           selected

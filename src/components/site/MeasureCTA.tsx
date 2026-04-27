@@ -37,7 +37,7 @@ export function MeasureCTA() {
                   Calcular agora
                 </a>
                 <a
-                  href="https://wa.me/5511999999999"
+                  href="https://wa.me/5532351202810"
                   className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/10"
                 >
                   Falar com consultor
