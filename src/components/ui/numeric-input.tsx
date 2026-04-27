@@ -8,17 +8,32 @@ type NumericInputProps = Omit<React.ComponentProps<typeof Input>, "type" | "valu
   decimal?: boolean;
 };
 
-function formatValue(value: number | null | undefined) {
-  return value === null || value === undefined || Number.isNaN(value) ? "" : String(value);
+function formatValue(value: number | null | undefined, decimal: boolean) {
+  if (value === null || value === undefined || Number.isNaN(value)) return "";
+  return decimal ? String(value).replace(".", ",") : String(value);
+}
+
+function stripLeadingZeros(raw: string, decimal: boolean) {
+  if (!raw) return "";
+
+  if (!decimal) {
+    return raw.replace(/^0+(\d)/, "$1") || "0";
+  }
+
+  const [whole = "", fraction] = raw.split(",");
+  const normalizedWhole = whole.replace(/^0+(\d)/, "$1") || (fraction !== undefined ? "0" : whole);
+
+  return fraction !== undefined ? `${normalizedWhole},${fraction}` : normalizedWhole;
 }
 
 function normalizeValue(raw: string, decimal: boolean) {
-  if (!decimal) return raw.replace(/\D+/g, "");
+  if (!decimal) return stripLeadingZeros(raw.replace(/\D+/g, ""), false);
 
   const cleaned = raw.replace(/[^\d.,]/g, "").replace(/\./g, ",");
   const [whole = "", ...fractionParts] = cleaned.split(",");
+  const normalizedWhole = stripLeadingZeros(whole, true);
 
-  return fractionParts.length > 0 ? `${whole},${fractionParts.join("")}` : whole;
+  return fractionParts.length > 0 ? `${normalizedWhole},${fractionParts.join("")}` : normalizedWhole;
 }
 
 function parseValue(raw: string, decimal: boolean) {
@@ -33,14 +48,14 @@ function parseValue(raw: string, decimal: boolean) {
 
 const NumericInput = React.forwardRef<HTMLInputElement, NumericInputProps>(
   ({ value, onValueChange, decimal = false, onBlur, onFocus, inputMode, ...props }, ref) => {
-    const [text, setText] = React.useState(() => formatValue(value));
+    const [text, setText] = React.useState(() => formatValue(value, decimal));
     const isFocusedRef = React.useRef(false);
 
     React.useEffect(() => {
       if (!isFocusedRef.current) {
-        setText(formatValue(value));
+        setText(formatValue(value, decimal));
       }
-    }, [value]);
+    }, [value, decimal]);
 
     return (
       <Input
@@ -55,7 +70,7 @@ const NumericInput = React.forwardRef<HTMLInputElement, NumericInputProps>(
         }}
         onBlur={(event) => {
           isFocusedRef.current = false;
-          setText(formatValue(value));
+          setText(formatValue(value, decimal));
           onBlur?.(event);
         }}
         onChange={(event) => {
