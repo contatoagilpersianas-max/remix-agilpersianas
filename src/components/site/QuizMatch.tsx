@@ -419,7 +419,7 @@ export function QuizMatch() {
   return (
     <section
       id="quiz-persiana-ideal"
-      className="relative isolate overflow-hidden pt-14 pb-20 sm:pt-24 sm:pb-28 font-sans"
+      className="relative isolate overflow-hidden font-sans"
       style={{ backgroundColor: dark.bg, color: dark.text }}
       aria-labelledby="quiz-title"
     >
@@ -435,7 +435,7 @@ export function QuizMatch() {
       {/* mantém referência do estado bg para evitar warning de unused */}
       <span hidden aria-hidden="true">{bgLoaded ? "" : ""}</span>
 
-      <div className="container mx-auto max-w-4xl flex flex-col items-center px-4 sm:px-6">
+      <div className="container mx-auto max-w-4xl flex flex-col items-center px-4 sm:px-6 py-20">
         <div className="text-center mb-8 sm:mb-12 w-full">
           <span
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-medium uppercase"
