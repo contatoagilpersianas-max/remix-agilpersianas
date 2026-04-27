@@ -268,12 +268,6 @@ const STEPS = [
     botMessage: "Ótimo! Agora me conte: você quer escurecer totalmente, filtrar a luz ou apenas ter privacidade?",
   },
   {
-    key: "seguranca" as const,
-    title: "Quem usa o ambiente?",
-    options: segurancas,
-    botMessage: "Isso me ajuda a sugerir o tecido e o acionamento mais adequados ao perfil de quem usa o espaço.",
-  },
-  {
     key: "estilo" as const,
     title: "Qual seu estilo de decoração?",
     options: estilos,
