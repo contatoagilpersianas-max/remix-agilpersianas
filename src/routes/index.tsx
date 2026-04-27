@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
-import { HeroBanner, HeroIntro } from "@/components/site/Hero";
+import { HeroBanner } from "@/components/site/Hero";
 import { PromoStrip } from "@/components/site/PromoStrip";
 // TrustBar e Categories removidos a pedido do cliente
 import { FeaturedProducts } from "@/components/site/FeaturedProducts";
@@ -50,9 +50,7 @@ function Index() {
         <HeroBanner />
         {/* 2) Faixa laranja com benefícios — logo abaixo do banner */}
         <PromoStrip />
-        {/* 3) Bloco editorial escuro — teaser do quiz */}
-        <HeroIntro />
-        {/* 4) ⭐ QUIZ INTELIGENTE */}
+        {/* 3) ⭐ QUIZ INTELIGENTE — direto, sem introdução */}
         <QuizMatch />
         {/* 5) Produtos em destaque */}
         <FeaturedProducts />
