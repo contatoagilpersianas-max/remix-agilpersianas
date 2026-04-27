@@ -70,6 +70,16 @@ type Product = {
 const slugify = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+// Aceita vírgula ou ponto como separador decimal (pt-BR)
+const toNum = (v: string): number => {
+  const n = parseFloat(String(v).replace(",", "."));
+  return Number.isFinite(n) ? n : 0;
+};
+const toInt = (v: string): number => {
+  const n = parseInt(String(v).replace(",", ".").replace(/\..*$/, ""), 10);
+  return Number.isFinite(n) ? n : 0;
+};
+
 const NEW_PRODUCT: Partial<Product> = {
   name: "",
   slug: "",
@@ -509,7 +519,7 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
               </div>
               <div>
                 <Label>Tempo de processamento (dias)</Label>
-                <Input type="number" value={e.processing_days ?? 0} onChange={(ev) => set({ processing_days: Number(ev.target.value) })} />
+                <Input type="number" inputMode="numeric" step="1" value={e.processing_days ?? 0} onChange={(ev) => set({ processing_days: toInt(ev.target.value) })} />
               </div>
             </div>
 
@@ -519,11 +529,11 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div>
                     <Label className="text-xs">Preço por m² (R$)</Label>
-                    <Input type="number" step="0.01" value={e.price_per_sqm ?? 0} onChange={(ev) => set({ price_per_sqm: Number(ev.target.value) })} />
+                    <Input type="text" inputMode="decimal" value={e.price_per_sqm ?? 0} onChange={(ev) => set({ price_per_sqm: toNum(ev.target.value) })} />
                   </div>
                   <div>
                     <Label className="text-xs">Área mínima (m²)</Label>
-                    <Input type="number" step="0.1" value={e.min_area ?? 1} onChange={(ev) => set({ min_area: Number(ev.target.value) })} />
+                    <Input type="text" inputMode="decimal" value={e.min_area ?? 1} onChange={(ev) => set({ min_area: toNum(ev.target.value) })} />
                   </div>
                 </div>
               </div>
@@ -531,15 +541,15 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
               <div className="grid sm:grid-cols-2 gap-3">
                 <div>
                   <Label>Preço normal (R$)</Label>
-                  <Input type="number" step="0.01" value={e.price ?? 0} onChange={(ev) => set({ price: Number(ev.target.value) })} />
+                  <Input type="text" inputMode="decimal" value={e.price ?? 0} onChange={(ev) => set({ price: toNum(ev.target.value) })} />
                 </div>
                 <div>
                   <Label>Preço de oferta (R$) <span className="text-muted-foreground text-xs">— opcional</span></Label>
                   <Input
-                    type="number"
-                    step="0.01"
+                    type="text"
+                    inputMode="decimal"
                     value={e.sale_price ?? ""}
-                    onChange={(ev) => set({ sale_price: ev.target.value === "" ? null : Number(ev.target.value) })}
+                    onChange={(ev) => set({ sale_price: ev.target.value === "" ? null : toNum(ev.target.value) })}
                     placeholder="0,00"
                   />
                 </div>
@@ -549,11 +559,11 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
             <div className="grid sm:grid-cols-2 gap-3">
               <div>
                 <Label>Estoque atual</Label>
-                <Input type="number" value={e.stock ?? 0} onChange={(ev) => set({ stock: Number(ev.target.value) })} />
+                <Input type="number" inputMode="numeric" step="1" value={e.stock ?? 0} onChange={(ev) => set({ stock: toInt(ev.target.value) })} />
               </div>
               <div>
                 <Label>Estoque mínimo (alerta)</Label>
-                <Input type="number" value={e.stock_min ?? 0} onChange={(ev) => set({ stock_min: Number(ev.target.value) })} />
+                <Input type="number" inputMode="numeric" step="1" value={e.stock_min ?? 0} onChange={(ev) => set({ stock_min: toInt(ev.target.value) })} />
               </div>
             </div>
           </TabsContent>
@@ -562,19 +572,19 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
           <TabsContent value="medidas" className="space-y-4 pt-5">
             <p className="text-xs text-muted-foreground">Limites usados quando o produto é do tipo <strong>Metro Quadrado</strong>.</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div><Label className="text-xs">Largura mín (cm)</Label><Input type="number" value={e.min_width_cm ?? 40} onChange={(ev) => set({ min_width_cm: Number(ev.target.value) })} /></div>
-              <div><Label className="text-xs">Largura máx (cm)</Label><Input type="number" value={e.max_width_cm ?? 300} onChange={(ev) => set({ max_width_cm: Number(ev.target.value) })} /></div>
-              <div><Label className="text-xs">Altura mín (cm)</Label><Input type="number" value={e.min_height_cm ?? 40} onChange={(ev) => set({ min_height_cm: Number(ev.target.value) })} /></div>
-              <div><Label className="text-xs">Altura máx (cm)</Label><Input type="number" value={e.max_height_cm ?? 300} onChange={(ev) => set({ max_height_cm: Number(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Largura mín (cm)</Label><Input type="number" inputMode="numeric" step="1" value={e.min_width_cm ?? 40} onChange={(ev) => set({ min_width_cm: toInt(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Largura máx (cm)</Label><Input type="number" inputMode="numeric" step="1" value={e.max_width_cm ?? 300} onChange={(ev) => set({ max_width_cm: toInt(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Altura mín (cm)</Label><Input type="number" inputMode="numeric" step="1" value={e.min_height_cm ?? 40} onChange={(ev) => set({ min_height_cm: toInt(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Altura máx (cm)</Label><Input type="number" inputMode="numeric" step="1" value={e.max_height_cm ?? 300} onChange={(ev) => set({ max_height_cm: toInt(ev.target.value) })} /></div>
             </div>
 
             <div className="rounded-lg border p-4 bg-sand/30">
               <h4 className="font-semibold text-sm mb-3">Acionamento e acabamentos (R$ adicional)</h4>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div><Label className="text-xs">Manual</Label><Input type="number" step="0.01" value={e.motor_manual_price ?? 0} onChange={(ev) => set({ motor_manual_price: Number(ev.target.value) })} /></div>
-                <div><Label className="text-xs">Motor RF</Label><Input type="number" step="0.01" value={e.motor_rf_price ?? 0} onChange={(ev) => set({ motor_rf_price: Number(ev.target.value) })} /></div>
-                <div><Label className="text-xs">Motor Wi-Fi</Label><Input type="number" step="0.01" value={e.motor_wifi_price ?? 0} onChange={(ev) => set({ motor_wifi_price: Number(ev.target.value) })} /></div>
-                <div><Label className="text-xs">Bandô</Label><Input type="number" step="0.01" value={e.bando_price ?? 0} onChange={(ev) => set({ bando_price: Number(ev.target.value) })} /></div>
+                <div><Label className="text-xs">Manual</Label><Input type="text" inputMode="decimal" value={e.motor_manual_price ?? 0} onChange={(ev) => set({ motor_manual_price: toNum(ev.target.value) })} /></div>
+                <div><Label className="text-xs">Motor RF</Label><Input type="text" inputMode="decimal" value={e.motor_rf_price ?? 0} onChange={(ev) => set({ motor_rf_price: toNum(ev.target.value) })} /></div>
+                <div><Label className="text-xs">Motor Wi-Fi</Label><Input type="text" inputMode="decimal" value={e.motor_wifi_price ?? 0} onChange={(ev) => set({ motor_wifi_price: toNum(ev.target.value) })} /></div>
+                <div><Label className="text-xs">Bandô</Label><Input type="text" inputMode="decimal" value={e.bando_price ?? 0} onChange={(ev) => set({ bando_price: toNum(ev.target.value) })} /></div>
               </div>
             </div>
           </TabsContent>
@@ -583,10 +593,10 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
           <TabsContent value="entrega" className="space-y-4 pt-5">
             <p className="text-xs text-muted-foreground">Dimensões e peso do <strong>pacote fechado</strong> usados para cálculo de frete via Frenet (Jadlog).</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div><Label className="text-xs">Peso (kg)</Label><Input type="number" step="0.1" value={e.weight_kg ?? 2} onChange={(ev) => set({ weight_kg: Number(ev.target.value) })} /></div>
-              <div><Label className="text-xs">Comprimento (cm)</Label><Input type="number" value={e.package_length_cm ?? 60} onChange={(ev) => set({ package_length_cm: Number(ev.target.value) })} /></div>
-              <div><Label className="text-xs">Largura (cm)</Label><Input type="number" value={e.package_width_cm ?? 15} onChange={(ev) => set({ package_width_cm: Number(ev.target.value) })} /></div>
-              <div><Label className="text-xs">Altura (cm)</Label><Input type="number" value={e.package_height_cm ?? 15} onChange={(ev) => set({ package_height_cm: Number(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Peso (kg)</Label><Input type="text" inputMode="decimal" value={e.weight_kg ?? 2} onChange={(ev) => set({ weight_kg: toNum(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Comprimento (cm)</Label><Input type="number" inputMode="numeric" step="1" value={e.package_length_cm ?? 60} onChange={(ev) => set({ package_length_cm: toInt(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Largura (cm)</Label><Input type="number" inputMode="numeric" step="1" value={e.package_width_cm ?? 15} onChange={(ev) => set({ package_width_cm: toInt(ev.target.value) })} /></div>
+              <div><Label className="text-xs">Altura (cm)</Label><Input type="number" inputMode="numeric" step="1" value={e.package_height_cm ?? 15} onChange={(ev) => set({ package_height_cm: toInt(ev.target.value) })} /></div>
             </div>
             <p className="text-[11px] text-muted-foreground">Dica: meça a caixa fechada. Peso em kg, dimensões em cm.</p>
           </TabsContent>
