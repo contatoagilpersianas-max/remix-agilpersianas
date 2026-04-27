@@ -70,6 +70,16 @@ type Product = {
 const slugify = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+// Aceita vírgula ou ponto como separador decimal (pt-BR)
+const toNum = (v: string): number => {
+  const n = parseFloat(String(v).replace(",", "."));
+  return Number.isFinite(n) ? n : 0;
+};
+const toInt = (v: string): number => {
+  const n = parseInt(String(v).replace(",", ".").replace(/\..*$/, ""), 10);
+  return Number.isFinite(n) ? n : 0;
+};
+
 const NEW_PRODUCT: Partial<Product> = {
   name: "",
   slug: "",
