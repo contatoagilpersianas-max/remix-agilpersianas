@@ -88,7 +88,7 @@ const ambienteImages: Record<string, string> = {
   cozinha: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
   escritorio: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
   lavanderia: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80",
-  infantil: "https://images.unsplash.com/photo-1559554498-17f985b2c421?w=600&q=80",
+  infantil: "https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?w=600&q=80",
   externa: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
 };
 
@@ -113,8 +113,10 @@ const optionImages: Record<string, Record<string, string>> = {
     nenhum: "https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=400&q=80",
   },
   acionamento: {
-    manual: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
-    motorizado: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
+    // Mão acionando corrente/cordão de persiana rolô
+    manual: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&q=80",
+    // Persiana rolô moderna em janela ampla — sugestão de motorização premium
+    motorizado: "https://images.unsplash.com/photo-1558882224-dda166733046?w=600&q=80",
   },
 };
 
