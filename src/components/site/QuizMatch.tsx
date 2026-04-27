@@ -620,6 +620,14 @@ export function QuizMatch() {
                 >
                   {current.title}
                 </h3>
+                {current.key === "convivencia" && (
+                  <p
+                    className="mt-2 text-[12px] uppercase font-medium"
+                    style={{ color: dark.coral, letterSpacing: "0.18em" }}
+                  >
+                    Selecione uma ou mais opções
+                  </p>
+                )}
               </div>
 
               {/* Opções — todos os steps usam cards com foto real (3:4) */}
