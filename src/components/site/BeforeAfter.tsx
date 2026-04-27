@@ -141,7 +141,7 @@ function CompareSlider({ pair }: { pair: Pair }) {
 
 export function BeforeAfter() {
   return (
-    <section className="bg-background py-20 md:py-28">
+    <section className="bg-background py-12 md:py-16">
       <div className="container-premium">
         <div className="mb-12 text-center max-w-2xl mx-auto">
           <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-primary">

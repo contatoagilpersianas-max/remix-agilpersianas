@@ -46,7 +46,7 @@ export function FeaturedProducts() {
   }
 
   return (
-    <section id="catalogo" className="bg-background py-20 md:py-28">
+    <section id="catalogo" className="bg-background py-12 md:py-16">
       <div className="container-premium">
         <div className="mb-12 flex flex-col items-center text-center md:mb-16" data-reveal>
           <span
