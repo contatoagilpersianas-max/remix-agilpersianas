@@ -92,6 +92,41 @@ const ambienteImages: Record<string, string> = {
   externa: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
 };
 
+// Fotos por etapa/opção — todos os cards usam imagens reais
+const optionImages: Record<string, Record<string, string>> = {
+  ambiente: ambienteImages,
+  luz: {
+    blackout: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80",
+    privacidade: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
+    filtrar: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=400&q=80",
+    solar: "https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=400&q=80",
+  },
+  estilo: {
+    moderno: "https://images.unsplash.com/photo-1489171078254-c3365d6e359f?w=400&q=80",
+    classico: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=400&q=80",
+    rustico: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=400&q=80",
+    industrial: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400&q=80",
+  },
+  convivencia: {
+    criancas: "https://images.unsplash.com/photo-1566004100631-35d015d6a491?w=400&q=80",
+    pets: "https://images.unsplash.com/photo-1583511655826-05700d52f4d9?w=400&q=80",
+    nenhum: "https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=400&q=80",
+  },
+  acionamento: {
+    manual: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
+    motorizado: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
+  },
+};
+
+// Subtítulo (caption laranja) por etapa
+const stepCaption: Record<string, string> = {
+  ambiente: "Ambiente",
+  luz: "Objetivo de luz",
+  estilo: "Estilo",
+  convivencia: "Convivência",
+  acionamento: "Acionamento",
+};
+
 type Ambiente =
   | "quarto"
   | "sala"
@@ -384,7 +419,7 @@ export function QuizMatch() {
   return (
     <section
       id="quiz-persiana-ideal"
-      className="relative isolate overflow-hidden pt-14 pb-20 sm:pt-24 sm:pb-28 font-sans"
+      className="relative isolate overflow-hidden font-sans"
       style={{ backgroundColor: dark.bg, color: dark.text }}
       aria-labelledby="quiz-title"
     >
@@ -400,7 +435,7 @@ export function QuizMatch() {
       {/* mantém referência do estado bg para evitar warning de unused */}
       <span hidden aria-hidden="true">{bgLoaded ? "" : ""}</span>
 
-      <div className="container mx-auto max-w-4xl flex flex-col items-center px-4 sm:px-6">
+      <div className="container mx-auto max-w-4xl flex flex-col items-center px-4 sm:px-6 py-20">
         <div className="text-center mb-8 sm:mb-12 w-full">
           <span
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-medium uppercase"
@@ -442,10 +477,10 @@ export function QuizMatch() {
               <Link
                 to="/catalogo"
                 aria-label="Pular o quiz e ir direto para a vitrine de produtos"
-                className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.22em] font-medium underline-offset-[6px] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm px-1"
-                style={{ color: dark.textMuted }}
+                className="inline-flex items-center gap-1.5 uppercase tracking-[0.22em] font-medium underline-offset-[6px] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm px-1 transition-opacity hover:opacity-100"
+                style={{ color: dark.textMuted, opacity: 0.4, fontSize: "12px" }}
               >
-                <SkipForward className="h-3.5 w-3.5" strokeWidth={1.2} />
+                <SkipForward className="h-3 w-3" strokeWidth={1.2} />
                 Pular e ver a coleção
               </Link>
             </div>
@@ -470,12 +505,6 @@ export function QuizMatch() {
                     style={{ color: dark.coral, letterSpacing: "0.22em" }}
                   >
                     Etapa {String(step + 1).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
-                  </span>
-                  <span
-                    className="text-[10px] uppercase"
-                    style={{ color: dark.textMuted, letterSpacing: "0.22em" }}
-                  >
-                    {STEPS.length - step - 1 === 0 ? "Última" : `Faltam ${STEPS.length - step - 1}`}
                   </span>
                 </div>
                 <div
@@ -573,143 +602,92 @@ export function QuizMatch() {
                 </h3>
               </div>
 
-              {/* Opções — para "ambiente": cards 3:4 com fotos reais. Demais: cards minimalistas dark. */}
-              {current.key === "ambiente" ? (
-                <div
-                  key={`opts-${step}`}
-                  className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
-                  role="listbox"
-                  aria-label={current.title}
-                >
-                  {current.options.map((opt) => {
-                    const selected = (answers as Record<string, string>)[current.key] === opt.value;
-                    const img = ambienteImages[opt.value] ?? ambienteImages.sala;
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => handleSelect(opt.value, opt.feedback)}
-                        aria-pressed={selected}
-                        className="group relative aspect-[3/4] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2"
+              {/* Opções — todos os steps usam cards com foto real (3:4) */}
+              <div
+                key={`opts-${step}`}
+                className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
+                role="listbox"
+                aria-label={current.title}
+              >
+                {current.options.map((opt) => {
+                  const selected = (answers as Record<string, string>)[current.key] === opt.value;
+                  const stepImages = optionImages[current.key] ?? {};
+                  const img =
+                    stepImages[opt.value] ??
+                    ambienteImages.sala;
+                  const caption = stepCaption[current.key] ?? "Opção";
+                  const highlightSafe =
+                    current.key === "acionamento" &&
+                    opt.value === "motorizado" &&
+                    answers.convivencia === "criancas";
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => handleSelect(opt.value, opt.feedback)}
+                      aria-pressed={selected}
+                      className="group relative aspect-[3/4] min-h-[160px] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2"
+                      style={{
+                        border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
+                        boxShadow: selected
+                          ? "0 8px 32px rgba(255,107,53,0.35)"
+                          : "0 4px 16px rgba(0,0,0,0.4)",
+                      }}
+                    >
+                      <img
+                        src={img}
+                        alt={opt.label}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div
+                        className="absolute inset-0"
                         style={{
-                          border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
-                          boxShadow: selected
-                            ? "0 8px 32px rgba(255,107,53,0.35)"
-                            : "0 4px 16px rgba(0,0,0,0.4)",
+                          background:
+                            "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%)",
                         }}
-                      >
-                        <img
-                          src={img}
-                          alt={opt.label}
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
+                      />
+                      {!selected && (
                         <div
-                          className="absolute inset-0"
-                          style={{
-                            background:
-                              "linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.85) 100%)",
-                          }}
+                          className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                          style={{ boxShadow: `inset 0 0 0 2px ${dark.coral}` }}
                         />
-                        {!selected && (
-                          <div
-                            className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                            style={{ boxShadow: `inset 0 0 0 2px ${dark.coral}` }}
-                          />
-                        )}
-                        {selected && (
-                          <span
-                            className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full"
-                            style={{ backgroundColor: dark.coral, boxShadow: "0 4px 12px rgba(255,107,53,0.5)" }}
-                          >
-                            <CheckCircle2 className="h-4 w-4 text-white" strokeWidth={2} />
-                          </span>
-                        )}
-                        <div className="absolute bottom-0 left-0 right-0 p-4 text-left">
-                          <p
-                            className="font-display text-white"
-                            style={{ fontSize: "clamp(15px,1.5vw,18px)", fontWeight: 500, lineHeight: 1.1 }}
-                          >
-                            {opt.label}
-                          </p>
-                          <p
-                            className="mt-0.5 text-[11px] uppercase font-light"
-                            style={{ color: dark.coral, letterSpacing: "0.16em" }}
-                          >
-                            Ambiente
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div
-                  key={`opts-${step}`}
-                  className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
-                  role="listbox"
-                  aria-label={current.title}
-                >
-                  {current.options.map((opt) => {
-                    const Icon = opt.icon;
-                    const selected = (answers as Record<string, string>)[current.key] === opt.value;
-                    const highlightSafe =
-                      current.key === "acionamento" &&
-                      opt.value === "motorizado" &&
-                      answers.convivencia === "criancas";
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => handleSelect(opt.value, opt.feedback)}
-                        aria-pressed={selected}
-                        className="group relative flex flex-col items-center justify-center gap-4 rounded-2xl p-5 sm:p-6 min-h-[150px] sm:min-h-[170px] transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2"
-                        style={{
-                          backgroundColor: selected ? "rgba(255,107,53,0.08)" : dark.surface,
-                          border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
-                          boxShadow: selected
-                            ? `0 8px 32px rgba(255,107,53,0.35)`
-                            : "0 4px 14px rgba(0,0,0,0.3)",
-                        }}
-                      >
-                        {highlightSafe && (
-                          <span
-                            className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[9px] font-medium uppercase tracking-[0.18em]"
-                            style={{ backgroundColor: dark.coral, color: "#fff" }}
-                          >
-                            Recomendado
-                          </span>
-                        )}
+                      )}
+                      {highlightSafe && (
                         <span
-                          className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full transition-all duration-300"
-                          style={{
-                            backgroundColor: selected ? "rgba(255,107,53,0.15)" : "rgba(255,255,255,0.04)",
-                            color: selected ? dark.coral : dark.text,
-                            border: `1px solid ${selected ? dark.coralBorder : dark.borderSoft}`,
-                          }}
+                          className="absolute top-3 left-3 whitespace-nowrap rounded-full px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.18em]"
+                          style={{ backgroundColor: dark.coral, color: "#fff" }}
                         >
-                          <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.2} />
+                          Recomendado
                         </span>
+                      )}
+                      {selected && (
                         <span
-                          className="text-[13px] sm:text-sm font-medium text-center leading-tight"
-                          style={{ color: dark.text }}
+                          className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full"
+                          style={{ backgroundColor: dark.coral, boxShadow: "0 4px 12px rgba(255,107,53,0.5)" }}
+                        >
+                          <CheckCircle2 className="h-4 w-4 text-white" strokeWidth={2} />
+                        </span>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
+                        <p
+                          className="font-display text-white"
+                          style={{ fontSize: "13px", fontWeight: 700, lineHeight: 1.15 }}
                         >
                           {opt.label}
-                        </span>
-                        {selected && (
-                          <span
-                            className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full"
-                            style={{ backgroundColor: dark.coral }}
-                          >
-                            <CheckCircle2 className="h-3.5 w-3.5 text-white" strokeWidth={2} />
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+                        </p>
+                        <p
+                          className="mt-0.5 uppercase font-light"
+                          style={{ color: dark.coral, fontSize: "10px", letterSpacing: "0.16em" }}
+                        >
+                          {caption}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
 
               <div className="mt-10 flex flex-col gap-3">
                 {(() => {
