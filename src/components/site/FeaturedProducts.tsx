@@ -39,6 +39,12 @@ export function FeaturedProducts() {
     refetchOnMount: "always",
   });
 
+  // Oculta a seção inteira quando não há produtos suficientes para uma vitrine real
+  // (evita placeholder "Em breve..." e cards repetindo a mesma foto).
+  if (!isLoading && products.length < 4) {
+    return null;
+  }
+
   return (
     <section id="catalogo" className="bg-background py-20 md:py-28">
       <div className="container-premium">
@@ -65,13 +71,6 @@ export function FeaturedProducts() {
                 className="aspect-[3/4] animate-pulse rounded-md bg-secondary"
               />
             ))}
-          </div>
-        ) : products.length === 0 ? (
-          <div className="rounded-2xl border bg-card p-12 text-center">
-            <p className="font-medium">Em breve, mais vendidos da semana.</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Marque produtos como “Destaque” no painel admin para aparecerem aqui.
-            </p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-x-6 md:gap-y-12 lg:grid-cols-4">

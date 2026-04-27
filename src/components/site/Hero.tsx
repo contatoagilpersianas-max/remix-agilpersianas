@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import heroLiving from "@/assets/hero-2026-living.jpg";
 import heroBedroom from "@/assets/hero-2026-bedroom.jpg";
 import heroLivingLumi from "@/assets/hero-2026-living-lumi.jpg";
-import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, CalendarCheck, BookOpen } from "lucide-react";
+import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, BookOpen } from "lucide-react";
 import { openLumiWith } from "@/components/site/LumiWidget";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -123,15 +123,17 @@ export function HeroBanner() {
               <div className="flex w-full flex-col items-center justify-center gap-2.5 sm:w-auto sm:flex-row sm:gap-3">
                 <button
                   type="button"
-                  onClick={() =>
-                    openLumiWith({
-                      pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
-                    })
-                  }
-                  className="inline-flex h-10 w-auto max-w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-5 text-[11px] font-bold uppercase tracking-[0.14em] text-primary-foreground shadow-glow transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:shadow-2xl sm:h-11 sm:px-6 sm:text-[12px] sm:tracking-[0.16em]"
+                  onClick={() => {
+                    if (typeof window === "undefined") return;
+                    const el = document.getElementById("quiz-persiana-ideal");
+                    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
+                  style={{ backgroundColor: "#FF6B35", color: "#fff" }}
+                  className="inline-flex h-10 w-auto max-w-full items-center justify-center gap-2 rounded-full px-5 text-[11px] font-bold uppercase tracking-[0.14em] shadow-glow transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:shadow-2xl sm:h-11 sm:px-6 sm:text-[12px] sm:tracking-[0.16em]"
                 >
-                  <CalendarCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  Agendar consultoria
+                  <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  Descobrir minha persiana ideal
+                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </button>
                 <Link
                   to="/catalogo"
