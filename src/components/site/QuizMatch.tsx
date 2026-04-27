@@ -630,7 +630,10 @@ export function QuizMatch() {
                 aria-label={current.title}
               >
                 {current.options.map((opt) => {
-                  const selected = (answers as Record<string, string>)[current.key] === opt.value;
+                  const selected =
+                    current.key === "convivencia"
+                      ? (answers.convivencia ?? []).includes(opt.value as Convivencia)
+                      : (answers as Record<string, string>)[current.key] === opt.value;
                   const stepImages = optionImages[current.key] ?? {};
                   const img =
                     stepImages[opt.value] ??
@@ -639,7 +642,7 @@ export function QuizMatch() {
                   const highlightSafe =
                     current.key === "acionamento" &&
                     opt.value === "motorizado" &&
-                    answers.convivencia === "criancas";
+                    (answers.convivencia ?? []).includes("criancas");
                   return (
                     <button
                       key={opt.value}
