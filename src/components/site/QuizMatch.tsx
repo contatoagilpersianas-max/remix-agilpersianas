@@ -683,6 +683,42 @@ export function QuizMatch() {
                         >
                           {caption}
                         </p>
+                        {current.key === "luz" && (() => {
+                          const positions: Record<string, number> = {
+                            blackout: 0.04,
+                            privacidade: 0.32,
+                            filtrar: 0.7,
+                            solar: 0.5,
+                          };
+                          const pos = positions[opt.value] ?? 0.5;
+                          return (
+                            <div
+                              className="relative mt-2"
+                              style={{
+                                width: 60,
+                                height: 3,
+                                borderRadius: 999,
+                                background: "linear-gradient(to right, #000, #fff)",
+                                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.15)",
+                              }}
+                              aria-hidden="true"
+                            >
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  top: "50%",
+                                  left: `${pos * 100}%`,
+                                  transform: "translate(-50%, -50%)",
+                                  width: 8,
+                                  height: 8,
+                                  borderRadius: "50%",
+                                  backgroundColor: dark.coral,
+                                  boxShadow: "0 0 0 2px rgba(0,0,0,0.6), 0 0 6px rgba(255,107,53,0.6)",
+                                }}
+                              />
+                            </div>
+                          );
+                        })()}
                       </div>
                     </button>
                   );
