@@ -316,7 +316,7 @@ export function QuizMatch() {
     const message =
       `Quiz concluído — Recomendação: ${recommendation.productName} ` +
       `(${recommendation.score}% match)\n` +
-      `Ambiente: ${a.ambiente} | Luz: ${a.luz} | Segurança: ${a.seguranca} | ` +
+      `Ambiente: ${a.ambiente} | Luz: ${a.luz} | ` +
       `Estilo: ${a.estilo} | Convivência: ${a.convivencia} | Acionamento: ${a.acionamento}`;
     void supabase
       .from("leads")
