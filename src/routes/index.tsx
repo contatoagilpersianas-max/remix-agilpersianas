@@ -20,6 +20,7 @@ import { MosquitoSection } from "@/components/site/MosquitoSection";
 // B2BSection removido a pedido do cliente (anexo 2)
 import { QuoteSection } from "@/components/site/QuoteSection";
 import { QuizMatch } from "@/components/site/QuizMatch";
+import { PriceCalculator } from "@/components/site/PriceCalculator";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 
 export const Route = createFileRoute("/")({
@@ -72,6 +73,21 @@ function Index() {
         <AutomationSection />
         {/* Captura de leads — formulário público alimenta CRM */}
         <QuoteSection />
+        {/* Calculadora de m² — ancorada em #calculadora, recebe pré-preenchimento do Quiz */}
+        <section id="calculadora" className="py-16 sm:py-20 bg-sand">
+          <div className="container mx-auto max-w-3xl">
+            <div className="text-center mb-8">
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-foreground">
+                Calcule sua persiana por m²
+              </h2>
+              <p className="mt-3 text-base text-foreground/70 max-w-xl mx-auto">
+                Estimativa instantânea com base nas suas medidas. Vindo do quiz?
+                Já preenchemos a recomendação para você.
+              </p>
+            </div>
+            <PriceCalculator />
+          </div>
+        </section>
         {/* Descontos */}
         <DiscountsGrid />
         {/* Prova social */}
