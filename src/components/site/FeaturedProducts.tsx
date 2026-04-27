@@ -53,10 +53,10 @@ export function FeaturedProducts() {
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em]"
             style={{ backgroundColor: "rgba(184,84,28,0.10)", color: "#B8541C" }}
           >
-            <Flame className="h-3.5 w-3.5" /> Mais vendidos
+            <Flame className="h-3.5 w-3.5" /> Destaques
           </span>
           <h2 className="mt-5 text-display text-4xl md:text-6xl">
-            Os mais vendidos da semana
+            Produtos em destaque
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
             Persianas e cortinas sob medida ao centímetro com envio para todo o Brasil.
