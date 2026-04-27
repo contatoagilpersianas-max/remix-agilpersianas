@@ -13,34 +13,34 @@ function formatValue(value: number | null | undefined, decimal: boolean) {
   return decimal ? String(value).replace(".", ",") : String(value);
 }
 
-function stripLeadingZeros(raw: string, decimal: boolean) {
-  if (!raw) return "";
-
-  if (!decimal) {
-    return raw.replace(/^0+(\d)/, "$1") || "0";
-  }
-
-  const [whole = "", fraction] = raw.split(",");
-  const normalizedWhole = whole.replace(/^0+(\d)/, "$1") || (fraction !== undefined ? "0" : whole);
-
-  return fraction !== undefined ? `${normalizedWhole},${fraction}` : normalizedWhole;
+function stripLeadingZeros(raw: string) {
+  return raw.replace(/^0+(?=\d)/, "");
 }
 
 function normalizeValue(raw: string, decimal: boolean) {
-  if (!decimal) return stripLeadingZeros(raw.replace(/\D+/g, ""), false);
+  if (!decimal) return stripLeadingZeros(raw.replace(/\D+/g, ""));
 
-  const cleaned = raw.replace(/[^\d.,]/g, "").replace(/\./g, ",");
-  const [whole = "", ...fractionParts] = cleaned.split(",");
-  const normalizedWhole = stripLeadingZeros(whole, true);
+  const cleaned = raw.replace(/[^\d.,]/g, "");
+  if (!cleaned) return "";
 
-  return fractionParts.length > 0 ? `${normalizedWhole},${fractionParts.join("")}` : normalizedWhole;
+  const separatorIndex = cleaned.search(/[.,]/);
+  if (separatorIndex === -1) {
+    return stripLeadingZeros(cleaned);
+  }
+
+  const separator = cleaned[separatorIndex];
+  const wholeRaw = cleaned.slice(0, separatorIndex).replace(/[.,]/g, "");
+  const fraction = cleaned.slice(separatorIndex + 1).replace(/[.,]/g, "");
+  const whole = stripLeadingZeros(wholeRaw) || "0";
+
+  return `${whole}${separator}${fraction}`;
 }
 
 function parseValue(raw: string, decimal: boolean) {
   if (!raw) return null;
 
   const parsed = decimal
-    ? Number.parseFloat(raw.replace(",", "."))
+    ? Number.parseFloat(raw.replace(",", ".").replace(/[^\d.]/g, ""))
     : Number.parseInt(raw, 10);
 
   return Number.isFinite(parsed) ? parsed : null;
