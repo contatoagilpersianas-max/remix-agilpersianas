@@ -529,6 +529,7 @@ function ResultCard({
     { label: "Objetivo de luz", value: luzes.find((x) => x.value === answers.luz)?.label ?? answers.luz },
     { label: "Quem usa", value: segurancas.find((x) => x.value === answers.seguranca)?.label ?? answers.seguranca },
     { label: "Estilo", value: estilos.find((x) => x.value === answers.estilo)?.label ?? answers.estilo },
+    { label: "Crianças/Pets", value: convivencias.find((x) => x.value === answers.convivencia)?.label ?? answers.convivencia },
     { label: "Acionamento", value: acionamentos.find((x) => x.value === answers.acionamento)?.label ?? answers.acionamento },
   ];
 
