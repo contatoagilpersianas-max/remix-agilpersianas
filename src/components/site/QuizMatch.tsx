@@ -115,10 +115,10 @@ const optionImages: Record<string, Record<string, string>> = {
     nenhum: "https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=400&q=80",
   },
   acionamento: {
-    // Mão acionando corrente/cordão de persiana rolô
-    manual: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&q=80",
-    // Persiana rolô moderna em janela ampla — sugestão de motorização premium
-    motorizado: "https://images.unsplash.com/photo-1558882224-dda166733046?w=600&q=80",
+    // Mão acionando corrente/cordão de persiana rolô — foto premium
+    manual: quizManualImg,
+    // Controle remoto acionando persiana — foto premium
+    motorizado: quizMotorizadoImg,
   },
 };
 
