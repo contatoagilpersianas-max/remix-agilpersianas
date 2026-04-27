@@ -46,6 +46,27 @@ type OptionDef<T extends string> = {
   feedback: string;
 };
 
+/* ---------------- Paleta premium ----------------
+   Nude / Champagne / Off-white com Coral apenas em CTAs e detalhes.
+----------------------------------------------------*/
+const palette = {
+  offwhite: "#FAF7F2",
+  champagne: "#EFE6D8",
+  champagneSoft: "#F6EFE3",
+  nude: "#E8DCC9",
+  ink: "#1F1A15",
+  inkSoft: "#5A5048",
+  inkMuted: "#8A8078",
+  hairline: "rgba(31,26,21,0.10)",
+  coral: "#D9663C",
+  coralSoft: "#E78A5F",
+  coralWash: "rgba(217,102,60,0.08)",
+};
+
+// Imagem de interior de luxo desfocada usada como pano de fundo "editorial".
+const editorialBg =
+  "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=70";
+
 type Ambiente =
   | "quarto"
   | "sala"
@@ -341,149 +362,170 @@ export function QuizMatch() {
   return (
     <section
       id="quiz-persiana-ideal"
-      className="relative pt-8 pb-16 sm:pt-12 sm:pb-24 font-sans"
-      style={{
-        background:
-          "linear-gradient(180deg, #FFF8F4 0%, #FFFFFF 55%, #FFF8F4 100%)",
-      }}
+      className="relative isolate overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28 font-sans"
+      style={{ backgroundColor: palette.offwhite }}
       aria-labelledby="quiz-title"
     >
-      <div className="container mx-auto max-w-4xl flex flex-col items-center">
-        <div className="text-center mb-5 sm:mb-6 w-full">
+      {/* Fundo editorial: foto de interior de luxo desfocada + véu champagne */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage: `url(${editorialBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(28px) saturate(0.85)",
+          transform: "scale(1.1)",
+          opacity: 0.35,
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background: `linear-gradient(180deg, ${palette.offwhite} 0%, rgba(250,247,242,0.86) 30%, rgba(239,230,216,0.65) 100%)`,
+        }}
+      />
+
+      <div className="container mx-auto max-w-4xl flex flex-col items-center px-4 sm:px-6">
+        <div className="text-center mb-8 sm:mb-12 w-full">
           <span
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm"
-            style={{ backgroundColor: "#FF6B35" }}
+            className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.32em]"
+            style={{ color: palette.coral }}
           >
-            <Sparkles className="h-3.5 w-3.5" /> Assistente inteligente
+            <span className="h-px w-6" style={{ backgroundColor: palette.coral }} />
+            Editorial · Quiz personalizado
+            <span className="h-px w-6" style={{ backgroundColor: palette.coral }} />
           </span>
           <h2
             id="quiz-title"
-            className="mt-4 font-display font-semibold tracking-tight"
+            className="mt-6 font-display tracking-tight"
             style={{
-              color: "#1A1A1A",
-              fontSize: "clamp(32px, 5vw, 56px)",
-              lineHeight: 1.05,
+              color: palette.ink,
+              fontSize: "clamp(34px, 5.4vw, 60px)",
+              lineHeight: 1.02,
+              fontWeight: 500,
             }}
           >
-            Descubra a Persiana Ideal para sua Casa em 60 Segundos
+            A persiana certa para sua casa,
+            <br className="hidden sm:block" />
+            <em className="not-italic" style={{ color: palette.coral, fontStyle: "italic" }}>
+              em apenas 60 segundos.
+            </em>
           </h2>
-          <p className="mt-4 text-base sm:text-lg max-w-2xl mx-auto" style={{ color: "#4A4A4A" }}>
-            Nosso assistente analisa seu ambiente, estilo e segurança para recomendar a melhor opção.
+          <p
+            className="mt-5 text-[15px] sm:text-base max-w-xl mx-auto leading-relaxed"
+            style={{ color: palette.inkSoft }}
+          >
+            Seis perguntas curtas. Uma recomendação feita sob medida para o seu
+            ambiente, estilo e rotina.
           </p>
           {!isComplete && (
-            <div className="mt-5 flex justify-center">
+            <div className="mt-7 flex justify-center">
               <Link
                 to="/catalogo"
                 aria-label="Pular o quiz e ir direto para a vitrine de produtos"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground/70 underline-offset-4 hover:text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm px-1"
+                className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.22em] font-medium underline-offset-[6px] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm px-1"
+                style={{ color: palette.inkMuted }}
               >
-                <SkipForward className="h-4 w-4" />
-                Pular quiz e ver todos os produtos
+                <SkipForward className="h-3.5 w-3.5" strokeWidth={1.2} />
+                Pular e ver a coleção
               </Link>
             </div>
           )}
         </div>
 
         <div
-          className="w-full mx-auto rounded-3xl border bg-white p-5 sm:p-8"
+          className="w-full mx-auto rounded-[28px] sm:rounded-[32px] p-6 sm:p-10 backdrop-blur-xl"
           style={{
-            borderColor: "#E5E7EB",
-            boxShadow: "0 12px 40px -8px rgba(26,26,26,0.08), 0 2px 8px -2px rgba(26,26,26,0.06)",
+            backgroundColor: "rgba(255, 253, 250, 0.78)",
+            border: `1px solid ${palette.hairline}`,
+            boxShadow:
+              "0 30px 80px -30px rgba(31,26,21,0.18), 0 8px 24px -12px rgba(31,26,21,0.08)",
           }}
         >
           {!isComplete ? (
             <>
-              {/* Steps numerados + barra de progresso */}
-              <div className="mb-6">
-                <div className="mb-3 flex items-center justify-between gap-2">
-                  {STEPS.map((_, i) => {
-                    const done = i < step;
-                    const active = i === step;
-                    return (
-                      <div key={i} className="flex flex-1 items-center">
-                        <span
-                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold transition-all"
-                          style={{
-                            backgroundColor: done || active ? "#FF6B35" : "#F1F2F4",
-                            color: done || active ? "#fff" : "#9CA3AF",
-                            boxShadow: active ? "0 0 0 4px rgba(255,107,53,0.18)" : "none",
-                          }}
-                          aria-current={active ? "step" : undefined}
-                        >
-                          {done ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
-                        </span>
-                        {i < STEPS.length - 1 && (
-                          <span
-                            className="mx-1.5 h-[2px] flex-1 rounded-full transition-colors"
-                            style={{ backgroundColor: i < step ? "#FF6B35" : "#E5E7EB" }}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-[0.14em]" style={{ color: "#1A1A1A" }}>
-                    Etapa {step + 1} de {STEPS.length}
-                  </span>
-                  <span className="text-xs font-medium" style={{ color: "#6B7280" }}>
-                    {STEPS.length - step - 1 === 0 ? "Última pergunta!" : `Faltam ${STEPS.length - step - 1}`}
+              {/* Indicador de etapa — minimalista (numeral + linhas finas) */}
+              <div className="mb-8 sm:mb-10">
+                <div className="mb-4 flex items-baseline justify-between">
+                  <p
+                    className="font-display"
+                    style={{
+                      color: palette.ink,
+                      fontSize: "13px",
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    <span style={{ color: palette.coral }}>
+                      {String(step + 1).padStart(2, "0")}
+                    </span>
+                    <span style={{ color: palette.inkMuted }}>
+                      {" "}/ {String(STEPS.length).padStart(2, "0")}
+                    </span>
+                  </p>
+                  <span
+                    className="text-[10px] uppercase tracking-[0.28em]"
+                    style={{ color: palette.inkMuted }}
+                  >
+                    {STEPS.length - step - 1 === 0
+                      ? "Última pergunta"
+                      : `Faltam ${STEPS.length - step - 1}`}
                   </span>
                 </div>
                 <div
-                  className="h-1.5 w-full rounded-full overflow-hidden"
-                  style={{ backgroundColor: "#F1F2F4" }}
+                  className="flex items-center gap-1.5"
                   role="progressbar"
                   aria-valuenow={progress}
                   aria-valuemin={0}
                   aria-valuemax={100}
                   aria-label={`Progresso do quiz: etapa ${step + 1} de ${STEPS.length}`}
                 >
-                  <div
-                    className="h-full rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${progress}%`, backgroundColor: "#FF6B35" }}
-                  />
+                  {STEPS.map((_, i) => (
+                    <span
+                      key={i}
+                      className="h-px flex-1 transition-all duration-500"
+                      style={{
+                        backgroundColor:
+                          i <= step ? palette.coral : palette.hairline,
+                        height: i <= step ? "2px" : "1px",
+                      }}
+                    />
+                  ))}
                 </div>
               </div>
 
-              {/* Bot de feedback contextual — card de dica premium */}
+              {/* Pergunta — tipografia editorial */}
               <div
-                className="mb-6 flex items-start gap-3 rounded-r-2xl rounded-l-md p-4 sm:p-5"
-                style={{
-                  backgroundColor: "#FFF0E8",
-                  borderLeft: "4px solid #FF6B35",
-                }}
+                key={`q-${step}`}
+                className="mb-8 sm:mb-10 text-center animate-fade-up"
               >
-                <span
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
-                  style={{ backgroundColor: "#FF6B35" }}
-                  aria-hidden="true"
-                >
-                  <Bot className="h-5 w-5" />
-                </span>
-                <div className="flex-1 pt-0.5">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: "#FF6B35" }}>
-                    Assistente Ágil
-                  </p>
-                  <p className="mt-1 text-sm sm:text-[15px] font-medium leading-snug" style={{ color: "#1A1A1A" }}>
-                    {feedback || current.botMessage}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mb-6 text-center">
                 <h3
-                  className="font-display font-semibold"
-                  style={{ color: "#1A1A1A", fontSize: "clamp(22px, 3vw, 32px)" }}
+                  className="font-display"
+                  style={{
+                    color: palette.ink,
+                    fontSize: "clamp(26px, 3.6vw, 40px)",
+                    lineHeight: 1.1,
+                    fontWeight: 500,
+                    letterSpacing: "-0.01em",
+                  }}
                 >
                   {current.title}
                 </h3>
-                <p className="mt-2 text-sm sm:text-base" style={{ color: "#6B7280" }} aria-live="polite">
-                  Toque na opção que mais combina com você.
+                <p
+                  className="mt-4 text-[14px] sm:text-[15px] leading-relaxed max-w-lg mx-auto"
+                  style={{ color: palette.inkSoft }}
+                  aria-live="polite"
+                >
+                  {feedback || current.botMessage}
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+              {/* Opções — cards minimalistas com glassmorphism + hover refinado */}
+              <div
+                key={`opts-${step}`}
+                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 animate-fade-up"
+              >
                 {current.options.map((opt) => {
                   const Icon = opt.icon;
                   const selected =
@@ -497,53 +539,78 @@ export function QuizMatch() {
                       key={opt.value}
                       type="button"
                       onClick={() => handleSelect(opt.value, opt.feedback)}
-                      className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl p-4 sm:p-5 min-h-[140px] sm:min-h-[156px] transition-all hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-                        highlightSafe && !selected ? "ring-2" : ""
-                      }`}
+                      className="group relative flex flex-col items-center justify-center gap-4 rounded-2xl p-5 sm:p-6 min-h-[150px] sm:min-h-[170px] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.015] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 backdrop-blur-md"
                       style={{
-                        backgroundColor: selected ? "#FF6B35" : "#FFFFFF",
-                        borderWidth: selected ? "2px" : "1px",
-                        borderStyle: "solid",
-                        borderColor: selected ? "#FF6B35" : "#E5E7EB",
-                        color: selected ? "#FFFFFF" : "#1A1A1A",
+                        backgroundColor: selected
+                          ? "rgba(255, 253, 250, 0.95)"
+                          : "rgba(255, 253, 250, 0.55)",
+                        border: selected
+                          ? `1.5px solid ${palette.coral}`
+                          : `1px solid ${palette.hairline}`,
                         boxShadow: selected
-                          ? "0 10px 28px -8px rgba(255,107,53,0.45)"
-                          : "0 1px 2px rgba(26,26,26,0.04)",
+                          ? `0 20px 50px -20px rgba(217,102,60,0.35), 0 0 0 4px ${palette.coralWash}`
+                          : "0 8px 30px -18px rgba(31,26,21,0.10)",
                         ...(highlightSafe && !selected
-                          ? ({ ["--tw-ring-color" as never]: "rgba(255,107,53,0.45)" } as React.CSSProperties)
+                          ? ({
+                              ["--tw-ring-color" as never]: "rgba(217,102,60,0.35)",
+                            } as React.CSSProperties)
                           : {}),
                       }}
                       aria-pressed={selected}
                     >
                       {highlightSafe && (
                         <span
-                          className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-md"
-                          style={{ backgroundColor: "#FF6B35", color: "#fff" }}
+                          className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[9px] font-medium uppercase tracking-[0.18em]"
+                          style={{
+                            backgroundColor: palette.ink,
+                            color: palette.offwhite,
+                          }}
                         >
-                          ⭐ Escolha segura
+                          Recomendado
                         </span>
                       )}
                       <span
-                        className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full transition-colors"
+                        className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-105"
                         style={{
-                          backgroundColor: selected ? "rgba(255,255,255,0.18)" : "rgba(255,107,53,0.12)",
-                          color: selected ? "#FFFFFF" : "#FF6B35",
+                          backgroundColor: selected
+                            ? palette.coralWash
+                            : "rgba(31,26,21,0.04)",
+                          color: selected ? palette.coral : palette.ink,
+                          border: `1px solid ${selected ? "rgba(217,102,60,0.25)" : palette.hairline}`,
                         }}
                       >
-                        <Icon className="h-7 w-7 sm:h-8 sm:w-8" />
+                        <Icon
+                          className="h-6 w-6 sm:h-7 sm:w-7"
+                          strokeWidth={1.2}
+                        />
                       </span>
                       <span
-                        className="text-sm sm:text-[15px] font-semibold text-center leading-tight"
-                        style={{ color: selected ? "#FFFFFF" : "#1A1A1A" }}
+                        className="text-[13px] sm:text-sm font-medium text-center leading-tight"
+                        style={{
+                          color: palette.ink,
+                          letterSpacing: "0.005em",
+                        }}
                       >
                         {opt.label}
                       </span>
+                      {selected && (
+                        <span
+                          className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full"
+                          style={{ backgroundColor: palette.coral }}
+                        >
+                          <CheckCircle2
+                            className="h-3.5 w-3.5"
+                            style={{ color: "#fff" }}
+                            strokeWidth={1.6}
+                          />
+                        </span>
+                      )}
                     </button>
                   );
                 })}
               </div>
 
-              <div className="mt-7 flex flex-col gap-3">
+              <div className="mt-10 flex flex-col gap-3">
                 {(() => {
                   const hasAnswer = !!(answers as Record<string, string>)[current.key];
                   return (
@@ -557,16 +624,22 @@ export function QuizMatch() {
                       }}
                       disabled={!hasAnswer}
                       style={{
-                        backgroundColor: hasAnswer ? "#FF6B35" : "#E5E7EB",
-                        color: hasAnswer ? "#FFFFFF" : "#9CA3AF",
-                        height: "52px",
-                        borderRadius: "12px",
-                        boxShadow: hasAnswer ? "0 8px 20px -6px rgba(255,107,53,0.45)" : "none",
+                        backgroundColor: hasAnswer ? palette.ink : "transparent",
+                        color: hasAnswer ? palette.offwhite : palette.inkMuted,
+                        height: "56px",
+                        borderRadius: "999px",
+                        border: hasAnswer
+                          ? `1px solid ${palette.ink}`
+                          : `1px solid ${palette.hairline}`,
+                        letterSpacing: "0.08em",
+                        boxShadow: hasAnswer
+                          ? "0 20px 40px -16px rgba(31,26,21,0.35)"
+                          : "none",
                       }}
-                      className="inline-flex w-full items-center justify-center gap-2 px-6 text-[15px] font-bold tracking-wide transition-all hover:opacity-95 disabled:cursor-not-allowed"
+                      className="inline-flex w-full items-center justify-center gap-3 px-8 text-[12px] uppercase font-medium transition-all duration-300 hover:opacity-90 disabled:cursor-not-allowed"
                     >
-                      {step === STEPS.length - 1 ? "Ver recomendação" : "Próxima etapa"}
-                      <ArrowRight className="h-5 w-5" />
+                      {step === STEPS.length - 1 ? "Ver minha recomendação" : "Próxima etapa"}
+                      <ArrowRight className="h-4 w-4" strokeWidth={1.4} />
                     </button>
                   );
                 })()}
@@ -574,10 +647,10 @@ export function QuizMatch() {
                   <button
                     type="button"
                     onClick={handleBack}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors hover:bg-[#F8F4F0]"
-                    style={{ color: "#6B7280" }}
+                    className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.22em] font-medium transition-colors hover:opacity-70"
+                    style={{ color: palette.inkMuted }}
                   >
-                    <ArrowLeft className="h-4 w-4" /> Voltar para etapa anterior
+                    <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.4} /> Voltar
                   </button>
                 )}
               </div>
