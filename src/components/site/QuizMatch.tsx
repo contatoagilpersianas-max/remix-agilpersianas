@@ -750,7 +750,10 @@ export function QuizMatch() {
 
               <div className="mt-10 flex flex-col gap-3">
                 {(() => {
-                  const hasAnswer = !!(answers as Record<string, string>)[current.key];
+                  const hasAnswer =
+                    current.key === "convivencia"
+                      ? (answers.convivencia ?? []).length > 0
+                      : !!(answers as Record<string, string>)[current.key];
                   return (
                     <button
                       type="button"
