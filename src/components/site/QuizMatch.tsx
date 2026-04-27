@@ -85,7 +85,6 @@ type Convivencia = "criancas" | "pets" | "nenhum";
 type Answers = {
   ambiente?: Ambiente;
   luz?: Luz;
-  seguranca?: Seguranca;
   estilo?: Estilo;
   convivencia?: Convivencia;
   acionamento?: Acionamento;
@@ -204,7 +203,7 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Privacidade ajustável sem abrir mão da iluminação natural.");
   }
 
-  if ((a.seguranca === "pets" || a.convivencia === "pets") && a.ambiente !== "externa" && a.luz !== "solar" && a.luz !== "blackout") {
+  if (a.convivencia === "pets" && a.ambiente !== "externa" && a.luz !== "solar" && a.luz !== "blackout") {
     productName = "Persiana Solar Screen (Pet-Friendly)";
     productPath = "/persiana-solar-screen";
     calcProductId = "rolo-solar";
@@ -212,7 +211,7 @@ function recommend(a: Required<Answers>): Recommendation {
     reasons.push("Tecido resistente que não desfia — perfeito para pets.");
   }
 
-  if (a.seguranca === "criancas" || a.convivencia === "criancas") {
+  if (a.convivencia === "criancas") {
     badge = "Motorização recomendada";
     reasons.push("Sem cordões soltos — segurança total para crianças em casa.");
   }
@@ -229,7 +228,7 @@ function recommend(a: Required<Answers>): Recommendation {
   if (a.luz === "solar" && (a.ambiente === "sala" || a.ambiente === "home")) score += 6;
   if (a.ambiente === "externa") score += 4;
   if (a.acionamento === "motorizado") score += 2;
-  if ((a.seguranca === "criancas" || a.convivencia === "criancas") && a.acionamento === "motorizado") score += 2;
+  if (a.convivencia === "criancas" && a.acionamento === "motorizado") score += 2;
   score = Math.min(99, score);
 
   const directPaths = new Set([
@@ -269,12 +268,6 @@ const STEPS = [
     botMessage: "Ótimo! Agora me conte: você quer escurecer totalmente, filtrar a luz ou apenas ter privacidade?",
   },
   {
-    key: "seguranca" as const,
-    title: "Quem usa o ambiente?",
-    options: segurancas,
-    botMessage: "Isso me ajuda a sugerir o tecido e o acionamento mais adequados ao perfil de quem usa o espaço.",
-  },
-  {
     key: "estilo" as const,
     title: "Qual seu estilo de decoração?",
     options: estilos,
@@ -298,6 +291,8 @@ export function QuizMatch() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [feedback, setFeedback] = useState<string>("");
+  const [direction, setDirection] = useState<"forward" | "back">("forward");
+  const [bgLoaded, setBgLoaded] = useState(false);
   const savedRef = useRef(false);
 
   const isComplete = step >= STEPS.length;
@@ -317,7 +312,7 @@ export function QuizMatch() {
     const message =
       `Quiz concluído — Recomendação: ${recommendation.productName} ` +
       `(${recommendation.score}% match)\n` +
-      `Ambiente: ${a.ambiente} | Luz: ${a.luz} | Segurança: ${a.seguranca} | ` +
+      `Ambiente: ${a.ambiente} | Luz: ${a.luz} | ` +
       `Estilo: ${a.estilo} | Convivência: ${a.convivencia} | Acionamento: ${a.acionamento}`;
     void supabase
       .from("leads")
@@ -346,11 +341,13 @@ export function QuizMatch() {
   }
 
   function handleBack() {
+    setDirection("back");
     setStep((s) => Math.max(0, s - 1));
     setFeedback("");
   }
 
   function handleReset() {
+    setDirection("forward");
     setStep(0);
     setAnswers({});
     setFeedback("");
@@ -367,16 +364,19 @@ export function QuizMatch() {
       aria-labelledby="quiz-title"
     >
       {/* Fundo editorial: foto de interior de luxo desfocada + véu champagne */}
-      <div
+      <img
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
+        src={editorialBg}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        sizes="100vw"
+        onLoad={() => setBgLoaded(true)}
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover transition-opacity duration-700"
         style={{
-          backgroundImage: `url(${editorialBg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
           filter: "blur(28px) saturate(0.85)",
           transform: "scale(1.1)",
-          opacity: 0.35,
+          opacity: bgLoaded ? 0.35 : 0,
         }}
       />
       <div
@@ -498,7 +498,7 @@ export function QuizMatch() {
               {/* Pergunta — tipografia editorial */}
               <div
                 key={`q-${step}`}
-                className="mb-8 sm:mb-10 text-center animate-fade-up"
+                className={`mb-8 sm:mb-10 text-center ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
               >
                 <h3
                   className="font-display"
@@ -524,7 +524,9 @@ export function QuizMatch() {
               {/* Opções — cards minimalistas com glassmorphism + hover refinado */}
               <div
                 key={`opts-${step}`}
-                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 animate-fade-up"
+                className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
+                role="listbox"
+                aria-label={current.title}
               >
                 {current.options.map((opt) => {
                   const Icon = opt.icon;
@@ -618,11 +620,20 @@ export function QuizMatch() {
                       type="button"
                       onClick={() => {
                         if (hasAnswer) {
+                          setDirection("forward");
                           setStep((s) => s + 1);
                           setFeedback("");
                         }
                       }}
                       disabled={!hasAnswer}
+                      aria-disabled={!hasAnswer}
+                      aria-label={
+                        hasAnswer
+                          ? step === STEPS.length - 1
+                            ? "Ver minha recomendação personalizada"
+                            : `Avançar para a etapa ${step + 2} de ${STEPS.length}`
+                          : "Selecione uma opção para avançar"
+                      }
                       style={{
                         backgroundColor: hasAnswer ? palette.ink : "transparent",
                         color: hasAnswer ? palette.offwhite : palette.inkMuted,
@@ -689,7 +700,6 @@ function ResultCard({
   const summary: { label: string; value: string }[] = [
     { label: "Ambiente", value: ambientes.find((x) => x.value === answers.ambiente)?.label ?? answers.ambiente },
     { label: "Objetivo de luz", value: luzes.find((x) => x.value === answers.luz)?.label ?? answers.luz },
-    { label: "Quem usa", value: segurancas.find((x) => x.value === answers.seguranca)?.label ?? answers.seguranca },
     { label: "Estilo", value: estilos.find((x) => x.value === answers.estilo)?.label ?? answers.estilo },
     { label: "Crianças/Pets", value: convivencias.find((x) => x.value === answers.convivencia)?.label ?? answers.convivencia },
     { label: "Acionamento", value: acionamentos.find((x) => x.value === answers.acionamento)?.label ?? answers.acionamento },
@@ -752,12 +762,10 @@ function ResultCard({
         </h3>
 
         {/* Selos contextuais (verde: crianças, azul: pets) */}
-        {(answers.seguranca === "criancas" ||
-          answers.convivencia === "criancas" ||
-          answers.seguranca === "pets" ||
+        {(answers.convivencia === "criancas" ||
           answers.convivencia === "pets") && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {(answers.seguranca === "criancas" || answers.convivencia === "criancas") && (
+            {answers.convivencia === "criancas" && (
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                 style={{ backgroundColor: "rgba(16,185,129,0.18)", color: "#34D399", border: "1px solid rgba(16,185,129,0.4)" }}
@@ -766,7 +774,7 @@ function ResultCard({
                 Seguro para crianças
               </span>
             )}
-            {(answers.seguranca === "pets" || answers.convivencia === "pets") && (
+            {answers.convivencia === "pets" && (
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                 style={{ backgroundColor: "rgba(59,130,246,0.18)", color: "#60A5FA", border: "1px solid rgba(59,130,246,0.4)" }}
