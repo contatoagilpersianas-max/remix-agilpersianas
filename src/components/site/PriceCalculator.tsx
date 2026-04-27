@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +40,20 @@ export function PriceCalculator({ defaultProductId, className, compact }: Props)
   const [width, setWidth] = useState<number>(120);
   const [height, setHeight] = useState<number>(140);
   const [motorized, setMotorized] = useState(false);
+
+  // Pré-preenchimento via query string (vindo do Quiz, por exemplo)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const produto = params.get("produto");
+    const largura = params.get("largura");
+    const altura = params.get("altura");
+    const motor = params.get("motor");
+    if (produto && PRODUCTS.some((p) => p.id === produto)) setProductId(produto);
+    if (largura && !Number.isNaN(Number(largura))) setWidth(Number(largura));
+    if (altura && !Number.isNaN(Number(altura))) setHeight(Number(altura));
+    if (motor === "1" || motor === "true") setMotorized(true);
+  }, []);
 
   const product = PRODUCTS.find((p) => p.id === productId) ?? PRODUCTS[0];
 
