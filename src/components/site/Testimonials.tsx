@@ -29,7 +29,7 @@ const ITEMS = [
 
 export function Testimonials() {
   return (
-    <section className="bg-sand py-20 md:py-28">
+    <section className="bg-sand py-12 md:py-16">
       <div className="container-premium">
         <div className="mb-12 text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">

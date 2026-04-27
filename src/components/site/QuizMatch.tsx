@@ -322,10 +322,6 @@ export function QuizMatch() {
     setFeedback(fb);
     const next: Answers = { ...answers, [current.key]: value as never };
     setAnswers(next);
-    setTimeout(() => {
-      setStep((s) => s + 1);
-      setFeedback("");
-    }, 450);
   }
 
   function handleBack() {

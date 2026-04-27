@@ -12,7 +12,7 @@ const FEATURES = [
 
 export function AutomationSection() {
   return (
-    <section className="relative overflow-hidden bg-graphite py-20 md:py-28 text-graphite-foreground">
+    <section className="relative overflow-hidden bg-graphite py-12 md:py-16 text-graphite-foreground">
       <div className="container-premium grid gap-12 md:grid-cols-2 md:items-center md:gap-16">
         <div className="relative aspect-[4/3] overflow-hidden rounded-3xl shadow-2xl">
           <img

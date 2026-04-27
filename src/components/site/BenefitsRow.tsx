@@ -25,7 +25,7 @@ const ITEMS = [
 
 export function BenefitsRow() {
   return (
-    <section className="bg-background py-14 md:py-20">
+    <section className="bg-background py-10 md:py-14">
       <div className="container-premium grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {ITEMS.map(({ icon: Icon, title, desc }, i) => (
           <div

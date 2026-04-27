@@ -24,7 +24,7 @@ type Item = {
 
 const ITEMS: Item[] = [
   {
-    title: "Persiana Rolô",
+    title: "Rolô",
     desc: "Versátil, moderna e perfeita para qualquer ambiente.",
     img: imgRolo,
     slug: "persiana-rolo",
@@ -85,7 +85,7 @@ const ITEMS: Item[] = [
 
 export function CategoriesPremium() {
   return (
-    <section id="categorias" className="bg-background py-20 md:py-28">
+    <section id="categorias" className="bg-background py-12 md:py-16">
       <div className="container-premium">
         {/* Cabeçalho */}
         <div className="mb-12 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end" data-reveal>
