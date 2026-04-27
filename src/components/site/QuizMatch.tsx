@@ -345,11 +345,11 @@ export function QuizMatch() {
   return (
     <section
       id="quiz-persiana-ideal"
-      className="relative py-16 sm:py-20 bg-gradient-to-b from-sand via-background to-sand font-sans"
+      className="relative pt-6 pb-14 sm:pt-8 sm:pb-20 bg-gradient-to-b from-sand via-background to-sand font-sans"
       aria-labelledby="quiz-title"
     >
       <div className="container mx-auto max-w-4xl flex flex-col items-center">
-        <div className="text-center mb-8 sm:mb-10 w-full">
+        <div className="text-center mb-5 sm:mb-6 w-full">
           <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm">
             <Sparkles className="h-3.5 w-3.5" /> Assistente inteligente
           </span>
@@ -498,7 +498,13 @@ export function QuizMatch() {
                     }
                   }}
                   disabled={!(answers as Record<string, string>)[current.key]}
-                  className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
+                  style={{
+                    backgroundColor: (answers as Record<string, string>)[current.key]
+                      ? "#FF6B35"
+                      : undefined,
+                    color: (answers as Record<string, string>)[current.key] ? "#fff" : undefined,
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold shadow-md hover:opacity-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:bg-muted disabled:text-foreground/40"
                 >
                   {step === STEPS.length - 1 ? "Ver recomendação" : "Próxima etapa"}
                   <ArrowRight className="h-4 w-4" />

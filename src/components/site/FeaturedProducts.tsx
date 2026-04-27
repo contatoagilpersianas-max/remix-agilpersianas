@@ -66,13 +66,9 @@ export function FeaturedProducts() {
               />
             ))}
           </div>
-        ) : products.length === 0 ? (
-          <div className="rounded-2xl border bg-card p-12 text-center">
-            <p className="font-medium">Em breve, mais vendidos da semana.</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Marque produtos como “Destaque” no painel admin para aparecerem aqui.
-            </p>
-          </div>
+        ) : products.length === 0 ? null : products.length < 4 ? (
+          // Evita exibir vitrine inconsistente com poucos produtos repetidos
+          null
         ) : (
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-x-6 md:gap-y-12 lg:grid-cols-4">
             {products.map((p, i) => (
