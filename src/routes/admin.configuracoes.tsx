@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { NumericInput } from "@/components/ui/numeric-input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Store, Phone, Share2, Lock, Palette, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
@@ -87,8 +88,8 @@ function Settings() {
           <div className="grid sm:grid-cols-2 gap-3">
             <div><Label>Nome da loja</Label><Input value={store.name} onChange={(e) => setStore({ ...store, name: e.target.value })} /></div>
             <div><Label>Slogan</Label><Input value={store.tagline} onChange={(e) => setStore({ ...store, tagline: e.target.value })} /></div>
-            <div><Label>Desconto PIX (%)</Label><Input type="number" value={store.pix_discount} onChange={(e) => setStore({ ...store, pix_discount: Number(e.target.value) })} /></div>
-            <div><Label>Parcelas máximas</Label><Input type="number" value={store.installments} onChange={(e) => setStore({ ...store, installments: Number(e.target.value) })} /></div>
+            <div><Label>Desconto PIX (%)</Label><NumericInput value={store.pix_discount} onValueChange={(value) => setStore({ ...store, pix_discount: value ?? 0 })} /></div>
+            <div><Label>Parcelas máximas</Label><NumericInput value={store.installments} onValueChange={(value) => setStore({ ...store, installments: value ?? 0 })} /></div>
           </div>
           <div className="flex justify-end"><Button onClick={() => save("store", store)} disabled={saving === "store"}>{saving === "store" && <Loader2 className="h-4 w-4 animate-spin" />} Salvar</Button></div>
         </div>
