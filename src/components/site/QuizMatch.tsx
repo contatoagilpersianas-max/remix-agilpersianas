@@ -360,6 +360,20 @@ export function QuizMatch() {
   const [direction, setDirection] = useState<"forward" | "back">("forward");
   const [bgLoaded, setBgLoaded] = useState(false);
   const savedRef = useRef(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  function scrollToQuizTop() {
+    if (typeof window === "undefined") return;
+    const el = sectionRef.current;
+    if (!el) return;
+    const prefersReduced =
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    requestAnimationFrame(() => {
+      const headerOffset = 96; // header fixo
+      const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+      window.scrollTo({ top, behavior: prefersReduced ? "auto" : "smooth" });
+    });
+  }
 
   const isComplete = step >= STEPS.length;
   const current = STEPS[Math.min(step, STEPS.length - 1)];
@@ -424,6 +438,7 @@ export function QuizMatch() {
     setDirection("back");
     setStep((s) => Math.max(0, s - 1));
     setFeedback("");
+    scrollToQuizTop();
   }
 
   function handleReset() {
@@ -439,6 +454,7 @@ export function QuizMatch() {
   return (
     <section
       id="quiz-persiana-ideal"
+      ref={sectionRef}
       className="relative isolate overflow-hidden font-sans"
       style={{ backgroundColor: dark.bg, color: dark.text }}
       aria-labelledby="quiz-title"
@@ -755,6 +771,7 @@ export function QuizMatch() {
                           setDirection("forward");
                           setStep((s) => s + 1);
                           setFeedback("");
+                          scrollToQuizTop();
                         }
                       }}
                       disabled={!hasAnswer}
