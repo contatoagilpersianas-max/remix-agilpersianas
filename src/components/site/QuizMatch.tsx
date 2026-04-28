@@ -507,7 +507,7 @@ export function QuizMatch() {
                 to="/catalogo"
                 aria-label="Pular o quiz e ir direto para a vitrine de produtos"
                 className="inline-flex items-center gap-1.5 uppercase tracking-[0.22em] font-medium underline-offset-[6px] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm px-1 transition-opacity hover:opacity-100"
-                style={{ color: dark.textMuted, opacity: 0.4, fontSize: "12px" }}
+                style={{ color: "#71717a", opacity: 1, fontSize: "12px" }}
               >
                 <SkipForward className="h-3 w-3" strokeWidth={1.2} />
                 Pular e ver a coleção
