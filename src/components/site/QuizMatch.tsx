@@ -705,7 +705,7 @@ export function QuizMatch() {
                       aria-pressed={selected}
                       className="quiz-card-light group relative overflow-hidden text-left transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 animate-quiz-card"
                       style={{
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: selected ? "#FF6B35" : "#FFFFFF",
                         border: selected ? "1.5px solid #FF6B35" : "1px solid #E8DDD0",
                         borderRadius: 12,
                         boxShadow: selected ? "0 4px 20px rgba(255,107,53,0.15)" : "none",
@@ -741,14 +741,14 @@ export function QuizMatch() {
                       <div className="px-3 py-2.5">
                         <p
                           className="font-display"
-                          style={{ color: "#1A0F08", fontSize: 11, fontWeight: 600, lineHeight: 1.2 }}
+                          style={{ color: selected ? "#FFFFFF" : "#1A0F08", fontSize: 11, fontWeight: 600, lineHeight: 1.2 }}
                         >
                           {opt.label}
                         </p>
                         {caption && (
                           <p
                             className="mt-0.5 uppercase font-medium"
-                            style={{ color: "#B89070", fontSize: 9, letterSpacing: "0.16em" }}
+                            style={{ color: selected ? "rgba(255,255,255,0.85)" : "#B89070", fontSize: 9, letterSpacing: "0.16em" }}
                           >
                             {caption}
                           </p>
