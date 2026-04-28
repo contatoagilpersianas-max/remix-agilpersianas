@@ -864,14 +864,14 @@ export function QuizMatch() {
                           : "Selecione uma opção para avançar"
                       }
                       style={{
-                        backgroundColor: hasAnswer ? "#FF6B35" : dark.border,
+                        backgroundColor: hasAnswer ? dark.coral : dark.border,
                         color: hasAnswer ? "#FFFFFF" : dark.textDim,
                         height: "52px",
                         borderRadius: "12px",
                         border: "none",
                         letterSpacing: "0.04em",
                         fontWeight: 600,
-                        boxShadow: hasAnswer ? "0 14px 32px -10px rgba(255,107,53,0.55)" : "none",
+                        boxShadow: hasAnswer ? "0 14px 32px -10px rgba(217,102,60,0.45)" : "none",
                       }}
                       className="quiz-cta group inline-flex w-full items-center justify-center gap-2 px-8 text-[14px] transition-all duration-300 disabled:cursor-not-allowed"
                     >
