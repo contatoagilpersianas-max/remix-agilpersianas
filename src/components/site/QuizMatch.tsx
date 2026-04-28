@@ -74,14 +74,14 @@ const palette = {
 // Paleta clara "Ateliê de Decoração" — Off-white / Champagne suave.
 // Coral só aparece em CTAs e indicadores de progresso.
 const dark = {
-  bg: "#F9F8F6",
+  bg: "#1A1208",
   surface: "#FFFFFF",
   surface2: "#FFFFFF",
   border: "rgba(31,26,21,0.08)",
   borderSoft: "rgba(31,26,21,0.06)",
   borderHard: "rgba(31,26,21,0.12)",
-  text: "#1F1A15",
-  textSoft: "#4A4239",
+  text: "#F5F0E8",
+  textSoft: "#A0A0A0",
   textMuted: "#8A8078",
   textDim: "#B8B0A6",
   coral: "#FF6B35",
@@ -465,64 +465,116 @@ export function QuizMatch() {
       <span hidden aria-hidden="true">{bgLoaded ? "" : ""}</span>
 
       <div className="container mx-auto max-w-4xl flex flex-col items-center px-4 sm:px-6 py-20">
-        <div className="text-center mb-12 sm:mb-16 w-full">
-          <span
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-medium uppercase"
-            style={{
-              border: "1px solid rgba(255,107,53,0.18)",
-              color: dark.coral,
-              letterSpacing: "0.2em",
-              backgroundColor: "rgba(255,107,53,0.08)",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-            }}
-          >
-            <Bot className="h-3.5 w-3.5" strokeWidth={1.6} />
-            Assistente Inteligente
-          </span>
-          <h2
-            id="quiz-title"
-            className="mt-8 font-display"
-            style={{
-              color: dark.text,
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(34px, 5.4vw, 58px)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.025em",
-              fontWeight: 500,
-            }}
-          >
-            Descubra a persiana ideal
-            <br className="hidden sm:block" />
-            <em
+        <div className="text-center mb-12 sm:mb-16 w-full flex flex-col items-center" style={{ paddingTop: "80px", gap: "16px" }}>
+          {/* 1. Linha de credencial ornamentada */}
+          <div className="flex items-center justify-center gap-3" aria-hidden="true">
+            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
+            <span
               style={{
-                color: "var(--color-primary)",
-                fontStyle: "italic",
+                fontFamily: "var(--font-sans)",
+                fontSize: "11px",
+                letterSpacing: "3px",
+                textTransform: "uppercase",
+                color: "rgba(255,107,53,0.7)",
                 fontWeight: 500,
-                fontFamily: "var(--font-display)",
               }}
             >
-              para a sua casa.
-            </em>
-          </h2>
-          <p
-            className="mt-7 text-[15px] sm:text-base max-w-lg mx-auto leading-relaxed font-light tracking-[0.005em]"
-            style={{ color: dark.textSoft }}
+              Mais de 20 mil lares transformados
+            </span>
+            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
+          </div>
+
+          {/* 2. Título principal — tensão entre light e bold */}
+          <h2
+            id="quiz-title"
+            className="font-display"
+            style={{
+              fontFamily: "var(--font-display)",
+              lineHeight: 1.1,
+              letterSpacing: "-0.025em",
+              margin: 0,
+            }}
           >
-            Cinco perguntas curtas. Uma recomendação feita sob medida para o seu
-            ambiente, estilo e rotina.
+            <span
+              style={{
+                display: "block",
+                fontWeight: 300,
+                fontSize: "clamp(2rem, 5vw, 3rem)",
+                color: "#F5F0E8",
+                fontStyle: "normal",
+              }}
+            >
+              Descubra a persiana
+            </span>
+            <span
+              style={{
+                display: "block",
+                fontWeight: 700,
+                fontSize: "clamp(2rem, 5vw, 3rem)",
+                color: "#FF6B35",
+                fontStyle: "italic",
+              }}
+            >
+              ideal para sua casa.
+            </span>
+          </h2>
+
+          {/* 3. Separador decorativo */}
+          <span
+            aria-hidden="true"
+            style={{
+              display: "block",
+              width: "60px",
+              height: "1px",
+              backgroundColor: "rgba(255,107,53,0.4)",
+              margin: "20px 0",
+            }}
+          />
+
+          {/* 4. Subtítulo */}
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontWeight: 300,
+              fontSize: "15px",
+              color: "#A0A0A0",
+              lineHeight: 1.8,
+              maxWidth: "420px",
+              margin: "0 auto",
+            }}
+          >
+            Cinco perguntas. Uma recomendação feita sob medida para o seu ambiente, estilo e rotina.
           </p>
+
+          {/* 5. Badge — agora abaixo, hierarquia invertida */}
+          <span
+            className="inline-flex items-center gap-2 rounded-full"
+            style={{
+              padding: "8px 16px",
+              fontSize: "11px",
+              fontWeight: 500,
+              textTransform: "uppercase",
+              letterSpacing: "0.2em",
+              color: "#FF6B35",
+              backgroundColor: "rgba(255,107,53,0.1)",
+              border: "1px solid rgba(255,107,53,0.3)",
+            }}
+          >
+            <Sparkles className="h-3.5 w-3.5" strokeWidth={1.6} />
+            Assistente Inteligente
+          </span>
+
+          {/* 6. Link skip — quase invisível */}
           {!isComplete && (
-            <div className="mt-10 flex justify-center">
-              <Link
-                to="/catalogo"
-                aria-label="Pular o quiz e ir direto para a vitrine de produtos"
-                className="inline-flex items-center gap-1.5 uppercase tracking-[0.22em] font-medium underline-offset-[6px] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm px-1 transition-opacity hover:opacity-100"
-                style={{ color: "#71717a", opacity: 1, fontSize: "12px" }}
-              >
-                <SkipForward className="h-3 w-3" strokeWidth={1.2} />
-                Pular e ver a coleção
-              </Link>
-            </div>
+            <Link
+              to="/catalogo"
+              aria-label="Pular o quiz e ir direto para a vitrine de produtos"
+              className="quiz-skip-link inline-flex items-center gap-1.5 transition-colors focus:outline-none rounded-sm px-1"
+              style={{ color: "#444", fontSize: "11px", textDecoration: "none" }}
+            >
+              <SkipForward className="h-3 w-3" strokeWidth={1.2} />
+              Pular e ver a coleção
+            </Link>
           )}
         </div>
 
