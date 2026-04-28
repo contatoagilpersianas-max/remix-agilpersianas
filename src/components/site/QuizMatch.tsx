@@ -515,7 +515,7 @@ export function QuizMatch() {
           style={{
             backgroundColor: dark.surface2,
             border: `1px solid ${dark.border}`,
-            boxShadow: "0 40px 100px -30px rgba(0,0,0,0.6)",
+            boxShadow: "0 30px 80px -40px rgba(31,26,21,0.18)",
           }}
         >
           {!isComplete ? (
@@ -574,7 +574,7 @@ export function QuizMatch() {
               <div
                 className="mb-8 flex items-start gap-3 rounded-xl p-4"
                 style={{
-                  backgroundColor: dark.surface,
+                  backgroundColor: "#FBF7F1",
                   borderLeft: `3px solid ${dark.coral}`,
                   border: `1px solid ${dark.border}`,
                   borderLeftWidth: 3,
