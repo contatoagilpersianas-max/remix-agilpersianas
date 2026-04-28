@@ -29,7 +29,6 @@ import {
   MessageCircle,
   ShoppingBag,
   Calculator,
-  SkipForward,
   Bot,
   Shield,
   Sailboat,
