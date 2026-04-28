@@ -206,6 +206,13 @@
   .animate-quiz-card {
     animation: quiz-card-fade 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+  .quiz-cta:not(:disabled):hover {
+    background-color: #E85A24 !important;
+    box-shadow: 0 16px 36px -10px rgba(232, 90, 36, 0.6) !important;
+  }
+  .quiz-cta:not(:disabled):active {
+    background-color: #D14E1B !important;
+  }
   @media (prefers-reduced-motion: reduce) {
     .animate-quiz-forward, .animate-quiz-back, .animate-quiz-card { animation: none; }
   }
