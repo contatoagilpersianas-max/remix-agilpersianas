@@ -618,7 +618,7 @@ export function QuizMatch() {
                           style={{
                             width: 28,
                             height: 28,
-                            backgroundColor: done || active ? dark.coral : dark.surface,
+                            backgroundColor: done || active ? dark.coral : "transparent",
                             border: `1px solid ${done || active ? dark.coral : dark.borderHard}`,
                             color: done || active ? "#fff" : dark.textMuted,
                             boxShadow: active ? `0 0 0 3px ${dark.coralWash}` : "none",
@@ -631,7 +631,7 @@ export function QuizMatch() {
                         {i < STEPS.length - 1 && (
                           <span
                             className="h-px flex-1 mx-1.5 transition-colors"
-                            style={{ backgroundColor: done ? dark.coral : dark.borderHard }}
+                            style={{ backgroundColor: done ? dark.coral : "rgba(245,240,232,0.12)" }}
                           />
                         )}
                       </div>
@@ -644,9 +644,9 @@ export function QuizMatch() {
               <div
                 className="mb-8 flex items-start gap-3 rounded-xl p-4"
                 style={{
-                  backgroundColor: "#FBF7F1",
+                  backgroundColor: "#150F08",
                   borderLeft: `3px solid ${dark.coral}`,
-                  border: `1px solid ${dark.border}`,
+                  border: "1px solid rgba(255,107,53,0.12)",
                   borderLeftWidth: 3,
                 }}
               >
@@ -703,10 +703,10 @@ export function QuizMatch() {
                 )}
               </div>
 
-              {/* Opções — todos os steps usam cards com foto real (3:4) */}
+              {/* Opções — cards com foto real, 4 colunas no desktop */}
               <div
                 key={`opts-${step}`}
-                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+                className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
                 role="listbox"
                 aria-label={current.title}
               >
@@ -737,12 +737,12 @@ export function QuizMatch() {
                       type="button"
                       onClick={() => handleSelect(opt.value, opt.feedback)}
                       aria-pressed={selected}
-                      className="group relative aspect-[3/4] min-h-[160px] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 animate-quiz-card"
+                      className="group relative aspect-[4/5] min-h-[200px] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 animate-quiz-card"
                       style={{
-                        border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
+                        border: selected ? `2px solid ${dark.coral}` : "1px solid rgba(245,240,232,0.10)",
                         boxShadow: selected
-                          ? "0 8px 28px rgba(217,102,60,0.25)"
-                          : "0 4px 14px rgba(31,26,21,0.08)",
+                          ? "0 8px 28px rgba(255,107,53,0.35)"
+                          : "none",
                         animationDelay: `${i * 50}ms`,
                       }}
                     >
