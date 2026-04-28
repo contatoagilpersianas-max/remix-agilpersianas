@@ -71,22 +71,23 @@ const palette = {
   coralWash: "rgba(217,102,60,0.08)",
 };
 
-// Paleta clara "Ateliê de Decoração" — Off-white / Champagne suave.
-// Coral só aparece em CTAs e indicadores de progresso.
+// Paleta clara editorial — Off-white / Branco com coral como acento.
+// Mantemos o nome `dark` para minimizar churn nas referências internas;
+// os valores agora são todos para um esquema light premium.
 const dark = {
-  bg: "#1A1208",
-  surface: "#FFFFFF",
-  surface2: "#FFFFFF",
-  border: "rgba(31,26,21,0.08)",
-  borderSoft: "rgba(31,26,21,0.06)",
-  borderHard: "rgba(31,26,21,0.12)",
-  text: "#F5F0E8",
-  textSoft: "#A0A0A0",
-  textMuted: "#8A8078",
-  textDim: "#B8B0A6",
-  coral: "#FF6B35",
-  coralWash: "rgba(255,107,53,0.18)",
-  coralBorder: "rgba(255,107,53,0.35)",
+  bg: "#F9F7F2",        // off-white quente para a seção
+  surface: "#FFFFFF",    // bolinhas do stepper / chips
+  surface2: "#FFFFFF",   // container do quiz
+  border: "rgba(31,26,21,0.06)",
+  borderSoft: "rgba(31,26,21,0.04)",
+  borderHard: "rgba(31,26,21,0.10)",
+  text: "#1F1A15",       // ink principal
+  textSoft: "#5A5048",   // ink suave (subtítulos / feedback)
+  textMuted: "#8A8078",  // legendas / labels
+  textDim: "#B8B0A6",    // desabilitado
+  coral: "#D9663C",      // coral premium harmoniza melhor sobre claro
+  coralWash: "rgba(217,102,60,0.10)",
+  coralBorder: "rgba(217,102,60,0.30)",
 };
 
 // Fotos reais de ambiente para os cards (Unsplash, otimizadas)
