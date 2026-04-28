@@ -71,22 +71,23 @@ const palette = {
   coralWash: "rgba(217,102,60,0.08)",
 };
 
-// Paleta clara "Ateliê de Decoração" — Off-white / Champagne suave.
-// Coral só aparece em CTAs e indicadores de progresso.
+// Paleta clara editorial — Off-white / Branco com coral como acento.
+// Mantemos o nome `dark` para minimizar churn nas referências internas;
+// os valores agora são todos para um esquema light premium.
 const dark = {
-  bg: "#1A1208",
-  surface: "#FFFFFF",
-  surface2: "#FFFFFF",
-  border: "rgba(31,26,21,0.08)",
-  borderSoft: "rgba(31,26,21,0.06)",
-  borderHard: "rgba(31,26,21,0.12)",
-  text: "#F5F0E8",
-  textSoft: "#A0A0A0",
-  textMuted: "#8A8078",
-  textDim: "#B8B0A6",
-  coral: "#FF6B35",
-  coralWash: "rgba(255,107,53,0.18)",
-  coralBorder: "rgba(255,107,53,0.35)",
+  bg: "#F9F7F2",        // off-white quente para a seção
+  surface: "#FFFFFF",    // bolinhas do stepper / chips
+  surface2: "#FFFFFF",   // container do quiz
+  border: "rgba(31,26,21,0.06)",
+  borderSoft: "rgba(31,26,21,0.04)",
+  borderHard: "rgba(31,26,21,0.10)",
+  text: "#1F1A15",       // ink principal
+  textSoft: "#5A5048",   // ink suave (subtítulos / feedback)
+  textMuted: "#8A8078",  // legendas / labels
+  textDim: "#B8B0A6",    // desabilitado
+  coral: "#D9663C",      // coral premium harmoniza melhor sobre claro
+  coralWash: "rgba(217,102,60,0.10)",
+  coralBorder: "rgba(217,102,60,0.30)",
 };
 
 // Fotos reais de ambiente para os cards (Unsplash, otimizadas)
@@ -458,7 +459,7 @@ export function QuizMatch() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(900px 500px at 50% -10%, rgba(217,102,60,0.06), transparent 60%), radial-gradient(700px 400px at 50% 110%, rgba(239,230,216,0.5), transparent 60%)",
+            "radial-gradient(900px 500px at 50% -10%, rgba(217,102,60,0.05), transparent 60%), radial-gradient(700px 400px at 50% 110%, rgba(239,230,216,0.55), transparent 60%)",
         }}
       />
       {/* mantém referência do estado bg para evitar warning de unused */}
@@ -468,20 +469,20 @@ export function QuizMatch() {
         <div className="text-center mb-12 sm:mb-16 w-full flex flex-col items-center" style={{ paddingTop: "80px", gap: "16px" }}>
           {/* 1. Linha de credencial ornamentada */}
           <div className="flex items-center justify-center gap-3" aria-hidden="true">
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
+            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(217,102,60,0.25)" }} />
             <span
               style={{
                 fontFamily: "var(--font-sans)",
                 fontSize: "11px",
                 letterSpacing: "3px",
                 textTransform: "uppercase",
-                color: "rgba(255,107,53,0.7)",
+                color: "rgba(184,90,44,0.75)",
                 fontWeight: 500,
               }}
             >
               Mais de 20 mil lares transformados
             </span>
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
+            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(217,102,60,0.25)" }} />
           </div>
 
           {/* 2. Título principal — tensão entre light e bold */}
@@ -498,24 +499,24 @@ export function QuizMatch() {
             <span
               style={{
                 display: "block",
-                fontWeight: 300,
+                fontWeight: 400,
                 fontSize: "clamp(2rem, 5vw, 3rem)",
-                color: "#F5F0E8",
+                color: "#1F1A15",
                 fontStyle: "normal",
               }}
             >
-              Descubra a persiana
+              Descubra a persiana ideal
             </span>
             <span
               style={{
                 display: "block",
-                fontWeight: 700,
+                fontWeight: 500,
                 fontSize: "clamp(2rem, 5vw, 3rem)",
-                color: "#FF6B35",
+                color: "#D9663C",
                 fontStyle: "italic",
               }}
             >
-              ideal para sua casa.
+              para a sua casa.
             </span>
           </h2>
 
@@ -526,7 +527,7 @@ export function QuizMatch() {
               display: "block",
               width: "60px",
               height: "1px",
-              backgroundColor: "rgba(255,107,53,0.4)",
+              backgroundColor: "rgba(217,102,60,0.35)",
               margin: "20px 0",
             }}
           />
@@ -537,7 +538,7 @@ export function QuizMatch() {
               fontFamily: "var(--font-sans)",
               fontWeight: 300,
               fontSize: "15px",
-              color: "#A0A0A0",
+              color: "#5A5048",
               lineHeight: 1.8,
               maxWidth: "420px",
               margin: "0 auto",
@@ -555,9 +556,9 @@ export function QuizMatch() {
               fontWeight: 500,
               textTransform: "uppercase",
               letterSpacing: "0.2em",
-              color: "#FF6B35",
-              backgroundColor: "rgba(255,107,53,0.1)",
-              border: "1px solid rgba(255,107,53,0.3)",
+              color: "#B85A2C",
+              backgroundColor: "rgba(217,102,60,0.08)",
+              border: "1px solid rgba(217,102,60,0.25)",
             }}
           >
             <Sparkles className="h-3.5 w-3.5" strokeWidth={1.6} />
@@ -570,7 +571,7 @@ export function QuizMatch() {
               to="/catalogo"
               aria-label="Pular o quiz e ir direto para a vitrine de produtos"
               className="quiz-skip-link inline-flex items-center gap-1.5 transition-colors focus:outline-none rounded-sm px-1"
-              style={{ color: "#444", fontSize: "11px", textDecoration: "none" }}
+              style={{ color: "#9A9089", fontSize: "11px", textDecoration: "none" }}
             >
               <SkipForward className="h-3 w-3" strokeWidth={1.2} />
               Pular e ver a coleção
@@ -581,9 +582,10 @@ export function QuizMatch() {
         <div
           className="w-full mx-auto rounded-[28px] sm:rounded-[32px] p-6 sm:p-10"
           style={{
-            backgroundColor: dark.surface2,
-            border: `1px solid ${dark.border}`,
-            boxShadow: "0 30px 80px -40px rgba(31,26,21,0.18)",
+            backgroundColor: "#FFFFFF",
+            border: "1px solid rgba(31,26,21,0.04)",
+            boxShadow:
+              "0 1px 2px rgba(31,26,21,0.04), 0 24px 60px -28px rgba(31,26,21,0.18)",
           }}
         >
           {!isComplete ? (
@@ -739,8 +741,8 @@ export function QuizMatch() {
                       style={{
                         border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
                         boxShadow: selected
-                          ? "0 8px 28px rgba(255,107,53,0.25)"
-                          : "0 6px 18px rgba(31,26,21,0.08)",
+                          ? "0 8px 28px rgba(217,102,60,0.25)"
+                          : "0 4px 14px rgba(31,26,21,0.08)",
                         animationDelay: `${i * 50}ms`,
                       }}
                     >
@@ -756,7 +758,7 @@ export function QuizMatch() {
                         className="absolute inset-0"
                         style={{
                           background:
-                            "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%)",
+                            "linear-gradient(to top, rgba(15,10,5,0.78) 0%, rgba(15,10,5,0.35) 45%, rgba(15,10,5,0.05) 100%)",
                         }}
                       />
                       {!selected && (
@@ -781,10 +783,10 @@ export function QuizMatch() {
                           <CheckCircle2 className="h-4 w-4 text-white" strokeWidth={2} />
                         </span>
                       )}
-                      <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
+                       <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
                         <p
                           className="font-display text-white"
-                          style={{ fontSize: "13px", fontWeight: 700, lineHeight: 1.15 }}
+                          style={{ fontSize: "13px", fontWeight: 700, lineHeight: 1.15, textShadow: "0 1px 8px rgba(0,0,0,0.45)" }}
                         >
                           {opt.label}
                         </p>
@@ -862,14 +864,14 @@ export function QuizMatch() {
                           : "Selecione uma opção para avançar"
                       }
                       style={{
-                        backgroundColor: hasAnswer ? "#FF6B35" : dark.border,
+                        backgroundColor: hasAnswer ? dark.coral : dark.border,
                         color: hasAnswer ? "#FFFFFF" : dark.textDim,
                         height: "52px",
                         borderRadius: "12px",
                         border: "none",
                         letterSpacing: "0.04em",
                         fontWeight: 600,
-                        boxShadow: hasAnswer ? "0 14px 32px -10px rgba(255,107,53,0.55)" : "none",
+                        boxShadow: hasAnswer ? "0 14px 32px -10px rgba(217,102,60,0.45)" : "none",
                       }}
                       className="quiz-cta group inline-flex w-full items-center justify-center gap-2 px-8 text-[14px] transition-all duration-300 disabled:cursor-not-allowed"
                     >
