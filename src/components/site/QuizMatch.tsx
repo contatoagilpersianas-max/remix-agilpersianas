@@ -65,21 +65,22 @@ const palette = {
   coralWash: "rgba(217,102,60,0.08)",
 };
 
-// Paleta dark editorial premium (override visual da seção)
+// Paleta clara "Ateliê de Decoração" — Off-white / Champagne suave.
+// Coral só aparece em CTAs e indicadores de progresso.
 const dark = {
-  bg: "#1A1208",
-  surface: "#150F08",
-  surface2: "#1E1510",
-  border: "#1E1E1A",
-  borderSoft: "#262620",
-  borderHard: "#333",
-  text: "#F5F1E8",
-  textSoft: "#C8C4BC",
-  textMuted: "#888178",
-  textDim: "#444",
+  bg: "#F9F8F6",
+  surface: "#FFFFFF",
+  surface2: "#FFFFFF",
+  border: "rgba(31,26,21,0.08)",
+  borderSoft: "rgba(31,26,21,0.06)",
+  borderHard: "rgba(31,26,21,0.12)",
+  text: "#1F1A15",
+  textSoft: "#4A4239",
+  textMuted: "#8A8078",
+  textDim: "#B8B0A6",
   coral: "#FF6B35",
-  coralWash: "rgba(255,107,53,0.25)",
-  coralBorder: "rgba(255,107,53,0.4)",
+  coralWash: "rgba(255,107,53,0.18)",
+  coralBorder: "rgba(255,107,53,0.35)",
 };
 
 // Fotos reais de ambiente para os cards (Unsplash, otimizadas)
