@@ -71,23 +71,22 @@ const palette = {
   coralWash: "rgba(217,102,60,0.08)",
 };
 
-// Paleta clara editorial — Off-white / Branco com coral como acento.
-// Mantemos o nome `dark` para minimizar churn nas referências internas;
-// os valores agora são todos para um esquema light premium.
+// Paleta dark editorial — fundo único #1A1208 do topo ao rodapé.
+// O quiz É a seção; sem container interno flutuante.
 const dark = {
-  bg: "#F9F7F2",        // off-white quente para a seção
-  surface: "#FFFFFF",    // bolinhas do stepper / chips
-  surface2: "#FFFFFF",   // container do quiz
-  border: "rgba(31,26,21,0.06)",
-  borderSoft: "rgba(31,26,21,0.04)",
-  borderHard: "rgba(31,26,21,0.10)",
-  text: "#1F1A15",       // ink principal
-  textSoft: "#5A5048",   // ink suave (subtítulos / feedback)
-  textMuted: "#8A8078",  // legendas / labels
-  textDim: "#B8B0A6",    // desabilitado
-  coral: "#D9663C",      // coral premium harmoniza melhor sobre claro
-  coralWash: "rgba(217,102,60,0.10)",
-  coralBorder: "rgba(217,102,60,0.30)",
+  bg: "#1A1208",
+  surface: "#150F08",
+  surface2: "#150F08",
+  border: "rgba(255,107,53,0.12)",
+  borderSoft: "rgba(245,240,232,0.06)",
+  borderHard: "rgba(245,240,232,0.18)",
+  text: "#F5F0E8",
+  textSoft: "#C9BFB2",
+  textMuted: "#8A8078",
+  textDim: "#6B6157",
+  coral: "#FF6B35",
+  coralWash: "rgba(255,107,53,0.12)",
+  coralBorder: "rgba(255,107,53,0.35)",
 };
 
 // Fotos reais de ambiente para os cards (Unsplash, otimizadas)

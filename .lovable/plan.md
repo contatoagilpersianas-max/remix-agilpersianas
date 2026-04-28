@@ -1,70 +1,108 @@
 ## Objetivo
-Converter o cabeçalho e o container do **QuizMatch** do modo escuro atual para um visual claro e editorial em off-white, mantendo o caráter premium e refinando o tratamento das imagens dos cards.
+Reestruturar o QuizMatch para ser uma **seção full-bleed escura** — o quiz É a seção, sem container branco flutuante. Visual unificado em `#1A1208` do topo ao rodapé.
 
 ## Escopo
-Apenas `src/components/site/QuizMatch.tsx` (camada de apresentação). Sem alterar lógica do quiz, recomendação, integração com Supabase ou navegação.
+Apenas `src/components/site/QuizMatch.tsx`. Sem mudanças em lógica, recomendação, dados ou rotas.
 
 ---
 
-## Mudanças visuais
+## Mudanças
 
-### 1. Fundo da seção
-- Trocar `backgroundColor: dark.bg` (`#1A1208`) por **`#F9F7F2`** (off-white quente).
-- Ajustar o glow ambiente para tons claros sutis (champagne suave + um leve toque de coral) em vez de gradientes pensados para fundo escuro.
+### 1. Paleta `dark` — voltar para esquema escuro real
+Hoje o objeto `dark` foi reaproveitado como light. Restaurar como dark coerente com o pedido:
 
-### 2. Cabeçalho
-- **Linha de credencial** (“Mais de 20 mil lares transformados”): manter ornamento, mas escurecer o coral para leitura sobre claro (`#B85A2C`/`#C2622E` em ~70% de opacidade) e linhas laterais com a mesma cor em ~25%.
-- **Título principal** em fonte serifada elegante (`var(--font-display)` — Playfair Display, já usado no projeto):
-  - Linha 1 “Descubra a persiana ideal” em `#1F1A15` (ink), peso 400, **sem itálico**.
-  - Linha 2 “para a sua casa.” em **itálico**, cor laranja da marca **`#D9663C`** (coral premium, harmoniza com fundo claro), peso 500.
-  - Estrutura: quebra de linha entre as duas partes (mantém hierarquia atual).
-- **Separador decorativo**: 60px, mesma laranja a 35% de opacidade.
-- **Subtítulo** em `#5A5048` (inkSoft), peso 300, mesma largura máxima.
-- **Badge “Assistente Inteligente”**: fundo `rgba(217,102,60,0.08)`, borda `rgba(217,102,60,0.25)`, texto coral escuro — pílula arredondada já existente.
-- **Link “Pular e ver a coleção”**: cor `#9A9089` (cinza quente) com hover `#5A5048`. Mantém quase invisível mas legível em fundo claro.
+```ts
+const dark = {
+  bg: "#1A1208",
+  surface: "#150F08",        // card do bot, chips inativos
+  surface2: "#150F08",       // (não mais usado como container, fica de fallback)
+  border: "rgba(255,107,53,0.12)",
+  borderSoft: "rgba(245,240,232,0.06)",
+  borderHard: "rgba(245,240,232,0.18)",
+  text: "#F5F0E8",
+  textSoft: "#C9BFB2",
+  textMuted: "#8A8078",
+  textDim: "#6B6157",
+  coral: "#FF6B35",
+  coralWash: "rgba(255,107,53,0.12)",
+  coralBorder: "rgba(255,107,53,0.35)",
+};
+```
 
-### 3. Container do quiz (card branco)
-- Fundo **`#FFFFFF` puro**.
-- Remover borda visível (`border: 1px solid rgba(0,0,0,0)` ou cor extremamente sutil `rgba(31,26,21,0.04)`).
-- Substituir a sombra atual por **sombra dupla muito leve e sofisticada**:
-  ```
-  box-shadow:
-    0 1px 2px rgba(31,26,21,0.04),
-    0 24px 60px -28px rgba(31,26,21,0.18);
-  ```
-- Manter raio `28–32px`.
+### 2. Wrapper da seção (full-bleed)
+Substituir o `container mx-auto max-w-4xl ... py-20` por um wrapper que:
+- Ocupa largura total da seção.
+- `padding: 100px 20px` no mobile, `100px 40px` no desktop.
+- `max-width: 1280px` central — limita a largura para não esticar demais em telas muito largas, mas mantém sensação full-width (vs. 4xl/56rem que parece "caixa").
 
-### 4. Stepper, bot de feedback e perguntas (dentro do card)
-- Stepper: bolinhas inativas com fundo `#FFFFFF` e borda `rgba(31,26,21,0.10)`, texto `#8A8078`. Ativas/concluídas continuam coral.
-- Bot de feedback: fundo `#FBF7F1` (já está), borda `rgba(31,26,21,0.06)`, texto `#5A5048`.
-- Título da pergunta (`h3`) em `#1F1A15`, fonte serifada, peso 500.
+Glow ambiente atual (radial coral + champagne off-white) será adaptado para tons escuros sutis: `radial-gradient(900px 500px at 50% -10%, rgba(255,107,53,0.08), transparent 60%)` apenas.
 
-### 5. Cards das opções (imagens)
-- **Overlay reforçado** para garantir contraste do texto branco em qualquer foto:
-  ```
-  background: linear-gradient(
-    to top,
-    rgba(15,10,5,0.78) 0%,
-    rgba(15,10,5,0.35) 45%,
-    rgba(15,10,5,0.05) 100%
-  );
-  ```
-  (atual vai de `rgba(0,0,0,0.85)` direto a `0.2`; a versão proposta tem transição mais suave e mantém legibilidade no rodapé).
-- Adicionar `text-shadow: 0 1px 8px rgba(0,0,0,0.45)` no rótulo branco para reforço extra em fotos muito claras (cozinha, escritório).
-- Borda padrão: `1px solid rgba(31,26,21,0.06)`. Selecionado mantém `2px solid coral` + sombra coral (já existe).
-- Sombra padrão dos cards mais discreta: `0 4px 14px rgba(31,26,21,0.08)`.
+### 3. Cabeçalho
+- **Largura máxima do bloco do título**: `max-width: 700px`, centralizado.
+- **Linha de credencial** mantém estrutura atual, ajustando a cor para `rgba(255,107,53,0.7)` (sobre fundo escuro).
+- **Título principal**:
+  - Linha 1 "Descubra a persiana" — Playfair Display **weight 300**, `clamp(2.25rem, 5vw, 3.5rem)`, cor `#F5F0E8`.
+  - Linha 2 "ideal para sua casa." — Playfair Display **weight 700 itálico**, `clamp(2.25rem, 5vw, 3.5rem)`, cor `#FF6B35`.
+- **Separador decorativo** em `rgba(255,107,53,0.4)`.
+- **Subtítulo**: `#A8A096` peso 300.
+- **Badge "Assistente Inteligente"**: fundo `rgba(255,107,53,0.10)`, borda `rgba(255,107,53,0.30)`, texto `#FF6B35`.
+- **Link skip**: `#5A5048` com hover `#8A8078`.
 
-### 6. Tela final (resultado)
-- Aplicar mesma paleta clara (já parcialmente preparada via objeto `palette`): garantir que textos usem `palette.ink`/`inkSoft` e CTA continue coral.
+### 4. Remover container branco
+Excluir o `<div className="w-full mx-auto rounded-[28px] ... bg #FFFFFF ...">` que envolve o quiz. O conteúdo (stepper, bot, pergunta, cards, botões) fica diretamente dentro do wrapper da seção. Sem padding interno extra, sem borda, sem sombra, sem fundo.
+
+Ajustar margin-top entre cabeçalho e stepper para `mt-12 sm:mt-16` (mantém respiro sem o card como referência visual).
+
+### 5. Stepper
+- Bolinhas **inativas**: fundo `transparent`, borda `rgba(245,240,232,0.18)`, texto `#8A8078`.
+- Bolinhas **ativas/concluídas**: fundo `#FF6B35`, borda `#FF6B35`, texto branco — mantém.
+- Linha conectora inativa: `rgba(245,240,232,0.12)`. Concluída: `#FF6B35`.
+
+### 6. Card do assistente (bot de feedback)
+Conforme pedido:
+- `background: #150F08`
+- `border-left: 3px solid #FF6B35`
+- Borda restante: `1px solid rgba(255,107,53,0.12)` (sutil, harmoniza)
+- Texto do feedback: `#C9BFB2`
+- Avatar continua com gradiente coral (já correto).
+
+### 7. Pergunta (h3)
+Cor `#F5F0E8`, mesma fonte serif e peso atuais.
+
+### 8. Cards de opções (grid)
+- Grid: `grid-cols-2 lg:grid-cols-4` (remove `sm:grid-cols-3` para garantir exatamente 4 no desktop ≥ lg). Mantém `gap-3 sm:gap-4`.
+- Aspect ratio atual `aspect-[3/4]` produz cards verticais; o pedido pede **min-height 200px** com foto cobrindo 100%. Trocar para `aspect-[4/5]` com `min-h-[200px]` para ocupar bem a largura disponível em 4 colunas.
+- Borda padrão: `1px solid rgba(245,240,232,0.10)`. Selecionado: `2px solid #FF6B35` + sombra coral.
+- Sombra padrão: nenhuma (visual editorial limpo sobre fundo escuro). Mantém apenas a sombra coral quando selecionado.
+- Overlay continua reforçado para legibilidade do texto branco.
+
+### 9. Botão "Próxima etapa"
+- `width: 100%` (ocupa toda a largura do conteúdo da seção, não só de uma "caixinha").
+- `height: 52px`, `border-radius: 12px`.
+- Habilitado: `background: #FF6B35`, texto branco bold.
+- Desabilitado: fundo `rgba(245,240,232,0.06)`, texto `#6B6157`.
+- Sombra habilitada: `0 14px 32px -10px rgba(255,107,53,0.55)`.
+
+### 10. Botão "Voltar" e link "Refazer quiz"
+Texto `#8A8078`, hover `#C9BFB2`.
+
+### 11. ResultCard (tela final)
+A função `ResultCard` ainda usa fundo branco (`#FFFFFF`) com texto escuro. Para coerência, transformar também:
+- Wrapper interno: `background: transparent` (já está dentro da seção escura), remover o `-m-6 sm:-m-10` e o `rounded-[28px] ... p-6 sm:p-10` brancos.
+- Texto do título do resultado: `#F5F0E8`.
+- Lista de razões: texto `#C9BFB2`, ícones coral.
+- Bloco "Suas escolhas no quiz": `background: #150F08`, borda `rgba(255,107,53,0.12)`, chips com fundo `rgba(245,240,232,0.04)` e borda `rgba(245,240,232,0.10)`.
+- CTAs principais (comprar / WhatsApp / calculadora) mantêm cores próprias — apenas o botão secundário "Falar com especialista" muda para borda `rgba(245,240,232,0.18)` e texto `#C9BFB2`.
 
 ---
 
 ## Fora de escopo
-- Trocar imagens dos ambientes (já feito anteriormente).
-- Alterar lógica de recomendação, leads, analytics ou rotas.
-- Mexer em outras seções do site.
+- Lógica de recomendação, leads, analytics, navegação.
+- Outras seções do site.
+- Trocar imagens dos cards.
 
 ## Verificação após implementação
-- Conferir o build/preview na home (`/`) com viewport mobile e desktop.
-- Inspecionar contraste do texto branco sobre os cards de cozinha (fundo claro) e escritório.
-- Validar que o título serifado renderiza com Playfair Display (já carregado via `--font-display`).
+- Preview em desktop (1280) e mobile (390): confirmar que não há mais "caixa branca" e que a seção respira do topo ao rodapé.
+- Conferir contraste do texto branco sobre os cards de cozinha e escritório.
+- Conferir que o botão "Próxima etapa" ocupa 100% da largura útil.
+- Conferir tela de resultado em ambos os modos (`direct` e `consult`).
