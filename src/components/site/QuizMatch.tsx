@@ -71,21 +71,21 @@ const palette = {
   coralWash: "rgba(217,102,60,0.08)",
 };
 
-// Paleta dark editorial — fundo único #1A1208 do topo ao rodapé.
-// O quiz É a seção; sem container interno flutuante.
+// Paleta editorial creme — fundo único #FAF7F2.
+// Mantemos o nome `dark` para minimizar churn nas referências internas.
 const dark = {
-  bg: "#1A1208",
-  surface: "#150F08",
-  surface2: "#150F08",
-  border: "rgba(255,107,53,0.12)",
-  borderSoft: "rgba(245,240,232,0.06)",
-  borderHard: "rgba(245,240,232,0.18)",
-  text: "#F5F0E8",
-  textSoft: "#C9BFB2",
-  textMuted: "#8A8078",
-  textDim: "#6B6157",
+  bg: "#FAF7F2",         // creme quente da seção
+  surface: "#FFFFFF",     // cards
+  surface2: "#F0EBE3",    // card do assistente
+  border: "#E8DDD0",      // bordas e barra de progresso (fundo)
+  borderSoft: "#EFE6D8",
+  borderHard: "#D4B89A",  // separador decorativo
+  text: "#1A0F08",        // ink principal
+  textSoft: "#5A4A3E",    // corpo de texto
+  textMuted: "#B89070",   // eyebrow / labels secundárias
+  textDim: "#C4AE96",     // estados desabilitados / link skip
   coral: "#FF6B35",
-  coralWash: "rgba(255,107,53,0.12)",
+  coralWash: "rgba(255,107,53,0.10)",
   coralBorder: "rgba(255,107,53,0.35)",
 };
 
