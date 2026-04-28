@@ -561,6 +561,22 @@ export function QuizMatch() {
         <div className="w-full mt-12 sm:mt-16">
           {!isComplete ? (
             <>
+              {/* Link "Pular quiz" — discreto, no início da seção */}
+              <div className="mb-4 flex justify-end">
+                <Link
+                  to="/catalogo"
+                  aria-label="Pular o quiz e ir direto para a vitrine de produtos"
+                  style={{
+                    color: "#C4AE96",
+                    fontSize: 12,
+                    textDecoration: "none",
+                  }}
+                  className="transition-colors hover:text-[#5A4A3E]"
+                >
+                  Pular quiz →
+                </Link>
+              </div>
+
               {/* Barra de progresso linear */}
               <div className="mb-8 sm:mb-10">
                 <div className="mb-3 flex items-center justify-between">
@@ -634,7 +650,25 @@ export function QuizMatch() {
                     style={{ color: "#5A4A3E" }}
                     aria-live="polite"
                   >
-                    {feedback || current.botMessage}
+                    {feedback ? (
+                      feedback
+                    ) : (
+                      <>
+                        Perfeito. Vamos encontrar a solução que equilibra sua{" "}
+                        <span style={{ color: "#1A0F08", fontStyle: "italic", fontWeight: 500 }}>
+                          privacidade
+                        </span>{" "}
+                        com a entrada ideal de{" "}
+                        <span style={{ color: "#1A0F08", fontStyle: "italic", fontWeight: 500 }}>
+                          luminosidade
+                        </span>
+                        , garantindo o{" "}
+                        <span style={{ color: "#1A0F08", fontStyle: "italic", fontWeight: 500 }}>
+                          conforto
+                        </span>{" "}
+                        do seu ambiente.
+                      </>
+                    )}
                   </p>
                 </div>
               </div>
@@ -705,7 +739,8 @@ export function QuizMatch() {
                         setDirection("forward");
                         setStep((s) => s + 1);
                         setFeedback("");
-                        scrollToQuizTop();
+                        // Não rolar para o topo — manter o usuário na altura dos cards
+                        // para que ele veja imediatamente as opções da próxima etapa.
                       }}
                       aria-pressed={selected}
                       className="quiz-card-light group relative overflow-hidden text-left transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 animate-quiz-card"
@@ -785,19 +820,6 @@ export function QuizMatch() {
                 const isLast = step === STEPS.length - 1;
                 return (
                   <div className="mt-10 flex flex-col items-center gap-4">
-                    <Link
-                      to="/catalogo"
-                      aria-label="Pular o quiz e ir direto para a vitrine de produtos"
-                      style={{
-                        color: "#C4AE96",
-                        fontSize: 13,
-                        textDecoration: "underline",
-                        textUnderlineOffset: "3px",
-                      }}
-                      className="transition-colors hover:text-[#5A4A3E]"
-                    >
-                      Pular quiz
-                    </Link>
                     <button
                       type="button"
                       onClick={() => {
