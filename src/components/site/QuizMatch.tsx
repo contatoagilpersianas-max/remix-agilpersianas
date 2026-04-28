@@ -879,9 +879,9 @@ function ResultCard({
   const calcHref = `/?${calcParams.toString()}#calculadora`;
 
   return (
-    <div style={{ color: "#F5F0E8" }}>
+    <div style={{ color: "#1A0F08" }}>
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
-      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#150F08", border: "1px solid rgba(245,240,232,0.08)" }}>
+      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#F0EBE3", border: "1px solid #E8DDD0" }}>
         <img
           src={rec.image}
           alt={rec.productName}
@@ -914,7 +914,7 @@ function ResultCard({
         </span>
         <h3
           className="mt-3 font-display font-semibold leading-[1.05]"
-          style={{ color: "#F5F0E8", fontSize: "clamp(28px, 4vw, 40px)" }}
+          style={{ color: "#1A0F08", fontSize: "clamp(28px, 4vw, 40px)" }}
         >
           {rec.productName}
         </h3>
@@ -943,12 +943,12 @@ function ResultCard({
           </div>
         )}
 
-        <p className="mt-4 text-sm" style={{ color: "#A8A096" }}>
+        <p className="mt-4 text-sm" style={{ color: "#B89070" }}>
           Por que escolhemos para você:
         </p>
         <ul className="mt-3 space-y-2.5">
           {rec.reasons.map((r, i) => (
-            <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#C9BFB2" }}>
+            <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#5A4A3E" }}>
               <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "#FF6B35" }} />
               <span>{r}</span>
             </li>
@@ -958,9 +958,9 @@ function ResultCard({
         {/* Resumo das escolhas do cliente */}
         <div
           className="mt-5 rounded-2xl p-4"
-          style={{ backgroundColor: "#150F08", border: "1px solid rgba(255,107,53,0.12)" }}
+          style={{ backgroundColor: "#F0EBE3", border: "1px solid #E8DDD0" }}
         >
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "#8A8078" }}>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "#B89070" }}>
             Suas escolhas no quiz
           </p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
@@ -968,9 +968,9 @@ function ResultCard({
               <li
                 key={s.label}
                 className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs"
-                style={{ backgroundColor: "rgba(245,240,232,0.04)", color: "#C9BFB2", border: "1px solid rgba(245,240,232,0.10)" }}
+                style={{ backgroundColor: "#FFFFFF", color: "#1A0F08", border: "1px solid #E8DDD0" }}
               >
-                <span style={{ color: "#8A8078" }}>{s.label}:</span>
+                <span style={{ color: "#B89070" }}>{s.label}:</span>
                 <span className="font-semibold">{s.value}</span>
               </li>
             ))}
@@ -1027,14 +1027,14 @@ function ResultCard({
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors hover:bg-[rgba(255,255,255,0.06)]"
-              style={{ border: "1px solid rgba(245,240,232,0.18)", color: "#C9BFB2" }}
+              style={{ border: "1px solid #E8DDD0", color: "#5A4A3E" }}
             >
               <MessageCircle className="h-4 w-4" />
               Falar com especialista
             </a>
           )}
 
-          <p className="text-xs text-center" style={{ color: "#8A8078" }}>
+          <p className="text-xs text-center" style={{ color: "#B89070" }}>
             Compra online imediata ou atendimento especializado, conforme seu projeto.
           </p>
 
@@ -1042,7 +1042,7 @@ function ResultCard({
             type="button"
             onClick={onReset}
             className="mt-1 inline-flex items-center justify-center gap-1.5 text-xs transition-colors hover:text-foreground"
-            style={{ color: "#8A8078" }}
+            style={{ color: "#B89070" }}
           >
             <RotateCcw className="h-3.5 w-3.5" /> Refazer quiz
           </button>
