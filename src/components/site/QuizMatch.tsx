@@ -74,14 +74,14 @@ const palette = {
 // Paleta clara "Ateliê de Decoração" — Off-white / Champagne suave.
 // Coral só aparece em CTAs e indicadores de progresso.
 const dark = {
-  bg: "#F9F8F6",
+  bg: "#1A1208",
   surface: "#FFFFFF",
   surface2: "#FFFFFF",
   border: "rgba(31,26,21,0.08)",
   borderSoft: "rgba(31,26,21,0.06)",
   borderHard: "rgba(31,26,21,0.12)",
-  text: "#1F1A15",
-  textSoft: "#4A4239",
+  text: "#F5F0E8",
+  textSoft: "#A0A0A0",
   textMuted: "#8A8078",
   textDim: "#B8B0A6",
   coral: "#FF6B35",
