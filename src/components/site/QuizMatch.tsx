@@ -681,114 +681,82 @@ export function QuizMatch() {
                       type="button"
                       onClick={() => handleSelect(opt.value, opt.feedback)}
                       aria-pressed={selected}
-                      className="group relative aspect-[4/5] min-h-[200px] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 animate-quiz-card"
+                      className="quiz-card-light group relative overflow-hidden text-left transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 animate-quiz-card"
                       style={{
-                        border: selected ? `2px solid ${dark.coral}` : "1px solid rgba(245,240,232,0.10)",
-                        boxShadow: selected
-                          ? "0 8px 28px rgba(255,107,53,0.35)"
-                          : "none",
+                        backgroundColor: "#FFFFFF",
+                        border: selected ? "1.5px solid #FF6B35" : "1px solid #E8DDD0",
+                        borderRadius: 12,
+                        boxShadow: selected ? "0 4px 20px rgba(255,107,53,0.15)" : "none",
                         animationDelay: `${i * 50}ms`,
                       }}
                     >
-                      <img
-                        src={img}
-                        alt={opt.label}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        style={{ objectPosition }}
-                      />
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          background:
-                            "linear-gradient(to top, rgba(15,10,5,0.78) 0%, rgba(15,10,5,0.35) 45%, rgba(15,10,5,0.05) 100%)",
-                        }}
-                      />
-                      {!selected && (
-                        <div
-                          className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                          style={{ boxShadow: `inset 0 0 0 2px ${dark.coral}` }}
+                      <div className="relative aspect-square overflow-hidden">
+                        <img
+                          src={img}
+                          alt={opt.label}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          style={{ objectPosition, filter: "brightness(0.72)" }}
                         />
-                      )}
-                      {highlightSafe && (
-                        <span
-                          className="absolute top-3 left-3 whitespace-nowrap rounded-full px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.18em]"
-                          style={{ backgroundColor: dark.coral, color: "#fff" }}
-                        >
-                          Recomendado
-                        </span>
-                      )}
-                      {selected && (
-                        <span
-                          className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full"
-                          style={{ backgroundColor: dark.coral, boxShadow: "0 4px 12px rgba(255,107,53,0.5)" }}
-                        >
-                          <CheckCircle2 className="h-4 w-4 text-white" strokeWidth={2} />
-                        </span>
-                      )}
-                       <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
+                        {highlightSafe && (
+                          <span
+                            className="absolute top-2 left-2 whitespace-nowrap rounded-full px-2 py-0.5 font-medium uppercase"
+                            style={{ backgroundColor: "#FF6B35", color: "#fff", fontSize: 9, letterSpacing: "0.18em" }}
+                          >
+                            Recomendado
+                          </span>
+                        )}
+                        {selected && (
+                          <span
+                            className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full"
+                            style={{ backgroundColor: "#FF6B35", boxShadow: "0 2px 8px rgba(255,107,53,0.4)" }}
+                          >
+                            <CheckCircle2 className="h-3.5 w-3.5 text-white" strokeWidth={2.4} />
+                          </span>
+                        )}
+                      </div>
+                      <div className="px-3 py-2.5">
                         <p
-                          className="font-display text-white"
-                          style={{ fontSize: "13px", fontWeight: 700, lineHeight: 1.15, textShadow: "0 1px 8px rgba(0,0,0,0.45)" }}
+                          className="font-display"
+                          style={{ color: "#1A0F08", fontSize: 11, fontWeight: 600, lineHeight: 1.2 }}
                         >
                           {opt.label}
                         </p>
                         <p
-                          className="mt-0.5 uppercase font-light"
-                          style={{ color: dark.coral, fontSize: "10px", letterSpacing: "0.16em" }}
+                          className="mt-0.5 uppercase font-medium"
+                          style={{ color: "#B89070", fontSize: 9, letterSpacing: "0.16em" }}
                         >
                           {caption}
                         </p>
-                        {current.key === "luz" && (() => {
-                          const positions: Record<string, number> = {
-                            blackout: 0.04,
-                            privacidade: 0.32,
-                            filtrar: 0.7,
-                            solar: 0.5,
-                          };
-                          const pos = positions[opt.value] ?? 0.5;
-                          return (
-                            <div
-                              className="relative mt-2"
-                              style={{
-                                width: 60,
-                                height: 3,
-                                borderRadius: 999,
-                                background: "linear-gradient(to right, #000, #fff)",
-                                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.15)",
-                              }}
-                              aria-hidden="true"
-                            >
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  top: "50%",
-                                  left: `${pos * 100}%`,
-                                  transform: "translate(-50%, -50%)",
-                                  width: 8,
-                                  height: 8,
-                                  borderRadius: "50%",
-                                  backgroundColor: dark.coral,
-                                  boxShadow: "0 0 0 2px rgba(0,0,0,0.6), 0 0 6px rgba(255,107,53,0.6)",
-                                }}
-                              />
-                            </div>
-                          );
-                        })()}
                       </div>
                     </button>
                   );
                 })}
               </div>
 
-              <div className="mt-10 flex flex-col gap-3">
-                {(() => {
-                  const hasAnswer =
-                    current.key === "convivencia"
-                      ? (answers.convivencia ?? []).length > 0
-                      : !!(answers as Record<string, string>)[current.key];
-                  return (
+              {/* Barra de ação inferior */}
+              {(() => {
+                const hasAnswer =
+                  current.key === "convivencia"
+                    ? (answers.convivencia ?? []).length > 0
+                    : !!(answers as Record<string, string>)[current.key];
+                const isLast = step === STEPS.length - 1;
+                return (
+                  <div className="mt-10 flex items-center justify-between gap-4">
+                    <Link
+                      to="/catalogo"
+                      aria-label="Pular o quiz e ir direto para a vitrine de produtos"
+                      style={{
+                        color: "#C4AE96",
+                        fontSize: 13,
+                        textDecoration: "underline",
+                        textUnderlineOffset: "3px",
+                      }}
+                      className="transition-colors hover:text-[#5A4A3E]"
+                    >
+                      Pular quiz
+                    </Link>
                     <button
                       type="button"
                       onClick={() => {
@@ -802,40 +770,55 @@ export function QuizMatch() {
                       aria-disabled={!hasAnswer}
                       aria-label={
                         hasAnswer
-                          ? step === STEPS.length - 1
+                          ? isLast
                             ? "Ver minha recomendação personalizada"
                             : `Avançar para a etapa ${step + 2} de ${STEPS.length}`
                           : "Selecione uma opção para avançar"
                       }
                       style={{
-                        backgroundColor: hasAnswer ? "#FF6B35" : "rgba(245,240,232,0.06)",
-                        color: hasAnswer ? "#FFFFFF" : dark.textDim,
-                        height: "52px",
-                        width: "100%",
-                        borderRadius: "12px",
+                        backgroundColor: hasAnswer ? "#1A0F08" : "#E8DDD0",
+                        color: hasAnswer ? "#FFFFFF" : "#C4AE96",
+                        padding: "10px 8px 10px 22px",
+                        borderRadius: 99,
                         border: "none",
-                        letterSpacing: "0.04em",
-                        fontWeight: 700,
-                        boxShadow: hasAnswer ? "0 14px 32px -10px rgba(255,107,53,0.55)" : "none",
+                        fontWeight: 600,
+                        fontSize: 14,
                       }}
-                      className="quiz-cta group inline-flex w-full items-center justify-center gap-2 px-8 text-[14px] transition-all duration-300 disabled:cursor-not-allowed"
+                      className="inline-flex items-center gap-3 transition-all duration-200 disabled:cursor-not-allowed hover:opacity-95"
                     >
-                      {step === STEPS.length - 1 ? "Ver minha recomendação" : "Próxima etapa"}
-                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2} />
+                      {isLast ? "Ver minha recomendação" : "Próxima etapa"}
+                      <span
+                        className="flex items-center justify-center rounded-full"
+                        style={{
+                          width: 28,
+                          height: 28,
+                          backgroundColor: hasAnswer ? "#FF6B35" : "#D4B89A",
+                        }}
+                      >
+                        <ArrowRight className="h-3.5 w-3.5 text-white" strokeWidth={2.4} />
+                      </span>
                     </button>
-                  );
-                })()}
-                {step > 0 && (
+                  </div>
+                );
+              })()}
+              {step > 0 && (
+                <div className="mt-3">
                   <button
                     type="button"
                     onClick={handleBack}
-                    className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.22em] font-medium transition-colors hover:opacity-70"
-                    style={{ color: dark.textMuted }}
+                    className="inline-flex items-center gap-1.5 transition-colors hover:opacity-70"
+                    style={{
+                      color: "#B89070",
+                      fontSize: 11,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.22em",
+                      fontWeight: 500,
+                    }}
                   >
                     <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.4} /> Voltar
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </>
           ) : (
             recommendation && (
