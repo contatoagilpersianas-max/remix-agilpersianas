@@ -29,7 +29,6 @@ import {
   MessageCircle,
   ShoppingBag,
   Calculator,
-  SkipForward,
   Bot,
   Shield,
   Sailboat,
@@ -71,21 +70,21 @@ const palette = {
   coralWash: "rgba(217,102,60,0.08)",
 };
 
-// Paleta dark editorial — fundo único #1A1208 do topo ao rodapé.
-// O quiz É a seção; sem container interno flutuante.
+// Paleta editorial creme — fundo único #FAF7F2.
+// Mantemos o nome `dark` para minimizar churn nas referências internas.
 const dark = {
-  bg: "#1A1208",
-  surface: "#150F08",
-  surface2: "#150F08",
-  border: "rgba(255,107,53,0.12)",
-  borderSoft: "rgba(245,240,232,0.06)",
-  borderHard: "rgba(245,240,232,0.18)",
-  text: "#F5F0E8",
-  textSoft: "#C9BFB2",
-  textMuted: "#8A8078",
-  textDim: "#6B6157",
+  bg: "#FAF7F2",         // creme quente da seção
+  surface: "#FFFFFF",     // cards
+  surface2: "#F0EBE3",    // card do assistente
+  border: "#E8DDD0",      // bordas e barra de progresso (fundo)
+  borderSoft: "#EFE6D8",
+  borderHard: "#D4B89A",  // separador decorativo
+  text: "#1A0F08",        // ink principal
+  textSoft: "#5A4A3E",    // corpo de texto
+  textMuted: "#B89070",   // eyebrow / labels secundárias
+  textDim: "#C4AE96",     // estados desabilitados / link skip
   coral: "#FF6B35",
-  coralWash: "rgba(255,107,53,0.12)",
+  coralWash: "rgba(255,107,53,0.10)",
   coralBorder: "rgba(255,107,53,0.35)",
 };
 
@@ -452,13 +451,13 @@ export function QuizMatch() {
       style={{ backgroundColor: dark.bg, color: dark.text }}
       aria-labelledby="quiz-title"
     >
-      {/* Glow ambiente sutil — coral quente sobre fundo escuro */}
+      {/* Glow ambiente quase imperceptível — coral muito sutil no topo */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(900px 500px at 50% -10%, rgba(255,107,53,0.08), transparent 60%)",
+            "radial-gradient(900px 500px at 50% -10%, rgba(255,107,53,0.04), transparent 60%)",
         }}
       />
       {/* mantém referência do estado bg para evitar warning de unused */}
@@ -473,35 +472,33 @@ export function QuizMatch() {
       >
         <div
           className="text-center w-full flex flex-col items-center"
-          style={{ maxWidth: "700px", gap: "16px" }}
+          style={{ maxWidth: "700px" }}
         >
-          {/* 1. Linha de credencial ornamentada */}
-          <div className="flex items-center justify-center gap-3" aria-hidden="true">
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
-            <span
-              style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: "11px",
-                letterSpacing: "3px",
-                textTransform: "uppercase",
-                color: "rgba(255,107,53,0.7)",
-                fontWeight: 500,
-              }}
-            >
-              Mais de 20 mil lares transformados
-            </span>
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
-          </div>
+          {/* Eyebrow */}
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: "11px",
+              letterSpacing: "3px",
+              textTransform: "uppercase",
+              color: "#B89070",
+              fontWeight: 500,
+              margin: 0,
+            }}
+          >
+            — Assistente Inteligente —
+          </p>
 
-          {/* 2. Título principal — tensão entre light e bold */}
+          {/* Título principal */}
           <h2
             id="quiz-title"
-            className="font-display"
+            className="font-display mt-5"
             style={{
               fontFamily: "var(--font-display)",
               lineHeight: 1.1,
               letterSpacing: "-0.025em",
               margin: 0,
+              marginTop: "20px",
             }}
           >
             <span
@@ -509,11 +506,11 @@ export function QuizMatch() {
                 display: "block",
                 fontWeight: 300,
                 fontSize: "clamp(2.25rem, 5vw, 3.5rem)",
-                color: "#F5F0E8",
+                color: "#1A0F08",
                 fontStyle: "normal",
               }}
             >
-              Descubra a persiana
+              Descubra a persiana ideal
             </span>
             <span
               style={{
@@ -524,130 +521,76 @@ export function QuizMatch() {
                 fontStyle: "italic",
               }}
             >
-              ideal para sua casa.
+              para a sua casa.
             </span>
           </h2>
 
-          {/* 3. Separador decorativo */}
+          {/* Separador decorativo */}
           <span
             aria-hidden="true"
             style={{
               display: "block",
-              width: "60px",
+              width: "48px",
               height: "1px",
-              backgroundColor: "rgba(255,107,53,0.4)",
-              margin: "20px 0",
+              backgroundColor: "#D4B89A",
+              margin: "14px auto",
             }}
           />
-
-          {/* 4. Subtítulo */}
-          <p
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontWeight: 300,
-              fontSize: "15px",
-              color: "#A8A096",
-              lineHeight: 1.8,
-              maxWidth: "420px",
-              margin: "0 auto",
-            }}
-          >
-            Cinco perguntas. Uma recomendação feita sob medida para o seu ambiente, estilo e rotina.
-          </p>
-
-          {/* 5. Badge — agora abaixo, hierarquia invertida */}
-          <span
-            className="inline-flex items-center gap-2 rounded-full"
-            style={{
-              padding: "8px 16px",
-              fontSize: "11px",
-              fontWeight: 500,
-              textTransform: "uppercase",
-              letterSpacing: "0.2em",
-              color: "#FF6B35",
-              backgroundColor: "rgba(255,107,53,0.10)",
-              border: "1px solid rgba(255,107,53,0.30)",
-            }}
-          >
-            <Sparkles className="h-3.5 w-3.5" strokeWidth={1.6} />
-            Assistente Inteligente
-          </span>
-
-          {/* 6. Link skip — quase invisível */}
-          {!isComplete && (
-            <Link
-              to="/catalogo"
-              aria-label="Pular o quiz e ir direto para a vitrine de produtos"
-              className="quiz-skip-link inline-flex items-center gap-1.5 transition-colors focus:outline-none rounded-sm px-1"
-              style={{ color: "#5A5048", fontSize: "11px", textDecoration: "none" }}
-            >
-              <SkipForward className="h-3 w-3" strokeWidth={1.2} />
-              Pular e ver a coleção
-            </Link>
-          )}
         </div>
 
         <div className="w-full mt-12 sm:mt-16">
           {!isComplete ? (
             <>
-              {/* Stepper de etapas — bolinhas conectadas */}
+              {/* Barra de progresso linear */}
               <div className="mb-8 sm:mb-10">
                 <div className="mb-3 flex items-center justify-between">
                   <span
-                    className="text-[10px] uppercase font-medium"
-                    style={{ color: dark.coral, letterSpacing: "0.22em" }}
+                    className="uppercase font-medium"
+                    style={{ color: "#B89070", fontSize: 11, letterSpacing: "0.18em" }}
                   >
-                    Etapa {String(step + 1).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
+                    Etapa {step + 1} de {STEPS.length}
+                  </span>
+                  <span
+                    className="uppercase font-medium"
+                    style={{ color: "#B89070", fontSize: 11, letterSpacing: "0.18em" }}
+                  >
+                    {progress}%
                   </span>
                 </div>
                 <div
-                  className="flex items-center gap-2"
                   role="progressbar"
                   aria-valuenow={progress}
                   aria-valuemin={0}
                   aria-valuemax={100}
                   aria-label={`Progresso: etapa ${step + 1} de ${STEPS.length}`}
+                  style={{
+                    width: "100%",
+                    height: 2,
+                    backgroundColor: "#E8DDD0",
+                    borderRadius: 999,
+                    overflow: "hidden",
+                  }}
                 >
-                  {STEPS.map((_, i) => {
-                    const done = i < step;
-                    const active = i === step;
-                    return (
-                      <div key={i} className="flex items-center flex-1 last:flex-none">
-                        <span
-                          className="flex items-center justify-center rounded-full transition-all duration-300"
-                          style={{
-                            width: 28,
-                            height: 28,
-                            backgroundColor: done || active ? dark.coral : "transparent",
-                            border: `1px solid ${done || active ? dark.coral : dark.borderHard}`,
-                            color: done || active ? "#fff" : dark.textMuted,
-                            boxShadow: active ? `0 0 0 3px ${dark.coralWash}` : "none",
-                            fontSize: 11,
-                            fontWeight: 600,
-                          }}
-                        >
-                          {done ? <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> : i + 1}
-                        </span>
-                        {i < STEPS.length - 1 && (
-                          <span
-                            className="h-px flex-1 mx-1.5 transition-colors"
-                            style={{ backgroundColor: done ? dark.coral : "rgba(245,240,232,0.12)" }}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
+                  <span
+                    style={{
+                      display: "block",
+                      height: "100%",
+                      width: `${progress}%`,
+                      backgroundColor: "#FF6B35",
+                      borderRadius: 999,
+                      transition: "width 300ms ease",
+                    }}
+                  />
                 </div>
               </div>
 
-              {/* Bot de feedback — borda esquerda coral */}
+              {/* Card do assistente — creme com borda esquerda coral */}
               <div
-                className="mb-8 flex items-start gap-3 rounded-xl p-4"
+                className="mb-8 flex items-start gap-3 p-4"
                 style={{
-                  backgroundColor: "#150F08",
-                  borderLeft: `3px solid ${dark.coral}`,
-                  border: "1px solid rgba(255,107,53,0.12)",
-                  borderLeftWidth: 3,
+                  backgroundColor: "#F0EBE3",
+                  borderLeft: "3px solid #FF6B35",
+                  borderRadius: "0 10px 10px 0",
                 }}
               >
                 <span
@@ -661,14 +604,14 @@ export function QuizMatch() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p
-                    className="text-[10px] font-medium uppercase mb-1"
-                    style={{ color: dark.coral, letterSpacing: "0.2em" }}
+                    className="font-medium uppercase mb-1"
+                    style={{ color: "#FF6B35", fontSize: 10, letterSpacing: "0.2em" }}
                   >
                     Assistente Ágil
                   </p>
                   <p
                     className="text-[14px] leading-relaxed font-light"
-                    style={{ color: dark.textSoft }}
+                    style={{ color: "#5A4A3E" }}
                     aria-live="polite"
                   >
                     {feedback || current.botMessage}
@@ -737,114 +680,82 @@ export function QuizMatch() {
                       type="button"
                       onClick={() => handleSelect(opt.value, opt.feedback)}
                       aria-pressed={selected}
-                      className="group relative aspect-[4/5] min-h-[200px] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 animate-quiz-card"
+                      className="quiz-card-light group relative overflow-hidden text-left transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 animate-quiz-card"
                       style={{
-                        border: selected ? `2px solid ${dark.coral}` : "1px solid rgba(245,240,232,0.10)",
-                        boxShadow: selected
-                          ? "0 8px 28px rgba(255,107,53,0.35)"
-                          : "none",
+                        backgroundColor: "#FFFFFF",
+                        border: selected ? "1.5px solid #FF6B35" : "1px solid #E8DDD0",
+                        borderRadius: 12,
+                        boxShadow: selected ? "0 4px 20px rgba(255,107,53,0.15)" : "none",
                         animationDelay: `${i * 50}ms`,
                       }}
                     >
-                      <img
-                        src={img}
-                        alt={opt.label}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        style={{ objectPosition }}
-                      />
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          background:
-                            "linear-gradient(to top, rgba(15,10,5,0.78) 0%, rgba(15,10,5,0.35) 45%, rgba(15,10,5,0.05) 100%)",
-                        }}
-                      />
-                      {!selected && (
-                        <div
-                          className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                          style={{ boxShadow: `inset 0 0 0 2px ${dark.coral}` }}
+                      <div className="relative aspect-square overflow-hidden">
+                        <img
+                          src={img}
+                          alt={opt.label}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          style={{ objectPosition, filter: "brightness(0.72)" }}
                         />
-                      )}
-                      {highlightSafe && (
-                        <span
-                          className="absolute top-3 left-3 whitespace-nowrap rounded-full px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.18em]"
-                          style={{ backgroundColor: dark.coral, color: "#fff" }}
-                        >
-                          Recomendado
-                        </span>
-                      )}
-                      {selected && (
-                        <span
-                          className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full"
-                          style={{ backgroundColor: dark.coral, boxShadow: "0 4px 12px rgba(255,107,53,0.5)" }}
-                        >
-                          <CheckCircle2 className="h-4 w-4 text-white" strokeWidth={2} />
-                        </span>
-                      )}
-                       <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
+                        {highlightSafe && (
+                          <span
+                            className="absolute top-2 left-2 whitespace-nowrap rounded-full px-2 py-0.5 font-medium uppercase"
+                            style={{ backgroundColor: "#FF6B35", color: "#fff", fontSize: 9, letterSpacing: "0.18em" }}
+                          >
+                            Recomendado
+                          </span>
+                        )}
+                        {selected && (
+                          <span
+                            className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full"
+                            style={{ backgroundColor: "#FF6B35", boxShadow: "0 2px 8px rgba(255,107,53,0.4)" }}
+                          >
+                            <CheckCircle2 className="h-3.5 w-3.5 text-white" strokeWidth={2.4} />
+                          </span>
+                        )}
+                      </div>
+                      <div className="px-3 py-2.5">
                         <p
-                          className="font-display text-white"
-                          style={{ fontSize: "13px", fontWeight: 700, lineHeight: 1.15, textShadow: "0 1px 8px rgba(0,0,0,0.45)" }}
+                          className="font-display"
+                          style={{ color: "#1A0F08", fontSize: 11, fontWeight: 600, lineHeight: 1.2 }}
                         >
                           {opt.label}
                         </p>
                         <p
-                          className="mt-0.5 uppercase font-light"
-                          style={{ color: dark.coral, fontSize: "10px", letterSpacing: "0.16em" }}
+                          className="mt-0.5 uppercase font-medium"
+                          style={{ color: "#B89070", fontSize: 9, letterSpacing: "0.16em" }}
                         >
                           {caption}
                         </p>
-                        {current.key === "luz" && (() => {
-                          const positions: Record<string, number> = {
-                            blackout: 0.04,
-                            privacidade: 0.32,
-                            filtrar: 0.7,
-                            solar: 0.5,
-                          };
-                          const pos = positions[opt.value] ?? 0.5;
-                          return (
-                            <div
-                              className="relative mt-2"
-                              style={{
-                                width: 60,
-                                height: 3,
-                                borderRadius: 999,
-                                background: "linear-gradient(to right, #000, #fff)",
-                                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.15)",
-                              }}
-                              aria-hidden="true"
-                            >
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  top: "50%",
-                                  left: `${pos * 100}%`,
-                                  transform: "translate(-50%, -50%)",
-                                  width: 8,
-                                  height: 8,
-                                  borderRadius: "50%",
-                                  backgroundColor: dark.coral,
-                                  boxShadow: "0 0 0 2px rgba(0,0,0,0.6), 0 0 6px rgba(255,107,53,0.6)",
-                                }}
-                              />
-                            </div>
-                          );
-                        })()}
                       </div>
                     </button>
                   );
                 })}
               </div>
 
-              <div className="mt-10 flex flex-col gap-3">
-                {(() => {
-                  const hasAnswer =
-                    current.key === "convivencia"
-                      ? (answers.convivencia ?? []).length > 0
-                      : !!(answers as Record<string, string>)[current.key];
-                  return (
+              {/* Barra de ação inferior */}
+              {(() => {
+                const hasAnswer =
+                  current.key === "convivencia"
+                    ? (answers.convivencia ?? []).length > 0
+                    : !!(answers as Record<string, string>)[current.key];
+                const isLast = step === STEPS.length - 1;
+                return (
+                  <div className="mt-10 flex items-center justify-between gap-4">
+                    <Link
+                      to="/catalogo"
+                      aria-label="Pular o quiz e ir direto para a vitrine de produtos"
+                      style={{
+                        color: "#C4AE96",
+                        fontSize: 13,
+                        textDecoration: "underline",
+                        textUnderlineOffset: "3px",
+                      }}
+                      className="transition-colors hover:text-[#5A4A3E]"
+                    >
+                      Pular quiz
+                    </Link>
                     <button
                       type="button"
                       onClick={() => {
@@ -858,40 +769,55 @@ export function QuizMatch() {
                       aria-disabled={!hasAnswer}
                       aria-label={
                         hasAnswer
-                          ? step === STEPS.length - 1
+                          ? isLast
                             ? "Ver minha recomendação personalizada"
                             : `Avançar para a etapa ${step + 2} de ${STEPS.length}`
                           : "Selecione uma opção para avançar"
                       }
                       style={{
-                        backgroundColor: hasAnswer ? "#FF6B35" : "rgba(245,240,232,0.06)",
-                        color: hasAnswer ? "#FFFFFF" : dark.textDim,
-                        height: "52px",
-                        width: "100%",
-                        borderRadius: "12px",
+                        backgroundColor: hasAnswer ? "#1A0F08" : "#E8DDD0",
+                        color: hasAnswer ? "#FFFFFF" : "#C4AE96",
+                        padding: "10px 8px 10px 22px",
+                        borderRadius: 99,
                         border: "none",
-                        letterSpacing: "0.04em",
-                        fontWeight: 700,
-                        boxShadow: hasAnswer ? "0 14px 32px -10px rgba(255,107,53,0.55)" : "none",
+                        fontWeight: 600,
+                        fontSize: 14,
                       }}
-                      className="quiz-cta group inline-flex w-full items-center justify-center gap-2 px-8 text-[14px] transition-all duration-300 disabled:cursor-not-allowed"
+                      className="inline-flex items-center gap-3 transition-all duration-200 disabled:cursor-not-allowed hover:opacity-95"
                     >
-                      {step === STEPS.length - 1 ? "Ver minha recomendação" : "Próxima etapa"}
-                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2} />
+                      {isLast ? "Ver minha recomendação" : "Próxima etapa"}
+                      <span
+                        className="flex items-center justify-center rounded-full"
+                        style={{
+                          width: 28,
+                          height: 28,
+                          backgroundColor: hasAnswer ? "#FF6B35" : "#D4B89A",
+                        }}
+                      >
+                        <ArrowRight className="h-3.5 w-3.5 text-white" strokeWidth={2.4} />
+                      </span>
                     </button>
-                  );
-                })()}
-                {step > 0 && (
+                  </div>
+                );
+              })()}
+              {step > 0 && (
+                <div className="mt-3">
                   <button
                     type="button"
                     onClick={handleBack}
-                    className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.22em] font-medium transition-colors hover:opacity-70"
-                    style={{ color: dark.textMuted }}
+                    className="inline-flex items-center gap-1.5 transition-colors hover:opacity-70"
+                    style={{
+                      color: "#B89070",
+                      fontSize: 11,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.22em",
+                      fontWeight: 500,
+                    }}
                   >
                     <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.4} /> Voltar
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </>
           ) : (
             recommendation && (
@@ -952,9 +878,9 @@ function ResultCard({
   const calcHref = `/?${calcParams.toString()}#calculadora`;
 
   return (
-    <div style={{ color: "#F5F0E8" }}>
+    <div style={{ color: "#1A0F08" }}>
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
-      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#150F08", border: "1px solid rgba(245,240,232,0.08)" }}>
+      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#F0EBE3", border: "1px solid #E8DDD0" }}>
         <img
           src={rec.image}
           alt={rec.productName}
@@ -987,7 +913,7 @@ function ResultCard({
         </span>
         <h3
           className="mt-3 font-display font-semibold leading-[1.05]"
-          style={{ color: "#F5F0E8", fontSize: "clamp(28px, 4vw, 40px)" }}
+          style={{ color: "#1A0F08", fontSize: "clamp(28px, 4vw, 40px)" }}
         >
           {rec.productName}
         </h3>
@@ -1016,12 +942,12 @@ function ResultCard({
           </div>
         )}
 
-        <p className="mt-4 text-sm" style={{ color: "#A8A096" }}>
+        <p className="mt-4 text-sm" style={{ color: "#B89070" }}>
           Por que escolhemos para você:
         </p>
         <ul className="mt-3 space-y-2.5">
           {rec.reasons.map((r, i) => (
-            <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#C9BFB2" }}>
+            <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#5A4A3E" }}>
               <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "#FF6B35" }} />
               <span>{r}</span>
             </li>
@@ -1031,9 +957,9 @@ function ResultCard({
         {/* Resumo das escolhas do cliente */}
         <div
           className="mt-5 rounded-2xl p-4"
-          style={{ backgroundColor: "#150F08", border: "1px solid rgba(255,107,53,0.12)" }}
+          style={{ backgroundColor: "#F0EBE3", border: "1px solid #E8DDD0" }}
         >
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "#8A8078" }}>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "#B89070" }}>
             Suas escolhas no quiz
           </p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
@@ -1041,9 +967,9 @@ function ResultCard({
               <li
                 key={s.label}
                 className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs"
-                style={{ backgroundColor: "rgba(245,240,232,0.04)", color: "#C9BFB2", border: "1px solid rgba(245,240,232,0.10)" }}
+                style={{ backgroundColor: "#FFFFFF", color: "#1A0F08", border: "1px solid #E8DDD0" }}
               >
-                <span style={{ color: "#8A8078" }}>{s.label}:</span>
+                <span style={{ color: "#B89070" }}>{s.label}:</span>
                 <span className="font-semibold">{s.value}</span>
               </li>
             ))}
@@ -1100,14 +1026,14 @@ function ResultCard({
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors hover:bg-[rgba(255,255,255,0.06)]"
-              style={{ border: "1px solid rgba(245,240,232,0.18)", color: "#C9BFB2" }}
+              style={{ border: "1px solid #E8DDD0", color: "#5A4A3E" }}
             >
               <MessageCircle className="h-4 w-4" />
               Falar com especialista
             </a>
           )}
 
-          <p className="text-xs text-center" style={{ color: "#8A8078" }}>
+          <p className="text-xs text-center" style={{ color: "#B89070" }}>
             Compra online imediata ou atendimento especializado, conforme seu projeto.
           </p>
 
@@ -1115,7 +1041,7 @@ function ResultCard({
             type="button"
             onClick={onReset}
             className="mt-1 inline-flex items-center justify-center gap-1.5 text-xs transition-colors hover:text-foreground"
-            style={{ color: "#8A8078" }}
+            style={{ color: "#B89070" }}
           >
             <RotateCcw className="h-3.5 w-3.5" /> Refazer quiz
           </button>
