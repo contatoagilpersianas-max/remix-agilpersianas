@@ -41,6 +41,11 @@ import { trackLead } from "@/lib/analytics";
 import quizManualImg from "@/assets/quiz-manual.jpg";
 import quizMotorizadoImg from "@/assets/quiz-motorizado.jpg";
 import quizQuartoInfantilImg from "@/assets/quiz-quarto-infantil.png";
+import quizAmbQuartoImg from "@/assets/quiz-amb-quarto.jpg";
+import quizAmbSalaImg from "@/assets/quiz-amb-sala.jpg";
+import quizAmbCozinhaImg from "@/assets/quiz-amb-cozinha.jpg";
+import quizAmbEscritorioImg from "@/assets/quiz-amb-escritorio.jpg";
+import quizAmbCinemaImg from "@/assets/quiz-amb-cinema.jpg";
 
 type OptionDef<T extends string> = {
   value: T;
@@ -86,11 +91,11 @@ const dark = {
 
 // Fotos reais de ambiente para os cards (Unsplash, otimizadas)
 const ambienteImages: Record<string, string> = {
-  quarto: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&q=80",
-  sala: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
-  home: "https://images.unsplash.com/photo-1593784991095-a205069470b6?w=600&q=80",
-  cozinha: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
-  escritorio: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
+  quarto: quizAmbQuartoImg,
+  sala: quizAmbSalaImg,
+  home: quizAmbCinemaImg,
+  cozinha: quizAmbCozinhaImg,
+  escritorio: quizAmbEscritorioImg,
   lavanderia: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80",
   infantil: quizQuartoInfantilImg,
   externa: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
