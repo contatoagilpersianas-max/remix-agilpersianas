@@ -561,6 +561,22 @@ export function QuizMatch() {
         <div className="w-full mt-12 sm:mt-16">
           {!isComplete ? (
             <>
+              {/* Link "Pular quiz" — discreto, no início da seção */}
+              <div className="mb-4 flex justify-end">
+                <Link
+                  to="/catalogo"
+                  aria-label="Pular o quiz e ir direto para a vitrine de produtos"
+                  style={{
+                    color: "#C4AE96",
+                    fontSize: 12,
+                    textDecoration: "none",
+                  }}
+                  className="transition-colors hover:text-[#5A4A3E]"
+                >
+                  Pular quiz →
+                </Link>
+              </div>
+
               {/* Barra de progresso linear */}
               <div className="mb-8 sm:mb-10">
                 <div className="mb-3 flex items-center justify-between">
