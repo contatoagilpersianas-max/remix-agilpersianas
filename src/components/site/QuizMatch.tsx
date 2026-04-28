@@ -71,23 +71,22 @@ const palette = {
   coralWash: "rgba(217,102,60,0.08)",
 };
 
-// Paleta clara editorial — Off-white / Branco com coral como acento.
-// Mantemos o nome `dark` para minimizar churn nas referências internas;
-// os valores agora são todos para um esquema light premium.
+// Paleta dark editorial — fundo único #1A1208 do topo ao rodapé.
+// O quiz É a seção; sem container interno flutuante.
 const dark = {
-  bg: "#F9F7F2",        // off-white quente para a seção
-  surface: "#FFFFFF",    // bolinhas do stepper / chips
-  surface2: "#FFFFFF",   // container do quiz
-  border: "rgba(31,26,21,0.06)",
-  borderSoft: "rgba(31,26,21,0.04)",
-  borderHard: "rgba(31,26,21,0.10)",
-  text: "#1F1A15",       // ink principal
-  textSoft: "#5A5048",   // ink suave (subtítulos / feedback)
-  textMuted: "#8A8078",  // legendas / labels
-  textDim: "#B8B0A6",    // desabilitado
-  coral: "#D9663C",      // coral premium harmoniza melhor sobre claro
-  coralWash: "rgba(217,102,60,0.10)",
-  coralBorder: "rgba(217,102,60,0.30)",
+  bg: "#1A1208",
+  surface: "#150F08",
+  surface2: "#150F08",
+  border: "rgba(255,107,53,0.12)",
+  borderSoft: "rgba(245,240,232,0.06)",
+  borderHard: "rgba(245,240,232,0.18)",
+  text: "#F5F0E8",
+  textSoft: "#C9BFB2",
+  textMuted: "#8A8078",
+  textDim: "#6B6157",
+  coral: "#FF6B35",
+  coralWash: "rgba(255,107,53,0.12)",
+  coralBorder: "rgba(255,107,53,0.35)",
 };
 
 // Fotos reais de ambiente para os cards (Unsplash, otimizadas)
@@ -453,36 +452,45 @@ export function QuizMatch() {
       style={{ backgroundColor: dark.bg, color: dark.text }}
       aria-labelledby="quiz-title"
     >
-      {/* Glow ambiente sutil — champagne quente sobre off-white */}
+      {/* Glow ambiente sutil — coral quente sobre fundo escuro */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(900px 500px at 50% -10%, rgba(217,102,60,0.05), transparent 60%), radial-gradient(700px 400px at 50% 110%, rgba(239,230,216,0.55), transparent 60%)",
+            "radial-gradient(900px 500px at 50% -10%, rgba(255,107,53,0.08), transparent 60%)",
         }}
       />
       {/* mantém referência do estado bg para evitar warning de unused */}
       <span hidden aria-hidden="true">{bgLoaded ? "" : ""}</span>
 
-      <div className="container mx-auto max-w-4xl flex flex-col items-center px-4 sm:px-6 py-20">
-        <div className="text-center mb-12 sm:mb-16 w-full flex flex-col items-center" style={{ paddingTop: "80px", gap: "16px" }}>
+      <div
+        className="mx-auto flex flex-col items-center w-full"
+        style={{
+          maxWidth: "1280px",
+          padding: "100px 20px",
+        }}
+      >
+        <div
+          className="text-center w-full flex flex-col items-center"
+          style={{ maxWidth: "700px", gap: "16px" }}
+        >
           {/* 1. Linha de credencial ornamentada */}
           <div className="flex items-center justify-center gap-3" aria-hidden="true">
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(217,102,60,0.25)" }} />
+            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
             <span
               style={{
                 fontFamily: "var(--font-sans)",
                 fontSize: "11px",
                 letterSpacing: "3px",
                 textTransform: "uppercase",
-                color: "rgba(184,90,44,0.75)",
+                color: "rgba(255,107,53,0.7)",
                 fontWeight: 500,
               }}
             >
               Mais de 20 mil lares transformados
             </span>
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(217,102,60,0.25)" }} />
+            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
           </div>
 
           {/* 2. Título principal — tensão entre light e bold */}
@@ -499,24 +507,24 @@ export function QuizMatch() {
             <span
               style={{
                 display: "block",
-                fontWeight: 400,
-                fontSize: "clamp(2rem, 5vw, 3rem)",
-                color: "#1F1A15",
+                fontWeight: 300,
+                fontSize: "clamp(2.25rem, 5vw, 3.5rem)",
+                color: "#F5F0E8",
                 fontStyle: "normal",
               }}
             >
-              Descubra a persiana ideal
+              Descubra a persiana
             </span>
             <span
               style={{
                 display: "block",
-                fontWeight: 500,
-                fontSize: "clamp(2rem, 5vw, 3rem)",
-                color: "#D9663C",
+                fontWeight: 700,
+                fontSize: "clamp(2.25rem, 5vw, 3.5rem)",
+                color: "#FF6B35",
                 fontStyle: "italic",
               }}
             >
-              para a sua casa.
+              ideal para sua casa.
             </span>
           </h2>
 
@@ -527,7 +535,7 @@ export function QuizMatch() {
               display: "block",
               width: "60px",
               height: "1px",
-              backgroundColor: "rgba(217,102,60,0.35)",
+              backgroundColor: "rgba(255,107,53,0.4)",
               margin: "20px 0",
             }}
           />
@@ -538,7 +546,7 @@ export function QuizMatch() {
               fontFamily: "var(--font-sans)",
               fontWeight: 300,
               fontSize: "15px",
-              color: "#5A5048",
+              color: "#A8A096",
               lineHeight: 1.8,
               maxWidth: "420px",
               margin: "0 auto",
@@ -556,9 +564,9 @@ export function QuizMatch() {
               fontWeight: 500,
               textTransform: "uppercase",
               letterSpacing: "0.2em",
-              color: "#B85A2C",
-              backgroundColor: "rgba(217,102,60,0.08)",
-              border: "1px solid rgba(217,102,60,0.25)",
+              color: "#FF6B35",
+              backgroundColor: "rgba(255,107,53,0.10)",
+              border: "1px solid rgba(255,107,53,0.30)",
             }}
           >
             <Sparkles className="h-3.5 w-3.5" strokeWidth={1.6} />
@@ -571,7 +579,7 @@ export function QuizMatch() {
               to="/catalogo"
               aria-label="Pular o quiz e ir direto para a vitrine de produtos"
               className="quiz-skip-link inline-flex items-center gap-1.5 transition-colors focus:outline-none rounded-sm px-1"
-              style={{ color: "#9A9089", fontSize: "11px", textDecoration: "none" }}
+              style={{ color: "#5A5048", fontSize: "11px", textDecoration: "none" }}
             >
               <SkipForward className="h-3 w-3" strokeWidth={1.2} />
               Pular e ver a coleção
@@ -579,15 +587,7 @@ export function QuizMatch() {
           )}
         </div>
 
-        <div
-          className="w-full mx-auto rounded-[28px] sm:rounded-[32px] p-6 sm:p-10"
-          style={{
-            backgroundColor: "#FFFFFF",
-            border: "1px solid rgba(31,26,21,0.04)",
-            boxShadow:
-              "0 1px 2px rgba(31,26,21,0.04), 0 24px 60px -28px rgba(31,26,21,0.18)",
-          }}
-        >
+        <div className="w-full mt-12 sm:mt-16">
           {!isComplete ? (
             <>
               {/* Stepper de etapas — bolinhas conectadas */}
@@ -618,7 +618,7 @@ export function QuizMatch() {
                           style={{
                             width: 28,
                             height: 28,
-                            backgroundColor: done || active ? dark.coral : dark.surface,
+                            backgroundColor: done || active ? dark.coral : "transparent",
                             border: `1px solid ${done || active ? dark.coral : dark.borderHard}`,
                             color: done || active ? "#fff" : dark.textMuted,
                             boxShadow: active ? `0 0 0 3px ${dark.coralWash}` : "none",
@@ -631,7 +631,7 @@ export function QuizMatch() {
                         {i < STEPS.length - 1 && (
                           <span
                             className="h-px flex-1 mx-1.5 transition-colors"
-                            style={{ backgroundColor: done ? dark.coral : dark.borderHard }}
+                            style={{ backgroundColor: done ? dark.coral : "rgba(245,240,232,0.12)" }}
                           />
                         )}
                       </div>
@@ -644,9 +644,9 @@ export function QuizMatch() {
               <div
                 className="mb-8 flex items-start gap-3 rounded-xl p-4"
                 style={{
-                  backgroundColor: "#FBF7F1",
+                  backgroundColor: "#150F08",
                   borderLeft: `3px solid ${dark.coral}`,
-                  border: `1px solid ${dark.border}`,
+                  border: "1px solid rgba(255,107,53,0.12)",
                   borderLeftWidth: 3,
                 }}
               >
@@ -703,10 +703,10 @@ export function QuizMatch() {
                 )}
               </div>
 
-              {/* Opções — todos os steps usam cards com foto real (3:4) */}
+              {/* Opções — cards com foto real, 4 colunas no desktop */}
               <div
                 key={`opts-${step}`}
-                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+                className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
                 role="listbox"
                 aria-label={current.title}
               >
@@ -737,12 +737,12 @@ export function QuizMatch() {
                       type="button"
                       onClick={() => handleSelect(opt.value, opt.feedback)}
                       aria-pressed={selected}
-                      className="group relative aspect-[3/4] min-h-[160px] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 animate-quiz-card"
+                      className="group relative aspect-[4/5] min-h-[200px] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 animate-quiz-card"
                       style={{
-                        border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
+                        border: selected ? `2px solid ${dark.coral}` : "1px solid rgba(245,240,232,0.10)",
                         boxShadow: selected
-                          ? "0 8px 28px rgba(217,102,60,0.25)"
-                          : "0 4px 14px rgba(31,26,21,0.08)",
+                          ? "0 8px 28px rgba(255,107,53,0.35)"
+                          : "none",
                         animationDelay: `${i * 50}ms`,
                       }}
                     >
@@ -864,14 +864,15 @@ export function QuizMatch() {
                           : "Selecione uma opção para avançar"
                       }
                       style={{
-                        backgroundColor: hasAnswer ? dark.coral : dark.border,
+                        backgroundColor: hasAnswer ? "#FF6B35" : "rgba(245,240,232,0.06)",
                         color: hasAnswer ? "#FFFFFF" : dark.textDim,
                         height: "52px",
+                        width: "100%",
                         borderRadius: "12px",
                         border: "none",
                         letterSpacing: "0.04em",
-                        fontWeight: 600,
-                        boxShadow: hasAnswer ? "0 14px 32px -10px rgba(217,102,60,0.45)" : "none",
+                        fontWeight: 700,
+                        boxShadow: hasAnswer ? "0 14px 32px -10px rgba(255,107,53,0.55)" : "none",
                       }}
                       className="quiz-cta group inline-flex w-full items-center justify-center gap-2 px-8 text-[14px] transition-all duration-300 disabled:cursor-not-allowed"
                     >
@@ -951,12 +952,9 @@ function ResultCard({
   const calcHref = `/?${calcParams.toString()}#calculadora`;
 
   return (
-    <div
-      className="-m-6 sm:-m-10 rounded-[28px] sm:rounded-[32px] p-6 sm:p-10"
-      style={{ backgroundColor: "#FFFFFF", color: "#1F1A15" }}
-    >
+    <div style={{ color: "#F5F0E8" }}>
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
-      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#F4EFE6", border: "1px solid rgba(31,26,21,0.06)" }}>
+      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#150F08", border: "1px solid rgba(245,240,232,0.08)" }}>
         <img
           src={rec.image}
           alt={rec.productName}
@@ -989,7 +987,7 @@ function ResultCard({
         </span>
         <h3
           className="mt-3 font-display font-semibold leading-[1.05]"
-          style={{ color: "#1F1A15", fontSize: "clamp(28px, 4vw, 40px)" }}
+          style={{ color: "#F5F0E8", fontSize: "clamp(28px, 4vw, 40px)" }}
         >
           {rec.productName}
         </h3>
@@ -1018,12 +1016,12 @@ function ResultCard({
           </div>
         )}
 
-        <p className="mt-4 text-sm" style={{ color: "#6B6157" }}>
+        <p className="mt-4 text-sm" style={{ color: "#A8A096" }}>
           Por que escolhemos para você:
         </p>
         <ul className="mt-3 space-y-2.5">
           {rec.reasons.map((r, i) => (
-            <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#2A241E" }}>
+            <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#C9BFB2" }}>
               <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "#FF6B35" }} />
               <span>{r}</span>
             </li>
@@ -1033,7 +1031,7 @@ function ResultCard({
         {/* Resumo das escolhas do cliente */}
         <div
           className="mt-5 rounded-2xl p-4"
-          style={{ backgroundColor: "#FBF7F1", border: "1px solid rgba(31,26,21,0.08)" }}
+          style={{ backgroundColor: "#150F08", border: "1px solid rgba(255,107,53,0.12)" }}
         >
           <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "#8A8078" }}>
             Suas escolhas no quiz
@@ -1043,7 +1041,7 @@ function ResultCard({
               <li
                 key={s.label}
                 className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs"
-                style={{ backgroundColor: "#FFFFFF", color: "#2A241E", border: "1px solid rgba(31,26,21,0.10)" }}
+                style={{ backgroundColor: "rgba(245,240,232,0.04)", color: "#C9BFB2", border: "1px solid rgba(245,240,232,0.10)" }}
               >
                 <span style={{ color: "#8A8078" }}>{s.label}:</span>
                 <span className="font-semibold">{s.value}</span>
@@ -1102,7 +1100,7 @@ function ResultCard({
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors hover:bg-[rgba(255,255,255,0.06)]"
-              style={{ border: "1px solid rgba(31,26,21,0.15)", color: "#2A241E" }}
+              style={{ border: "1px solid rgba(245,240,232,0.18)", color: "#C9BFB2" }}
             >
               <MessageCircle className="h-4 w-4" />
               Falar com especialista
