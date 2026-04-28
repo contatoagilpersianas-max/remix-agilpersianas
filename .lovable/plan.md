@@ -1,71 +1,101 @@
-# Ajustes pontuais no Quiz (QuizMatch)
+# Ajustes no Quiz — clique avança, seleção premium, CTA laranja
 
-Três correções localizadas, sem mexer em nenhuma outra parte do site.
+Três correções pontuais em `src/components/site/QuizMatch.tsx`. Nenhuma outra parte do site é tocada.
 
-## 1. Clique na imagem não deve "jogar" para a seção Mais Vendidas
+## 1. Clicar na imagem deve avançar para a próxima etapa
 
-**Causa real:** `handleSelect` (linha 417) apenas grava a resposta — não avança de etapa. Mas como a etapa atual continua renderizando com a mesma altura e o usuário já está perto do final da seção, o navegador acaba expondo a seção seguinte (BestSellersWeek) na linha do olhar, dando a sensação de que o quiz "pulou".
+**Hoje:** clicar só marca a opção e dispara `ensureQuizInView()`, que rola a página de volta ao topo do quiz — o usuário sente que "voltou pro título". Para avançar, precisa clicar no botão "Próxima etapa".
 
-**Correção:** ao selecionar uma opção, garantir que o usuário continue vendo o quiz — chamar `scrollToQuizTop()` também no `handleSelect`, mas **só quando o topo do quiz estiver fora da viewport** (evita scroll desnecessário em desktop com tela grande). A navegação para a próxima etapa continua acontecendo **apenas** via botão "Próxima etapa", como hoje.
+**Correção:** ao clicar num card, gravar a resposta E avançar imediatamente para a próxima etapa (mesma lógica do botão "Próxima etapa"). Sem chamar `scrollToQuizTop` antes — o avanço já vai re-renderizar a etapa nova e disparar o scroll suave para o topo do quiz.
 
-- Em `handleSelect` (após gravar a resposta), checar `sectionRef.current.getBoundingClientRect().top < 0` e, se sim, chamar `scrollToQuizTop()`.
-- Não alterar a lógica multi-select de "convivencia".
+Exceção: a etapa **`convivencia`** é multi-select (crianças + pets). Nessa etapa o clique continua só marcando/desmarcando, e o avanço fica no botão "Próxima etapa" (caso contrário o usuário não consegue marcar duas opções).
 
-## 2. Botão "Próxima etapa" centralizado
+Última etapa: o clique conclui o quiz (mesmo comportamento do botão "Ver minha recomendação").
 
-**Hoje:** linha 755 usa `flex items-center justify-between` — joga "Pular quiz" para a esquerda e "Próxima etapa" para a direita.
+## 2. Efeito premium ao selecionar (não só borda laranja)
 
-**Correção:** mudar a estrutura do rodapé de ação para:
-- "Pular quiz" como link discreto **acima** do botão, alinhado ao centro com tamanho menor (mantém visibilidade mas tira da linha do CTA).
-- Botão "Próxima etapa" **centralizado** logo abaixo, ocupando largura natural (não 100%, mantém o pill premium atual).
-- Botão "Voltar" (quando step > 0) continua abaixo, centralizado e discreto.
+**Hoje:** card selecionado vira bloco laranja chapado com texto branco — visualmente pesado e perde o ar editorial.
 
-Hierarquia visual final, de cima para baixo:
-```text
-[ Pular quiz ]              ← link pequeno, centralizado
-[ Próxima etapa → ]         ← CTA pill centralizado (estilo atual)
-[ ← Voltar ]                ← link discreto, centralizado, só se step > 0
-```
+**Correção:** voltar ao tratamento premium anterior, com camadas:
 
-## 3. Card laranja quando selecionado
+- Card mantém **fundo branco** (não vira laranja chapado).
+- **Borda coral 2px** `#FF6B35` (mais presente que 1.5px).
+- **Glow externo** suave: `box-shadow: 0 8px 24px rgba(255,107,53,0.22), 0 0 0 4px rgba(255,107,53,0.08)` (halo + anel sutil).
+- **Imagem ganha overlay coral** discreto: gradient `linear-gradient(180deg, rgba(255,107,53,0.0) 40%, rgba(255,107,53,0.28) 100%)` por cima da imagem (mantém `brightness(0.78)` em vez de 0.72 para a foto não escurecer demais com o overlay).
+- **Leve scale-up** do card: `transform: scale(1.02)` com `transition` suave (eleva o card escolhido).
+- **Badge de check** no canto superior direito permanece (já existe, círculo coral com check branco).
+- **Texto do label** volta para escuro `#1A0F08` e caption em `#B89070` (sem mais texto branco — fundo do card é branco de novo).
 
-**Hoje:** o card selecionado mantém fundo branco e ganha apenas borda coral 1.5px + sombra leve + check no canto. Visualmente sutil demais.
+Resultado: o card escolhido "se acende" com halo coral, sobe levemente e ganha um wash de cor na imagem, sem virar um bloco laranja chapado.
 
-**Correção:** quando `selected === true`, aplicar estado laranja claro e nítido:
-- `backgroundColor: "#FF6B35"` (coral da marca) no card inteiro.
-- `border: "1.5px solid #FF6B35"`.
-- Imagem com overlay sutil para não sumir: manter `filter: brightness(0.72)` e adicionar uma leve mistura coral via `mix-blend-mode: multiply` no container ou aumentar o contraste do badge de check (já existe).
-- Texto do rodapé do card (`opt.label` e `caption`) passa para **branco** quando selecionado, para legibilidade sobre o coral.
-- Card não-selecionado permanece branco com borda `#E8DDD0` (igual ao atual).
+## 3. Botão "Próxima etapa" laranja em vez de preto
+
+**Hoje:** `backgroundColor: "#1A0F08"` (preto/marrom escuro) com a seta num círculo laranja.
+
+**Correção:** botão inteiro em coral da marca:
+- `backgroundColor: "#FF6B35"` (estado ativo).
+- Texto branco `#FFFFFF` (já é).
+- Círculo da seta passa para **branco translúcido** `rgba(255,255,255,0.22)` para criar contraste interno em vez de competir com o fundo.
+- Hover: leve escurecimento `#E85D2C` via `:hover` (filter brightness 0.95 ou cor explícita).
+- Sombra coral suave: `box-shadow: 0 6px 18px rgba(255,107,53,0.28)`.
+- Estado desabilitado (sem resposta): mantém atual `#E8DDD0` com texto `#C4AE96`.
 
 ## Detalhes técnicos
 
-Arquivo único: `src/components/site/QuizMatch.tsx`
+Arquivo único: `src/components/site/QuizMatch.tsx`.
 
-1. **handleSelect** (linha 417): após `setAnswers(...)`, adicionar:
-   ```ts
-   if (typeof window !== "undefined" && sectionRef.current) {
-     const rect = sectionRef.current.getBoundingClientRect();
-     if (rect.top < 0) scrollToQuizTop();
-   }
-   ```
-
-2. **Rodapé de ação** (linhas 748-813): substituir o `<div className="mt-10 flex items-center justify-between gap-4">` por uma coluna centralizada:
+1. **onClick do card** (linha 701-704):
    ```tsx
-   <div className="mt-10 flex flex-col items-center gap-4">
-     <Link to="/catalogo" /* estilo skip atual, sem mudar cor */>Pular quiz</Link>
-     <button /* CTA pill atual, sem mudar estilo interno */>Próxima etapa →</button>
-   </div>
+   onClick={() => {
+     handleSelect(opt.value, opt.feedback);
+     if (current.key === "convivencia") return; // multi-select: não avança
+     if (step === STEPS.length - 1) {
+       // última etapa — conclui (mesmo efeito do CTA "Ver minha recomendação")
+       setDirection("forward");
+       setStep((s) => s + 1);
+       setFeedback("");
+       scrollToQuizTop();
+     } else {
+       setDirection("forward");
+       setStep((s) => s + 1);
+       setFeedback("");
+       scrollToQuizTop();
+     }
+   }}
    ```
-   E o bloco "Voltar" (linhas 814-831) muda de `<div className="mt-3">` para `<div className="mt-3 flex justify-center">`.
+   Remover `ensureQuizInView()` daqui. A função pode ser deletada se não for usada em outro lugar.
 
-3. **Card selecionado** (linhas 686-742): no `style` do `<button>`:
+2. **Style do card selecionado** (linhas 707-713):
    ```ts
-   backgroundColor: selected ? "#FF6B35" : "#FFFFFF",
-   border: selected ? "1.5px solid #FF6B35" : "1px solid #E8DDD0",
+   backgroundColor: "#FFFFFF", // sempre branco
+   border: selected ? "2px solid #FF6B35" : "1px solid #E8DDD0",
+   borderRadius: 12,
+   boxShadow: selected
+     ? "0 8px 24px rgba(255,107,53,0.22), 0 0 0 4px rgba(255,107,53,0.08)"
+     : "none",
+   transform: selected ? "scale(1.02)" : "scale(1)",
    ```
-   No bloco do rodapé do card (linhas 726-741), trocar a cor dos textos quando `selected`:
-   - `opt.label`: `color: selected ? "#FFFFFF" : "#1A0F08"`
-   - `caption`: `color: selected ? "rgba(255,255,255,0.85)" : "#B89070"`
+   E adicionar overlay coral no container da imagem (depois do `<img>`, antes do badge "Recomendado"):
+   ```tsx
+   {selected && (
+     <div className="pointer-events-none absolute inset-0"
+       style={{ background: "linear-gradient(180deg, rgba(255,107,53,0) 40%, rgba(255,107,53,0.28) 100%)" }} />
+   )}
+   ```
+   Ajustar `filter: "brightness(0.78)"` quando `selected` (mantém 0.72 quando não selecionado, para não ficar muito claro).
 
-Sem mudanças em paleta global, layout da seção, lógica de recomendação, microcopy ou qualquer outro componente.
+3. **Texto do card** (linhas 742-755): remover branco quando selected — voltar para `#1A0F08` e `#B89070` em todos os estados.
+
+4. **Botão "Próxima etapa"** (linhas 803-824):
+   ```ts
+   backgroundColor: hasAnswer ? "#FF6B35" : "#E8DDD0",
+   color: hasAnswer ? "#FFFFFF" : "#C4AE96",
+   boxShadow: hasAnswer ? "0 6px 18px rgba(255,107,53,0.28)" : "none",
+   ```
+   E o círculo da seta:
+   ```ts
+   backgroundColor: hasAnswer ? "rgba(255,255,255,0.22)" : "#D4B89A",
+   ```
+   Hover usa `hover:brightness-95` (já tem `hover:opacity-95`, trocar para brightness para não embaçar).
+
+Sem mudanças em paleta global, lógica de recomendação, microcopy ou outros componentes.
