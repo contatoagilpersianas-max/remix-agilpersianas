@@ -818,15 +818,16 @@ export function QuizMatch() {
                           : "Selecione uma opção para avançar"
                       }
                       style={{
-                        backgroundColor: hasAnswer ? "#1A0F08" : "#E8DDD0",
+                        backgroundColor: hasAnswer ? "#FF6B35" : "#E8DDD0",
                         color: hasAnswer ? "#FFFFFF" : "#C4AE96",
                         padding: "10px 8px 10px 22px",
                         borderRadius: 99,
                         border: "none",
                         fontWeight: 600,
                         fontSize: 14,
+                        boxShadow: hasAnswer ? "0 6px 18px rgba(255,107,53,0.28)" : "none",
                       }}
-                      className="inline-flex items-center gap-3 transition-all duration-200 disabled:cursor-not-allowed hover:opacity-95"
+                      className="inline-flex items-center gap-3 transition-all duration-200 disabled:cursor-not-allowed hover:brightness-95"
                     >
                       {isLast ? "Ver minha recomendação" : "Próxima etapa"}
                       <span
@@ -834,7 +835,7 @@ export function QuizMatch() {
                         style={{
                           width: 28,
                           height: 28,
-                          backgroundColor: hasAnswer ? "#FF6B35" : "#D4B89A",
+                          backgroundColor: hasAnswer ? "rgba(255,255,255,0.22)" : "#D4B89A",
                         }}
                       >
                         <ArrowRight className="h-3.5 w-3.5 text-white" strokeWidth={2.4} />
