@@ -698,7 +698,10 @@ export function QuizMatch() {
                     <button
                       key={opt.value}
                       type="button"
-                      onClick={() => handleSelect(opt.value, opt.feedback)}
+                      onClick={() => {
+                        handleSelect(opt.value, opt.feedback);
+                        ensureQuizInView();
+                      }}
                       aria-pressed={selected}
                       className="quiz-card-light group relative overflow-hidden text-left transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 animate-quiz-card"
                       style={{
