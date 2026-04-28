@@ -767,7 +767,7 @@ export function QuizMatch() {
                     : !!(answers as Record<string, string>)[current.key];
                 const isLast = step === STEPS.length - 1;
                 return (
-                  <div className="mt-10 flex items-center justify-between gap-4">
+                  <div className="mt-10 flex flex-col items-center gap-4">
                     <Link
                       to="/catalogo"
                       aria-label="Pular o quiz e ir direto para a vitrine de produtos"
@@ -827,7 +827,7 @@ export function QuizMatch() {
                 );
               })()}
               {step > 0 && (
-                <div className="mt-3">
+                <div className="mt-3 flex justify-center">
                   <button
                     type="button"
                     onClick={handleBack}
