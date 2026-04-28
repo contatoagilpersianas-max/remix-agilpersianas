@@ -700,15 +700,23 @@ export function QuizMatch() {
                       type="button"
                       onClick={() => {
                         handleSelect(opt.value, opt.feedback);
-                        ensureQuizInView();
+                        // Multi-select (convivência) não auto-avança — usuário pode marcar 2 opções
+                        if (current.key === "convivencia") return;
+                        setDirection("forward");
+                        setStep((s) => s + 1);
+                        setFeedback("");
+                        scrollToQuizTop();
                       }}
                       aria-pressed={selected}
                       className="quiz-card-light group relative overflow-hidden text-left transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 animate-quiz-card"
                       style={{
-                        backgroundColor: selected ? "#FF6B35" : "#FFFFFF",
-                        border: selected ? "1.5px solid #FF6B35" : "1px solid #E8DDD0",
+                        backgroundColor: "#FFFFFF",
+                        border: selected ? "2px solid #FF6B35" : "1px solid #E8DDD0",
                         borderRadius: 12,
-                        boxShadow: selected ? "0 4px 20px rgba(255,107,53,0.15)" : "none",
+                        boxShadow: selected
+                          ? "0 8px 24px rgba(255,107,53,0.22), 0 0 0 4px rgba(255,107,53,0.08)"
+                          : "none",
+                        transform: selected ? "scale(1.02)" : "scale(1)",
                         animationDelay: `${i * 50}ms`,
                       }}
                     >
@@ -719,8 +727,17 @@ export function QuizMatch() {
                           loading="lazy"
                           decoding="async"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          style={{ objectPosition, filter: "brightness(0.72)" }}
+                          style={{ objectPosition, filter: selected ? "brightness(0.78)" : "brightness(0.72)" }}
                         />
+                        {selected && (
+                          <div
+                            className="pointer-events-none absolute inset-0"
+                            style={{
+                              background:
+                                "linear-gradient(180deg, rgba(255,107,53,0) 40%, rgba(255,107,53,0.28) 100%)",
+                            }}
+                          />
+                        )}
                         {highlightSafe && (
                           <span
                             className="absolute top-2 left-2 whitespace-nowrap rounded-full px-2 py-0.5 font-medium uppercase"
@@ -741,14 +758,14 @@ export function QuizMatch() {
                       <div className="px-3 py-2.5">
                         <p
                           className="font-display"
-                          style={{ color: selected ? "#FFFFFF" : "#1A0F08", fontSize: 11, fontWeight: 600, lineHeight: 1.2 }}
+                          style={{ color: "#1A0F08", fontSize: 11, fontWeight: 600, lineHeight: 1.2 }}
                         >
                           {opt.label}
                         </p>
                         {caption && (
                           <p
                             className="mt-0.5 uppercase font-medium"
-                            style={{ color: selected ? "rgba(255,255,255,0.85)" : "#B89070", fontSize: 9, letterSpacing: "0.16em" }}
+                            style={{ color: "#B89070", fontSize: 9, letterSpacing: "0.16em" }}
                           >
                             {caption}
                           </p>
