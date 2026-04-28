@@ -810,6 +810,7 @@ export function QuizMatch() {
                   );
                 })}
               </div>
+              </div>
 
               {/* Barra de ação inferior */}
               {(() => {
