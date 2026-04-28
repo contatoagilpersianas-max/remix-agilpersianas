@@ -1,29 +1,37 @@
-## Plano
+## Objetivo
 
-Vou aplicar as mudanças apenas em `src/components/site/QuizMatch.tsx`.
+Quando o usuário avançar (ou voltar) entre etapas do quiz, a tela deve enquadrar a área de pergunta exatamente como na imagem de referência: card do **Assistente Ágil** no topo, em seguida o **título da etapa** (ex.: "Qual seu objetivo de luz?") e logo abaixo a grade de **4 imagens**. Hoje o scroll volta para o título principal "Descubra a persiana ideal para a sua casa.", deixando o título da etapa fora do enquadramento inicial.
 
-### 1. Atualizar o texto do assistente
-- Trocar o feedback exibido acima das opções para:
-  `Perfeito. Vamos encontrar a solução que equilibra sua privacidade com a entrada ideal de luz.`
-- Ajustar a ênfase visual do texto no card do assistente para destacar `Privacidade`, `Luminosidade` e `Conforto` com um tratamento mais sofisticado, mantendo o tom profissional e consultivo.
+## Mudanças (somente `src/components/site/QuizMatch.tsx`)
 
-### 2. Corrigir o avanço ao clicar na imagem
-- Remover o comportamento que rola a tela de volta para o topo do título quando o usuário clica em uma opção.
-- Fazer o clique no card/imagem encaminhar diretamente para a próxima etapa do quiz, exibindo imediatamente as imagens da etapa seguinte.
-- Manter exceção apenas para a etapa multi-seleção (`convivencia`), onde o clique continua marcando/desmarcando sem autoavanço.
+### 1. Novo alvo de scroll: bloco do assistente + pergunta
+- Adicionar uma `ref` (`stepBlockRef`) no contêiner que envolve o **card do Assistente Ágil + título da etapa + grid de opções** (envolver os blocos atuais em uma `div` com essa ref, sem alterar estilos).
+- Manter `sectionRef` apenas para o cálculo de "o quiz saiu da viewport" (lógica existente continua válida).
 
-### 3. Reposicionar o botão “Pular quiz”
-- Tirar o link de “Pular quiz” do rodapé inferior do card.
-- Recolocar o botão/link no início da área de navegação do quiz, como era antes, acima do CTA principal.
-- Preservar o estilo discreto pedido anteriormente, sem competir com o botão principal.
+### 2. Reescrever `scrollToQuizTop` para mirar a etapa
+- Substituir o alvo atual (topo da `<section>`) pelo `stepBlockRef.current`.
+- Manter o offset do header fixo (~96px) e respeitar `prefers-reduced-motion`.
+- O resultado: o card do assistente fica logo abaixo do header, o título da etapa aparece em destaque e os 4 cards aparecem inteiros — enquadramento idêntico à imagem anexada.
 
-### 4. Preservar a hierarquia visual atual
-- Manter o botão `Próxima etapa` centralizado e em laranja.
-- Manter o efeito premium de seleção nos cards, sem regredir para um estado visual simples.
-- Garantir que a transição entre etapas continue fluida em desktop e mobile.
+### 3. Disparar o scroll ao avançar e ao voltar
+- `Próxima etapa` (botão laranja): já chama `scrollToQuizTop()` — passa a enquadrar a próxima etapa automaticamente.
+- `Voltar` (`handleBack`): mantém a chamada, agora enquadrando a etapa anterior.
+- Clique nos cards de opção: continua **sem** scroll (mantém o comportamento atual de só selecionar).
+- Reset (`Refazer quiz` na tela final): ao voltar para a etapa 1, também enquadrar o bloco da etapa.
 
-## Detalhes técnicos
-- Ajustar a renderização do card do assistente que hoje usa `feedback || current.botMessage`.
-- Revisar o `onClick` dos cards de opção para evitar o scroll prematuro do `scrollToQuizTop()` no momento do clique.
-- Reorganizar o bloco da barra de ação para que `Pular quiz` volte ao topo dessa seção.
-- Não haverá mudanças em backend, banco, catálogo ou recomendação final do quiz.
+### 4. Garantir suavidade entre etapas curtas e longas
+- Usar `requestAnimationFrame` + leitura de `getBoundingClientRect()` no momento do scroll (já é o padrão da função) para que a posição seja calculada **após** o React renderizar o novo título/opções.
+- Em telas muito altas (desktop wide), se o bloco couber inteiro acima da dobra, ainda assim posicioná-lo logo abaixo do header (não centralizar) — assim o padrão de enquadramento é consistente em todas as etapas.
+
+### 5. Sem alterações em
+- Lógica de seleção, multi-select de "convivência", recomendação final, lead/analytics.
+- Estilos dos cards, botão laranja "Próxima etapa", link "Pular quiz", barra de progresso.
+- Microcopy do assistente.
+
+## Arquivos afetados
+- `src/components/site/QuizMatch.tsx` (edição única)
+
+## Validação manual sugerida
+- Navegar etapa 1 → 2 → 3 → 4 → 5 e confirmar que cada transição enquadra: assistente no topo, título da etapa, 4 cards visíveis (desktop) ou 2x2 (mobile).
+- Voltar com o botão "Voltar" e confirmar o mesmo enquadramento.
+- Conferir em mobile (≤640px) e desktop (≥1024px).
