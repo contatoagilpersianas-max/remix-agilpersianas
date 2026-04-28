@@ -741,8 +741,8 @@ export function QuizMatch() {
                       style={{
                         border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
                         boxShadow: selected
-                          ? "0 8px 28px rgba(255,107,53,0.25)"
-                          : "0 6px 18px rgba(31,26,21,0.08)",
+                          ? "0 8px 28px rgba(217,102,60,0.25)"
+                          : "0 4px 14px rgba(31,26,21,0.08)",
                         animationDelay: `${i * 50}ms`,
                       }}
                     >
@@ -758,7 +758,7 @@ export function QuizMatch() {
                         className="absolute inset-0"
                         style={{
                           background:
-                            "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%)",
+                            "linear-gradient(to top, rgba(15,10,5,0.78) 0%, rgba(15,10,5,0.35) 45%, rgba(15,10,5,0.05) 100%)",
                         }}
                       />
                       {!selected && (
@@ -783,10 +783,10 @@ export function QuizMatch() {
                           <CheckCircle2 className="h-4 w-4 text-white" strokeWidth={2} />
                         </span>
                       )}
-                      <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
+                       <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
                         <p
                           className="font-display text-white"
-                          style={{ fontSize: "13px", fontWeight: 700, lineHeight: 1.15 }}
+                          style={{ fontSize: "13px", fontWeight: 700, lineHeight: 1.15, textShadow: "0 1px 8px rgba(0,0,0,0.45)" }}
                         >
                           {opt.label}
                         </p>
