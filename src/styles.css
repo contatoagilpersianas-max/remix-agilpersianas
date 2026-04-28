@@ -213,6 +213,7 @@
   .quiz-cta:not(:disabled):active {
     background-color: #D14E1B !important;
   }
+  .quiz-skip-link:hover { color: #666 !important; }
   @media (prefers-reduced-motion: reduce) {
     .animate-quiz-forward, .animate-quiz-back, .animate-quiz-card { animation: none; }
   }
