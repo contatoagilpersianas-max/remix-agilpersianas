@@ -361,17 +361,20 @@ export function QuizMatch() {
   const [bgLoaded, setBgLoaded] = useState(false);
   const savedRef = useRef(false);
   const sectionRef = useRef<HTMLElement | null>(null);
+  const stepBlockRef = useRef<HTMLDivElement | null>(null);
 
   function scrollToQuizTop() {
     if (typeof window === "undefined") return;
-    const el = sectionRef.current;
+    const el = stepBlockRef.current ?? sectionRef.current;
     if (!el) return;
     const prefersReduced =
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
     requestAnimationFrame(() => {
-      const headerOffset = 96; // header fixo
-      const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
-      window.scrollTo({ top, behavior: prefersReduced ? "auto" : "smooth" });
+      requestAnimationFrame(() => {
+        const headerOffset = 96; // header fixo
+        const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top, behavior: prefersReduced ? "auto" : "smooth" });
+      });
     });
   }
 
@@ -620,7 +623,8 @@ export function QuizMatch() {
                 </div>
               </div>
 
-              {/* Card do assistente — creme com borda esquerda coral */}
+              {/* Bloco enquadrado a cada etapa: assistente + pergunta + opções */}
+              <div ref={stepBlockRef} style={{ scrollMarginTop: 96 }}>
               <div
                 className="mb-8 flex items-start gap-3 p-4"
                 style={{
@@ -805,6 +809,7 @@ export function QuizMatch() {
                     </button>
                   );
                 })}
+              </div>
               </div>
 
               {/* Barra de ação inferior */}
