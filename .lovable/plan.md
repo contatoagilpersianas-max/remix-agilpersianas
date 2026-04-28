@@ -1,64 +1,71 @@
-# Ajustes no Quiz Inteligente (QuizMatch)
+# Ajustes pontuais no Quiz (QuizMatch)
 
-Dois problemas pontuais, sem mexer em nenhuma outra parte do site.
+Três correções localizadas, sem mexer em nenhuma outra parte do site.
 
-## 1. Bug do "Próxima etapa" jogando para a seção de mais vendidas
+## 1. Clique na imagem não deve "jogar" para a seção Mais Vendidas
 
-**O que acontece hoje:** ao clicar em "Próxima etapa", o estado avança corretamente para a próxima pergunta — mas como a altura da seção muda entre etapas e o botão fica perto do final da seção, o usuário continua olhando para a área inferior da página e vê a seção seguinte (Mais vendidas / Produtos em destaque), tendo a impressão de que o quiz "pulou" para lá.
+**Causa real:** `handleSelect` (linha 417) apenas grava a resposta — não avança de etapa. Mas como a etapa atual continua renderizando com a mesma altura e o usuário já está perto do final da seção, o navegador acaba expondo a seção seguinte (BestSellersWeek) na linha do olhar, dando a sensação de que o quiz "pulou".
 
-**Correção:** ao avançar ou voltar de etapa, fazer um scroll suave de volta para o topo do quiz (âncora `#quiz-persiana-ideal`), respeitando o offset do header fixo. Isso garante que o usuário veja imediatamente o novo título da pergunta e os novos cards.
+**Correção:** ao selecionar uma opção, garantir que o usuário continue vendo o quiz — chamar `scrollToQuizTop()` também no `handleSelect`, mas **só quando o topo do quiz estiver fora da viewport** (evita scroll desnecessário em desktop com tela grande). A navegação para a próxima etapa continua acontecendo **apenas** via botão "Próxima etapa", como hoje.
 
-- Adicionar uma `ref` no `<section>` do quiz.
-- Nos handlers `onClick` do botão "Próxima etapa" e do "Voltar", chamar `scrollIntoView({ behavior: "smooth", block: "start" })` com um pequeno offset para não esconder o título atrás do header.
-- Respeitar `prefers-reduced-motion` (sem animação se o usuário preferir).
+- Em `handleSelect` (após gravar a resposta), checar `sectionRef.current.getBoundingClientRect().top < 0` e, se sim, chamar `scrollToQuizTop()`.
+- Não alterar a lógica multi-select de "convivencia".
 
-## 2. Caption repetitiva abaixo do nome da opção
+## 2. Botão "Próxima etapa" centralizado
 
-**O que acontece hoje:** abaixo de cada card (ex: "Sala de TV / Home", "Cozinha", "Quarto") aparece sempre a mesma palavra — "Ambiente". Na etapa seguinte aparece "Objetivo de luz" em todos os cards. É redundante (já está no título da pergunta) e não agrega.
+**Hoje:** linha 755 usa `flex items-center justify-between` — joga "Pular quiz" para a esquerda e "Próxima etapa" para a direita.
 
-**Correção:** substituir o objeto `stepCaption` (label fixo por etapa) por uma microcopy curta **por opção**, que ajuda o cliente a se identificar com o cenário. Texto curto (até ~28 caracteres), em caixa alta com letter-spacing, mantendo o estilo visual atual (#B89070, 9px).
+**Correção:** mudar a estrutura do rodapé de ação para:
+- "Pular quiz" como link discreto **acima** do botão, alinhado ao centro com tamanho menor (mantém visibilidade mas tira da linha do CTA).
+- Botão "Próxima etapa" **centralizado** logo abaixo, ocupando largura natural (não 100%, mantém o pill premium atual).
+- Botão "Voltar" (quando step > 0) continua abaixo, centralizado e discreto.
 
-### Microcopy proposta
+Hierarquia visual final, de cima para baixo:
+```text
+[ Pular quiz ]              ← link pequeno, centralizado
+[ Próxima etapa → ]         ← CTA pill centralizado (estilo atual)
+[ ← Voltar ]                ← link discreto, centralizado, só se step > 0
+```
 
-**Ambiente:**
-- Quarto → "Sono & descanso"
-- Sala de Estar → "Convívio & receber"
-- Sala de TV / Home → "Cinema em casa"
-- Cozinha → "Praticidade no dia a dia"
-- Escritório → "Foco & produtividade"
-- Lavanderia → "Área úmida"
-- Quarto Infantil → "Segurança em primeiro lugar"
-- Área Externa → "Sol, chuva & vento"
+## 3. Card laranja quando selecionado
 
-**Objetivo de luz:**
-- Escuridão Total → "Sono profundo"
-- Filtrar Luz Suave → "Clima aconchegante"
-- Apenas Privacidade → "Sem bloquear claridade"
-- Visão Externa → "Você vê, ninguém vê"
+**Hoje:** o card selecionado mantém fundo branco e ganha apenas borda coral 1.5px + sombra leve + check no canto. Visualmente sutil demais.
 
-**Estilo:**
-- Moderno / Clean → "Linhas retas"
-- Clássico / Aconchegante → "Tons quentes"
-- Rústico / Natural → "Fibras naturais"
-- Industrial → "Acabamento robusto"
-
-**Convivência:**
-- Tenho Crianças → "Sem cordões soltos"
-- Tenho Pets → "Tecidos resistentes"
-- Não → "Liberdade total"
-
-**Acionamento:**
-- Manual → "Prático & econômico"
-- Motorizado → "Controle, app ou Alexa"
-
-Caso o usuário prefira outro tom (mais técnico, mais emocional, mais curto), ajusto após a aprovação.
+**Correção:** quando `selected === true`, aplicar estado laranja claro e nítido:
+- `backgroundColor: "#FF6B35"` (coral da marca) no card inteiro.
+- `border: "1.5px solid #FF6B35"`.
+- Imagem com overlay sutil para não sumir: manter `filter: brightness(0.72)` e adicionar uma leve mistura coral via `mix-blend-mode: multiply` no container ou aumentar o contraste do badge de check (já existe).
+- Texto do rodapé do card (`opt.label` e `caption`) passa para **branco** quando selecionado, para legibilidade sobre o coral.
+- Card não-selecionado permanece branco com borda `#E8DDD0` (igual ao atual).
 
 ## Detalhes técnicos
 
 Arquivo único: `src/components/site/QuizMatch.tsx`
 
-1. Adicionar campo opcional `caption?: string` em `OptionDef<T>` e preencher em cada array (`ambientes`, `luzes`, `estilos`, `convivencias`, `acionamentos`).
-2. Remover o objeto `stepCaption` e ler `opt.caption` no render do card (fallback para vazio se faltar).
-3. Adicionar `sectionRef = useRef<HTMLElement>(null)` no `<section>` e uma função `scrollToQuizTop()` chamada após `setStep(...)` no botão "Próxima etapa" e em `handleBack()`. Usar `requestAnimationFrame` para esperar o re-render antes do scroll.
+1. **handleSelect** (linha 417): após `setAnswers(...)`, adicionar:
+   ```ts
+   if (typeof window !== "undefined" && sectionRef.current) {
+     const rect = sectionRef.current.getBoundingClientRect();
+     if (rect.top < 0) scrollToQuizTop();
+   }
+   ```
 
-Sem mudanças em estilos, paleta, layout, lógica de recomendação, ou qualquer outro componente do site.
+2. **Rodapé de ação** (linhas 748-813): substituir o `<div className="mt-10 flex items-center justify-between gap-4">` por uma coluna centralizada:
+   ```tsx
+   <div className="mt-10 flex flex-col items-center gap-4">
+     <Link to="/catalogo" /* estilo skip atual, sem mudar cor */>Pular quiz</Link>
+     <button /* CTA pill atual, sem mudar estilo interno */>Próxima etapa →</button>
+   </div>
+   ```
+   E o bloco "Voltar" (linhas 814-831) muda de `<div className="mt-3">` para `<div className="mt-3 flex justify-center">`.
+
+3. **Card selecionado** (linhas 686-742): no `style` do `<button>`:
+   ```ts
+   backgroundColor: selected ? "#FF6B35" : "#FFFFFF",
+   border: selected ? "1.5px solid #FF6B35" : "1px solid #E8DDD0",
+   ```
+   No bloco do rodapé do card (linhas 726-741), trocar a cor dos textos quando `selected`:
+   - `opt.label`: `color: selected ? "#FFFFFF" : "#1A0F08"`
+   - `caption`: `color: selected ? "rgba(255,255,255,0.85)" : "#B89070"`
+
+Sem mudanças em paleta global, layout da seção, lógica de recomendação, microcopy ou qualquer outro componente.
