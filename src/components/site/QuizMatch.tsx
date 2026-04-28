@@ -881,10 +881,10 @@ function ResultCard({
   return (
     <div
       className="-m-6 sm:-m-10 rounded-[28px] sm:rounded-[32px] p-6 sm:p-10"
-      style={{ backgroundColor: "#0F0F0F", color: "#FFFFFF" }}
+      style={{ backgroundColor: "#FFFFFF", color: "#1F1A15" }}
     >
     <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
-      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#0F0F0F" }}>
+      <div className="relative aspect-[4/3] md:aspect-square rounded-2xl overflow-hidden" style={{ backgroundColor: "#F4EFE6", border: "1px solid rgba(31,26,21,0.06)" }}>
         <img
           src={rec.image}
           alt={rec.productName}
@@ -901,7 +901,7 @@ function ResultCard({
         {rec.badge && (
           <div
             className="absolute bottom-3 left-3 rounded-full px-3 py-1.5 text-xs font-bold shadow"
-            style={{ backgroundColor: "#FFFFFF", color: "#1A1A1A" }}
+            style={{ backgroundColor: "#1F1A15", color: "#FFFFFF" }}
           >
             {rec.badge}
           </div>
@@ -917,7 +917,7 @@ function ResultCard({
         </span>
         <h3
           className="mt-3 font-display font-semibold leading-[1.05]"
-          style={{ color: "#FFFFFF", fontSize: "clamp(28px, 4vw, 40px)" }}
+          style={{ color: "#1F1A15", fontSize: "clamp(28px, 4vw, 40px)" }}
         >
           {rec.productName}
         </h3>
@@ -928,7 +928,7 @@ function ResultCard({
             {hasCriancas && (
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
-                style={{ backgroundColor: "rgba(16,185,129,0.18)", color: "#34D399", border: "1px solid rgba(16,185,129,0.4)" }}
+                style={{ backgroundColor: "rgba(16,185,129,0.10)", color: "#0F8A5F", border: "1px solid rgba(16,185,129,0.35)" }}
               >
                 <Shield className="h-3.5 w-3.5" />
                 Seguro para crianças
@@ -937,7 +937,7 @@ function ResultCard({
             {hasPets && (
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
-                style={{ backgroundColor: "rgba(59,130,246,0.18)", color: "#60A5FA", border: "1px solid rgba(59,130,246,0.4)" }}
+                style={{ backgroundColor: "rgba(59,130,246,0.10)", color: "#2563EB", border: "1px solid rgba(59,130,246,0.35)" }}
               >
                 <PawPrint className="h-3.5 w-3.5" />
                 Resistente a pets
@@ -946,12 +946,12 @@ function ResultCard({
           </div>
         )}
 
-        <p className="mt-4 text-sm" style={{ color: "rgba(255,255,255,0.65)" }}>
+        <p className="mt-4 text-sm" style={{ color: "#6B6157" }}>
           Por que escolhemos para você:
         </p>
         <ul className="mt-3 space-y-2.5">
           {rec.reasons.map((r, i) => (
-            <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#F5F5F5" }}>
+            <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#2A241E" }}>
               <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "#FF6B35" }} />
               <span>{r}</span>
             </li>
@@ -961,9 +961,9 @@ function ResultCard({
         {/* Resumo das escolhas do cliente */}
         <div
           className="mt-5 rounded-2xl p-4"
-          style={{ backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+          style={{ backgroundColor: "#FBF7F1", border: "1px solid rgba(31,26,21,0.08)" }}
         >
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "rgba(255,255,255,0.6)" }}>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "#8A8078" }}>
             Suas escolhas no quiz
           </p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
@@ -971,9 +971,9 @@ function ResultCard({
               <li
                 key={s.label}
                 className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs"
-                style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "#F5F5F5", border: "1px solid rgba(255,255,255,0.12)" }}
+                style={{ backgroundColor: "#FFFFFF", color: "#2A241E", border: "1px solid rgba(31,26,21,0.10)" }}
               >
-                <span style={{ color: "rgba(255,255,255,0.55)" }}>{s.label}:</span>
+                <span style={{ color: "#8A8078" }}>{s.label}:</span>
                 <span className="font-semibold">{s.value}</span>
               </li>
             ))}
@@ -1030,22 +1030,22 @@ function ResultCard({
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors hover:bg-[rgba(255,255,255,0.06)]"
-              style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.85)" }}
+              style={{ border: "1px solid rgba(31,26,21,0.15)", color: "#2A241E" }}
             >
               <MessageCircle className="h-4 w-4" />
               Falar com especialista
             </a>
           )}
 
-          <p className="text-xs text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
+          <p className="text-xs text-center" style={{ color: "#8A8078" }}>
             Compra online imediata ou atendimento especializado, conforme seu projeto.
           </p>
 
           <button
             type="button"
             onClick={onReset}
-            className="mt-1 inline-flex items-center justify-center gap-1.5 text-xs transition-colors hover:text-white"
-            style={{ color: "rgba(255,255,255,0.55)" }}
+            className="mt-1 inline-flex items-center justify-center gap-1.5 text-xs transition-colors hover:text-foreground"
+            style={{ color: "#8A8078" }}
           >
             <RotateCcw className="h-3.5 w-3.5" /> Refazer quiz
           </button>
