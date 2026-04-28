@@ -434,6 +434,18 @@ export function QuizMatch() {
     setAnswers({ ...answers, [current.key]: value as never });
   }
 
+  // Após selecionar uma opção, se o topo do quiz já saiu da viewport
+  // (usuário rolou para ver os cards), traz o quiz de volta para o topo
+  // — assim o botão "Próxima etapa" fica visível e a próxima seção
+  // (Mais Vendidas) não invade a linha do olhar.
+  function ensureQuizInView() {
+    if (typeof window === "undefined") return;
+    const el = sectionRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top < 0) scrollToQuizTop();
+  }
+
   function handleBack() {
     setDirection("back");
     setStep((s) => Math.max(0, s - 1));
