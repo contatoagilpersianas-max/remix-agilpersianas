@@ -446,13 +446,13 @@ export function QuizMatch() {
       style={{ backgroundColor: dark.bg, color: dark.text }}
       aria-labelledby="quiz-title"
     >
-      {/* Glow ambiente sutil — luz quente */}
+      {/* Glow ambiente sutil — champagne quente sobre off-white */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(900px 500px at 50% -10%, rgba(255,107,53,0.08), transparent 60%), radial-gradient(700px 400px at 50% 110%, rgba(255,107,53,0.05), transparent 60%)",
+            "radial-gradient(900px 500px at 50% -10%, rgba(217,102,60,0.06), transparent 60%), radial-gradient(700px 400px at 50% 110%, rgba(239,230,216,0.5), transparent 60%)",
         }}
       />
       {/* mantém referência do estado bg para evitar warning de unused */}
