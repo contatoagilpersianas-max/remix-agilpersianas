@@ -671,8 +671,8 @@ export function QuizMatch() {
                       style={{
                         border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
                         boxShadow: selected
-                          ? "0 8px 32px rgba(255,107,53,0.35)"
-                          : "0 4px 16px rgba(0,0,0,0.4)",
+                          ? "0 8px 28px rgba(255,107,53,0.25)"
+                          : "0 6px 18px rgba(31,26,21,0.08)",
                       }}
                     >
                       <img
