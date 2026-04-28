@@ -733,25 +733,21 @@ export function QuizMatch() {
                       key={opt.value}
                       type="button"
                       onClick={() => {
+                        // Apenas marca a opção. O avanço é feito ao clicar
+                        // no botão "Próxima etapa" — assim o usuário vê o
+                        // destaque premium da escolha antes de prosseguir.
                         handleSelect(opt.value, opt.feedback);
-                        // Multi-select (convivência) não auto-avança — usuário pode marcar 2 opções
-                        if (current.key === "convivencia") return;
-                        setDirection("forward");
-                        setStep((s) => s + 1);
-                        setFeedback("");
-                        // Não rolar para o topo — manter o usuário na altura dos cards
-                        // para que ele veja imediatamente as opções da próxima etapa.
                       }}
                       aria-pressed={selected}
-                      className="quiz-card-light group relative overflow-hidden text-left transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 animate-quiz-card"
+                      className="quiz-card-light group relative overflow-hidden text-left transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 animate-quiz-card"
                       style={{
                         backgroundColor: "#FFFFFF",
                         border: selected ? "2px solid #FF6B35" : "1px solid #E8DDD0",
-                        borderRadius: 12,
+                        borderRadius: 14,
                         boxShadow: selected
-                          ? "0 8px 24px rgba(255,107,53,0.22), 0 0 0 4px rgba(255,107,53,0.08)"
-                          : "none",
-                        transform: selected ? "scale(1.02)" : "scale(1)",
+                          ? "0 18px 40px -12px rgba(255,107,53,0.45), 0 6px 16px rgba(255,107,53,0.18), 0 0 0 6px rgba(255,107,53,0.10)"
+                          : "0 1px 2px rgba(26,15,8,0.04)",
+                        transform: selected ? "translateY(-4px) scale(1.03)" : "scale(1)",
                         animationDelay: `${i * 50}ms`,
                       }}
                     >
