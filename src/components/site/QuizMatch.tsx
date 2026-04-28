@@ -465,14 +465,15 @@ export function QuizMatch() {
       <span hidden aria-hidden="true">{bgLoaded ? "" : ""}</span>
 
       <div className="container mx-auto max-w-4xl flex flex-col items-center px-4 sm:px-6 py-20">
-        <div className="text-center mb-8 sm:mb-12 w-full">
+        <div className="text-center mb-12 sm:mb-16 w-full">
           <span
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-medium uppercase"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-medium uppercase"
             style={{
-              border: `1px solid ${dark.coralBorder}`,
+              border: "1px solid rgba(255,107,53,0.18)",
               color: dark.coral,
               letterSpacing: "0.2em",
-              backgroundColor: "rgba(255,107,53,0.06)",
+              backgroundColor: "rgba(255,107,53,0.08)",
+              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
             }}
           >
             <Bot className="h-3.5 w-3.5" strokeWidth={1.6} />
@@ -480,29 +481,38 @@ export function QuizMatch() {
           </span>
           <h2
             id="quiz-title"
-            className="mt-6 font-display tracking-tight"
+            className="mt-8 font-display"
             style={{
               color: dark.text,
+              fontFamily: "var(--font-display)",
               fontSize: "clamp(34px, 5.4vw, 58px)",
-              lineHeight: 1.02,
+              lineHeight: 1.05,
+              letterSpacing: "-0.025em",
               fontWeight: 500,
             }}
           >
             Descubra a persiana ideal
             <br className="hidden sm:block" />
-            <em className="not-italic" style={{ color: dark.coral, fontStyle: "italic" }}>
+            <em
+              style={{
+                color: "var(--color-primary)",
+                fontStyle: "italic",
+                fontWeight: 500,
+                fontFamily: "var(--font-display)",
+              }}
+            >
               para a sua casa.
             </em>
           </h2>
           <p
-            className="mt-5 text-[15px] sm:text-base max-w-xl mx-auto leading-relaxed font-light"
+            className="mt-7 text-[15px] sm:text-base max-w-lg mx-auto leading-relaxed font-light tracking-[0.005em]"
             style={{ color: dark.textSoft }}
           >
             Cinco perguntas curtas. Uma recomendação feita sob medida para o seu
             ambiente, estilo e rotina.
           </p>
           {!isComplete && (
-            <div className="mt-7 flex justify-center">
+            <div className="mt-10 flex justify-center">
               <Link
                 to="/catalogo"
                 aria-label="Pular o quiz e ir direto para a vitrine de produtos"
