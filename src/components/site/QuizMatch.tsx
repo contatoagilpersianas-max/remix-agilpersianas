@@ -623,7 +623,8 @@ export function QuizMatch() {
                 </div>
               </div>
 
-              {/* Card do assistente — creme com borda esquerda coral */}
+              {/* Bloco enquadrado a cada etapa: assistente + pergunta + opções */}
+              <div ref={stepBlockRef} style={{ scrollMarginTop: 96 }}>
               <div
                 className="mb-8 flex items-start gap-3 p-4"
                 style={{
