@@ -636,11 +636,11 @@ export function QuizMatch() {
               {/* Opções — todos os steps usam cards com foto real (3:4) */}
               <div
                 key={`opts-${step}`}
-                className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 ${direction === "back" ? "animate-quiz-back" : "animate-quiz-forward"}`}
+                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
                 role="listbox"
                 aria-label={current.title}
               >
-                {current.options.map((opt) => {
+                {current.options.map((opt, i) => {
                   const selected =
                     current.key === "convivencia"
                       ? (answers.convivencia ?? []).includes(opt.value as Convivencia)
@@ -667,12 +667,13 @@ export function QuizMatch() {
                       type="button"
                       onClick={() => handleSelect(opt.value, opt.feedback)}
                       aria-pressed={selected}
-                      className="group relative aspect-[3/4] min-h-[160px] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2"
+                      className="group relative aspect-[3/4] min-h-[160px] overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 animate-quiz-card"
                       style={{
                         border: selected ? `2px solid ${dark.coral}` : `1px solid ${dark.border}`,
                         boxShadow: selected
                           ? "0 8px 28px rgba(255,107,53,0.25)"
                           : "0 6px 18px rgba(31,26,21,0.08)",
+                        animationDelay: `${i * 50}ms`,
                       }}
                     >
                       <img
@@ -793,15 +794,16 @@ export function QuizMatch() {
                           : "Selecione uma opção para avançar"
                       }
                       style={{
-                        backgroundColor: hasAnswer ? dark.coral : dark.border,
-                        color: hasAnswer ? "#fff" : dark.textDim,
+                        backgroundColor: hasAnswer ? "#FF6B35" : dark.border,
+                        color: hasAnswer ? "#FFFFFF" : dark.textDim,
                         height: "52px",
                         borderRadius: "12px",
                         border: "none",
                         letterSpacing: "0.04em",
-                        boxShadow: hasAnswer ? "0 12px 28px -8px rgba(255,107,53,0.5)" : "none",
+                        fontWeight: 600,
+                        boxShadow: hasAnswer ? "0 14px 32px -10px rgba(255,107,53,0.55)" : "none",
                       }}
-                      className="group inline-flex w-full items-center justify-center gap-2 px-8 text-[14px] font-medium transition-all duration-300 hover:opacity-95 disabled:cursor-not-allowed"
+                      className="quiz-cta group inline-flex w-full items-center justify-center gap-2 px-8 text-[14px] transition-all duration-300 disabled:cursor-not-allowed"
                     >
                       {step === STEPS.length - 1 ? "Ver minha recomendação" : "Próxima etapa"}
                       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2} />

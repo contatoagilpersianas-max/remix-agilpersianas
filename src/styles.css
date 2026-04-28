@@ -186,21 +186,35 @@
   }
 
   @keyframes quiz-slide-in-right {
-    from { opacity: 0; transform: translateX(28px); }
-    to { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   @keyframes quiz-slide-in-left {
-    from { opacity: 0; transform: translateX(-28px); }
-    to { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   .animate-quiz-forward {
-    animation: quiz-slide-in-right 0.45s var(--ease-premium) both;
+    animation: quiz-slide-in-right 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
   .animate-quiz-back {
-    animation: quiz-slide-in-left 0.45s var(--ease-premium) both;
+    animation: quiz-slide-in-left 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes quiz-card-fade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-quiz-card {
+    animation: quiz-card-fade 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .quiz-cta:not(:disabled):hover {
+    background-color: #E85A24 !important;
+    box-shadow: 0 16px 36px -10px rgba(232, 90, 36, 0.6) !important;
+  }
+  .quiz-cta:not(:disabled):active {
+    background-color: #D14E1B !important;
   }
   @media (prefers-reduced-motion: reduce) {
-    .animate-quiz-forward, .animate-quiz-back { animation: none; }
+    .animate-quiz-forward, .animate-quiz-back, .animate-quiz-card { animation: none; }
   }
 
   /* Reveal on scroll — usado com IntersectionObserver via [data-reveal] */
