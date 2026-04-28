@@ -459,7 +459,7 @@ export function QuizMatch() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(900px 500px at 50% -10%, rgba(217,102,60,0.06), transparent 60%), radial-gradient(700px 400px at 50% 110%, rgba(239,230,216,0.5), transparent 60%)",
+            "radial-gradient(900px 500px at 50% -10%, rgba(217,102,60,0.05), transparent 60%), radial-gradient(700px 400px at 50% 110%, rgba(239,230,216,0.55), transparent 60%)",
         }}
       />
       {/* mantém referência do estado bg para evitar warning de unused */}
@@ -469,20 +469,20 @@ export function QuizMatch() {
         <div className="text-center mb-12 sm:mb-16 w-full flex flex-col items-center" style={{ paddingTop: "80px", gap: "16px" }}>
           {/* 1. Linha de credencial ornamentada */}
           <div className="flex items-center justify-center gap-3" aria-hidden="true">
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
+            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(217,102,60,0.25)" }} />
             <span
               style={{
                 fontFamily: "var(--font-sans)",
                 fontSize: "11px",
                 letterSpacing: "3px",
                 textTransform: "uppercase",
-                color: "rgba(255,107,53,0.7)",
+                color: "rgba(184,90,44,0.75)",
                 fontWeight: 500,
               }}
             >
               Mais de 20 mil lares transformados
             </span>
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
+            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(217,102,60,0.25)" }} />
           </div>
 
           {/* 2. Título principal — tensão entre light e bold */}
@@ -499,24 +499,24 @@ export function QuizMatch() {
             <span
               style={{
                 display: "block",
-                fontWeight: 300,
+                fontWeight: 400,
                 fontSize: "clamp(2rem, 5vw, 3rem)",
-                color: "#F5F0E8",
+                color: "#1F1A15",
                 fontStyle: "normal",
               }}
             >
-              Descubra a persiana
+              Descubra a persiana ideal
             </span>
             <span
               style={{
                 display: "block",
-                fontWeight: 700,
+                fontWeight: 500,
                 fontSize: "clamp(2rem, 5vw, 3rem)",
-                color: "#FF6B35",
+                color: "#D9663C",
                 fontStyle: "italic",
               }}
             >
-              ideal para sua casa.
+              para a sua casa.
             </span>
           </h2>
 
@@ -527,7 +527,7 @@ export function QuizMatch() {
               display: "block",
               width: "60px",
               height: "1px",
-              backgroundColor: "rgba(255,107,53,0.4)",
+              backgroundColor: "rgba(217,102,60,0.35)",
               margin: "20px 0",
             }}
           />
@@ -538,7 +538,7 @@ export function QuizMatch() {
               fontFamily: "var(--font-sans)",
               fontWeight: 300,
               fontSize: "15px",
-              color: "#A0A0A0",
+              color: "#5A5048",
               lineHeight: 1.8,
               maxWidth: "420px",
               margin: "0 auto",
@@ -556,9 +556,9 @@ export function QuizMatch() {
               fontWeight: 500,
               textTransform: "uppercase",
               letterSpacing: "0.2em",
-              color: "#FF6B35",
-              backgroundColor: "rgba(255,107,53,0.1)",
-              border: "1px solid rgba(255,107,53,0.3)",
+              color: "#B85A2C",
+              backgroundColor: "rgba(217,102,60,0.08)",
+              border: "1px solid rgba(217,102,60,0.25)",
             }}
           >
             <Sparkles className="h-3.5 w-3.5" strokeWidth={1.6} />
@@ -571,7 +571,7 @@ export function QuizMatch() {
               to="/catalogo"
               aria-label="Pular o quiz e ir direto para a vitrine de produtos"
               className="quiz-skip-link inline-flex items-center gap-1.5 transition-colors focus:outline-none rounded-sm px-1"
-              style={{ color: "#444", fontSize: "11px", textDecoration: "none" }}
+              style={{ color: "#9A9089", fontSize: "11px", textDecoration: "none" }}
             >
               <SkipForward className="h-3 w-3" strokeWidth={1.2} />
               Pular e ver a coleção
@@ -582,9 +582,10 @@ export function QuizMatch() {
         <div
           className="w-full mx-auto rounded-[28px] sm:rounded-[32px] p-6 sm:p-10"
           style={{
-            backgroundColor: dark.surface2,
-            border: `1px solid ${dark.border}`,
-            boxShadow: "0 30px 80px -40px rgba(31,26,21,0.18)",
+            backgroundColor: "#FFFFFF",
+            border: "1px solid rgba(31,26,21,0.04)",
+            boxShadow:
+              "0 1px 2px rgba(31,26,21,0.04), 0 24px 60px -28px rgba(31,26,21,0.18)",
           }}
         >
           {!isComplete ? (
