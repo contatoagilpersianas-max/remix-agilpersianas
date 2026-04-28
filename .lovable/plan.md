@@ -1,51 +1,31 @@
-## Objetivo
+## Padronização do cabeçalho do quiz
 
-Substituir as fotos atuais (Unsplash) dos ambientes do quiz por recortes da imagem de referência enviada, para 5 ambientes:
+Refinar o header do `QuizMatch` para reforçar o estilo premium da marca (Playfair + laranja Ágil), mantendo o restante do quiz intacto.
 
-| Ambiente no quiz (key) | Recorte da imagem de referência |
-|---|---|
-| `quarto` | Card "Quarto" (linha 1, col 1) |
-| `sala` | Card "Sala de estar" (linha 1, col 2) |
-| `cozinha` | Card "Cozinha" (linha 1, col 3) |
-| `escritorio` | Card "Escritório" (linha 2, col 1) |
-| `home` (Sala de TV / Home theater) | Card "Sala de cinema" (linha 3, col 2) |
+### Mudanças em `src/components/site/QuizMatch.tsx` (apenas o bloco header, linhas ~468–503)
 
-Os demais ambientes (`lavanderia`, `infantil`, `externa`) ficam exatamente como estão.
+1. **Badge "Assistente Inteligente"**
+   - Manter `rounded-full` (já arredondado), porém suavizar:
+     - Fundo mais suave: `rgba(255,107,53,0.08)` com borda `1px solid rgba(255,107,53,0.18)`.
+     - Padding aumentado: `px-4 py-2`.
+     - Sombra leve: `box-shadow: 0 1px 2px rgba(0,0,0,0.04)`.
 
-## Passos
+2. **Título principal (H2)**
+   - Trocar para fonte serif premium da marca: usar `font-display` (Playfair Display, já no design system) e garantir `font-family: var(--font-display)` inline para sobrescrever qualquer reset.
+   - `font-weight: 500`, `letter-spacing: -0.025em`, `line-height: 1.05`.
+   - Tamanho mantém `clamp(34px, 5.4vw, 58px)`.
+   - Primeira linha: "Descubra a persiana ideal" em `dark.text` (regular).
+   - Segunda linha: `<em>para a sua casa.</em>` em **itálico real** (remover `not-italic`), cor `var(--color-primary)` (laranja vibrante da marca, `#FF6B00`), `font-style: italic`, mesmo peso 500.
 
-1. **Copiar a imagem de referência para um path real**
-   - `code--copy user-uploads://image-33.png /tmp/ref.png`
+3. **Espaçamento generoso**
+   - Margem entre badge e título: `mt-8` (era `mt-6`).
+   - Margem entre título e subtítulo: `mt-7` (era `mt-5`).
+   - Margem entre subtítulo e link "Pular": `mt-10` (era `mt-7`).
+   - Container header: `mb-12 sm:mb-16` (era `mb-8 sm:mb-12`).
 
-2. **Recortar os 5 cards usando ImageMagick**
-   - Identificar coordenadas dos 4 cards na imagem (grid 4 colunas × 3 linhas, áreas só da foto, sem o rótulo de texto).
-   - Gerar 5 arquivos JPEG otimizados (largura 600px, qualidade 80) em `src/assets/`:
-     - `src/assets/quiz-amb-quarto.jpg`
-     - `src/assets/quiz-amb-sala.jpg`
-     - `src/assets/quiz-amb-cozinha.jpg`
-     - `src/assets/quiz-amb-escritorio.jpg`
-     - `src/assets/quiz-amb-cinema.jpg`
-   - QA visual: abrir cada arquivo gerado e confirmar que o recorte ficou limpo (sem rótulo, sem cortar móveis). Se algum ficar errado, ajustar coordenadas e re-recortar.
+4. **Subtítulo**
+   - Manter texto e cor `dark.textSoft`, mas usar `font-light` + `tracking-[0.005em]` e `max-w-lg` para visual mais clean e centrado.
 
-3. **Atualizar `src/components/site/QuizMatch.tsx`**
-   - Adicionar 5 imports ES6 dos novos assets.
-   - No objeto `ambienteImages` (linhas 88–97), trocar as 5 URLs:
-     ```ts
-     quarto: quizAmbQuartoImg,
-     sala: quizAmbSalaImg,
-     home: quizAmbCinemaImg,        // Sala de TV recebe a foto de Sala de cinema
-     cozinha: quizAmbCozinhaImg,
-     escritorio: quizAmbEscritorioImg,
-     ```
-   - Manter `lavanderia`, `infantil`, `externa` intactos.
-
-## Arquivos afetados
-
-- `src/assets/quiz-amb-quarto.jpg` (novo)
-- `src/assets/quiz-amb-sala.jpg` (novo)
-- `src/assets/quiz-amb-cozinha.jpg` (novo)
-- `src/assets/quiz-amb-escritorio.jpg` (novo)
-- `src/assets/quiz-amb-cinema.jpg` (novo)
-- `src/components/site/QuizMatch.tsx` (5 imports + 5 linhas no objeto)
-
-Sem alterações de lógica, estilo, rotas ou banco.
+### Fora de escopo
+- Não alterar a lógica do quiz, perguntas, imagens dos ambientes ou estilos do CTA.
+- Não mexer em `styles.css` (Playfair já está disponível via `font-display`).
