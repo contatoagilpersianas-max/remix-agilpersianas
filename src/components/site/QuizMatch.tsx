@@ -654,7 +654,7 @@ export function QuizMatch() {
                   const img =
                     stepImages[opt.value] ??
                     ambienteImages.sala;
-                  const caption = stepCaption[current.key] ?? "Opção";
+                  const caption = opt.caption ?? "";
                   // Mantém o foco no detalhe do acionamento (corrente na direita / controle ao centro)
                   const objectPosition =
                     current.key === "acionamento"
