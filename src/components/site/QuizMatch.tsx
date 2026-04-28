@@ -452,13 +452,13 @@ export function QuizMatch() {
       style={{ backgroundColor: dark.bg, color: dark.text }}
       aria-labelledby="quiz-title"
     >
-      {/* Glow ambiente sutil — coral quente sobre fundo escuro */}
+      {/* Glow ambiente quase imperceptível — coral muito sutil no topo */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(900px 500px at 50% -10%, rgba(255,107,53,0.08), transparent 60%)",
+            "radial-gradient(900px 500px at 50% -10%, rgba(255,107,53,0.04), transparent 60%)",
         }}
       />
       {/* mantém referência do estado bg para evitar warning de unused */}
@@ -473,35 +473,33 @@ export function QuizMatch() {
       >
         <div
           className="text-center w-full flex flex-col items-center"
-          style={{ maxWidth: "700px", gap: "16px" }}
+          style={{ maxWidth: "700px" }}
         >
-          {/* 1. Linha de credencial ornamentada */}
-          <div className="flex items-center justify-center gap-3" aria-hidden="true">
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
-            <span
-              style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: "11px",
-                letterSpacing: "3px",
-                textTransform: "uppercase",
-                color: "rgba(255,107,53,0.7)",
-                fontWeight: 500,
-              }}
-            >
-              Mais de 20 mil lares transformados
-            </span>
-            <span style={{ display: "block", width: "40px", height: "1px", backgroundColor: "rgba(255,107,53,0.3)" }} />
-          </div>
+          {/* Eyebrow */}
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: "11px",
+              letterSpacing: "3px",
+              textTransform: "uppercase",
+              color: "#B89070",
+              fontWeight: 500,
+              margin: 0,
+            }}
+          >
+            — Assistente Inteligente —
+          </p>
 
-          {/* 2. Título principal — tensão entre light e bold */}
+          {/* Título principal */}
           <h2
             id="quiz-title"
-            className="font-display"
+            className="font-display mt-5"
             style={{
               fontFamily: "var(--font-display)",
               lineHeight: 1.1,
               letterSpacing: "-0.025em",
               margin: 0,
+              marginTop: "20px",
             }}
           >
             <span
@@ -509,11 +507,11 @@ export function QuizMatch() {
                 display: "block",
                 fontWeight: 300,
                 fontSize: "clamp(2.25rem, 5vw, 3.5rem)",
-                color: "#F5F0E8",
+                color: "#1A0F08",
                 fontStyle: "normal",
               }}
             >
-              Descubra a persiana
+              Descubra a persiana ideal
             </span>
             <span
               style={{
@@ -524,130 +522,76 @@ export function QuizMatch() {
                 fontStyle: "italic",
               }}
             >
-              ideal para sua casa.
+              para a sua casa.
             </span>
           </h2>
 
-          {/* 3. Separador decorativo */}
+          {/* Separador decorativo */}
           <span
             aria-hidden="true"
             style={{
               display: "block",
-              width: "60px",
+              width: "48px",
               height: "1px",
-              backgroundColor: "rgba(255,107,53,0.4)",
-              margin: "20px 0",
+              backgroundColor: "#D4B89A",
+              margin: "14px auto",
             }}
           />
-
-          {/* 4. Subtítulo */}
-          <p
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontWeight: 300,
-              fontSize: "15px",
-              color: "#A8A096",
-              lineHeight: 1.8,
-              maxWidth: "420px",
-              margin: "0 auto",
-            }}
-          >
-            Cinco perguntas. Uma recomendação feita sob medida para o seu ambiente, estilo e rotina.
-          </p>
-
-          {/* 5. Badge — agora abaixo, hierarquia invertida */}
-          <span
-            className="inline-flex items-center gap-2 rounded-full"
-            style={{
-              padding: "8px 16px",
-              fontSize: "11px",
-              fontWeight: 500,
-              textTransform: "uppercase",
-              letterSpacing: "0.2em",
-              color: "#FF6B35",
-              backgroundColor: "rgba(255,107,53,0.10)",
-              border: "1px solid rgba(255,107,53,0.30)",
-            }}
-          >
-            <Sparkles className="h-3.5 w-3.5" strokeWidth={1.6} />
-            Assistente Inteligente
-          </span>
-
-          {/* 6. Link skip — quase invisível */}
-          {!isComplete && (
-            <Link
-              to="/catalogo"
-              aria-label="Pular o quiz e ir direto para a vitrine de produtos"
-              className="quiz-skip-link inline-flex items-center gap-1.5 transition-colors focus:outline-none rounded-sm px-1"
-              style={{ color: "#5A5048", fontSize: "11px", textDecoration: "none" }}
-            >
-              <SkipForward className="h-3 w-3" strokeWidth={1.2} />
-              Pular e ver a coleção
-            </Link>
-          )}
         </div>
 
         <div className="w-full mt-12 sm:mt-16">
           {!isComplete ? (
             <>
-              {/* Stepper de etapas — bolinhas conectadas */}
+              {/* Barra de progresso linear */}
               <div className="mb-8 sm:mb-10">
                 <div className="mb-3 flex items-center justify-between">
                   <span
-                    className="text-[10px] uppercase font-medium"
-                    style={{ color: dark.coral, letterSpacing: "0.22em" }}
+                    className="uppercase font-medium"
+                    style={{ color: "#B89070", fontSize: 11, letterSpacing: "0.18em" }}
                   >
-                    Etapa {String(step + 1).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
+                    Etapa {step + 1} de {STEPS.length}
+                  </span>
+                  <span
+                    className="uppercase font-medium"
+                    style={{ color: "#B89070", fontSize: 11, letterSpacing: "0.18em" }}
+                  >
+                    {progress}%
                   </span>
                 </div>
                 <div
-                  className="flex items-center gap-2"
                   role="progressbar"
                   aria-valuenow={progress}
                   aria-valuemin={0}
                   aria-valuemax={100}
                   aria-label={`Progresso: etapa ${step + 1} de ${STEPS.length}`}
+                  style={{
+                    width: "100%",
+                    height: 2,
+                    backgroundColor: "#E8DDD0",
+                    borderRadius: 999,
+                    overflow: "hidden",
+                  }}
                 >
-                  {STEPS.map((_, i) => {
-                    const done = i < step;
-                    const active = i === step;
-                    return (
-                      <div key={i} className="flex items-center flex-1 last:flex-none">
-                        <span
-                          className="flex items-center justify-center rounded-full transition-all duration-300"
-                          style={{
-                            width: 28,
-                            height: 28,
-                            backgroundColor: done || active ? dark.coral : "transparent",
-                            border: `1px solid ${done || active ? dark.coral : dark.borderHard}`,
-                            color: done || active ? "#fff" : dark.textMuted,
-                            boxShadow: active ? `0 0 0 3px ${dark.coralWash}` : "none",
-                            fontSize: 11,
-                            fontWeight: 600,
-                          }}
-                        >
-                          {done ? <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> : i + 1}
-                        </span>
-                        {i < STEPS.length - 1 && (
-                          <span
-                            className="h-px flex-1 mx-1.5 transition-colors"
-                            style={{ backgroundColor: done ? dark.coral : "rgba(245,240,232,0.12)" }}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
+                  <span
+                    style={{
+                      display: "block",
+                      height: "100%",
+                      width: `${progress}%`,
+                      backgroundColor: "#FF6B35",
+                      borderRadius: 999,
+                      transition: "width 300ms ease",
+                    }}
+                  />
                 </div>
               </div>
 
-              {/* Bot de feedback — borda esquerda coral */}
+              {/* Card do assistente — creme com borda esquerda coral */}
               <div
-                className="mb-8 flex items-start gap-3 rounded-xl p-4"
+                className="mb-8 flex items-start gap-3 p-4"
                 style={{
-                  backgroundColor: "#150F08",
-                  borderLeft: `3px solid ${dark.coral}`,
-                  border: "1px solid rgba(255,107,53,0.12)",
-                  borderLeftWidth: 3,
+                  backgroundColor: "#F0EBE3",
+                  borderLeft: "3px solid #FF6B35",
+                  borderRadius: "0 10px 10px 0",
                 }}
               >
                 <span
@@ -661,14 +605,14 @@ export function QuizMatch() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p
-                    className="text-[10px] font-medium uppercase mb-1"
-                    style={{ color: dark.coral, letterSpacing: "0.2em" }}
+                    className="font-medium uppercase mb-1"
+                    style={{ color: "#FF6B35", fontSize: 10, letterSpacing: "0.2em" }}
                   >
                     Assistente Ágil
                   </p>
                   <p
                     className="text-[14px] leading-relaxed font-light"
-                    style={{ color: dark.textSoft }}
+                    style={{ color: "#5A4A3E" }}
                     aria-live="polite"
                   >
                     {feedback || current.botMessage}
