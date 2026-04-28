@@ -40,6 +40,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { trackLead } from "@/lib/analytics";
 import quizManualImg from "@/assets/quiz-manual.jpg";
 import quizMotorizadoImg from "@/assets/quiz-motorizado.jpg";
+import quizQuartoInfantilImg from "@/assets/quiz-quarto-infantil.png";
 
 type OptionDef<T extends string> = {
   value: T;
@@ -91,7 +92,7 @@ const ambienteImages: Record<string, string> = {
   cozinha: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
   escritorio: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
   lavanderia: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80",
-  infantil: "https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?w=600&q=80",
+  infantil: quizQuartoInfantilImg,
   externa: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
 };
 
