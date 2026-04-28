@@ -730,12 +730,14 @@ export function QuizMatch() {
                         >
                           {opt.label}
                         </p>
-                        <p
-                          className="mt-0.5 uppercase font-medium"
-                          style={{ color: "#B89070", fontSize: 9, letterSpacing: "0.16em" }}
-                        >
-                          {caption}
-                        </p>
+                        {caption && (
+                          <p
+                            className="mt-0.5 uppercase font-medium"
+                            style={{ color: "#B89070", fontSize: 9, letterSpacing: "0.16em" }}
+                          >
+                            {caption}
+                          </p>
+                        )}
                       </div>
                     </button>
                   );
