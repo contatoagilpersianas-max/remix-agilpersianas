@@ -1,4 +1,7 @@
-const ITEMS = [
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+const DEFAULT_ITEMS = [
   "Cortinas e persianas sob medida",
   "Toldos e telas mosquiteiras",
   "Produção própria",
@@ -10,7 +13,29 @@ const ITEMS = [
 ];
 
 export function PromoStrip() {
-  const loop = [...ITEMS, ...ITEMS, ...ITEMS];
+  const [items, setItems] = useState<string[]>(DEFAULT_ITEMS);
+  const [enabled, setEnabled] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", "promo_strip")
+        .maybeSingle();
+      if (cancelled || !data?.value) return;
+      const v = data.value as { items?: string[]; enabled?: boolean };
+      if (Array.isArray(v.items) && v.items.length) setItems(v.items.filter(Boolean));
+      if (typeof v.enabled === "boolean") setEnabled(v.enabled);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (!enabled || !items.length) return null;
+  const loop = [...items, ...items, ...items];
   return (
     <section
       className="overflow-hidden"
