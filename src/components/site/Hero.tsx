@@ -263,28 +263,48 @@ export function HeroIntro() {
             className="mt-4 text-display text-white text-pretty leading-[1.08] sm:mt-5 sm:leading-[1.04]"
             style={{ fontSize: "clamp(1.45rem, 5.4vw, 3.2rem)" }}
           >
-            <span className="block">Seu ambiente merece a</span>
-            <span className="mt-1 block bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-              perfeição feita sob medida.
-            </span>
+            {cfg.title ? (
+              <span className="block bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+                {cfg.title}
+              </span>
+            ) : (
+              <>
+                <span className="block">Seu ambiente merece a</span>
+                <span className="mt-1 block bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+                  perfeição feita sob medida.
+                </span>
+              </>
+            )}
           </h1>
 
           <p className="mt-4 mx-auto max-w-2xl text-[13.5px] leading-[1.65] text-white/85 sm:mt-5 sm:text-[15px] sm:leading-7 md:text-base md:leading-8">
-            Responda 6 perguntas e descubra qual persiana é ideal para o seu
-            espaço — em 60 segundos.
+            {cfg.subtitle || "Responda 6 perguntas e descubra qual persiana é ideal para o seu espaço — em 60 segundos."}
           </p>
 
-          {/* CTA principal — fazer o quiz */}
-          <div className="mt-7 flex flex-col items-center justify-center gap-3">
-            <button
-              type="button"
-              onClick={scrollToQuiz}
-              style={{ backgroundColor: "#FF6B35", color: "#fff" }}
-              className="group inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full px-6 sm:w-auto sm:px-8 text-[12px] md:text-[13px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5 hover:opacity-95"
-            >
-              Fazer o quiz agora
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
+          {/* CTAs configuráveis */}
+          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            {ctaEnabled && (
+              <button
+                type="button"
+                onClick={handlePrimary}
+                style={{ backgroundColor: "#FF6B35", color: "#fff" }}
+                className="group inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full px-6 sm:w-auto sm:px-8 text-[12px] md:text-[13px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5 hover:opacity-95"
+              >
+                {ctaText}
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            )}
+            {cta2Enabled && (
+              <button
+                type="button"
+                onClick={handleSecondary}
+                className="inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 sm:w-auto sm:px-8 text-[12px] md:text-[13px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-white backdrop-blur-md transition hover:bg-white/20"
+              >
+                {cta2Text}
+              </button>
+            )}
+          </div>
+          <div className="mt-3 flex justify-center">
             <button
               type="button"
               onClick={() =>
