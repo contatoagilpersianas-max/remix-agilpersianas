@@ -12,6 +12,9 @@ type Scene = {
   src: string;
   title: string;
   subtitle: string;
+  cta?: string;
+  ctaUrl?: string;
+  active?: boolean;
 };
 
 const DEFAULT_SCENES: Scene[] = [
@@ -50,14 +53,21 @@ export function HeroBanner() {
         .maybeSingle();
       if (cancelled || !data?.value) return;
       const incoming = data.value as Array<Partial<Scene>> | null;
-      if (!Array.isArray(incoming)) return;
-      // Mescla com defaults (mantém banner padrão se admin não definiu imagem)
-      const merged = DEFAULT_SCENES.map((def, i) => ({
-        src: incoming[i]?.src?.trim() ? incoming[i]!.src! : def.src,
-        title: incoming[i]?.title?.trim() ? incoming[i]!.title! : def.title,
-        subtitle: incoming[i]?.subtitle?.trim() ? incoming[i]!.subtitle! : def.subtitle,
-      }));
-      setScenes(merged);
+      if (!Array.isArray(incoming) || !incoming.length) return;
+      // Filtra inativos e mescla com defaults para campos obrigatórios
+      const merged = incoming
+        .filter((b) => b?.active !== false)
+        .map((b, i) => {
+          const def = DEFAULT_SCENES[i % DEFAULT_SCENES.length];
+          return {
+            src: b?.src?.trim() ? b.src! : def.src,
+            title: b?.title?.trim() ? b.title! : def.title,
+            subtitle: b?.subtitle?.trim() ? b.subtitle! : def.subtitle,
+            cta: b?.cta,
+            ctaUrl: b?.ctaUrl,
+          };
+        });
+      if (merged.length) setScenes(merged);
     })();
     return () => {
       cancelled = true;
