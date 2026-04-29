@@ -10,44 +10,72 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import logoAgil from "@/assets/agil-logo.png";
-import { type NavColumn, validateNavLinks } from "@/lib/nav";
-import { SITE_CONFIG, whatsappLink } from "@/lib/site-config";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useSiteContact, whatsappLink } from "@/hooks/use-site-contact";
+import { SITE_CONFIG } from "@/lib/site-config";
 
-const COLS: NavColumn[] = [
+type FooterLink = { label: string; url: string };
+type FooterColumn = { title: string; enabled: boolean; links: FooterLink[] };
+type FooterCfg = { intro: string; columns: FooterColumn[]; copyright: string };
+
+const DEFAULT_COLS: FooterColumn[] = [
   {
     title: "Produtos",
+    enabled: true,
     links: [
-      { label: "Persiana Rolô Blackout", to: "/persiana-rolo-blackout" },
-      { label: "Persiana Solar Screen", to: "/persiana-solar-screen" },
-      { label: "Cortina Romana", to: "/cortina-romana" },
-      { label: "Double Vision", to: "/persiana-double-vision" },
-      { label: "Catálogo completo", to: "/catalogo" },
+      { label: "Persiana Rolô Blackout", url: "/persiana-rolo-blackout" },
+      { label: "Persiana Solar Screen", url: "/persiana-solar-screen" },
+      { label: "Cortina Romana", url: "/cortina-romana" },
+      { label: "Double Vision", url: "/persiana-double-vision" },
+      { label: "Catálogo completo", url: "/catalogo" },
     ],
   },
   {
     title: "Atendimento",
+    enabled: true,
     links: [
-      { label: "Como medir", href: "/blog/como-medir-janela-persiana" },
-      { label: "Escolha de tecidos", href: "/blog/como-escolher-tecido-persiana" },
-      { label: "Automação", href: "/blog/automacao-persianas-casa-inteligente" },
-      { label: "Frete e prazo", href: "#frete" },
-      { label: "Instalação simples", href: "#instalacao" },
-      { label: "FAQ", href: "#faq" },
+      { label: "Como medir", url: "/blog/como-medir-janela-persiana" },
+      { label: "Escolha de tecidos", url: "/blog/como-escolher-tecido-persiana" },
+      { label: "Automação", url: "/blog/automacao-persianas-casa-inteligente" },
+      { label: "FAQ", url: "#faq" },
     ],
   },
   {
     title: "Ágil",
+    enabled: true,
     links: [
-      { label: "Persiana Juiz de Fora", to: "/persiana-juiz-de-fora" },
-      { label: "Persiana Rio de Janeiro", to: "/persiana-rio-de-janeiro" },
-      { label: "Persiana Belo Horizonte", to: "/persiana-belo-horizonte" },
-      { label: "Blog Ágil", to: "/blog" },
-      { label: "Política de privacidade", href: "#privacidade" },
+      { label: "Blog Ágil", url: "/blog" },
+      { label: "Política de privacidade", url: "#privacidade" },
     ],
   },
 ];
 
+const DEFAULT_FOOTER: FooterCfg = {
+  intro: "Transformando ambientes com persianas, cortinas e toldos sob medida — entrega para todo o Brasil.",
+  columns: DEFAULT_COLS,
+  copyright: `© ${new Date().getFullYear()} ${SITE_CONFIG.brand} — CNPJ ${SITE_CONFIG.cnpj}. Todos os direitos reservados.`,
+};
+
 export function Footer() {
+  const contact = useSiteContact();
+  const [cfg, setCfg] = useState<FooterCfg>(DEFAULT_FOOTER);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("site_settings").select("value").eq("key", "footer").maybeSingle();
+      if (!cancelled && data?.value) setCfg({ ...DEFAULT_FOOTER, ...(data.value as Partial<FooterCfg>) });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const cols = (cfg.columns || []).filter((c) => c.enabled !== false && c.title?.trim());
+  const socials: Array<{ Icon: typeof Instagram; href: string; label: string }> = [
+    { Icon: Instagram, href: contact.instagram, label: "Instagram" },
+    { Icon: Facebook, href: contact.facebook, label: "Facebook" },
+    { Icon: Youtube, href: contact.youtube, label: "YouTube" },
+  ].filter((s) => s.href);
   return (
     <footer className="bg-graphite text-graphite-foreground">
       <div className="container-premium grid gap-12 py-16 md:grid-cols-12 md:py-20">
@@ -57,47 +85,48 @@ export function Footer() {
           </div>
 
           <p className="mt-5 max-w-sm text-sm text-white/70">
-            Transformando ambientes com persianas, cortinas e toldos sob medida
-            — entrega para todo o Brasil.
+            {cfg.intro}
           </p>
 
           <ul className="mt-6 space-y-3 text-sm">
             <li className="flex items-start gap-3">
               <Phone className="mt-0.5 h-4 w-4 text-primary-glow" />
               <a
-                href={`tel:+${SITE_CONFIG.whatsappNumber}`}
+                href={`tel:+${(contact.whatsapp || "").replace(/\D/g, "")}`}
                 className="opacity-80 hover:opacity-100"
               >
-                {SITE_CONFIG.phoneDisplay}
+                {contact.phone}
               </a>
             </li>
             <li className="flex items-start gap-3">
               <MessageCircle className="mt-0.5 h-4 w-4 text-primary-glow" />
               <a
-                href={whatsappLink()}
+                href={whatsappLink(contact.whatsapp)}
                 target="_blank"
                 rel="noreferrer"
                 className="opacity-80 hover:opacity-100"
               >
-                WhatsApp {SITE_CONFIG.whatsappDisplay} · {SITE_CONFIG.hours}
+                WhatsApp {contact.whatsappDisplay} · {contact.hours}
               </a>
             </li>
             <li className="flex items-start gap-3">
               <Mail className="mt-0.5 h-4 w-4 text-primary-glow" />
               <a
-                href={`mailto:${SITE_CONFIG.email}`}
+                href={`mailto:${contact.email}`}
                 className="opacity-80 hover:opacity-100"
               >
-                {SITE_CONFIG.email}
+                {contact.email}
               </a>
             </li>
           </ul>
 
           <div className="mt-6 flex gap-2">
-            {[Instagram, Facebook, Youtube].map((Icon, i) => (
+            {socials.map(({ Icon, href, label }) => (
               <a
-                key={i}
-                href="#"
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
                 aria-label="Rede social"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 transition hover:bg-primary hover:border-primary"
               >
@@ -107,37 +136,31 @@ export function Footer() {
           </div>
         </div>
 
-        {COLS.map((col) => {
-          const safeLinks = validateNavLinks(col.links, `Footer/${col.title}`);
-          return (
-            <div key={col.title} className="md:col-span-2">
-              <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-primary-glow">
-                {col.title}
-              </div>
-              <ul className="space-y-2.5 text-sm">
-                {safeLinks.map((l) => (
+        {cols.map((col) => (
+          <div key={col.title} className="md:col-span-2">
+            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-primary-glow">
+              {col.title}
+            </div>
+            <ul className="space-y-2.5 text-sm">
+              {col.links.filter((l) => l.label?.trim()).map((l) => {
+                const isInternal = l.url?.startsWith("/") && !l.url.startsWith("//");
+                return (
                   <li key={l.label}>
-                    {"to" in l && l.to ? (
-                      <Link
-                        to={l.to}
-                        className="text-white/75 transition hover:text-white"
-                      >
+                    {isInternal ? (
+                      <Link to={l.url as string} className="text-white/75 transition hover:text-white">
                         {l.label}
                       </Link>
                     ) : (
-                      <a
-                        href={l.href}
-                        className="text-white/75 transition hover:text-white"
-                      >
+                      <a href={l.url || "#"} className="text-white/75 transition hover:text-white">
                         {l.label}
                       </a>
                     )}
                   </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })}
+                );
+              })}
+            </ul>
+          </div>
+        ))}
 
         <div className="md:col-span-2">
           <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-primary-glow">
@@ -170,7 +193,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container-premium flex flex-col items-center justify-between gap-3 py-6 text-xs text-white/60 md:flex-row">
           <div>
-            © {new Date().getFullYear()} {SITE_CONFIG.brand} — CNPJ {SITE_CONFIG.cnpj}. Todos os direitos reservados.
+            {cfg.copyright}
           </div>
           <div className="flex gap-5">
             <a href="#" className="hover:text-white">Privacidade</a>
