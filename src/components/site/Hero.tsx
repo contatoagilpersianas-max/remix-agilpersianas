@@ -8,10 +8,24 @@ import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, BookOpen } from 
 import { openLumiWith } from "@/components/site/LumiWidget";
 import { supabase } from "@/integrations/supabase/client";
 
+type HeroCfg = {
+  title?: string;
+  subtitle?: string;
+  cta?: string;
+  cta2?: string;
+  ctaUrl?: string;
+  cta2Url?: string;
+  ctaEnabled?: boolean;
+  cta2Enabled?: boolean;
+};
+
 type Scene = {
   src: string;
   title: string;
   subtitle: string;
+  cta?: string;
+  ctaUrl?: string;
+  active?: boolean;
 };
 
 const DEFAULT_SCENES: Scene[] = [
@@ -50,14 +64,21 @@ export function HeroBanner() {
         .maybeSingle();
       if (cancelled || !data?.value) return;
       const incoming = data.value as Array<Partial<Scene>> | null;
-      if (!Array.isArray(incoming)) return;
-      // Mescla com defaults (mantém banner padrão se admin não definiu imagem)
-      const merged = DEFAULT_SCENES.map((def, i) => ({
-        src: incoming[i]?.src?.trim() ? incoming[i]!.src! : def.src,
-        title: incoming[i]?.title?.trim() ? incoming[i]!.title! : def.title,
-        subtitle: incoming[i]?.subtitle?.trim() ? incoming[i]!.subtitle! : def.subtitle,
-      }));
-      setScenes(merged);
+      if (!Array.isArray(incoming) || !incoming.length) return;
+      // Filtra inativos e mescla com defaults para campos obrigatórios
+      const merged = incoming
+        .filter((b) => b?.active !== false)
+        .map((b, i) => {
+          const def = DEFAULT_SCENES[i % DEFAULT_SCENES.length];
+          return {
+            src: b?.src?.trim() ? b.src! : def.src,
+            title: b?.title?.trim() ? b.title! : def.title,
+            subtitle: b?.subtitle?.trim() ? b.subtitle! : def.subtitle,
+            cta: b?.cta,
+            ctaUrl: b?.ctaUrl,
+          };
+        });
+      if (merged.length) setScenes(merged);
     })();
     return () => {
       cancelled = true;
@@ -169,11 +190,50 @@ export function HeroBanner() {
  * Renderizado logo após o banner.
  */
 export function HeroIntro() {
+  const [cfg, setCfg] = useState<HeroCfg>({});
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("site_settings").select("value").eq("key", "hero").maybeSingle();
+      if (!cancelled && data?.value) setCfg(data.value as HeroCfg);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const ctaEnabled = cfg.ctaEnabled !== false;
+  const cta2Enabled = cfg.cta2Enabled !== false;
+  const ctaText = cfg.cta || "Fazer o quiz agora";
+  const cta2Text = cfg.cta2 || "Ver catálogo";
+  const ctaUrl = cfg.ctaUrl || "#quiz-persiana-ideal";
+  const cta2Url = cfg.cta2Url || "/catalogo";
+
+  const handlePrimary = () => {
+    if (typeof window === "undefined") return;
+    if (ctaUrl.startsWith("#")) {
+      const el = document.getElementById(ctaUrl.slice(1));
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.location.href = ctaUrl;
+    }
+  };
+  const handleSecondary = () => {
+    if (typeof window === "undefined") return;
+    if (cta2Url.startsWith("#")) {
+      const el = document.getElementById(cta2Url.slice(1));
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.location.href = cta2Url;
+    }
+  };
+
   const scrollToQuiz = () => {
     if (typeof window === "undefined") return;
     const el = document.getElementById("quiz-persiana-ideal");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+  void scrollToQuiz;
 
   return (
     <section
@@ -203,28 +263,48 @@ export function HeroIntro() {
             className="mt-4 text-display text-white text-pretty leading-[1.08] sm:mt-5 sm:leading-[1.04]"
             style={{ fontSize: "clamp(1.45rem, 5.4vw, 3.2rem)" }}
           >
-            <span className="block">Seu ambiente merece a</span>
-            <span className="mt-1 block bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-              perfeição feita sob medida.
-            </span>
+            {cfg.title ? (
+              <span className="block bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+                {cfg.title}
+              </span>
+            ) : (
+              <>
+                <span className="block">Seu ambiente merece a</span>
+                <span className="mt-1 block bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+                  perfeição feita sob medida.
+                </span>
+              </>
+            )}
           </h1>
 
           <p className="mt-4 mx-auto max-w-2xl text-[13.5px] leading-[1.65] text-white/85 sm:mt-5 sm:text-[15px] sm:leading-7 md:text-base md:leading-8">
-            Responda 6 perguntas e descubra qual persiana é ideal para o seu
-            espaço — em 60 segundos.
+            {cfg.subtitle || "Responda 6 perguntas e descubra qual persiana é ideal para o seu espaço — em 60 segundos."}
           </p>
 
-          {/* CTA principal — fazer o quiz */}
-          <div className="mt-7 flex flex-col items-center justify-center gap-3">
-            <button
-              type="button"
-              onClick={scrollToQuiz}
-              style={{ backgroundColor: "#FF6B35", color: "#fff" }}
-              className="group inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full px-6 sm:w-auto sm:px-8 text-[12px] md:text-[13px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5 hover:opacity-95"
-            >
-              Fazer o quiz agora
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
+          {/* CTAs configuráveis */}
+          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            {ctaEnabled && (
+              <button
+                type="button"
+                onClick={handlePrimary}
+                style={{ backgroundColor: "#FF6B35", color: "#fff" }}
+                className="group inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full px-6 sm:w-auto sm:px-8 text-[12px] md:text-[13px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] shadow-glow transition-all duration-300 ease-premium hover:shadow-2xl hover:-translate-y-0.5 hover:opacity-95"
+              >
+                {ctaText}
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            )}
+            {cta2Enabled && (
+              <button
+                type="button"
+                onClick={handleSecondary}
+                className="inline-flex h-12 md:h-13 w-full max-w-full items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 sm:w-auto sm:px-8 text-[12px] md:text-[13px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-white backdrop-blur-md transition hover:bg-white/20"
+              >
+                {cta2Text}
+              </button>
+            )}
+          </div>
+          <div className="mt-3 flex justify-center">
             <button
               type="button"
               onClick={() =>
