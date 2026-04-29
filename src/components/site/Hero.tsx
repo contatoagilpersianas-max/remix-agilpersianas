@@ -8,6 +8,17 @@ import { ArrowRight, Sparkles, Star, Ruler, Truck, ShieldCheck, BookOpen } from 
 import { openLumiWith } from "@/components/site/LumiWidget";
 import { supabase } from "@/integrations/supabase/client";
 
+type HeroCfg = {
+  title?: string;
+  subtitle?: string;
+  cta?: string;
+  cta2?: string;
+  ctaUrl?: string;
+  cta2Url?: string;
+  ctaEnabled?: boolean;
+  cta2Enabled?: boolean;
+};
+
 type Scene = {
   src: string;
   title: string;
@@ -179,11 +190,50 @@ export function HeroBanner() {
  * Renderizado logo após o banner.
  */
 export function HeroIntro() {
+  const [cfg, setCfg] = useState<HeroCfg>({});
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("site_settings").select("value").eq("key", "hero").maybeSingle();
+      if (!cancelled && data?.value) setCfg(data.value as HeroCfg);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const ctaEnabled = cfg.ctaEnabled !== false;
+  const cta2Enabled = cfg.cta2Enabled !== false;
+  const ctaText = cfg.cta || "Fazer o quiz agora";
+  const cta2Text = cfg.cta2 || "Ver catálogo";
+  const ctaUrl = cfg.ctaUrl || "#quiz-persiana-ideal";
+  const cta2Url = cfg.cta2Url || "/catalogo";
+
+  const handlePrimary = () => {
+    if (typeof window === "undefined") return;
+    if (ctaUrl.startsWith("#")) {
+      const el = document.getElementById(ctaUrl.slice(1));
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.location.href = ctaUrl;
+    }
+  };
+  const handleSecondary = () => {
+    if (typeof window === "undefined") return;
+    if (cta2Url.startsWith("#")) {
+      const el = document.getElementById(cta2Url.slice(1));
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.location.href = cta2Url;
+    }
+  };
+
   const scrollToQuiz = () => {
     if (typeof window === "undefined") return;
     const el = document.getElementById("quiz-persiana-ideal");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+  void scrollToQuiz;
 
   return (
     <section
