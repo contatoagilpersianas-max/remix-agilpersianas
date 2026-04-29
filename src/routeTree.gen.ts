@@ -33,7 +33,6 @@ import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as PedidoNumeroRouteImport } from './routes/pedido.$numero'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
-import { Route as AdminSiteRouteImport } from './routes/admin.site'
 import { Route as AdminRelatoriosRouteImport } from './routes/admin.relatorios'
 import { Route as AdminProducaoRouteImport } from './routes/admin.producao'
 import { Route as AdminPedidosRouteImport } from './routes/admin.pedidos'
@@ -169,11 +168,6 @@ const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminSiteRoute = AdminSiteRouteImport.update({
-  id: '/site',
-  path: '/site',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminRelatoriosRoute = AdminRelatoriosRouteImport.update({
   id: '/relatorios',
   path: '/relatorios',
@@ -277,7 +271,6 @@ export interface FileRoutesByFullPath {
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/producao': typeof AdminProducaoRoute
   '/admin/relatorios': typeof AdminRelatoriosRoute
-  '/admin/site': typeof AdminSiteRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/pedido/$numero': typeof PedidoNumeroRoute
@@ -317,7 +310,6 @@ export interface FileRoutesByTo {
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/producao': typeof AdminProducaoRoute
   '/admin/relatorios': typeof AdminRelatoriosRoute
-  '/admin/site': typeof AdminSiteRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/pedido/$numero': typeof PedidoNumeroRoute
@@ -359,7 +351,6 @@ export interface FileRoutesById {
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/producao': typeof AdminProducaoRoute
   '/admin/relatorios': typeof AdminRelatoriosRoute
-  '/admin/site': typeof AdminSiteRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/pedido/$numero': typeof PedidoNumeroRoute
@@ -402,7 +393,6 @@ export interface FileRouteTypes {
     | '/admin/pedidos'
     | '/admin/producao'
     | '/admin/relatorios'
-    | '/admin/site'
     | '/admin/usuarios'
     | '/blog/$slug'
     | '/pedido/$numero'
@@ -442,7 +432,6 @@ export interface FileRouteTypes {
     | '/admin/pedidos'
     | '/admin/producao'
     | '/admin/relatorios'
-    | '/admin/site'
     | '/admin/usuarios'
     | '/blog/$slug'
     | '/pedido/$numero'
@@ -483,7 +472,6 @@ export interface FileRouteTypes {
     | '/admin/pedidos'
     | '/admin/producao'
     | '/admin/relatorios'
-    | '/admin/site'
     | '/admin/usuarios'
     | '/blog/$slug'
     | '/pedido/$numero'
@@ -689,13 +677,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsuariosRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/site': {
-      id: '/admin/site'
-      path: '/site'
-      fullPath: '/admin/site'
-      preLoaderRoute: typeof AdminSiteRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/relatorios': {
       id: '/admin/relatorios'
       path: '/relatorios'
@@ -811,7 +792,6 @@ interface AdminRouteChildren {
   AdminPedidosRoute: typeof AdminPedidosRoute
   AdminProducaoRoute: typeof AdminProducaoRoute
   AdminRelatoriosRoute: typeof AdminRelatoriosRoute
-  AdminSiteRoute: typeof AdminSiteRoute
   AdminUsuariosRoute: typeof AdminUsuariosRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -830,7 +810,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPedidosRoute: AdminPedidosRoute,
   AdminProducaoRoute: AdminProducaoRoute,
   AdminRelatoriosRoute: AdminRelatoriosRoute,
-  AdminSiteRoute: AdminSiteRoute,
   AdminUsuariosRoute: AdminUsuariosRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -865,3 +844,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
