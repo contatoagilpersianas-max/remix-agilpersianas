@@ -356,6 +356,9 @@ const STEPS = [
 ];
 
 export function QuizMatch() {
+  const { value: quizCfg } = useSiteSetting<QuizConfig>("quiz", QUIZ_DEFAULTS);
+  if (!quizCfg.enabled) return null;
+  const cfgStep = (key: string) => quizCfg.steps?.find((s) => s.key === key);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [feedback, setFeedback] = useState<string>("");
