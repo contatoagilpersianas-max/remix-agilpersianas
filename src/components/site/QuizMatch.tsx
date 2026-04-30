@@ -667,21 +667,7 @@ export function QuizMatch() {
                     {feedback ? (
                       feedback
                     ) : (
-                      <>
-                        Perfeito. Vamos encontrar a solução que equilibra sua{" "}
-                        <span style={{ color: "#1A0F08", fontStyle: "italic", fontWeight: 500 }}>
-                          privacidade
-                        </span>{" "}
-                        com a entrada ideal de{" "}
-                        <span style={{ color: "#1A0F08", fontStyle: "italic", fontWeight: 500 }}>
-                          luminosidade
-                        </span>
-                        , garantindo o{" "}
-                        <span style={{ color: "#1A0F08", fontStyle: "italic", fontWeight: 500 }}>
-                          conforto
-                        </span>{" "}
-                        do seu ambiente.
-                      </>
+                      stepBotMessage || quizCfg.assistantIntro
                     )}
                   </p>
                 </div>
@@ -702,7 +688,7 @@ export function QuizMatch() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  {current.title}
+                  {stepTitle}
                 </h3>
                 {current.key === "convivencia" && (
                   <p
@@ -719,7 +705,7 @@ export function QuizMatch() {
                 key={`opts-${step}`}
                 className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
                 role="listbox"
-                aria-label={current.title}
+                aria-label={stepTitle}
               >
                 {current.options.map((opt, i) => {
                   const selected =
