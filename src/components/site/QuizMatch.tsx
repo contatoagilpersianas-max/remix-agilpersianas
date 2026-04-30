@@ -45,6 +45,8 @@ import quizAmbSalaImg from "@/assets/quiz-amb-sala.jpg";
 import quizAmbCozinhaImg from "@/assets/quiz-amb-cozinha.jpg";
 import quizAmbEscritorioImg from "@/assets/quiz-amb-escritorio.jpg";
 import quizAmbCinemaImg from "@/assets/quiz-amb-cinema.jpg";
+import { useSiteSetting } from "@/hooks/use-site-setting";
+import { QUIZ_DEFAULTS, type QuizConfig } from "@/components/admin/site/QuizModule";
 
 type OptionDef<T extends string> = {
   value: T;
