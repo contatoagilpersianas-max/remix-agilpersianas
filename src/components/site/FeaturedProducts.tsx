@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { Star, Flame, ShoppingCart, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart, formatBRL } from "@/lib/cart";
+import { useSiteSetting } from "@/hooks/use-site-setting";
+import { FEATURED_DEFAULTS, type FeaturedConfig } from "@/components/admin/site/FeaturedModule";
 
 type Product = {
   id: string;
@@ -20,8 +22,10 @@ type Product = {
 };
 
 export function FeaturedProducts() {
+  const { value: cfg } = useSiteSetting<FeaturedConfig>("featured", FEATURED_DEFAULTS);
+  const limit = cfg.limit ?? 8;
   const { data: products = [], isLoading } = useQuery({
-    queryKey: ["featured-products"],
+    queryKey: ["featured-products", limit],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
@@ -31,7 +35,7 @@ export function FeaturedProducts() {
         .eq("active", true)
         .eq("featured", true)
         .order("bestseller", { ascending: false })
-        .limit(8);
+        .limit(limit);
       if (error) throw error;
       return (data ?? []) as Product[];
     },
@@ -39,6 +43,7 @@ export function FeaturedProducts() {
     refetchOnMount: "always",
   });
 
+  if (!cfg.enabled) return null;
   // Oculta a seção inteira quando não há produtos suficientes para uma vitrine real
   // (evita placeholder "Em breve..." e cards repetindo a mesma foto).
   if (!isLoading && products.length < 4) {
@@ -53,13 +58,13 @@ export function FeaturedProducts() {
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em]"
             style={{ backgroundColor: "rgba(184,84,28,0.10)", color: "#B8541C" }}
           >
-            <Flame className="h-3.5 w-3.5" /> Destaques
+            <Flame className="h-3.5 w-3.5" /> {cfg.eyebrow}
           </span>
           <h2 className="mt-5 text-display text-4xl md:text-6xl">
-            Produtos em destaque
+            {cfg.title}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
-            Persianas e cortinas sob medida ao centímetro com envio para todo o Brasil.
+            {cfg.subtitle}
           </p>
         </div>
 
@@ -83,13 +88,13 @@ export function FeaturedProducts() {
         )}
 
         <div className="mt-14 text-center" data-reveal>
-          <Link
-            to="/catalogo"
+          <a
+            href={cfg.ctaUrl}
             className="group inline-flex h-13 items-center justify-center gap-2.5 rounded-full bg-foreground px-8 py-4 text-[12px] font-bold uppercase tracking-[0.18em] text-background transition-all duration-300 ease-premium hover:bg-primary hover:-translate-y-0.5 hover:shadow-glow"
           >
-            Ver todos os produtos
+            {cfg.ctaLabel}
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          </a>
         </div>
       </div>
     </section>
