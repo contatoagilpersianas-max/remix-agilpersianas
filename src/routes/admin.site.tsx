@@ -7,6 +7,13 @@ import { ContactModule } from "@/components/admin/site/ContactModule";
 import { FooterModule } from "@/components/admin/site/FooterModule";
 import { SeoModule } from "@/components/admin/site/SeoModule";
 import { MediaLibraryModule } from "@/components/admin/site/MediaLibraryModule";
+import { QuizModule } from "@/components/admin/site/QuizModule";
+import { BestSellersModule } from "@/components/admin/site/BestSellersModule";
+import { FeaturedModule } from "@/components/admin/site/FeaturedModule";
+import { BeforeAfterModule } from "@/components/admin/site/BeforeAfterModule";
+import { MosquitoModule } from "@/components/admin/site/MosquitoModule";
+import { AutomationModule } from "@/components/admin/site/AutomationModule";
+import { TestimonialsModule } from "@/components/admin/site/TestimonialsModule";
 
 export const Route = createFileRoute("/admin/site")({ component: SiteContent });
 
@@ -27,6 +34,13 @@ function SiteContent() {
         <HeroModule />
         <BannersModule />
         <PromoStripModule />
+        <QuizModule />
+        <BestSellersModule />
+        <FeaturedModule />
+        <BeforeAfterModule />
+        <MosquitoModule />
+        <AutomationModule />
+        <TestimonialsModule />
         <ContactModule />
         <FooterModule />
         <SeoModule />

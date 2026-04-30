@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { Star, Flame, ShoppingCart, ArrowRight, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart, formatBRL } from "@/lib/cart";
+import { useSiteSetting } from "@/hooks/use-site-setting";
+import { BESTSELLERS_DEFAULTS, type BestSellersConfig } from "@/components/admin/site/BestSellersModule";
 
 type Product = {
   id: string;
@@ -20,8 +22,10 @@ type Product = {
 };
 
 export function BestSellersWeek() {
+  const { value: cfg } = useSiteSetting<BestSellersConfig>("bestsellers", BESTSELLERS_DEFAULTS);
+  const limit = cfg.limit ?? 8;
   const { data: products = [], isLoading } = useQuery({
-    queryKey: ["bestseller-products-week"],
+    queryKey: ["bestseller-products-week", limit],
     queryFn: async () => {
       // 1) tenta produtos marcados como bestseller
       const { data: marked, error } = await supabase
@@ -32,7 +36,7 @@ export function BestSellersWeek() {
         .eq("active", true)
         .eq("bestseller", true)
         .order("reviews_count", { ascending: false })
-        .limit(8);
+        .limit(limit);
       if (error) throw error;
       if (marked && marked.length >= 4) return marked as Product[];
 
@@ -45,7 +49,7 @@ export function BestSellersWeek() {
         .eq("active", true)
         .order("reviews_count", { ascending: false })
         .order("rating", { ascending: false })
-        .limit(8);
+        .limit(limit);
       if (e2) throw e2;
       return (top ?? []) as Product[];
     },
@@ -53,6 +57,7 @@ export function BestSellersWeek() {
     refetchOnMount: "always",
   });
 
+  if (!cfg.enabled) return null;
   if (!isLoading && products.length === 0) {
     return null;
   }
@@ -65,13 +70,13 @@ export function BestSellersWeek() {
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em]"
             style={{ backgroundColor: "rgba(184,84,28,0.10)", color: "#B8541C" }}
           >
-            <TrendingUp className="h-3.5 w-3.5" /> Mais vendidos
+            <TrendingUp className="h-3.5 w-3.5" /> {cfg.eyebrow}
           </span>
           <h2 className="mt-5 text-display text-4xl md:text-6xl">
-            Mais vendidas essa semana
+            {cfg.title}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
-            Os modelos preferidos dos nossos clientes nos últimos dias.
+            {cfg.subtitle}
           </p>
         </div>
 
@@ -95,13 +100,13 @@ export function BestSellersWeek() {
         )}
 
         <div className="mt-14 text-center" data-reveal>
-          <Link
-            to="/catalogo"
+          <a
+            href={cfg.ctaUrl}
             className="group inline-flex h-13 items-center justify-center gap-2.5 rounded-full bg-foreground px-8 py-4 text-[12px] font-bold uppercase tracking-[0.18em] text-background transition-all duration-300 ease-premium hover:bg-primary hover:-translate-y-0.5 hover:shadow-glow"
           >
-            Ver todos os mais vendidos
+            {cfg.ctaLabel}
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          </a>
         </div>
       </div>
     </section>

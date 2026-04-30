@@ -45,6 +45,8 @@ import quizAmbSalaImg from "@/assets/quiz-amb-sala.jpg";
 import quizAmbCozinhaImg from "@/assets/quiz-amb-cozinha.jpg";
 import quizAmbEscritorioImg from "@/assets/quiz-amb-escritorio.jpg";
 import quizAmbCinemaImg from "@/assets/quiz-amb-cinema.jpg";
+import { useSiteSetting } from "@/hooks/use-site-setting";
+import { QUIZ_DEFAULTS, type QuizConfig } from "@/components/admin/site/QuizModule";
 
 type OptionDef<T extends string> = {
   value: T;
@@ -354,6 +356,7 @@ const STEPS = [
 ];
 
 export function QuizMatch() {
+  const { value: quizCfg } = useSiteSetting<QuizConfig>("quiz", QUIZ_DEFAULTS);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [feedback, setFeedback] = useState<string>("");
@@ -466,6 +469,13 @@ export function QuizMatch() {
 
   const progress = isComplete ? 100 : Math.round(((step + 1) / STEPS.length) * 100);
 
+  // Override de texto vindo do admin (mantém STEPS originais para manter a lógica/options).
+  const cfgStep = (key: string) => quizCfg.steps?.find((s) => s.key === key);
+  const stepTitle = cfgStep(current.key)?.title || current.title;
+  const stepBotMessage = cfgStep(current.key)?.botMessage || current.botMessage;
+
+  if (!quizCfg.enabled) return null;
+
   return (
     <section
       id="quiz-persiana-ideal"
@@ -509,7 +519,7 @@ export function QuizMatch() {
               margin: 0,
             }}
           >
-            — Assistente Inteligente —
+            {quizCfg.eyebrow}
           </p>
 
           {/* Título principal */}
@@ -533,7 +543,7 @@ export function QuizMatch() {
                 fontStyle: "normal",
               }}
             >
-              Descubra a persiana ideal
+              {quizCfg.titleLine1}
             </span>
             <span
               style={{
@@ -544,7 +554,7 @@ export function QuizMatch() {
                 fontStyle: "italic",
               }}
             >
-              para a sua casa.
+              {quizCfg.titleLine2}
             </span>
           </h2>
 
@@ -657,21 +667,7 @@ export function QuizMatch() {
                     {feedback ? (
                       feedback
                     ) : (
-                      <>
-                        Perfeito. Vamos encontrar a solução que equilibra sua{" "}
-                        <span style={{ color: "#1A0F08", fontStyle: "italic", fontWeight: 500 }}>
-                          privacidade
-                        </span>{" "}
-                        com a entrada ideal de{" "}
-                        <span style={{ color: "#1A0F08", fontStyle: "italic", fontWeight: 500 }}>
-                          luminosidade
-                        </span>
-                        , garantindo o{" "}
-                        <span style={{ color: "#1A0F08", fontStyle: "italic", fontWeight: 500 }}>
-                          conforto
-                        </span>{" "}
-                        do seu ambiente.
-                      </>
+                      step === 0 ? quizCfg.assistantIntro : stepBotMessage
                     )}
                   </p>
                 </div>
@@ -692,7 +688,7 @@ export function QuizMatch() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  {current.title}
+                  {stepTitle}
                 </h3>
                 {current.key === "convivencia" && (
                   <p
@@ -709,7 +705,7 @@ export function QuizMatch() {
                 key={`opts-${step}`}
                 className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
                 role="listbox"
-                aria-label={current.title}
+                aria-label={stepTitle}
               >
                 {current.options.map((opt, i) => {
                   const selected =
