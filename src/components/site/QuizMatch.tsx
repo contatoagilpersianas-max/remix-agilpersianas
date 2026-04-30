@@ -519,7 +519,7 @@ export function QuizMatch() {
               margin: 0,
             }}
           >
-            — Assistente Inteligente —
+            {quizCfg.eyebrow}
           </p>
 
           {/* Título principal */}
@@ -543,7 +543,7 @@ export function QuizMatch() {
                 fontStyle: "normal",
               }}
             >
-              Descubra a persiana ideal
+              {quizCfg.titleLine1}
             </span>
             <span
               style={{
@@ -554,7 +554,7 @@ export function QuizMatch() {
                 fontStyle: "italic",
               }}
             >
-              para a sua casa.
+              {quizCfg.titleLine2}
             </span>
           </h2>
 
