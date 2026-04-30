@@ -667,7 +667,7 @@ export function QuizMatch() {
                     {feedback ? (
                       feedback
                     ) : (
-                      stepBotMessage || quizCfg.assistantIntro
+                      step === 0 ? quizCfg.assistantIntro : stepBotMessage
                     )}
                   </p>
                 </div>
