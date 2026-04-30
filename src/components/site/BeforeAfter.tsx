@@ -5,10 +5,12 @@ import afterImg from "@/assets/after-sala-persiana.jpg";
 import beforeImg2 from "@/assets/before-quarto.jpg";
 import afterImg2 from "@/assets/hero-2026-bedroom.jpg";
 import { Sparkles } from "lucide-react";
+import { useSiteSetting } from "@/hooks/use-site-setting";
+import { BEFORE_AFTER_DEFAULTS, type BeforeAfterConfig } from "@/components/admin/site/BeforeAfterModule";
 
 type Pair = { before: string; after: string; title: string; desc: string };
 
-const PAIRS: Pair[] = [
+const FALLBACK_PAIRS: Pair[] = [
   {
     before: beforeImg,
     after: afterImg,
@@ -140,25 +142,33 @@ function CompareSlider({ pair }: { pair: Pair }) {
 }
 
 export function BeforeAfter() {
+  const { value: cfg } = useSiteSetting<BeforeAfterConfig>("before_after", BEFORE_AFTER_DEFAULTS);
+  if (!cfg.enabled) return null;
+  const rawPairs = cfg.pairs?.length ? cfg.pairs : FALLBACK_PAIRS;
+  const pairs: Pair[] = rawPairs.map((p, i) => ({
+    title: p.title || FALLBACK_PAIRS[i % FALLBACK_PAIRS.length].title,
+    desc: p.desc || FALLBACK_PAIRS[i % FALLBACK_PAIRS.length].desc,
+    before: p.before || FALLBACK_PAIRS[i % FALLBACK_PAIRS.length].before,
+    after: p.after || FALLBACK_PAIRS[i % FALLBACK_PAIRS.length].after,
+  }));
   return (
     <section className="bg-background py-12 md:py-16">
       <div className="container-premium">
         <div className="mb-12 text-center max-w-2xl mx-auto">
           <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            Transformações reais
+            {cfg.eyebrow}
           </span>
           <h2 className="mt-3 font-display text-4xl md:text-5xl" style={{ fontWeight: 500 }}>
-            Veja como uma persiana muda tudo
+            {cfg.title}
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Arraste para comparar. Mesmos ambientes — antes e depois das nossas
-            persianas instaladas.
+            {cfg.subtitle}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {PAIRS.map((p) => (
+          {pairs.map((p) => (
             <CompareSlider key={p.title} pair={p} />
           ))}
         </div>
