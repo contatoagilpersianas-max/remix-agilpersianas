@@ -469,6 +469,13 @@ export function QuizMatch() {
 
   const progress = isComplete ? 100 : Math.round(((step + 1) / STEPS.length) * 100);
 
+  // Override de texto vindo do admin (mantém STEPS originais para manter a lógica/options).
+  const cfgStep = (key: string) => quizCfg.steps?.find((s) => s.key === key);
+  const stepTitle = cfgStep(current.key)?.title || current.title;
+  const stepBotMessage = cfgStep(current.key)?.botMessage || current.botMessage;
+
+  if (!quizCfg.enabled) return null;
+
   return (
     <section
       id="quiz-persiana-ideal"
