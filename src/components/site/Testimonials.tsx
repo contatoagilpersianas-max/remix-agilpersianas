@@ -2,7 +2,10 @@ import { Star, Quote } from "lucide-react";
 import t1 from "@/assets/testimonial-1.jpg";
 import t2 from "@/assets/testimonial-2.jpg";
 import t3 from "@/assets/testimonial-3.jpg";
+import { useSiteSetting } from "@/hooks/use-site-setting";
+import { TESTIMONIALS_DEFAULTS, type TestimonialsConfig } from "@/components/admin/site/TestimonialsModule";
 
+const FALLBACK_PHOTOS = [t1, t2, t3];
 const ITEMS = [
   {
     name: "Marina Lopes",
@@ -28,28 +31,31 @@ const ITEMS = [
 ];
 
 export function Testimonials() {
+  const { value: cfg } = useSiteSetting<TestimonialsConfig>("testimonials", TESTIMONIALS_DEFAULTS);
+  if (!cfg.enabled) return null;
+  const items = cfg.items?.length ? cfg.items : ITEMS;
   return (
     <section className="bg-sand py-12 md:py-16">
       <div className="container-premium">
         <div className="mb-12 text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-            Quem comprou, recomenda
+            {cfg.eyebrow}
           </span>
           <h2 className="mt-3 font-display text-4xl font-semibold md:text-5xl">
-            +20 mil lares com Ágil
+            {cfg.title}
           </h2>
           <div className="mt-3 inline-flex items-center gap-1.5">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className="h-5 w-5 fill-primary text-primary" />
             ))}
             <span className="ml-2 text-sm font-semibold">
-              4.9/5 — 3.214 avaliações
+              {cfg.ratingSummary}
             </span>
           </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {ITEMS.map((it) => (
+          {items.map((it, idx) => (
             <figure
               key={it.name}
               className="relative rounded-2xl bg-card p-7 shadow-card"
@@ -68,7 +74,7 @@ export function Testimonials() {
               </blockquote>
               <figcaption className="mt-5 flex items-center gap-3 border-t border-border pt-4">
                 <img
-                  src={it.photo}
+                  src={it.photo || FALLBACK_PHOTOS[idx % FALLBACK_PHOTOS.length]}
                   alt={it.name}
                   loading="lazy"
                   width={48}
