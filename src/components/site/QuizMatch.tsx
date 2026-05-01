@@ -497,7 +497,7 @@ export function QuizMatch() {
       <span hidden aria-hidden="true">{bgLoaded ? "" : ""}</span>
 
       <div
-        className="mx-auto flex flex-col items-center w-full"
+        className="mx-auto flex flex-col items-center w-full text-sm"
         style={{
           maxWidth: "1280px",
           padding: "100px 20px",
@@ -578,15 +578,10 @@ export function QuizMatch() {
               <div className="mb-4 flex justify-end">
                 <Link
                   to="/catalogo"
-                  aria-label="Pular o quiz e ir direto para a vitrine de produtos"
-                  style={{
-                    color: "#C4AE96",
-                    fontSize: 12,
-                    textDecoration: "none",
-                  }}
-                  className="transition-colors hover:text-[#5A4A3E]"
+                  aria-label="Ir para o catálogo de produtos"
+                  className="text-orange-900 text-xs"
                 >
-                  Pular quiz →
+                  Ir para o Catálogo
                 </Link>
               </div>
 
