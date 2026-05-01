@@ -654,10 +654,10 @@ export function QuizMatch() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p
-                    className="font-medium mb-1"
-                    style={{ color: "#FF6B35", fontSize: 10, letterSpacing: "0.2em" }}
+                    className="mb-1"
+                    style={{ color: "#FF6B35", fontSize: 14, fontWeight: 700, letterSpacing: "0.02em" }}
                   >
-                    Assistente Ágil
+                    Lumini
                   </p>
                   <p
                     className="text-[14px] leading-relaxed font-light"

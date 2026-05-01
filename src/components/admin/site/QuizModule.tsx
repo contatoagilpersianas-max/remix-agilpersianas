@@ -21,7 +21,7 @@ export const QUIZ_DEFAULTS: QuizConfig = {
   titleLine1: "Descubra a persiana ideal",
   titleLine2: "para a sua casa.",
   assistantIntro:
-    "Excelente escolha. Vamos definir a solução que une privacidade absoluta e luz natural na medida certa, elevando o conforto e a estética do seu espaço.",
+    "Vamos definir a solução que une privacidade absoluta e luz natural na medida certa, elevando o conforto e a estética do seu espaço.",
   steps: [
     {
       key: "ambiente",
