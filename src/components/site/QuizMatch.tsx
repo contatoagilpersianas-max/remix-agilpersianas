@@ -179,21 +179,21 @@ const segurancas: OptionDef<Seguranca>[] = [
 ];
 
 const estilos: OptionDef<Estilo>[] = [
-  { value: "moderno", label: "Moderno / Clean", icon: Sparkles, feedback: "Linhas retas e tecidos lisos — perfeito.", caption: "Linhas retas" },
-  { value: "classico", label: "Clássico / Aconchegante", icon: Home, feedback: "Tons quentes e texturas suaves entram na seleção.", caption: "Tons quentes" },
-  { value: "rustico", label: "Rústico / Natural", icon: Mountain, feedback: "Fibras naturais e tons terrosos — lindo!", caption: "Fibras naturais" },
-  { value: "industrial", label: "Industrial", icon: Factory, feedback: "Acabamentos robustos e paleta neutra." , caption: "Acabamento robusto" },
+   { value: "moderno", label: "Moderno / Clean", icon: Sparkles, feedback: "Linhas retas e tecidos lisos — perfeito.", caption: "LINHAS RETAS" },
+   { value: "classico", label: "Clássico / Aconchegante", icon: Home, feedback: "Tons quentes e texturas suaves entram na seleção.", caption: "TONS QUENTES" },
+   { value: "rustico", label: "Rústico / Natural", icon: Mountain, feedback: "Fibras naturais e tons terrosos — lindo!", caption: "FIBRAS NATURAIS" },
+   { value: "industrial", label: "Industrial", icon: Factory, feedback: "Acabamentos robustos e paleta neutra." , caption: "ACABAMENTO ROBUSTO" },
 ];
 
 const acionamentos: OptionDef<Acionamento>[] = [
-  { value: "manual", label: "Manual", icon: Hand, feedback: "Prático e econômico.", caption: "Prático & econômico" },
-  { value: "motorizado", label: "Motorizado (Controle/Alexa)", icon: Cpu, feedback: "Conforto premium — abre e fecha por voz ou app.", caption: "Controle, app ou Alexa" },
+   { value: "manual", label: "Manual", icon: Hand, feedback: "Prático e econômico.", caption: "PRÁTICO & ECONÔMICO" },
+   { value: "motorizado", label: "Motorizado (Controle/Alexa)", icon: Cpu, feedback: "Conforto premium — abre e fecha por voz ou app.", caption: "CONTROLE, APP OU ALEXA" },
 ];
 
 const convivencias: OptionDef<Convivencia>[] = [
-  { value: "criancas", label: "Sim, crianças", icon: Baby, feedback: "Vamos priorizar modelos sem cordão solto — segurança máxima.", caption: "Sem cordões soltos" },
-  { value: "pets", label: "Sim, animais", icon: PawPrint, feedback: "Tecidos resistentes que não desfiam — ideais para pets.", caption: "Tecidos resistentes" },
-  { value: "nenhum", label: "Não", icon: XCircle, feedback: "Perfeito! Liberdade total nas escolhas de tecido e acionamento.", caption: "Liberdade total" },
+   { value: "criancas", label: "Sim, crianças", icon: Baby, feedback: "Vamos priorizar modelos sem cordão solto — segurança máxima.", caption: "SEM CORDÕES SOLTOS" },
+   { value: "pets", label: "Sim, animais", icon: PawPrint, feedback: "Tecidos resistentes que não desfiam — ideais para pets.", caption: "TECIDOS RESISTENTES" },
+   { value: "nenhum", label: "Não", icon: XCircle, feedback: "Perfeito! Liberdade total nas escolhas de tecido e acionamento.", caption: "LIBERDADE TOTAL" },
 ];
 
 /* ---------------- Lógica de recomendação ---------------- */
