@@ -654,7 +654,7 @@ export function QuizMatch() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p
-                    className="font-medium uppercase mb-1"
+                    className="font-medium mb-1"
                     style={{ color: "#FF6B35", fontSize: 10, letterSpacing: "0.2em" }}
                   >
                     Assistente Ágil
