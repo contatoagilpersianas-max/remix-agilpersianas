@@ -21,13 +21,36 @@ export const QUIZ_DEFAULTS: QuizConfig = {
   titleLine1: "Descubra a persiana ideal",
   titleLine2: "para a sua casa.",
   assistantIntro:
-    "Perfeito. Vamos encontrar a solução que equilibra sua privacidade com a entrada ideal de luminosidade, garantindo o conforto do seu ambiente.",
+    "Excelente escolha. Vamos definir a solução que une privacidade absoluta e luz natural na medida certa, elevando o conforto e a estética do seu espaço.",
   steps: [
-    { key: "ambiente", title: "Onde será instalada?", botMessage: "Olá! Vou encontrar a solução perfeita para você. Comece pelo ambiente onde a persiana será instalada." },
-    { key: "luz", title: "Qual seu objetivo de luz?", botMessage: "Ótimo! Agora me conte: você quer escurecer totalmente, filtrar a luz ou apenas ter privacidade?" },
-    { key: "estilo", title: "Qual seu estilo de decoração?", botMessage: "Vou alinhar a recomendação com a estética da sua casa — texturas, cores e acabamentos." },
-    { key: "convivencia", title: "Crianças ou pets em casa?", botMessage: "A segurança vem primeiro! Para crianças, recomendarei modelos sem cordão solto. Para pets, tecidos que não desfiam." },
-    { key: "acionamento", title: "Como prefere acionar?", botMessage: "Última pergunta! Manual é econômico; motorizado é conforto premium — abre e fecha por controle, app ou Alexa." },
+    {
+      key: "ambiente",
+      title: "Onde será instalada?",
+      botMessage:
+        "Olá! Vou encontrar a solução perfeita para você. Comece pelo ambiente onde a persiana será instalada.",
+    },
+    {
+      key: "luz",
+      title: "Qual seu objetivo de luz?",
+      botMessage: "Ótimo! Agora me conte: você quer escurecer totalmente, filtrar a luz ou apenas ter privacidade?",
+    },
+    {
+      key: "estilo",
+      title: "Qual seu estilo de decoração?",
+      botMessage: "Vou alinhar a recomendação com a estética da sua casa — texturas, cores e acabamentos.",
+    },
+    {
+      key: "convivencia",
+      title: "Crianças ou pets em casa?",
+      botMessage:
+        "A segurança vem primeiro! Para crianças, recomendarei modelos sem cordão solto. Para pets, tecidos que não desfiam.",
+    },
+    {
+      key: "acionamento",
+      title: "Como prefere acionar?",
+      botMessage:
+        "Última pergunta! Manual é econômico; motorizado é conforto premium — abre e fecha por controle, app ou Alexa.",
+    },
   ],
 };
 
@@ -47,11 +70,7 @@ export function QuizModule() {
       onSave={() => save()}
       saving={saving}
     >
-      <ToggleField
-        label="Mostrar quiz na home"
-        checked={value.enabled}
-        onChange={(v) => update({ enabled: v })}
-      />
+      <ToggleField label="Mostrar quiz na home" checked={value.enabled} onChange={(v) => update({ enabled: v })} />
       <div className="grid sm:grid-cols-2 gap-3">
         <div>
           <Label>Eyebrow (texto pequeno acima do título)</Label>
