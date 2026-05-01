@@ -592,7 +592,7 @@ export function QuizMatch() {
                     className="uppercase font-medium"
                     style={{ color: "#B89070", fontSize: 11, letterSpacing: "0.18em" }}
                   >
-                    Etapa {step + 1} de {STEPS.length}
+                    ETAPA {step + 1} DE {STEPS.length}
                   </span>
                   <span
                     className="uppercase font-medium"
@@ -631,7 +631,7 @@ export function QuizMatch() {
               {/* Bloco enquadrado a cada etapa: assistente + pergunta + opções */}
               <div ref={stepBlockRef} style={{ scrollMarginTop: 96 }}>
               <div
-                className="mb-8 flex items-start gap-3 p-4"
+                className="mb-8 flex items-start gap-3 p-4 text-xs"
                 style={{
                   backgroundColor: "#F0EBE3",
                   borderLeft: "3px solid #FF6B35",
@@ -649,10 +649,10 @@ export function QuizMatch() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p
-                    className="font-medium mb-1"
-                    style={{ color: "#FF6B35", fontSize: 10, letterSpacing: "0.2em" }}
+                    className="font-medium mb-1 text-base text-orange-600"
+                    style={{ letterSpacing: "0.2em" }}
                   >
-                    Assistente Ágil
+                    Lumini
                   </p>
                   <p
                     className="text-[14px] leading-relaxed font-light"
