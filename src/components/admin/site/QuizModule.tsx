@@ -17,7 +17,7 @@ export type QuizConfig = {
 
 export const QUIZ_DEFAULTS: QuizConfig = {
   enabled: true,
-  eyebrow: "— Assistente Inteligente —",
+  eyebrow: "— ASSISTENTE INTELIGENTE —",
   titleLine1: "Descubra a persiana ideal",
   titleLine2: "para a sua casa.",
    assistantIntro: "Ver Catálogo",
