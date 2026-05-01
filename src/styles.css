@@ -168,13 +168,19 @@
     .container-premium { padding-inline: 2rem; }
   }
 
-  /* Subtle marquee for trust bar */
+  /* Marquee for promo strip — requires the inner list to be duplicated exactly once */
   @keyframes marquee {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
   }
   .animate-marquee {
-    animation: marquee 16s linear infinite;
+    animation: marquee 18s linear infinite;
+  }
+  @media (min-width: 768px) {
+    .animate-marquee { animation-duration: 32s; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee { animation: none; }
   }
 
   @keyframes fade-up {

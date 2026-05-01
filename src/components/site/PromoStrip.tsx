@@ -35,20 +35,21 @@ export function PromoStrip() {
   }, []);
 
   if (!enabled || !items.length) return null;
-  const loop = [...items, ...items, ...items];
+  // Duplicar exatamente uma vez — combina com keyframe translateX(-50%) para loop seamless
+  const loop = [...items, ...items];
   return (
     <section
       className="overflow-hidden"
       style={{ backgroundColor: "#E2763A" }}
     >
-      <div className="flex whitespace-nowrap py-1.5 sm:py-2 animate-marquee will-change-transform">
+      <div className="flex w-max whitespace-nowrap py-1.5 sm:py-2 animate-marquee will-change-transform">
         {loop.map((t, i) => (
           <span
             key={i}
-            className="mx-6 sm:mx-8 inline-flex items-center gap-3 text-[12px] sm:text-[13px] md:text-[14px] font-bold uppercase tracking-[0.18em] text-white"
+            className="mx-3 sm:mx-6 md:mx-8 inline-flex items-center gap-2 sm:gap-3 text-[10.5px] sm:text-[12px] md:text-[14px] font-bold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-white"
           >
             {t}
-            <span className="text-white/70 text-[18px] leading-none">•</span>
+            <span className="text-white/70 text-[16px] sm:text-[18px] leading-none">•</span>
           </span>
         ))}
       </div>
