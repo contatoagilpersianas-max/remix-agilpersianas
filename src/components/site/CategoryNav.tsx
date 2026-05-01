@@ -214,9 +214,9 @@ export function CategoryNav() {
                     >
                       {sub.name}
                     </Link>
-                    <ul className="mt-3 space-y-1.5">
-                      {subGrand.length > 0 ? (
-                        subGrand.map((g) => (
+                    {subGrand.length > 0 && (
+                      <ul className="mt-3 space-y-1.5">
+                        {subGrand.map((g) => (
                           <li key={g.id}>
                             <Link
                               to="/catalogo"
@@ -227,20 +227,9 @@ export function CategoryNav() {
                               {g.name}
                             </Link>
                           </li>
-                        ))
-                      ) : (
-                        <li>
-                          <Link
-                            to="/catalogo"
-                            search={{ categoria: sub.slug }}
-                            onClick={closeAll}
-                            className="block truncate text-[14px] text-foreground/85 transition hover:text-primary"
-                          >
-                            {sub.name}
-                          </Link>
-                        </li>
-                      )}
-                    </ul>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 );
               })}

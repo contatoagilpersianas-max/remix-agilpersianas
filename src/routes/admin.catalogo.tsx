@@ -212,7 +212,7 @@ function Catalog() {
     <div className="space-y-6 max-w-[1400px]">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">Catálogo</div>
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">Produtos</div>
           <h1 className="font-display text-3xl mt-1">Produtos</h1>
           <p className="text-muted-foreground text-sm mt-1">
             Cadastre, organize e venda. Editor completo com fotos, medidas, frete, SEO e mais.

@@ -1,97 +1,81 @@
-## Visão geral
+## 1. Quiz · Frase do assistente
 
-A expansão completa cobre 16 módulos editáveis. Para entregar com qualidade, dividi em 3 fases. Esta é a **Fase 1** (essencial) — depois de aprovar e validar, sigo para Fase 2 (conteúdo) e Fase 3 (avançado).
+Em `src/components/site/QuizMatch.tsx`:
 
-## Fase 1 — escopo desta entrega
+- Trocar o texto "Assistente Ágil" (linha 660) por **Lumini** em **negrito** e **laranja** (`color: #FF6B35`, `fontWeight: 700`, sem letter-spacing largo, fonte um pouco maior — ~12px). Manter o avatar Bot.
+- Atualizar o default em `src/components/admin/site/QuizModule.tsx` (`QUIZ_DEFAULTS.assistantIntro`) removendo a frase **"Excelente escolha."** — passa a começar em "Vamos definir a solução…".
+- O painel admin já permite editar essa intro; só atualizamos o default usado quando ainda não há valor salvo.
 
-**Infraestrutura compartilhada (usada por todas as 3 fases):**
-1. Instalar `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` para drag-and-drop real.
-2. Refatorar `src/routes/admin.site.tsx` em arquitetura modular: cada módulo vira um componente em `src/components/admin/site/` (ex.: `HeroModule.tsx`, `BannersModule.tsx`…). Mantém o arquivo da rota leve e legível.
-3. Criar componentes utilitários reutilizáveis em `src/components/admin/site/_shared/`:
-   - `ModuleCard.tsx` — card padrão (borda, ícone laranja, título bold, descrição cinza, botão "Salvar X" laranja à direita).
-   - `UrlFieldWithPreview.tsx` — input de URL com botão "Visualizar" (abre nova aba).
-   - `WhatsAppField.tsx` — input com botão "Testar" (abre `wa.me/numero`).
-   - `CharCounterTextarea.tsx` / `CharCounterInput.tsx` — campos com contador em tempo real.
-   - `RequiredLabel.tsx` — label com asterisco vermelho.
-   - `SortableList.tsx` — wrapper genérico de drag-and-drop com handle de arrasto.
-   - `ToggleField.tsx` — switch de mostrar/ocultar com label.
-   - `ModulesIndex.tsx` — índice horizontal sticky no topo com âncoras + scroll suave para os 16 módulos (já preparado para Fases 2 e 3, módulos não implementados aparecem com badge "em breve").
-4. Hook `useSiteSetting<T>(key, defaults)` em `src/hooks/use-site-setting.ts` para load/save padronizado em `site_settings` + toast verde "✓ Salvo com sucesso".
+## 2. Faixa promocional laranja (PromoStrip) — fix mobile
 
-**Módulos implementados nesta fase (admin + integração com site):**
+Sintomas: no mobile não passa todas as frases e fica lenta. Causas:
 
-- **Módulo 1 — Hero (expandido):** adicionar `cta2`, `ctaUrl`, `cta2Url`, `ctaEnabled`, `cta2Enabled`. Atualizar `Hero.tsx` (`HeroBanner` + `HeroIntro`) para ler esses campos e respeitar URL/visibilidade dos botões.
-- **Módulo 2 — Carrossel de banners (expandido):** schema novo `{ src, title, subtitle, cta, ctaUrl, active }[]` (até 5), drag-and-drop, botão adicionar/remover, toggle ativo. Atualizar `HeroBanner` para filtrar `active`. Migração de dados antigos preservada (mescla com defaults).
-- **Módulo 3 — Faixa de benefícios (`promo_strip`):** lista até 10 itens + toggle global. Atualizar `PromoStrip.tsx` para ler de `site_settings`.
-- **Módulo 14 — Informações globais de contato (`contact`):** WhatsApp principal (com botão Testar), telefone, email, endereço, horário, redes sociais (Instagram/Facebook/YouTube/TikTok). Refatorar `src/lib/site-config.ts` para hook reativo `useSiteContact()` que lê de `site_settings.contact` com fallback para defaults atuais. Footer e TopBar passam a ler do hook.
-- **Módulo 15 — Footer (`footer`):** texto institucional, até 4 colunas (título + até 8 links cada + toggle por coluna), texto do rodapé final. Atualizar `Footer.tsx` para ler de `site_settings`.
-- **Módulo 16 — SEO (`seo`):** title (contador 60), description (contador 160), keywords (chips por vírgula), URL canônica, OG image (com botão Visualizar). Atualizar `src/routes/__root.tsx` para ler dinamicamente — como o `head()` do root é estático no Tanstack, vou criar um pequeno componente client `<SeoHead />` montado no `RootComponent` que injeta `<meta>` em runtime via `document.head` para os campos editáveis (title, description, OG image, canonical), preservando os defaults SSR.
+- Um único trilho de animação `marquee` de 16s com `whitespace-nowrap` e items grandes — no mobile a faixa total fica enorme e a velocidade aparente cai.
+- `overflow-hidden` no container, mas só renderiza um trilho (`[items, items, items]` num mesmo flex) com `transform: translateX(-50%)` aproximado pela keyframe — o loop não é "seamless" em todas as larguras.
 
-**Índice no topo:** sticky logo abaixo do header do admin, com scroll horizontal em mobile, links para todos os 16 módulos. Os 10 módulos das Fases 2/3 ficam com tooltip "Disponível em breve" e estilo desabilitado, mas já visíveis para a navegação parecer completa.
+Correções em `src/components/site/PromoStrip.tsx` + `src/styles.css`:
 
-**Padrões aplicados a tudo:**
-- Toast verde `toast.success("✓ Salvo com sucesso")` (sonner já configurado).
-- Asterisco vermelho em campos obrigatórios.
-- Contadores em tempo real onde houver limite.
-- Drag handle visível em itens reordenáveis.
-- Botão "Visualizar" em todos os campos de URL de imagem.
-- Botão "Testar" em todos os campos de WhatsApp.
+- Reduzir o tamanho da fonte e o gap horizontal no mobile (`mx-4 sm:mx-8`, `text-[11px]` no mobile).
+- Renderizar **dois trilhos lado a lado** (cada um com a lista uma vez) animando `translateX(0 → -100%)` no primeiro e o segundo deslocado em `translateX(100%)` para entrar — animação verdadeiramente contínua.
+- Acelerar a animação no mobile: `animation-duration` menor em telas pequenas (ex.: 22s mobile, 35s desktop) para sensação mais fluida.
+- Adicionar `prefers-reduced-motion` para respeitar acessibilidade.
+
+## 3. Renomear menu admin "Catálogo" → "Produtos"
+
+Em `src/routes/admin.tsx` (NAV array): trocar o `label: "Catálogo"` por `label: "Produtos"`. Manter a rota `/admin/catalogo` (não renomear arquivo para evitar quebrar links). Trocar também o título exibido na página `src/routes/admin.catalogo.tsx` se houver heading "Catálogo".
+
+## 4. Cadastrar 8 produtos da imagem (Rolô Blackout Pinpoint + Texturizado)
+
+**Categorias:**
+- Criar duas subcategorias filhas de "Rolô Blackout" (`rolo-blackout`):
+  - `rolo-blackout-pinpoint` — "Rolô Blackout Pinpoint"
+  - `rolo-blackout-texturizado` — "Rolô Blackout Texturizado"
+
+**Imagens (8 fotos premium geradas por IA):** salvar em `src/assets/products/` e fazer upload para o bucket `product-media`. Estilo: foto realista de janela com persiana rolô blackout instalada, ambiente clean, luz natural, cor real do tecido conforme cada produto.
+
+**Produtos (preço por m²):**
+
+| Slug | Nome | Cor | Linha | price_per_sqm |
+|---|---|---|---|---|
+| cortina-rolo-blackout-pinpoint-branca | Cortina Rolô Blackout Pinpoint Branca Sob Medida | Branco | Pinpoint | 264,91 |
+| cortina-rolo-blackout-pinpoint-bege | Cortina Rolô Blackout Pinpoint Bege Sob Medida | Bege | Pinpoint | 365,73 |
+| cortina-rolo-blackout-pinpoint-cinza | Cortina Rolô Blackout Pinpoint Cinza Sob Medida | Cinza | Pinpoint | 379,70 |
+| cortina-rolo-blackout-pinpoint-preta | Cortina Rolô Blackout Pinpoint Preta Sob Medida | Preto | Pinpoint | 378,75 |
+| cortina-rolo-blackout-branca-texturizado | Cortina Rolô Blackout Branca Texturizado | Branco | Texturizado | 393,00 |
+| cortina-rolo-blackout-bege-rustico-texturizado | Cortina Rolô Blackout Bege Rústico Texturizado | Bege | Texturizado | 400,52 |
+| persiana-rolo-blackout-cinza-texturizada | Persiana Rolô Blackout Cinza Texturizada | Cinza | Texturizado | 336,71 |
+| persiana-rolo-blackout-tecido-liso-branca | Persiana Rolô Blackout Tecido Liso Branca | Branco | Liso | 359,44 |
+
+Campos comuns: `product_type='medida'`, `min_width_cm=40`, `max_width_cm=300`, `min_height_cm=40`, `max_height_cm=300`, `min_area=1`, `active=true`, `featured=true` para os 4 Pinpoint, vincular cada um à subcategoria correta via `product_categories`.
+
+## 5. Mega menu — esconder item repetido quando não há netos
+
+Em `src/components/site/CategoryNav.tsx` (linhas 217-243):
+
+- Quando `subGrand.length === 0`, NÃO renderizar a `<ul>` com o `<li>` repetindo `{sub.name}`. O título laranja (header) já é clicável e leva à categoria.
+- Manter a `<ul>` apenas quando existem netos.
+
+Resultado: na imagem 3, "ROLÔ BLACKOUT" aparece só uma vez (laranja, clicável). O mesmo se aplica a Double Vision, Romana etc.
 
 ## Detalhes técnicos
 
-**Schema de `site_settings` (novas keys):**
-```
-contact         → { whatsapp, phone, email, address, hours, instagram, facebook, youtube, tiktok }
-promo_strip     → { items: string[], enabled: boolean }
-footer          → { intro, columns: [{ title, enabled, links: [{ label, url }] }], copyright }
-seo             → { title, description, keywords: string[], canonical, ogImage }
-hero            → { title, subtitle, cta, cta2, ctaUrl, cta2Url, ctaEnabled, cta2Enabled, image }
-hero_banners    → { src, title, subtitle, cta, ctaUrl, active }[]  (até 5, ordem importa)
-```
-RLS já permitida (admin escreve, público lê). Sem migração SQL necessária — `site_settings` aceita qualquer JSON.
+- **Imagens IA:** usar `imagegen--generate_image` (modelo `standard`) 1024x1024, prompt template: "Premium product photo, modern bedroom window with [cor] [pinpoint/textured] roller blind blackout shade fully closed, soft natural light from sides, minimalist Scandinavian decor, photorealistic, clean white background outside, professional interior photography, 4k". Salvar em `src/assets/products/rolo-pinpoint-branco.jpg` etc.
+- **Upload para storage:** as fotos vão direto em `src/assets/` e são referenciadas no `cover_image` como URL pública após `supabase.storage.from('product-media').upload(...)`. Como cadastro é one-shot via INSERT, faremos upload via script `code--exec` usando a service-role key não está disponível; alternativa: usar `imagegen--generate_image` com `target_path: src/assets/products/...` e referenciar diretamente como URL relativa não funciona em produção. **Solução adotada:** gerar imagens em `src/assets/products/`, depois usar o tool `supabase--storage_upload` (8 chamadas) para subir cada uma ao bucket `product-media` e obter URL pública, então usar `supabase--insert` para inserir os produtos com a URL pública em `cover_image`.
+- **Migration:** apenas para criar as 2 subcategorias (estrutura nova precisa de INSERT em `categories` — pode ser feito via `supabase--insert`, sem migration).
+- **Operações DB:** 1 INSERT em `categories` (2 linhas), 1 INSERT em `products` (8 linhas), 1 INSERT em `product_categories` (8 linhas). Tudo via `supabase--insert`.
 
-**Estrutura de arquivos:**
-```text
-src/
-  routes/admin.site.tsx                 (rota leve: índice + lista de módulos)
-  components/admin/site/
-    _shared/
-      ModuleCard.tsx
-      UrlFieldWithPreview.tsx
-      WhatsAppField.tsx
-      CharCounter*.tsx
-      RequiredLabel.tsx
-      SortableList.tsx
-      ToggleField.tsx
-      ModulesIndex.tsx
-    HeroModule.tsx
-    BannersModule.tsx
-    PromoStripModule.tsx
-    ContactModule.tsx
-    FooterModule.tsx
-    SeoModule.tsx
-    MediaLibraryModule.tsx              (extraído do existente)
-  hooks/use-site-setting.ts
-  hooks/use-site-contact.ts
-  components/site/SeoHead.tsx           (client-side meta sync)
-```
+## Arquivos alterados
 
-**Mudanças nos componentes do site (integração ler do banco):**
-- `Hero.tsx`: lê novos campos do hero + filtra banners por `active`.
-- `PromoStrip.tsx`: lê `promo_strip.items` e `enabled`.
-- `Footer.tsx`: lê `footer.columns/intro/copyright` e `contact.*`.
-- `SiteHeader.tsx` / `TopBar.tsx`: usam `useSiteContact()` para WhatsApp.
-- `__root.tsx`: monta `<SeoHead />` dentro do `RootComponent`.
+- `src/components/site/QuizMatch.tsx` — Lumini em laranja+bold
+- `src/components/admin/site/QuizModule.tsx` — default da intro sem "Excelente escolha."
+- `src/components/site/PromoStrip.tsx` — marquee fluido com 2 trilhos
+- `src/styles.css` — keyframes/duration responsivos do marquee
+- `src/routes/admin.tsx` — label "Produtos"
+- `src/routes/admin.catalogo.tsx` — heading "Produtos" se aplicável
+- `src/components/site/CategoryNav.tsx` — esconder item repetido
+- `src/assets/products/*.jpg` — 8 imagens novas
 
-## Fora desta fase (Fases 2 e 3)
+## Fora do escopo
 
-- Fase 2: Quiz, Mais vendidos, Antes/Depois, Mosquiteira, Automação, Depoimentos, Produtos em destaque (módulo informativo).
-- Fase 3: Cupom, Lumi (config + prompt), Social proof popup.
-
-Cada uma será uma rodada separada para revisão. A infraestrutura compartilhada criada agora torna as fases seguintes muito mais rápidas (basicamente compor `ModuleCard` + `SortableList` + hook + atualizar o componente do site correspondente).
-
-## Estimativa de impacto
-
-- ~12 arquivos novos, ~6 arquivos editados, 1 dependência (`@dnd-kit`).
-- `admin.site.tsx` reduz de 316 linhas para ~80 (orquestração).
-- Cada módulo entre 80–250 linhas, isolado e testável.
+- Não vou renomear a rota `/admin/catalogo` para `/admin/produtos` (apenas o label do menu) para não quebrar bookmarks/links existentes.
+- Estoque/SKU dos novos produtos ficam padrão (estoque alto, SKU vazio) — você pode ajustar depois no admin.
