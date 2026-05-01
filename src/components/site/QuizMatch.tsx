@@ -155,21 +155,21 @@ type Answers = {
 };
 
 const ambientes: OptionDef<Ambiente>[] = [
-   { value: "quarto", label: "Quarto", icon: BedDouble, feedback: "Ótimo! Quartos pedem privacidade e conforto.", caption: "SONO & DESCANSO" },
-   { value: "sala", label: "Sala de Estar", icon: Sofa, feedback: "Perfeito! Vamos pensar em luz natural e elegância.", caption: "CONVÍVIO & RECEBER" },
-   { value: "home", label: "Sala de TV / Home", icon: Tv, feedback: "Entendido! Foco em controle de reflexos e brilho.", caption: "CINEMA EM CASA" },
-   { value: "cozinha", label: "Cozinha", icon: ChefHat, feedback: "Boa escolha! Tecidos fáceis de limpar entram na lista.", caption: "PRATICIDADE NO DIA A DIA" },
-   { value: "escritorio", label: "Escritório", icon: Briefcase, feedback: "Show! Vamos priorizar foco e zero ofuscação.", caption: "FOCO & PRODUTIVIDADE" },
-   { value: "lavanderia", label: "Lavanderia", icon: WashingMachine, feedback: "Anotado! Resistência à umidade é essencial.", caption: "ÁREA ÚMIDA" },
-   { value: "infantil", label: "Quarto Infantil", icon: Baby, feedback: "Importante! Vamos focar em segurança e blackout suave.", caption: "SEGURANÇA EM PRIMEIRO LUGAR" },
-   { value: "externa", label: "Área Externa / Varanda", icon: Sailboat, feedback: "Toldos e telas resistentes ao tempo entram na lista.", caption: "SOL, CHUVA & VENTO" },
+  { value: "quarto", label: "Quarto", icon: BedDouble, feedback: "Ótimo! Quartos pedem privacidade e conforto.", caption: "Sono & descanso" },
+  { value: "sala", label: "Sala de Estar", icon: Sofa, feedback: "Perfeito! Vamos pensar em luz natural e elegância.", caption: "Convívio & receber" },
+  { value: "home", label: "Sala de TV / Home", icon: Tv, feedback: "Entendido! Foco em controle de reflexos e brilho.", caption: "Cinema em casa" },
+  { value: "cozinha", label: "Cozinha", icon: ChefHat, feedback: "Boa escolha! Tecidos fáceis de limpar entram na lista.", caption: "Praticidade no dia a dia" },
+  { value: "escritorio", label: "Escritório", icon: Briefcase, feedback: "Show! Vamos priorizar foco e zero ofuscação.", caption: "Foco & produtividade" },
+  { value: "lavanderia", label: "Lavanderia", icon: WashingMachine, feedback: "Anotado! Resistência à umidade é essencial.", caption: "Área úmida" },
+  { value: "infantil", label: "Quarto Infantil", icon: Baby, feedback: "Importante! Vamos focar em segurança e blackout suave.", caption: "Segurança em primeiro lugar" },
+  { value: "externa", label: "Área Externa / Varanda", icon: Sailboat, feedback: "Toldos e telas resistentes ao tempo entram na lista.", caption: "Sol, chuva & vento" },
 ];
 
 const luzes: OptionDef<Luz>[] = [
-   { value: "blackout", label: "Escuridão Total", icon: Moon, feedback: "Vamos de Blackout — sono profundo garantido.", caption: "SONO PROFUNDO" },
-   { value: "filtrar", label: "Filtrar Luz Suave", icon: Sun, feedback: "Lindo! Tecidos translúcidos criam clima aconchegante.", caption: "CLIMA ACONCHEGANTE" },
-   { value: "privacidade", label: "Apenas Privacidade", icon: Eye, feedback: "Ok! Vamos cuidar da sua intimidade sem bloquear luz.", caption: "SEM BLOQUEAR CLARIDADE" },
-   { value: "solar", label: "Visão Externa (Solar)", icon: Trees, feedback: "Perfeito! Você vê fora, ninguém vê dentro.", caption: "VOCÊ VÊ, NINGUÉM VÊ" },
+  { value: "blackout", label: "Escuridão Total", icon: Moon, feedback: "Vamos de Blackout — sono profundo garantido.", caption: "Sono profundo" },
+  { value: "filtrar", label: "Filtrar Luz Suave", icon: Sun, feedback: "Lindo! Tecidos translúcidos criam clima aconchegante.", caption: "Clima aconchegante" },
+  { value: "privacidade", label: "Apenas Privacidade", icon: Eye, feedback: "Ok! Vamos cuidar da sua intimidade sem bloquear luz.", caption: "Sem bloquear claridade" },
+  { value: "solar", label: "Visão Externa (Solar)", icon: Trees, feedback: "Perfeito! Você vê fora, ninguém vê dentro.", caption: "Você vê, ninguém vê" },
 ];
 
 const segurancas: OptionDef<Seguranca>[] = [
@@ -179,21 +179,21 @@ const segurancas: OptionDef<Seguranca>[] = [
 ];
 
 const estilos: OptionDef<Estilo>[] = [
-   { value: "moderno", label: "Moderno / Clean", icon: Sparkles, feedback: "Linhas retas e tecidos lisos — perfeito.", caption: "LINHAS RETAS" },
-   { value: "classico", label: "Clássico / Aconchegante", icon: Home, feedback: "Tons quentes e texturas suaves entram na seleção.", caption: "TONS QUENTES" },
-   { value: "rustico", label: "Rústico / Natural", icon: Mountain, feedback: "Fibras naturais e tons terrosos — lindo!", caption: "FIBRAS NATURAIS" },
-   { value: "industrial", label: "Industrial", icon: Factory, feedback: "Acabamentos robustos e paleta neutra." , caption: "ACABAMENTO ROBUSTO" },
+  { value: "moderno", label: "Moderno / Clean", icon: Sparkles, feedback: "Linhas retas e tecidos lisos — perfeito.", caption: "Linhas retas" },
+  { value: "classico", label: "Clássico / Aconchegante", icon: Home, feedback: "Tons quentes e texturas suaves entram na seleção.", caption: "Tons quentes" },
+  { value: "rustico", label: "Rústico / Natural", icon: Mountain, feedback: "Fibras naturais e tons terrosos — lindo!", caption: "Fibras naturais" },
+  { value: "industrial", label: "Industrial", icon: Factory, feedback: "Acabamentos robustos e paleta neutra." , caption: "Acabamento robusto" },
 ];
 
 const acionamentos: OptionDef<Acionamento>[] = [
-   { value: "manual", label: "Manual", icon: Hand, feedback: "Prático e econômico.", caption: "PRÁTICO & ECONÔMICO" },
-   { value: "motorizado", label: "Motorizado (Controle/Alexa)", icon: Cpu, feedback: "Conforto premium — abre e fecha por voz ou app.", caption: "CONTROLE, APP OU ALEXA" },
+  { value: "manual", label: "Manual", icon: Hand, feedback: "Prático e econômico.", caption: "Prático & econômico" },
+  { value: "motorizado", label: "Motorizado (Controle/Alexa)", icon: Cpu, feedback: "Conforto premium — abre e fecha por voz ou app.", caption: "Controle, app ou Alexa" },
 ];
 
 const convivencias: OptionDef<Convivencia>[] = [
-   { value: "criancas", label: "Sim, crianças", icon: Baby, feedback: "Vamos priorizar modelos sem cordão solto — segurança máxima.", caption: "SEM CORDÕES SOLTOS" },
-   { value: "pets", label: "Sim, animais", icon: PawPrint, feedback: "Tecidos resistentes que não desfiam — ideais para pets.", caption: "TECIDOS RESISTENTES" },
-   { value: "nenhum", label: "Não", icon: XCircle, feedback: "Perfeito! Liberdade total nas escolhas de tecido e acionamento.", caption: "LIBERDADE TOTAL" },
+  { value: "criancas", label: "Sim, crianças", icon: Baby, feedback: "Vamos priorizar modelos sem cordão solto — segurança máxima.", caption: "Sem cordões soltos" },
+  { value: "pets", label: "Sim, animais", icon: PawPrint, feedback: "Tecidos resistentes que não desfiam — ideais para pets.", caption: "Tecidos resistentes" },
+  { value: "nenhum", label: "Não", icon: XCircle, feedback: "Perfeito! Liberdade total nas escolhas de tecido e acionamento.", caption: "Liberdade total" },
 ];
 
 /* ---------------- Lógica de recomendação ---------------- */
@@ -497,7 +497,7 @@ export function QuizMatch() {
       <span hidden aria-hidden="true">{bgLoaded ? "" : ""}</span>
 
       <div
-        className="mx-auto flex flex-col items-center w-full text-sm"
+        className="mx-auto flex flex-col items-center w-full"
         style={{
           maxWidth: "1280px",
           padding: "100px 20px",
@@ -578,10 +578,15 @@ export function QuizMatch() {
               <div className="mb-4 flex justify-end">
                 <Link
                   to="/catalogo"
-                  aria-label="Ir para o catálogo de produtos"
-                  className="text-orange-900 text-xs"
+                  aria-label="Pular o quiz e ir direto para a vitrine de produtos"
+                  style={{
+                    color: "#C4AE96",
+                    fontSize: 12,
+                    textDecoration: "none",
+                  }}
+                  className="transition-colors hover:text-[#5A4A3E]"
                 >
-                  Ir para o Catálogo
+                  Pular quiz →
                 </Link>
               </div>
 
@@ -592,7 +597,7 @@ export function QuizMatch() {
                     className="uppercase font-medium"
                     style={{ color: "#B89070", fontSize: 11, letterSpacing: "0.18em" }}
                   >
-                    ETAPA {step + 1} DE {STEPS.length}
+                    Etapa {step + 1} de {STEPS.length}
                   </span>
                   <span
                     className="uppercase font-medium"
@@ -631,7 +636,7 @@ export function QuizMatch() {
               {/* Bloco enquadrado a cada etapa: assistente + pergunta + opções */}
               <div ref={stepBlockRef} style={{ scrollMarginTop: 96 }}>
               <div
-                className="mb-8 flex items-start gap-3 p-4 text-xs"
+                className="mb-8 flex items-start gap-3 p-4"
                 style={{
                   backgroundColor: "#F0EBE3",
                   borderLeft: "3px solid #FF6B35",
@@ -649,10 +654,10 @@ export function QuizMatch() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p
-                    className="font-medium mb-1 text-base text-orange-600"
-                    style={{ letterSpacing: "0.2em" }}
+                    className="font-medium mb-1"
+                    style={{ color: "#FF6B35", fontSize: 10, letterSpacing: "0.2em" }}
                   >
-                    Lumini
+                    Assistente Ágil
                   </p>
                   <p
                     className="text-[14px] leading-relaxed font-light"
