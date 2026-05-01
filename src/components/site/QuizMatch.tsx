@@ -155,21 +155,21 @@ type Answers = {
 };
 
 const ambientes: OptionDef<Ambiente>[] = [
-  { value: "quarto", label: "Quarto", icon: BedDouble, feedback: "Ótimo! Quartos pedem privacidade e conforto.", caption: "Sono & descanso" },
-  { value: "sala", label: "Sala de Estar", icon: Sofa, feedback: "Perfeito! Vamos pensar em luz natural e elegância.", caption: "Convívio & receber" },
-  { value: "home", label: "Sala de TV / Home", icon: Tv, feedback: "Entendido! Foco em controle de reflexos e brilho.", caption: "Cinema em casa" },
-  { value: "cozinha", label: "Cozinha", icon: ChefHat, feedback: "Boa escolha! Tecidos fáceis de limpar entram na lista.", caption: "Praticidade no dia a dia" },
-  { value: "escritorio", label: "Escritório", icon: Briefcase, feedback: "Show! Vamos priorizar foco e zero ofuscação.", caption: "Foco & produtividade" },
-  { value: "lavanderia", label: "Lavanderia", icon: WashingMachine, feedback: "Anotado! Resistência à umidade é essencial.", caption: "Área úmida" },
-  { value: "infantil", label: "Quarto Infantil", icon: Baby, feedback: "Importante! Vamos focar em segurança e blackout suave.", caption: "Segurança em primeiro lugar" },
-  { value: "externa", label: "Área Externa / Varanda", icon: Sailboat, feedback: "Toldos e telas resistentes ao tempo entram na lista.", caption: "Sol, chuva & vento" },
+   { value: "quarto", label: "Quarto", icon: BedDouble, feedback: "Ótimo! Quartos pedem privacidade e conforto.", caption: "SONO & DESCANSO" },
+   { value: "sala", label: "Sala de Estar", icon: Sofa, feedback: "Perfeito! Vamos pensar em luz natural e elegância.", caption: "CONVÍVIO & RECEBER" },
+   { value: "home", label: "Sala de TV / Home", icon: Tv, feedback: "Entendido! Foco em controle de reflexos e brilho.", caption: "CINEMA EM CASA" },
+   { value: "cozinha", label: "Cozinha", icon: ChefHat, feedback: "Boa escolha! Tecidos fáceis de limpar entram na lista.", caption: "PRATICIDADE NO DIA A DIA" },
+   { value: "escritorio", label: "Escritório", icon: Briefcase, feedback: "Show! Vamos priorizar foco e zero ofuscação.", caption: "FOCO & PRODUTIVIDADE" },
+   { value: "lavanderia", label: "Lavanderia", icon: WashingMachine, feedback: "Anotado! Resistência à umidade é essencial.", caption: "ÁREA ÚMIDA" },
+   { value: "infantil", label: "Quarto Infantil", icon: Baby, feedback: "Importante! Vamos focar em segurança e blackout suave.", caption: "SEGURANÇA EM PRIMEIRO LUGAR" },
+   { value: "externa", label: "Área Externa / Varanda", icon: Sailboat, feedback: "Toldos e telas resistentes ao tempo entram na lista.", caption: "SOL, CHUVA & VENTO" },
 ];
 
 const luzes: OptionDef<Luz>[] = [
-  { value: "blackout", label: "Escuridão Total", icon: Moon, feedback: "Vamos de Blackout — sono profundo garantido.", caption: "Sono profundo" },
-  { value: "filtrar", label: "Filtrar Luz Suave", icon: Sun, feedback: "Lindo! Tecidos translúcidos criam clima aconchegante.", caption: "Clima aconchegante" },
-  { value: "privacidade", label: "Apenas Privacidade", icon: Eye, feedback: "Ok! Vamos cuidar da sua intimidade sem bloquear luz.", caption: "Sem bloquear claridade" },
-  { value: "solar", label: "Visão Externa (Solar)", icon: Trees, feedback: "Perfeito! Você vê fora, ninguém vê dentro.", caption: "Você vê, ninguém vê" },
+   { value: "blackout", label: "Escuridão Total", icon: Moon, feedback: "Vamos de Blackout — sono profundo garantido.", caption: "SONO PROFUNDO" },
+   { value: "filtrar", label: "Filtrar Luz Suave", icon: Sun, feedback: "Lindo! Tecidos translúcidos criam clima aconchegante.", caption: "CLIMA ACONCHEGANTE" },
+   { value: "privacidade", label: "Apenas Privacidade", icon: Eye, feedback: "Ok! Vamos cuidar da sua intimidade sem bloquear luz.", caption: "SEM BLOQUEAR CLARIDADE" },
+   { value: "solar", label: "Visão Externa (Solar)", icon: Trees, feedback: "Perfeito! Você vê fora, ninguém vê dentro.", caption: "VOCÊ VÊ, NINGUÉM VÊ" },
 ];
 
 const segurancas: OptionDef<Seguranca>[] = [
