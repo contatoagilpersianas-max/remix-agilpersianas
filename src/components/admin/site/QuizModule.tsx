@@ -17,11 +17,10 @@ export type QuizConfig = {
 
 export const QUIZ_DEFAULTS: QuizConfig = {
   enabled: true,
-  eyebrow: "— Assistente Inteligente —",
+  eyebrow: "— ASSISTENTE INTELIGENTE —",
   titleLine1: "Descubra a persiana ideal",
   titleLine2: "para a sua casa.",
-  assistantIntro:
-    "Excelente escolha. Vamos definir a solução que une privacidade absoluta e luz natural na medida certa, elevando o conforto e a estética do seu espaço.",
+   assistantIntro: "Ver Catálogo",
   steps: [
     {
       key: "ambiente",
