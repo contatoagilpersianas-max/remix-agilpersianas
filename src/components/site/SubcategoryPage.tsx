@@ -1,6 +1,7 @@
 import { Link, useSearch } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { Star } from "lucide-react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { Star, Loader2 } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFAB } from "@/components/site/WhatsAppFAB";
@@ -34,6 +35,8 @@ type Props = {
   parentLabel?: string;
 };
 
+const PAGE_SIZE = 24;
+
 export function SubcategoryPage({
   categorySlug,
   routeId,
@@ -47,23 +50,24 @@ export function SubcategoryPage({
   const sort = (search as { sort?: string }).sort ?? "destaque";
   const q = (search as { q?: string }).q ?? "";
 
-  const { data: products = [], isLoading } = useQuery({
+  const {
+    data,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ["subcat", categorySlug, sort, q],
-    queryFn: async () => {
+    initialPageParam: 0,
+    queryFn: async ({ pageParam }) => {
+      const page = pageParam as number;
       const { data: cat } = await supabase
         .from("categories")
         .select("id")
         .eq("slug", categorySlug)
         .maybeSingle();
-      if (!cat) return [];
-      let query = supabase
-        .from("products")
-        .select(
-          "id,name,slug,price,sale_price,price_per_sqm,product_type,rating,reviews_count,cover_image,badge,featured,bestseller,created_at",
-        )
-        .eq("active", true)
-        .eq("category_id", cat.id);
-      if (q) query = query.ilike("name", `%${q}%`);
+      if (!cat) return { rows: [] as ProductRow[], total: 0 };
+
       const orderMap: Record<string, { col: string; asc: boolean }> = {
         destaque: { col: "featured", asc: false },
         "menor-preco": { col: "price", asc: true },
@@ -71,11 +75,52 @@ export function SubcategoryPage({
         novidades: { col: "created_at", asc: false },
       };
       const o = orderMap[sort] ?? orderMap.destaque;
-      const { data } = await query.order(o.col, { ascending: o.asc }).limit(120);
-      return (data ?? []) as ProductRow[];
+
+      let query = supabase
+        .from("products")
+        .select(
+          "id,name,slug,price,sale_price,price_per_sqm,product_type,rating,reviews_count,cover_image,badge",
+          { count: "exact" },
+        )
+        .eq("active", true)
+        .eq("category_id", cat.id);
+      if (q) query = query.ilike("name", `%${q}%`);
+
+      const from = page * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+      const { data: rows, count } = await query
+        .order(o.col, { ascending: o.asc })
+        .order("id", { ascending: true })
+        .range(from, to);
+
+      return { rows: (rows ?? []) as ProductRow[], total: count ?? 0 };
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      const loaded = allPages.reduce((sum, p) => sum + p.rows.length, 0);
+      return loaded < lastPage.total ? allPages.length : undefined;
     },
     staleTime: 60_000,
   });
+
+  const products = data?.pages.flatMap((p) => p.rows) ?? [];
+  const total = data?.pages[0]?.total ?? 0;
+
+  // Carregamento infinito via IntersectionObserver
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasNextPage) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, products.length]);
 
   const sortOptions = [
     { v: "destaque", l: "Destaque" },
@@ -111,7 +156,9 @@ export function SubcategoryPage({
           <h1 className="mt-2 font-display text-3xl md:text-5xl">{title}</h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">{subtitle}</p>
           <p className="mt-4 text-sm text-muted-foreground">
-            {products.length} {products.length === 1 ? "produto encontrado" : "produtos encontrados"}
+            {isLoading
+              ? "Carregando produtos..."
+              : `${total} ${total === 1 ? "produto encontrado" : "produtos encontrados"}`}
           </p>
         </header>
 
@@ -168,11 +215,36 @@ export function SubcategoryPage({
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-5 md:gap-y-10">
-            {products.map((p) => (
-              <Card key={p.id} p={p} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-5 md:gap-y-10">
+              {products.map((p) => (
+                <Card key={p.id} p={p} />
+              ))}
+            </div>
+
+            {/* Sentinel de scroll infinito */}
+            <div ref={sentinelRef} aria-hidden className="h-1 w-full" />
+
+            <div className="mt-10 flex flex-col items-center gap-3">
+              {isFetchingNextPage && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" /> Carregando mais produtos...
+                </div>
+              )}
+              {hasNextPage && !isFetchingNextPage && (
+                <button
+                  type="button"
+                  onClick={() => fetchNextPage()}
+                  className="inline-flex h-10 items-center justify-center rounded-full border border-border bg-card px-6 text-sm font-semibold transition hover:border-primary/40 hover:text-primary"
+                >
+                  Carregar mais
+                </button>
+              )}
+              {!hasNextPage && products.length >= PAGE_SIZE && (
+                <p className="text-xs text-muted-foreground">Você viu todos os {total} produtos.</p>
+              )}
+            </div>
+          </>
         )}
       </main>
 
