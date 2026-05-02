@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ToldosRouteImport } from './routes/toldos'
 import { Route as TelaMosquiteiraRouteImport } from './routes/tela-mosquiteira'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RoloBlackoutTexturizadoRouteImport } from './routes/rolo-blackout-texturizado'
+import { Route as RoloBlackoutPinpointRouteImport } from './routes/rolo-blackout-pinpoint'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as PersianaVerticalRouteImport } from './routes/persiana-vertical'
 import { Route as PersianaSolarScreenRouteImport } from './routes/persiana-solar-screen'
@@ -62,6 +64,16 @@ const TelaMosquiteiraRoute = TelaMosquiteiraRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoloBlackoutTexturizadoRoute = RoloBlackoutTexturizadoRouteImport.update({
+  id: '/rolo-blackout-texturizado',
+  path: '/rolo-blackout-texturizado',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoloBlackoutPinpointRoute = RoloBlackoutPinpointRouteImport.update({
+  id: '/rolo-blackout-pinpoint',
+  path: '/rolo-blackout-pinpoint',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
@@ -261,6 +273,8 @@ export interface FileRoutesByFullPath {
   '/persiana-solar-screen': typeof PersianaSolarScreenRoute
   '/persiana-vertical': typeof PersianaVerticalRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/rolo-blackout-pinpoint': typeof RoloBlackoutPinpointRoute
+  '/rolo-blackout-texturizado': typeof RoloBlackoutTexturizadoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tela-mosquiteira': typeof TelaMosquiteiraRoute
   '/toldos': typeof ToldosRoute
@@ -301,6 +315,8 @@ export interface FileRoutesByTo {
   '/persiana-solar-screen': typeof PersianaSolarScreenRoute
   '/persiana-vertical': typeof PersianaVerticalRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/rolo-blackout-pinpoint': typeof RoloBlackoutPinpointRoute
+  '/rolo-blackout-texturizado': typeof RoloBlackoutTexturizadoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tela-mosquiteira': typeof TelaMosquiteiraRoute
   '/toldos': typeof ToldosRoute
@@ -343,6 +359,8 @@ export interface FileRoutesById {
   '/persiana-solar-screen': typeof PersianaSolarScreenRoute
   '/persiana-vertical': typeof PersianaVerticalRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/rolo-blackout-pinpoint': typeof RoloBlackoutPinpointRoute
+  '/rolo-blackout-texturizado': typeof RoloBlackoutTexturizadoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tela-mosquiteira': typeof TelaMosquiteiraRoute
   '/toldos': typeof ToldosRoute
@@ -386,6 +404,8 @@ export interface FileRouteTypes {
     | '/persiana-solar-screen'
     | '/persiana-vertical'
     | '/robots.txt'
+    | '/rolo-blackout-pinpoint'
+    | '/rolo-blackout-texturizado'
     | '/sitemap.xml'
     | '/tela-mosquiteira'
     | '/toldos'
@@ -426,6 +446,8 @@ export interface FileRouteTypes {
     | '/persiana-solar-screen'
     | '/persiana-vertical'
     | '/robots.txt'
+    | '/rolo-blackout-pinpoint'
+    | '/rolo-blackout-texturizado'
     | '/sitemap.xml'
     | '/tela-mosquiteira'
     | '/toldos'
@@ -467,6 +489,8 @@ export interface FileRouteTypes {
     | '/persiana-solar-screen'
     | '/persiana-vertical'
     | '/robots.txt'
+    | '/rolo-blackout-pinpoint'
+    | '/rolo-blackout-texturizado'
     | '/sitemap.xml'
     | '/tela-mosquiteira'
     | '/toldos'
@@ -509,6 +533,8 @@ export interface RootRouteChildren {
   PersianaSolarScreenRoute: typeof PersianaSolarScreenRoute
   PersianaVerticalRoute: typeof PersianaVerticalRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
+  RoloBlackoutPinpointRoute: typeof RoloBlackoutPinpointRoute
+  RoloBlackoutTexturizadoRoute: typeof RoloBlackoutTexturizadoRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TelaMosquiteiraRoute: typeof TelaMosquiteiraRoute
   ToldosRoute: typeof ToldosRoute
@@ -540,6 +566,20 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rolo-blackout-texturizado': {
+      id: '/rolo-blackout-texturizado'
+      path: '/rolo-blackout-texturizado'
+      fullPath: '/rolo-blackout-texturizado'
+      preLoaderRoute: typeof RoloBlackoutTexturizadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rolo-blackout-pinpoint': {
+      id: '/rolo-blackout-pinpoint'
+      path: '/rolo-blackout-pinpoint'
+      fullPath: '/rolo-blackout-pinpoint'
+      preLoaderRoute: typeof RoloBlackoutPinpointRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/robots.txt': {
@@ -853,6 +893,8 @@ const rootRouteChildren: RootRouteChildren = {
   PersianaSolarScreenRoute: PersianaSolarScreenRoute,
   PersianaVerticalRoute: PersianaVerticalRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
+  RoloBlackoutPinpointRoute: RoloBlackoutPinpointRoute,
+  RoloBlackoutTexturizadoRoute: RoloBlackoutTexturizadoRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TelaMosquiteiraRoute: TelaMosquiteiraRoute,
   ToldosRoute: ToldosRoute,

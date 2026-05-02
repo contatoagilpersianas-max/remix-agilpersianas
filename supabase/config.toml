@@ -1,1 +1,4 @@
 project_id = "bgtgpttcdafhxvztruyt"
+
+[functions.generate-product-image]
+verify_jwt = false
