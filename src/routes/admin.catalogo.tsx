@@ -18,7 +18,6 @@ import { FileUpload } from "@/components/admin/FileUpload";
 import { GalleryEditor, type GalleryItem } from "@/components/admin/GalleryEditor";
 import { FeaturesEditor } from "@/components/admin/FeaturesEditor";
 import { FAQEditor, type FAQItem } from "@/components/admin/FAQEditor";
-import { AIImageGenerator } from "@/components/admin/AIImageGenerator";
 
 export const Route = createFileRoute("/admin/catalogo")({ component: Catalog });
 
@@ -480,27 +479,9 @@ function ProductEditor({ open, editing, setEditing, cats, extraCats, setExtraCat
                   onChange={(url) => set({ cover_image: url ?? "" })}
                   recommendedSize="1200 × 1200 px"
                 />
-                <AIImageGenerator
-                  suggestion={e.name ?? ""}
-                  folder="covers"
-                  applyLabel={e.cover_image ? "Substituir capa" : "Usar como capa"}
-                  onApply={(url) => set({ cover_image: url })}
-                  compact
-                />
               </div>
               <div className="border-l md:pl-6">
                 <GalleryEditor items={e.gallery ?? []} onChange={(items) => set({ gallery: items })} />
-                <div className="mt-3">
-                  <AIImageGenerator
-                    suggestion={e.name ?? ""}
-                    folder="gallery"
-                    applyLabel="Adicionar à galeria"
-                    onApply={(url) =>
-                      set({ gallery: [...(e.gallery ?? []), { url, caption: "", color: "" }] })
-                    }
-                    compact
-                  />
-                </div>
               </div>
             </div>
           </TabsContent>
