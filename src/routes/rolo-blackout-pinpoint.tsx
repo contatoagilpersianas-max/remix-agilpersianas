@@ -1,12 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SubcategoryPage } from "@/components/site/SubcategoryPage";
 
-type Search = { sort?: string; q?: string };
+type Search = {
+  sort?: "destaque" | "menor-preco" | "maior-preco" | "novidades";
+  q?: string;
+  page?: number;
+  tag?: string;
+};
+
+const SORTS = ["destaque", "menor-preco", "maior-preco", "novidades"] as const;
 
 export const Route = createFileRoute("/rolo-blackout-pinpoint")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    sort: typeof s.sort === "string" ? s.sort : undefined,
+    sort:
+      typeof s.sort === "string" && (SORTS as readonly string[]).includes(s.sort)
+        ? (s.sort as Search["sort"])
+        : undefined,
     q: typeof s.q === "string" ? s.q : undefined,
+    page: typeof s.page === "number" ? s.page : Number(s.page) || undefined,
+    tag: typeof s.tag === "string" ? s.tag : undefined,
   }),
   head: () => ({
     meta: [
@@ -36,6 +48,12 @@ function PinpointPage() {
       subtitle="Tecido blackout com micro-textura Pinpoint. Bloqueio total de luz, sofisticação visual e cores neutras para qualquer ambiente."
       parentSlug="rolo-blackout"
       parentLabel="Rolô Blackout"
+      tags={[
+        { value: "branca", label: "Branca" },
+        { value: "bege", label: "Bege" },
+        { value: "cinza", label: "Cinza" },
+        { value: "preta", label: "Preta" },
+      ]}
     />
   );
 }
